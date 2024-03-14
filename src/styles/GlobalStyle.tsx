@@ -65,8 +65,26 @@ const GlobalStyle = css`
 		padding: 0;
 		border: 0;
 		vertical-align: baseline;
-		font-family: 'Pretendard', monospace;
-		font-family: 'Noto Sans KR', sans-serif;
+		font-family:
+      'Pretendard',
+			'Noto Sans KR',
+      system-ui,
+      -apple-system,
+      Segoe UI,
+      Roboto,
+      Ubuntu,
+      Cantarell,
+      Noto Sans,
+      sans-serif,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Helvetica,
+      Arial,
+      sans-serif,
+      'Apple Color Emoji',
+      'Segoe UI Emoji',
+      'Segoe UI Symbol';
+  }
 		word-break: keep-all;
 		-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 	}
