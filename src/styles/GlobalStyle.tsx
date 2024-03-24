@@ -12,14 +12,14 @@ const GlobalStyle = css`
 		--color-black: #191a20;
 		--color-white: #fff;
 
-		--color-gray-50: #f7f7f7;
+		--color-gray-50: #f3f4f4;
 		--color-gray-100: #f9fafb;
 		--color-gray-200: #f0f1f5;
 		--color-gray-300: #ecedf0;
-		--color-gray-400: #e7e7e9;
+		--color-gray-400: #ededed;
 		--color-gray-500: #b8b8b8;
 		--color-gray-600: #4b4c53;
-		--color-gray-700: #3a3d4a;
+		--color-gray-700: #757575;
 		--color-gray-800: #2e3039;
 		--color-gray-900: #1f2028;
 
@@ -44,6 +44,11 @@ const GlobalStyle = css`
 		--color-red: #ff4545;
 		--color-dark: #090b16;
 
+		--layout-border-color: var(--color-gray-700);
+		--item-border-color: var(--color-gray-50);
+		--tag-bg-color: var(--color-gray-400);
+		--tag-text-color: var(--color-gray-700);
+
 		--btn-sm-padding: 8px 16px;
 		--btn-md-padding: 12px 20px;
 		--btn-lg-padding: 16px 24px;
@@ -65,26 +70,8 @@ const GlobalStyle = css`
 		padding: 0;
 		border: 0;
 		vertical-align: baseline;
-		font-family:
-      'Pretendard',
-			'Noto Sans KR',
-      system-ui,
-      -apple-system,
-      Segoe UI,
-      Roboto,
-      Ubuntu,
-      Cantarell,
-      Noto Sans,
-      sans-serif,
-      BlinkMacSystemFont,
-      'Segoe UI',
-      Helvetica,
-      Arial,
-      sans-serif,
-      'Apple Color Emoji',
-      'Segoe UI Emoji',
-      'Segoe UI Symbol';
-  }
+		font-family: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif,
+			BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 		word-break: keep-all;
 		-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 	}
@@ -115,6 +102,11 @@ const GlobalStyle = css`
 	a {
 		text-decoration: none;
 		color: inherit;
+	}
+
+	a:hover,
+	a:active {
+		text-decoration: none;
 	}
 
 	a,
