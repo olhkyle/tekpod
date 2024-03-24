@@ -22,6 +22,7 @@ const GlobalStyle = css`
 		--color-gray-700: #757575;
 		--color-gray-800: #2e3039;
 		--color-gray-900: #1f2028;
+		--color-transparent-bgColor-hover: #b1bac41f;
 
 		--color-green-10: #46df8e60;
 		--color-green-50: #46df8e;
@@ -48,6 +49,8 @@ const GlobalStyle = css`
 		--item-border-color: var(--color-gray-50);
 		--tag-bg-color: var(--color-gray-400);
 		--tag-text-color: var(--color-gray-700);
+		--max-app-width: 480px;
+		--min-app-width: 320px;
 
 		--btn-sm-padding: 8px 16px;
 		--btn-md-padding: 12px 20px;
@@ -79,6 +82,10 @@ const GlobalStyle = css`
 	html {
 		width: 100%;
 		height: 100%;
+	}
+
+	body {
+		background-color: var(--color-gray-200);
 	}
 
 	h1,
