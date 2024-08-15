@@ -69,11 +69,3 @@
 	src: local('Pretendard Thin'), url('/public/static/fonts/pretendard/Pretendard-Thin.woff2') format('woff2'),
 		url('/public/static/fonts/pretendard/Pretendard-Thin.woff') format('woff');
 }
-
-@font-face {
-	font-family: 'Mona Sans';
-	src: url('/public/static/fonts/mona_sans/Mona-Sans.woff2') format('woff2 supports variations'),
-		url('/public/static/fonts/mona_sans/Mona-Sans.woff2') format('woff2-variations');
-	font-weight: 200 900;
-	font-stretch: 75% 125%;
-}
