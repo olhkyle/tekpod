@@ -1,8 +1,7 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Nav, Footer } from '.';
 import { css } from '@emotion/react';
-import BottomHeader from './BottomHeader';
+import { Nav, BottomHeader } from '.';
 
 const layoutCss = {
 	wrapper: css`
@@ -12,17 +11,18 @@ const layoutCss = {
 		overflow: hidden;
 	`,
 	main: css`
-		min-height: calc(100vh - 50px);
-		margin-top: 50px;
-		background-color: var(--color-white);
+		min-height: calc(100dvh - var(--nav-height));
+		margin-top: var(--nav-height);
+		padding: var(--padding-container-mobile);
+		background-color: var(--white);
 	`,
 };
 
 const Layout = () => {
-	const layoutRef = React.useRef<HTMLDivElement>(null);
-	const [, setGlobalWidth] = React.useState('');
+	const layoutRef = useRef<HTMLDivElement>(null);
+	const [, setGlobalWidth] = useState('');
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (layoutRef.current) {
 			setGlobalWidth(`${layoutRef.current.clientWidth}px`);
 		}
@@ -35,7 +35,7 @@ const Layout = () => {
 				<Outlet />
 			</main>
 			<BottomHeader />
-			<Footer />
+			{/* <Footer /> */}
 		</div>
 	);
 };

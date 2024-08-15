@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-const GlobalStyle = css`
+const Global = css`
 	:root {
 		font-weight: 400;
 		font-synthesis: none;
@@ -8,63 +8,116 @@ const GlobalStyle = css`
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
 
-		--color-black: #191a20;
-		--color-white: #fff;
+		/*colors*/
+		--white: #fff;
+		--whiteOpacity: rgba(255, 255, 255, 0.4);
+		--black: #000;
 
-		--color-gray-50: #f3f4f4;
-		--color-gray-100: #f9fafb;
-		--color-gray-200: #f0f1f5;
-		--color-gray-300: #ecedf0;
-		--color-gray-400: #ededed;
-		--color-gray-500: #b8b8b8;
-		--color-gray-600: #4b4c53;
-		--color-gray-700: #757575;
-		--color-gray-800: #2e3039;
-		--color-gray-900: #1f2028;
-		--color-transparent-bgColor-hover: #b1bac41f;
+		--grey50: #f9fafb;
+		--grey100: #f2f4f6;
+		--grey200: #e5e8eb;
+		--grey300: #d1d6db;
+		--grey400: #b0b8c1;
+		--grey500: #8b95a1;
+		--grey600: #6b7684;
+		--grey700: #4e5968;
+		--grey800: #333d4b;
+		--grey900: #191f28;
+		--greyOpacity50: rgba(0, 23, 51, 0.02);
+		--greyOpacity100: rgba(2, 32, 71, 0.05);
+		--greyOpacity200: rgba(0, 27, 55, 0.1);
+		--greyOpacity300: rgba(0, 29, 58, 0.18);
+		--greyOpacity400: rgba(0, 25, 54, 0.31);
+		--greyOpacity500: rgba(3, 24, 50, 0.46);
+		--greyOpacity600: rgba(0, 19, 43, 0.58);
+		--greyOpacity700: rgba(3, 18, 40, 0.7);
+		--greyOpacity800: rgba(0, 12, 30, 0.8);
+		--greyOpacity900: rgba(2, 9, 19, 0.91);
 
-		--color-green-10: #46df8e60;
-		--color-green-50: #46df8e;
-		--color-green-100: #76e4b8;
-		--color-green-200: #3fd599;
-		--color-green-300: #15c47e;
-		--color-green-400: #0e7b6c;
+		--background: #fff;
+		--greyBackground: #f2f4f6;
+		--overlayBackground: rgba(0, 0, 0, 0.3);
 
-		--color-blue-100: #0687f0;
-		--color-blue-200: #2272eb;
-		--color-blue-300: #0164e6;
+		--orange100: #fffbe5;
+		--orange200: #fff7cc;
+		--orange300: #fff0a6;
+		--orange400: #ffea80;
+		--orange500: #ffe359;
+		--orange600: #ffdd33;
+		--orange700: #ffd400;
+		--orange800: #ffc100;
+		--orange900: #ffb320;
 
-		--color-purple: #6466f1;
+		--blue100: #eff8ff;
+		--blue200: #1c9eff;
 
-		--color-yellow: #ffd644;
+		--green100: #f1fcf8;
+		--green200: #00c82c;
 
-		--color-orange-100: #ffa927;
-		--color-orange-200: #fe9800;
+		--red100: #faedef;
+		--red200: #ef2a2b;
 
-		--color-red: #ff4545;
-		--color-dark: #090b16;
+		/* radius */
+		--radius-xs: 6px;
+		--radius-s: 8px;
+		--radius-m: 12px;
+		--radius-l: 16px;
+		--radius-xl: 24px;
+		--radius-2xl: 32px;
+		--radius-3xl: 64px;
+		--radius-extra: 9999px;
 
-		--layout-border-color: var(--color-gray-700);
-		--item-border-color: var(--color-gray-50);
-		--tag-bg-color: var(--color-gray-400);
-		--tag-text-color: var(--color-gray-700);
+		/* padding */
+		--padding-container-desktop: 32px;
+		--padding-container-mobile: 16px;
+
+		--padding-base-vertical: 12px;
+		--padding-base-horizontal: 16px;
+		--padding-s-vertical: 4px;
+		--padding-s-horizontal: 8px;
+		--padding-m-vertical: 8px;
+		--padding-m-horizontal: 12px;
+		--padding-l-vertical: 12px;
+		--padding-l-horizontal: 20px;
+		--padding-xl-vertical: 16px;
+		--padding-xl-horizontal: 24px;
+		--padding-2xl-vertical: 18px;
+		--padding-2xl-horizontal: 32px;
+
+		/* font */
+		--line-height-base: 1.5;
+		--fz-2xl: 96px;
+		--fz-xl: 72px;
+		--fz-h1: 56px;
+		--fz-h2: 48px;
+		--fz-h3: 36px;
+		--fz-h4: 32px;
+		--fz-h5: 24px;
+		--fz-h6: 20px;
+		--fz-h7: 17px;
+		--fz-p: 15px;
+		--fz-sm: 13px;
+		--fz-xs: 11px;
+
+		--fw-regular: 400;
+		--fw-medium: 500;
+		--fw-semibold: 600;
+		--fw-bold: 700;
+		--fw-black: 900;
+
 		--max-app-width: 480px;
 		--min-app-width: 320px;
 
-		--btn-sm-padding: 8px 16px;
-		--btn-md-padding: 12px 20px;
-		--btn-lg-padding: 16px 24px;
-		--btn-sm-font-size: 12px;
-		--btn-md-font-size: 14px;
-		--btn-lg-font-size: 16px;
-
-		--text-sm-label: 14px;
-		--text-md-label: 16px;
-		--text-lg-label: 18px;
-
-		--radius: 0.5rem;
+		--nav-height: 50px;
 		--transition-duration: 0.2;
+
+		/* z-index */
+		--nav-index: 50;
+		--overlay-index: 999;
+		--modal-index: 9990;
+		--toast-index: 9999;
 	}
 
 	* {
@@ -73,8 +126,10 @@ const GlobalStyle = css`
 		padding: 0;
 		border: 0;
 		vertical-align: baseline;
-		font-family: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif,
-			BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+		font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Mona-Sans',
+			'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+			sans-serif;
+
 		word-break: keep-all;
 		-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 	}
@@ -85,7 +140,11 @@ const GlobalStyle = css`
 	}
 
 	body {
-		background-color: var(--color-gray-200);
+		width: 100%;
+		height: 100%;
+		line-height: var(--line-height-base);
+		font-size: var(--fz-p);
+		background-color: var(--greyOpacity50);
 	}
 
 	h1,
@@ -111,11 +170,6 @@ const GlobalStyle = css`
 		color: inherit;
 	}
 
-	a:hover,
-	a:active {
-		text-decoration: none;
-	}
-
 	a,
 	button {
 		cursor: pointer;
@@ -139,6 +193,17 @@ const GlobalStyle = css`
 		-webkit-appearance: none;
 	}
 
+	input[type='text'],
+	input[type='number'],
+	input[type='email'],
+	input[type='tel'],
+	input[type='password'],
+	textarea {
+		font-size: 15px; /* 최소 16px 설정 */
+		-webkit-text-size-adjust: 100%; /* iOS에서 텍스트 크기 자동 조정 방지 */
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* 탭 시 하이라이트 효과 제거 */
+	}
+
 	::-moz-selection {
 		background: var(--color-green-10);
 	}
@@ -148,4 +213,4 @@ const GlobalStyle = css`
 	}
 `;
 
-export default GlobalStyle;
+export default Global;

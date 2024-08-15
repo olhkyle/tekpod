@@ -1,9 +1,10 @@
 const routes = {
 	HOME: '/',
-	LOGIN: '/signin',
+	LOGIN: '/login',
 	REGISTER: '/register',
-	USER: '/user/:id',
-	BOOKMARK: '/user/:id/bookmark',
+	DIARY: '/diary',
+	WRITE: '/write',
+	USER: '/:id',
 } as const;
 
 export type Route<T> = T[keyof T];

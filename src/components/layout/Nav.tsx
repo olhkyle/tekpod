@@ -1,8 +1,7 @@
-import React from 'react';
-import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
-import routes from '../constants/routes';
+import styled from '@emotion/styled';
 import { FiSearch } from 'react-icons/fi';
+import { routes } from '../../constants';
 
 const Nav = () => {
 	return (
@@ -18,25 +17,25 @@ const Nav = () => {
 };
 
 const Container = styled.nav`
+	position: fixed;
+	top: 0;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	position: fixed;
-	top: 0;
 	margin: 0 auto;
-	padding: 0 1rem;
+	padding: 0 var(--padding-container-mobile);
 	max-width: var(--max-app-width);
 	min-width: var(--min-app-width);
 	width: 100%;
-	height: 52px;
-	background-color: var(--color-white);
-	border-bottom: 1px solid var(--layout-border-color);
-	z-index: 9900;
+	height: var(--nav-height);
+	background-color: var(--white);
+	border-bottom: 1px solid var(--greyOpacity100);
+	z-index: var(--nav-index);
 `;
 
 const Logo = styled.h1`
-	font-size: 20px;
-	font-weight: 900;
+	font-size: var(--fz-h6);
+	font-weight: var(--fw-black);
 `;
 
 const Button = styled.button`
