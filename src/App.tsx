@@ -4,31 +4,43 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
-import { Home, Diary, NotFound, Write, Login } from './pages';
-import { Layout } from './components';
+import { Home, Diary, NotFound, Write, Profile, Login, Register } from './pages';
+import { ErrorBoundary, Layout } from './components';
 import { routes } from './constants';
+import AuthenticationGuard from './guard/AuthenticationGuard';
+
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: 0,
+		},
+	},
+});
 
 const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Layout />,
+		errorElement: <ErrorBoundary />,
 		children: [
 			{
 				index: true,
-				element: <Home />,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Home />} />,
 			},
 			{
 				path: routes.DIARY,
-				element: <Diary />,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Diary />} />,
 			},
 			{
 				path: routes.WRITE,
-				element: <Write />,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Write />} />,
 			},
 			{
-				path: routes.LOGIN,
-				element: <Login />,
+				path: `${routes.USER}/:id`,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Profile />} />,
 			},
+			{ path: routes.LOGIN, element: <Login /> },
+			{ path: routes.REGISTER, element: <Register /> },
 		],
 	},
 	{
@@ -36,8 +48,6 @@ const router = createBrowserRouter([
 		element: <NotFound />,
 	},
 ]);
-
-const queryClient = new QueryClient();
 
 const App = () => {
 	return (

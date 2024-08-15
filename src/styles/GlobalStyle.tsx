@@ -154,7 +154,7 @@ const Global = css`
 	h5,
 	h6 {
 		margin: 0;
-		font-size: 1em;
+		font-size: var(--fz-p);
 		font-weight: normal;
 	}
 
@@ -181,6 +181,7 @@ const Global = css`
 	textarea {
 		background-color: transparent;
 		border: 0;
+
 		&:focus {
 			outline: none;
 			box-shadow: none;

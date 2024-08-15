@@ -2,8 +2,12 @@ import styled from '@emotion/styled';
 import { RiBook3Line, RiHome6Line, RiPencilLine, RiUser3Line } from 'react-icons/ri';
 import { NavLink } from '.';
 import { routes } from '../../constants';
+import useUserStore from '../../store/userStore';
 
 const BottomHeader = () => {
+	const {
+		userInfo: { id },
+	} = useUserStore();
 	return (
 		<Header>
 			<NavLink href={routes.HOME}>
@@ -15,7 +19,7 @@ const BottomHeader = () => {
 			<NavLink href={routes.WRITE}>
 				<RiPencilLine size={26} />
 			</NavLink>
-			<NavLink href={routes.LOGIN}>
+			<NavLink href={`${routes.USER}/${id}`}>
 				<RiUser3Line size={24} />
 			</NavLink>
 		</Header>

@@ -4,9 +4,10 @@ const routes = {
 	REGISTER: '/register',
 	DIARY: '/diary',
 	WRITE: '/write',
-	USER: '/:id',
+	USER: '/profile',
 } as const;
 
-export type Route<T> = T[keyof T];
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Route<T> = T[keyof T] | (string & {});
 
 export default routes;
