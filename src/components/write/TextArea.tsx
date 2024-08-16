@@ -36,6 +36,7 @@ const Container = styled.textarea`
 	font-weight: var(--fw-regular);
 	color: var(--black);
 	border-bottom: 1px solid var(--greyOpacity100);
+	border-radius: none;
 	transition: border 0.15s ease-in-out;
 	appearance: none;
 	resize: none;
@@ -44,6 +45,10 @@ const Container = styled.textarea`
 
 	&::placeholder {
 		color: var(--grey400);
+	}
+
+	&:focus {
+		border-bottom-color: var(--black);
 	}
 `;
 

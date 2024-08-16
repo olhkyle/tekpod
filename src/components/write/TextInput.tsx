@@ -17,6 +17,7 @@ const Input = styled.input<{ name: string }>`
 	font-weight: ${({ name }) => (name === 'title' ? 'var(--fw-semibold)' : 'var(--fw-regular)')};
 	color: var(--black);
 	border-bottom: 1px solid var(--greyOpacity100);
+	border-radius: none;
 	transition: border 0.15s ease-in-out;
 	cursor: pointer;
 
