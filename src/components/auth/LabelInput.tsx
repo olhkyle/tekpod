@@ -30,10 +30,11 @@ interface TextFieldProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> 
 }
 
 LabelInput.TextField = forwardRef(
-	({ type, name, placeholder, disabled, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
+	({ type, id, name, placeholder, disabled, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
 		return (
 			<input
 				type={type}
+				id={id}
 				name={name}
 				ref={ref}
 				placeholder={placeholder}
@@ -60,6 +61,7 @@ const Container = styled.div`
 		border: 1px solid var(--greyOpacity100);
 		border-radius: var(--radius-s);
 		color: var(--black);
+		font-size: var(--fz-p);
 		font-weight: var(--fw-semibold);
 		transition: border 0.15s ease-in-out;
 	}
