@@ -1,8 +1,8 @@
-import { ReactNode, Suspense, useEffect, useState } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
+import { LoadingSpinner, NotAuthenticated } from '../components';
+import { useAuthQuery } from '../hooks';
 import routes, { Route } from '../constants/routes';
-import supabase from '../supabase/service';
-import useUserStore from '../store/userStore';
 
 interface AuthenticationGuardProps {
 	redirectTo: Route<typeof routes>;
@@ -10,32 +10,21 @@ interface AuthenticationGuardProps {
 }
 
 const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
-	const { userInfo, setUserData } = useUserStore();
-	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+	const {
+		authQuery: { data, isFetched, isLoading, error },
+	} = useAuthQuery();
 
-	useEffect(() => {
-		const checkIsLogin = async () => {
-			try {
-				const {
-					data: { user },
-				} = await supabase.auth.getUser();
-
-				if (!user) {
-					setIsLoggedIn(false);
-					return;
-				}
-
-				setIsLoggedIn(true);
-				setUserData({ id: user!.id, email: user?.email ?? userInfo.email });
-			} catch (error) {
-				console.error(error);
-			}
-		};
-
-		checkIsLogin();
-	}, [setUserData]);
-
-	return !isLoggedIn ? <Navigate to={redirectTo} /> : <Suspense fallback={<div>Loading...</div>}>{element}</Suspense>;
+	return isLoading ? (
+		<LoadingSpinner />
+	) : isFetched && data ? (
+		error === null ? (
+			<Suspense fallback={<LoadingSpinner />}>{element}</Suspense>
+		) : (
+			<Navigate to={redirectTo} />
+		)
+	) : (
+		<NotAuthenticated />
+	);
 };
 
 export default AuthenticationGuard;
