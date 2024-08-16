@@ -8,22 +8,24 @@ const Content = () => {
 	const { data: diaries } = useQuery({ queryKey: ['diary'], queryFn: getDiaries });
 
 	return (
-		<ul>
-			{diaries?.map(({ id, title, content, updated_at, tags }) => (
-				<li key={id}>
-					<Link to={`${routes.DIARY}/${id}`}>
-						<h3>{title}</h3>
-						<p>{content}</p>
-						<span>{format(updated_at)}</span>
-						<div>
-							{tags?.map(tag => (
-								<span key={tag}>{tag}</span>
-							))}
-						</div>
-					</Link>
-				</li>
-			))}
-		</ul>
+		<section>
+			<ul>
+				{diaries?.map(({ id, title, content, updated_at, tags }) => (
+					<li key={id}>
+						<Link to={`${routes.DIARY}/${id}`}>
+							<h3>{title}</h3>
+							<p>{content}</p>
+							<span>{format(updated_at)}</span>
+							<div>
+								{tags?.map(tag => (
+									<span key={tag}>{tag}</span>
+								))}
+							</div>
+						</Link>
+					</li>
+				))}
+			</ul>
+		</section>
 	);
 };
 
