@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
+import styled from '@emotion/styled';
 import supabase from '../supabase/service';
 import { routes } from '../constants';
 import useUserStore from '../store/userStore';
-import styled from '@emotion/styled';
 
 const Profile = () => {
 	const navigate = useNavigate();
