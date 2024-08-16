@@ -3,12 +3,12 @@ import { z } from 'zod';
 type LoginSchema = z.infer<typeof loginSchema>;
 
 const loginSchema = z.object({
-	email: z.string({ required_error: '이메일을 입력해 주세요' }).email({ message: '이메일 형식이 올바르지 않습니다' }),
+	email: z.string({ required_error: 'Please, Write an email' }).email({ message: 'Incorrect email format' }),
 	password: z
-		.string({ required_error: '비밀번호를 입력해 주세요' })
-		.min(1, { message: '비밀번호를 입력해 주세요' })
+		.string({ required_error: 'Please, Write a password' })
+		.min(1, { message: 'Write a password' })
 		.regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{7,15}$/, {
-			message: `비밀번호를 정확하게 입력해 주세요`,
+			message: `Write correct password format`,
 		}),
 });
 
@@ -16,13 +16,13 @@ type RegisterSchema = z.infer<typeof registerSchema>;
 
 const registerSchema = z
 	.object({
-		nickname: z.string().min(2, { message: '2자리 이상의 이름을 적어주세요' }),
-		email: z.string({ required_error: '이메일을 입력해 주세요' }).email({ message: '이메일 형식이 올바르지 않습니다' }),
+		nickname: z.string().min(2, { message: 'Over 2 length of name' }),
+		email: z.string({ required_error: 'Please, Write an email' }).email({ message: 'Incorrect email format' }),
 		password: z
-			.string({ required_error: '비밀번호를 입력해 주세요' })
-			.min(1, { message: '비밀번호를 입력해 주세요' })
+			.string({ required_error: 'Please, Write a password' })
+			.min(1, { message: 'Please, Write a password' })
 			.regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{7,15}$/, {
-				message: `비밀번호를 정확하게 입력해 주세요`,
+				message: `Write correct password format`,
 			}),
 		passwordConfirm: z.string(),
 	})
