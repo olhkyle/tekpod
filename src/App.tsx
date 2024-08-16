@@ -5,9 +5,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
 import { Home, Diary, NotFound, Write, Profile, Login, Register } from './pages';
+import AuthenticationGuard from './guard/AuthenticationGuard';
 import { ErrorBoundary, Layout } from './components';
 import { routes } from './constants';
-import AuthenticationGuard from './guard/AuthenticationGuard';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
