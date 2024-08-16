@@ -200,17 +200,16 @@ const Global = css`
 	input[type='tel'],
 	input[type='password'],
 	textarea {
-		font-size: 15px; /* 최소 16px 설정 */
 		-webkit-text-size-adjust: 100%; /* iOS에서 텍스트 크기 자동 조정 방지 */
 		-webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* 탭 시 하이라이트 효과 제거 */
 	}
 
 	::-moz-selection {
-		background: var(--color-green-10);
+		background: var(--blue100);
 	}
 
 	::selection {
-		background: var(--color-green-10);
+		background: var(--blue100);
 	}
 `;
 
