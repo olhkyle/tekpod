@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import supabase from '../supabase/service';
-import { routes } from '../constants';
 import useUserStore from '../store/userStore';
+import { routes } from '../constants';
 
 const Profile = () => {
 	const navigate = useNavigate();
@@ -12,10 +12,12 @@ const Profile = () => {
 		try {
 			const { error } = await supabase.auth.signOut();
 
-			if (!error) {
-				resetUser();
-				navigate(routes.LOGIN);
+			if (error) {
+				throw new Error(error.message);
 			}
+
+			resetUser();
+			navigate(routes.LOGIN);
 		} catch (error) {
 			console.error(error);
 		}
@@ -23,11 +25,13 @@ const Profile = () => {
 
 	return (
 		<Container>
-			<User>✹ {userInfo.email.split('@').at(0)} ✹ </User>
-			<Title>Keep Writing ? </Title>
-			<LogoutButton type="button" onClick={handleLogout}>
-				로그아웃
-			</LogoutButton>
+			<User>✹ {userInfo?.user?.email?.split('@').at(0)} ✹ </User>
+			<Bottom>
+				<Title>Keep Writing ? </Title>
+				<LogoutButton type="button" onClick={handleLogout}>
+					로그아웃
+				</LogoutButton>
+			</Bottom>
 		</Container>
 	);
 };
@@ -35,15 +39,14 @@ const Profile = () => {
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	gap: 32px;
-	height: calc(100dvh - 2 * var(--nav-height));
+	height: calc(100dvh - 3 * var(--nav-height));
 `;
 
 const User = styled.h2`
 	min-width: 270px;
-	padding: calc(var(--padding-container-mobile) / 1.2) var(--padding-container-mobile);
 	font-size: var(--fz-h5);
 	font-weight: var(--fw-bold);
 	color: var(--white);
@@ -51,11 +54,18 @@ const User = styled.h2`
 	text-align: center;
 `;
 
+const Bottom = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+`;
+
 const Title = styled.p`
 	min-width: 270px;
 	padding: calc(var(--padding-container-mobile) / 1.2) var(--padding-container-mobile);
-	font-size: var(--fz-h6);
-	font-weight: var(--fw-bold);
+	font-size: var(--fz-h7);
+	font-weight: var(--fw-medium);
 	color: var(--white);
 	background: linear-gradient(to right, var(--grey600), var(--grey200));
 	text-align: center;
@@ -66,6 +76,7 @@ const LogoutButton = styled.button`
 	min-width: 270px;
 	color: var(--white);
 	background-color: var(--black);
+	font-size: var(--fz-p);
 	font-weight: var(--fw-bold);
 	transition: background 0.15s ease-in-out;
 

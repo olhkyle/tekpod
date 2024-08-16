@@ -1,27 +1,32 @@
+import { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 
-interface User {
-	id: string;
-	email: string;
-}
+/**
+ * Session {
+ * 	access_token: string
+ * 	refresh_token: string
+ * 	expires_in: number
+ * 	expires_at?: number
+ * 	token_type: string
+ *	user: User
+ * }
+ */
 
 interface UserState {
-	userInfo: User;
-	setUserData: (data: User) => void;
+	userInfo: Session | null;
+	setUserData: (data: Session | null) => void;
 	resetUser: () => void;
 }
 
-const userInfo = { id: '', email: '' };
-
 const useUserStore = create<UserState>(set => ({
-	userInfo,
+	userInfo: null,
 	setUserData(data) {
 		set(() => ({
 			userInfo: data,
 		}));
 	},
 	resetUser() {
-		set(() => ({ userInfo }));
+		set(() => ({ userInfo: null }));
 	},
 }));
 

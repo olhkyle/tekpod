@@ -1,30 +1,34 @@
 import { useQuery } from '@tanstack/react-query';
-import useUserStore from '../store/userStore';
 import supabase from '../supabase/service';
+import useUserStore from '../store/userStore';
 
 const useAuthQuery = () => {
-	const { userInfo, setUserData } = useUserStore();
+	const { setUserData } = useUserStore();
 
-	const authQuery = useQuery({
+	// 1. fetching to check if it's authenticated
+	// 2. if it's authenticated, set Global State
+	const { data, isFetched, isLoading, error } = useQuery({
 		queryKey: ['auth'],
 		queryFn: async () => {
 			try {
 				const {
-					data: { user },
-				} = await supabase.auth.getUser();
+					data: { session },
+					error,
+				} = await supabase.auth.getSession();
 
-				if (user) {
-					setUserData({ id: user!.id, email: user?.email ?? userInfo.email });
+				if (error) {
+					throw new Error(error.message);
 				}
 
-				return user;
+				setUserData(session);
+				return session;
 			} catch (error) {
 				console.error(error);
 			}
 		},
 	});
 
-	return { userInfo, setUserData, authQuery };
+	return { data, isFetched, isLoading, error };
 };
 
 export default useAuthQuery;

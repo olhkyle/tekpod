@@ -25,10 +25,12 @@ const Login = () => {
 		try {
 			const { data, error } = await supabase.auth.signInWithPassword(formData);
 
-			if (!error) {
-				setUserData({ id: data?.user!.id, email: data?.user!.email ?? formData?.email });
-				navigate(routes.HOME);
+			if (error) {
+				throw new Error(error.message);
 			}
+
+			setUserData(data.session);
+			navigate(routes.HOME);
 		} catch (error) {
 			console.error(error);
 		}
@@ -77,6 +79,7 @@ const SubmitButton = styled.button`
 	min-width: 270px;
 	background-color: var(--greyOpacity100);
 	border-radius: var(--radius-s);
+	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	transition: background 0.15s ease-in-out;
 

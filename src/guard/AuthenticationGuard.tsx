@@ -9,10 +9,9 @@ interface AuthenticationGuardProps {
 	element: ReactNode;
 }
 
+// As a role of Server-Side-Rendering's Middleware
 const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
-	const {
-		authQuery: { data, isFetched, isLoading, error },
-	} = useAuthQuery();
+	const { data, isFetched, isLoading, error } = useAuthQuery();
 
 	return isLoading ? (
 		<LoadingSpinner />

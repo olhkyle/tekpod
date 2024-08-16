@@ -5,9 +5,7 @@ import { useAuthQuery } from '../../hooks';
 import { routes } from '../../constants';
 
 const BottomHeader = () => {
-	const {
-		authQuery: { data },
-	} = useAuthQuery();
+	const { data } = useAuthQuery();
 
 	return (
 		<Header>
@@ -21,7 +19,7 @@ const BottomHeader = () => {
 				<NavLink href={routes.WRITE}>
 					<RiPencilLine size={26} />
 				</NavLink>
-				<NavLink href={data ? `${routes.USER}/${data.id}` : routes.LOGIN}>
+				<NavLink href={data?.user ? `${routes.USER}/${data?.user?.id}` : routes.LOGIN}>
 					<RiUser3Line size={24} />
 				</NavLink>
 			</Links>
