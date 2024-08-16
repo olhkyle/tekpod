@@ -25,7 +25,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				index: true,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Home />} />,
+				element: <Home />,
 			},
 			{
 				path: routes.DIARY,
