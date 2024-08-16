@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 const Home = () => {
 	return (
 		<Container>
-			<Title>Contributions in This Year</Title>
+			<Title>✹ Contributions</Title>
 			<DayGrid>
 				{Array.from({ length: 64 }, (_, idx) => (
 					<Day key={idx} isActive={idx % 3 === 0} />
@@ -21,7 +21,7 @@ const Container = styled.div`
 
 const Title = styled.h2`
 	width: 100%;
-	font-size: var(--fz-h7);
+	font-size: var(--fz-h6);
 	font-weight: var(--fw-black);
 	color: var(--blue200);
 `;
@@ -30,7 +30,7 @@ const DayGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
 	gap: 8px;
-	margin-top: 32px;
+	margin-top: 16px;
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	border: 1px solid var(--grey200);

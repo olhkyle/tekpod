@@ -10,7 +10,7 @@ const Nav = () => {
 				<Link to={routes.HOME}>TEKT</Link>
 			</Logo>
 			<Button>
-				<FiSearch size={24} />
+				<FiSearch size={24} color="var(--black)" />
 			</Button>
 		</Container>
 	);
