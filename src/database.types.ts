@@ -6,9 +6,10 @@ export interface Database {
 			diary: {
 				Row: {
 					// the data expected from .select()
-					id: number;
+					id: string;
 					title: string;
 					content: string;
+					feeling: string;
 					created_at: Date;
 					updated_at: Date;
 					tags: string[] | null;
@@ -18,6 +19,7 @@ export interface Database {
 					id?: never; // generated columns must not be supplied
 					title: string; // `not null` columns with no default must be supplied
 					content: string; // nullable columns can be omitted
+					feeling: string;
 					created_at: Date;
 					updated_at: Date;
 					tags: string[] | null;
@@ -27,6 +29,7 @@ export interface Database {
 					id?: never;
 					title: string; // `not null` columns with no default must be supplied
 					content: string; // nullable columns can be omitted
+					feeling: string;
 					updated_at: Date;
 					tags: string[] | null;
 				};
