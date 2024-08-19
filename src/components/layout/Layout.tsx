@@ -13,6 +13,7 @@ const layoutCss = {
 	main: css`
 		min-height: calc(100dvh - var(--nav-height));
 		margin-top: var(--nav-height);
+		margin-bottom: var(--nav-height);
 		padding: var(--padding-container-mobile);
 		background-color: var(--white);
 	`,

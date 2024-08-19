@@ -16,7 +16,7 @@ const TagsInput = ({ tags, setTags }: TagsInputProps) => {
 		<Container>
 			{tags.map(({ id, tag }) => (
 				<Tag key={`${tag}_${id}`}>
-					{tag}
+					{`#${tag}`}
 					<button type="button" onClick={() => setTags(tags.filter(({ id: order }) => id !== order))}>
 						<RiCloseFill size="16" color="var(--black)" />
 					</button>
@@ -55,7 +55,9 @@ const Container = styled.div`
 	gap: 8px;
 	padding: var(--padding-container-mobile);
 	width: 100%;
+	min-height: 65px;
 	border: 1px solid var(--greyOpacity200);
+	overflow-x: scroll;
 `;
 
 const Tag = styled.span`

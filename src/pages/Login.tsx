@@ -5,8 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import supabase from '../supabase/service';
 import { LabelInput } from '../components';
 import { loginSchema, type LoginSchema } from '../components/auth/schema';
-import { routes } from '../constants';
 import useUserStore from '../store/userStore';
+import useLoading from '../hooks/useLoading';
+import { routes } from '../constants';
 
 const Login = () => {
 	const {
@@ -18,12 +19,14 @@ const Login = () => {
 		defaultValues: { email: '', password: '' },
 	});
 
+	const { Loading, isLoading, startTransition } = useLoading();
+
 	const { setUserData } = useUserStore();
 	const navigate = useNavigate();
 
 	const onSubmit = async (formData: LoginSchema) => {
 		try {
-			const { data, error } = await supabase.auth.signInWithPassword(formData);
+			const { data, error } = await startTransition(supabase.auth.signInWithPassword(formData));
 
 			if (error) {
 				throw new Error(error.message);
@@ -40,14 +43,14 @@ const Login = () => {
 		<Form onSubmit={handleSubmit(onSubmit)}>
 			<Title>﹡﹡</Title>
 			<LabelInput label={'email'} errorMessage={errors?.email?.message}>
-				<LabelInput.TextField type={'email'} placeholder={'Email'} {...register('email')} />
+				<LabelInput.TextField type={'email'} id={'email'} {...register('email')} placeholder={'Email'} />
 			</LabelInput>
 			<LabelInput label={'password'} errorMessage={errors?.password?.message}>
-				<LabelInput.TextField type={'password'} placeholder={'Password'} {...register('password')} />
+				<LabelInput.TextField type={'password'} id={'password'} {...register('password')} placeholder={'Password'} />
 			</LabelInput>
 
 			<SubmitButton type="submit" aria-label="Login Button">
-				LOGIN
+				{isLoading ? Loading : 'LOGIN'}
 			</SubmitButton>
 			<ActionButtons>
 				<ResetPasswordButton type="button" aria-label="Reset Password Button">

@@ -3,14 +3,17 @@ import styled from '@emotion/styled';
 import supabase from '../supabase/service';
 import useUserStore from '../store/userStore';
 import { routes } from '../constants';
+import useLoading from '../hooks/useLoading';
 
 const Profile = () => {
 	const navigate = useNavigate();
 	const { userInfo, resetUser } = useUserStore();
 
+	const { Loading, isLoading, startTransition } = useLoading();
+
 	const handleLogout = async () => {
 		try {
-			const { error } = await supabase.auth.signOut();
+			const { error } = await startTransition(supabase.auth.signOut());
 
 			if (error) {
 				throw new Error(error.message);
@@ -29,7 +32,7 @@ const Profile = () => {
 			<Bottom>
 				<Title>Keep Writing ? </Title>
 				<LogoutButton type="button" onClick={handleLogout}>
-					로그아웃
+					{isLoading ? Loading : 'LogOut ⇲'}
 				</LogoutButton>
 			</Bottom>
 		</Container>

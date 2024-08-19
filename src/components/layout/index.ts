@@ -6,3 +6,4 @@ export { default as Footer } from './Footer';
 export { default as BottomHeader } from './BottomHeader';
 export { default as NotAuthenticated } from './NotAuthenticated';
 export { default as LoadingSpinner } from './LoadingSpinner';
+export { default as LayoutLoadingSpinner } from './LayoutLoadingSpinner';

@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
-import { Content } from '../components';
+import { Content, LoadingSpinner } from '../components';
 
 const Diary = () => {
 	return (
-		<Suspense fallback={<div>Loading... Loading... Loading... Loading...</div>}>
+		<Suspense fallback={<LoadingSpinner />}>
 			<Content />
 		</Suspense>
 	);

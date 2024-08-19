@@ -1,7 +1,27 @@
+import { ChangeEvent, Children, cloneElement, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId, useRef } from 'react';
 import styled from '@emotion/styled';
-import { ChangeEvent, HTMLAttributes, useRef } from 'react';
 
-interface TextAreaProps extends Omit<HTMLAttributes<HTMLTextAreaElement>, 'size'> {
+interface TextAreaProps {
+	children: ReactElement;
+	errorMessage?: string;
+}
+
+const TextArea = ({ children, errorMessage, ...props }: TextAreaProps) => {
+	const child = Children.only(children);
+	const generatedId = useId();
+	const id = child.props.id ?? generatedId;
+
+	const ref = useRef<HTMLTextAreaElement | null>(null);
+
+	return (
+		<Container {...props}>
+			{cloneElement(child, { id, ref, ...child.props })}
+			{errorMessage && <Message>﹡ {errorMessage}</Message>}
+		</Container>
+	);
+};
+
+interface TextFieldProps extends Omit<HTMLAttributes<HTMLTextAreaElement>, 'size'> {
 	id: string;
 	name: string;
 	value: string;
@@ -9,28 +29,41 @@ interface TextAreaProps extends Omit<HTMLAttributes<HTMLTextAreaElement>, 'size'
 	placeholder: string;
 }
 
-const TextArea = ({ id, name, placeholder, onChange, ...props }: TextAreaProps) => {
-	const ref = useRef<HTMLTextAreaElement | null>(null);
-
+TextArea.TextField = forwardRef(({ id, name, placeholder, onChange, ...props }: TextFieldProps, ref: ForwardedRef<HTMLTextAreaElement>) => {
 	return (
-		<Container
+		<TextField
 			id={id}
 			name={name}
 			ref={ref}
 			placeholder={placeholder}
 			onChange={e => {
-				if (ref && ref.current) {
-					ref.current.style.height = 'auto';
-					ref.current.style.height = `${ref.current.scrollHeight}px`;
+				const element = e.currentTarget;
+
+				element.style.height = 'auto';
+				element.style.height = `${element.scrollHeight}px`;
+
+				if (onChange) {
 					onChange(e);
 				}
 			}}
 			{...props}
 		/>
 	);
-};
+});
 
-const Container = styled.textarea`
+const Container = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+`;
+
+const Message = styled.p`
+	padding-left: 4px;
+	font-size: var(--fz-sm);
+	color: var(--red200);
+`;
+
+const TextField = styled.textarea`
 	padding: var(--padding-container-mobile);
 	font-size: var(--fz-h5);
 	font-weight: var(--fw-regular);

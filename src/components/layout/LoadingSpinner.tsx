@@ -1,27 +1,5 @@
-import styled from '@emotion/styled';
-
 const LoadingSpinner = () => {
-	return (
-		<Container>
-			<img src="/eclipse-half.svg" alt="spinner" />
-		</Container>
-	);
+	return <img src="/eclipse-half-small.svg" alt="spinner" />;
 };
-
-const Container = styled.div`
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100dvw;
-	height: 100dvh;
-
-	img {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate3d(-50%, -50%);
-	}
-`;
 
 export default LoadingSpinner;
