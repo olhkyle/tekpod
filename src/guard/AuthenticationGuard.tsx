@@ -15,7 +15,7 @@ const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) 
 
 	return isLoading ? (
 		<LoadingSpinner />
-	) : isFetched && data ? (
+	) : data && isFetched ? (
 		error === null ? (
 			<Suspense fallback={<LoadingSpinner />}>{element}</Suspense>
 		) : (
