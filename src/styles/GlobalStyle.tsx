@@ -200,6 +200,7 @@ const Global = css`
 	input[type='tel'],
 	input[type='password'],
 	textarea {
+		border-radius: 0;
 		-webkit-text-size-adjust: 100%; /* iOS에서 텍스트 크기 자동 조정 방지 */
 		-webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* 탭 시 하이라이트 효과 제거 */
 	}
