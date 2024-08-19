@@ -8,6 +8,7 @@ import { WriteSchema, writeSchema } from '../components/write/schema';
 import { addDiary } from '../supabase/diary';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../constants';
+import useLoading from '../hooks/useLoading';
 
 export interface Tag {
 	id: number;
@@ -23,6 +24,7 @@ const Write = () => {
 	} = useForm<WriteSchema>({ resolver: zodResolver(writeSchema) });
 
 	const [tags, setTags] = useState<Tag[]>([]);
+	const { Loading, isLoading, startTransition } = useLoading();
 
 	const navigate = useNavigate();
 
@@ -35,13 +37,15 @@ const Write = () => {
 		const today = new Date();
 
 		try {
-			const { error } = await addDiary({
-				id: uuid(),
-				...data,
-				created_at: today,
-				updated_at: today,
-				tags: tags.map(({ tag }) => tag),
-			});
+			const { error } = await startTransition(
+				addDiary({
+					id: uuid(),
+					...data,
+					created_at: today,
+					updated_at: today,
+					tags: tags.map(({ tag }) => tag),
+				}),
+			);
 
 			if (error) {
 				throw new Error(error.message);
@@ -78,7 +82,7 @@ const Write = () => {
 					<TextInput.TextField id="feeling" {...register('feeling')} name="feeling" placeholder="💡 One Feeling" />
 				</TextInput>
 				<TagsInput tags={tags} setTags={setTags} />
-				<UploadButton type="submit">업로드</UploadButton>
+				<UploadButton type="submit">{isLoading ? Loading : '👆🏻 Upload'}</UploadButton>
 			</Group>
 		</Container>
 	);
@@ -104,6 +108,7 @@ const Preview = styled.button`
 	padding: calc(var(--padding-container-mobile) / 4) calc(var(--padding-container-mobile) / 2);
 	font-weight: var(--fw-semibold);
 	border-radius: var(--radius-s);
+	color: var(--grey700);
 	background-color: var(--greyOpacity100);
 
 	&:focus {
