@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Header, BottomNav } from '.';
+import useInitialScrollToTop from '../../hooks/useInitialScrollToTop';
 
 const layoutCss = {
 	wrapper: css`
@@ -22,6 +23,8 @@ const layoutCss = {
 const Layout = () => {
 	const layoutRef = useRef<HTMLDivElement>(null);
 	const [, setGlobalWidth] = useState('');
+
+	useInitialScrollToTop();
 
 	useEffect(() => {
 		if (layoutRef.current) {
