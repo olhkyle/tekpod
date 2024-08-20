@@ -7,7 +7,7 @@ const useAuthQuery = () => {
 
 	// 1. fetching to check if it's authenticated
 	// 2. if it's authenticated, set Global State
-	const { data, isFetched, isLoading, error } = useQuery({
+	const { data, isFetched, isLoading, error, refetch } = useQuery({
 		queryKey: ['auth'],
 		queryFn: async () => {
 			try {
@@ -20,6 +20,10 @@ const useAuthQuery = () => {
 					throw new Error(error.message);
 				}
 
+				if (!session) {
+					return null;
+				}
+
 				setUserData(session);
 				return session;
 			} catch (error) {
@@ -28,7 +32,7 @@ const useAuthQuery = () => {
 		},
 	});
 
-	return { data, isFetched, isLoading, error };
+	return { data, isFetched, isLoading, error, refetch };
 };
 
 export default useAuthQuery;
