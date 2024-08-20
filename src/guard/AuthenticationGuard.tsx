@@ -1,6 +1,6 @@
-import { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { LayoutLoadingSpinner, LoadingSpinner, NotAuthenticated } from '../components';
+import { LayoutLoadingSpinner, NotAuthenticated } from '../components';
 import { useAuthQuery } from '../hooks';
 import routes, { Route } from '../constants/routes';
 
@@ -14,10 +14,12 @@ const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) 
 	const { data, isFetched, isLoading, error, refetch } = useAuthQuery();
 
 	// data(session)이 null인 순간들이 발생할 때 refetch 하도록
-	if (!data) {
-		refetch();
-		return null;
-	}
+	useEffect(() => {
+		if (!data) {
+			refetch();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	if (isLoading) {
 		return <LayoutLoadingSpinner />;
@@ -25,7 +27,7 @@ const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) 
 
 	return data && isFetched ? (
 		error === null ? (
-			<Suspense fallback={<LoadingSpinner />}>{element}</Suspense>
+			<Suspense fallback={<LayoutLoadingSpinner />}>{element}</Suspense>
 		) : (
 			<Navigate to={redirectTo} />
 		)
