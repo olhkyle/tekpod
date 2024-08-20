@@ -6,7 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
 import { Home, Diary, NotFound, Write, Profile, Login, Register, Content } from './pages';
 import AuthenticationGuard from './guard/AuthenticationGuard';
-import { DiaryLayout, ErrorBoundary, Layout } from './components';
+import { Layout, RouteError, DiaryLayout } from './components';
 import { routes } from './constants';
 
 const queryClient = new QueryClient({
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Layout />,
-		errorElement: <ErrorBoundary />,
+		errorElement: <RouteError />,
 		children: [
 			{
 				index: true,

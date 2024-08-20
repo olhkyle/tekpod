@@ -2,7 +2,7 @@ export * from './spinner';
 
 export { default as Layout } from './Layout';
 export { default as DiaryLayout } from './DiaryLayout';
-export { default as ErrorBoundary } from './RouteError';
+export { default as RouteError } from './RouteError';
 export { default as Header } from './Header';
 export { default as NavLink } from './NavLink';
 export { default as Footer } from './Footer';
