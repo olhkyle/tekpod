@@ -1,19 +1,24 @@
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
-import { getSingleDiary } from '../supabase/diary';
+import styled from '@emotion/styled';
+import { ContentBody, ContentBodyLoader, GoBackButton } from '../components';
+import { Suspense } from 'react';
 
 const ContentPage = () => {
-	const { diaryId } = useParams();
-
-	const { data } = useQuery({ queryKey: ['diary', diaryId], queryFn: () => getSingleDiary(diaryId!) });
-
 	return (
-		<>
-			{data?.title}
-			{data?.content}
-			{data?.feeling}
-		</>
+		<Container>
+			<GoBackButton />
+			<Suspense fallback={<ContentBodyLoader />}>
+				<ContentBody />
+			</Suspense>
+		</Container>
 	);
 };
+
+const Container = styled.section`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 100%;
+	height: calc(100dvh - (3 * var(--nav-height) + 16px));
+`;
 
 export default ContentPage;

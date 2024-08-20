@@ -5,6 +5,7 @@ export { default as DiaryLayout } from './DiaryLayout';
 export { default as RouteError } from './RouteError';
 export { default as Header } from './Header';
 export { default as NavLink } from './NavLink';
+export { default as GoBackButton } from './GoBackButton';
 export { default as Footer } from './Footer';
 export { default as BottomNav } from './BottomNav';
 export { default as NotAuthenticated } from './NotAuthenticated';
