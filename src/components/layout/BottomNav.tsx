@@ -4,11 +4,11 @@ import { NavLink } from '.';
 import { useAuthQuery } from '../../hooks';
 import { routes } from '../../constants';
 
-const BottomHeader = () => {
+const BottomNav = () => {
 	const { data } = useAuthQuery();
 
 	return (
-		<Header>
+		<Nav>
 			<Links>
 				<NavLink href={routes.HOME}>
 					<RiHome6Line size={24} />
@@ -24,11 +24,11 @@ const BottomHeader = () => {
 				</NavLink>
 			</Links>
 			<Spacer />
-		</Header>
+		</Nav>
 	);
 };
 
-const Header = styled.header`
+const Nav = styled.header`
 	position: fixed;
 	bottom: 0;
 	max-width: var(--max-app-width);
@@ -55,4 +55,4 @@ const Spacer = styled.div`
 	}
 `;
 
-export default BottomHeader;
+export default BottomNav;

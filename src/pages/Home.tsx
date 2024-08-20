@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-const Home = () => {
+const HomePage = () => {
 	return (
 		<Container>
 			<Title>✹ Contributions</Title>
@@ -46,4 +46,4 @@ const Day = styled.span<{ isActive: boolean }>`
 	border-radius: var(--radius-xs);
 `;
 
-export default Home;
+export default HomePage;

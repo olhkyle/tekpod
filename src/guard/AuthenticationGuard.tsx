@@ -1,6 +1,6 @@
 import { ReactNode, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
-import { LayoutLoadingSpinner, NotAuthenticated } from '../components';
+import { LayoutLoadingSpinner, LoadingSpinner, NotAuthenticated } from '../components';
 import { useAuthQuery } from '../hooks';
 import routes, { Route } from '../constants/routes';
 
@@ -25,7 +25,7 @@ const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) 
 
 	return data && isFetched ? (
 		error === null ? (
-			<Suspense fallback={<LayoutLoadingSpinner />}>{element}</Suspense>
+			<Suspense fallback={<LoadingSpinner />}>{element}</Suspense>
 		) : (
 			<Navigate to={redirectTo} />
 		)

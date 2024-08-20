@@ -15,7 +15,7 @@ export interface Tag {
 	tag: string;
 }
 
-const Write = () => {
+const WritePage = () => {
 	const {
 		register,
 		control,
@@ -134,4 +134,4 @@ const UploadButton = styled.button`
 	}
 `;
 
-export default Write;
+export default WritePage;

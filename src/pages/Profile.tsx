@@ -5,7 +5,7 @@ import useUserStore from '../store/userStore';
 import { routes } from '../constants';
 import useLoading from '../hooks/useLoading';
 
-const Profile = () => {
+const ProfilePage = () => {
 	const navigate = useNavigate();
 	const { userInfo, resetUser } = useUserStore();
 
@@ -88,4 +88,4 @@ const LogoutButton = styled.button`
 	}
 `;
 
-export default Profile;
+export default ProfilePage;

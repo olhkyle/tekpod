@@ -10,7 +10,7 @@ const RouteError = () => {
 
 	if (error) {
 		switch (error instanceof Error && error.name) {
-			case 'InvalidAuthError':
+			case 'Invalid login credentials':
 				return <Navigate to={routes.LOGIN} replace={true} />;
 
 			default:

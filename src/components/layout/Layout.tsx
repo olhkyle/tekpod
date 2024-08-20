@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
-import { Nav, BottomHeader } from '.';
+import { Header, BottomNav } from '.';
 
 const layoutCss = {
 	wrapper: css`
@@ -31,11 +31,11 @@ const Layout = () => {
 
 	return (
 		<div ref={layoutRef} css={layoutCss.wrapper}>
-			<Nav />
+			<Header />
 			<main css={layoutCss.main}>
 				<Outlet />
 			</main>
-			<BottomHeader />
+			<BottomNav />
 			{/* <Footer /> */}
 		</div>
 	);

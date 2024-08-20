@@ -10,7 +10,9 @@ const getDiaries = async (): Promise<Diary[]> => {
 };
 
 const getSingleDiary = async (id: string) => {
-	await supabase.from(TABLE).select().eq('id', id).single();
+	const { data } = await supabase.from(TABLE).select().eq('id', id).single();
+
+	return data;
 };
 
 const addDiary = async (data: Diary) => {

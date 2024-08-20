@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { FiSearch } from 'react-icons/fi';
 import { routes } from '../../constants';
 
-const Nav = () => {
+const Header = () => {
 	return (
 		<Container>
 			<Logo>
@@ -47,4 +47,4 @@ const Button = styled.button`
 	cursor: pointer;
 `;
 
-export default Nav;
+export default Header;

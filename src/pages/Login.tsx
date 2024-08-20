@@ -9,7 +9,7 @@ import useUserStore from '../store/userStore';
 import useLoading from '../hooks/useLoading';
 import { routes } from '../constants';
 
-const Login = () => {
+const LoginPage = () => {
 	const {
 		register,
 		formState: { errors },
@@ -128,4 +128,4 @@ const RegisterLink = styled(Link)`
 	}
 `;
 
-export default Login;
+export default LoginPage;
