@@ -4,9 +4,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
-import { Home, Diary, NotFound, Write, Profile, Login, Register } from './pages';
+import { Home, Diary, NotFound, Write, Profile, Login, Register, Content } from './pages';
 import AuthenticationGuard from './guard/AuthenticationGuard';
-import { ErrorBoundary, Layout } from './components';
+import { DiaryLayout, ErrorBoundary, Layout } from './components';
 import { routes } from './constants';
 
 const queryClient = new QueryClient({
@@ -29,7 +29,14 @@ const router = createBrowserRouter([
 			},
 			{
 				path: routes.DIARY,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Diary />} />,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<DiaryLayout />} />,
+				children: [
+					{
+						index: true,
+						element: <Diary />,
+					},
+					{ path: `:diaryId`, element: <Content /> },
+				],
 			},
 			{
 				path: routes.WRITE,
