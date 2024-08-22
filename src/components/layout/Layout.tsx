@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Header, BottomNav } from '.';
-import useInitialScrollToTop from '../../hooks/useInitialScrollToTop';
+import { useInitialScrollToTop } from '../../hooks';
 
 const layoutCss = {
 	wrapper: css`
@@ -12,9 +12,8 @@ const layoutCss = {
 		overflow: hidden;
 	`,
 	main: css`
-		min-height: calc(100dvh - var(--nav-height));
-		margin-top: var(--nav-height);
-		margin-bottom: var(--nav-height);
+		min-height: calc(100dvh - 2 * var(--nav-height));
+		margin: var(--nav-height) 0;
 		padding: var(--padding-container-mobile);
 		background-color: var(--white);
 	`,
