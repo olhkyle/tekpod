@@ -1,4 +1,4 @@
-import { ReactNode, Suspense, useEffect } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 import { LayoutLoadingSpinner, NotAuthenticated } from '../components';
 import { useAuthQuery } from '../hooks';
@@ -11,15 +11,7 @@ interface AuthenticationGuardProps {
 
 // As a role of Server-Side-Rendering's Middleware
 const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
-	const { data, isFetched, isLoading, error, refetch } = useAuthQuery();
-
-	// data(session)이 null인 순간들이 발생할 때 refetch 하도록
-	useEffect(() => {
-		if (!data) {
-			refetch();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	const { data, isFetched, isLoading, error } = useAuthQuery();
 
 	if (isLoading) {
 		return <LayoutLoadingSpinner />;
