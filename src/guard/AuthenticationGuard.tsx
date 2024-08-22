@@ -11,21 +11,13 @@ interface AuthenticationGuardProps {
 
 // As a role of Server-Side-Rendering's Middleware
 const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
-	const { data, isFetched, isLoading, error } = useAuthQuery();
+	const { data, error } = useAuthQuery();
 
-	if (isLoading) {
-		return <LayoutLoadingSpinner />;
+	if (!data) {
+		return <NotAuthenticated />;
 	}
 
-	return data && isFetched ? (
-		error === null ? (
-			<Suspense fallback={<LayoutLoadingSpinner />}>{element}</Suspense>
-		) : (
-			<Navigate to={redirectTo} />
-		)
-	) : (
-		<NotAuthenticated />
-	);
+	return error === null ? <Suspense fallback={<LayoutLoadingSpinner />}>{element}</Suspense> : <Navigate to={redirectTo} />;
 };
 
 export default AuthenticationGuard;
