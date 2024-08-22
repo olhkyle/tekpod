@@ -13,6 +13,7 @@ const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			retry: 0,
+			staleTime: 3000,
 		},
 	},
 });
@@ -45,10 +46,10 @@ const router = createBrowserRouter([
 				path: `${routes.USER}/:id`,
 				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Profile')} />,
 			},
-			{ path: routes.LOGIN, element: <Login /> },
-			{ path: routes.REGISTER, element: <Register /> },
 		],
 	},
+	{ path: routes.LOGIN, element: <Login /> },
+	{ path: routes.REGISTER, element: <Register /> },
 	{
 		path: '/*',
 		element: <NotFound />,
