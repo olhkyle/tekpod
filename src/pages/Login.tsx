@@ -53,7 +53,6 @@ const LoginPage = () => {
 			}
 
 			if (data) {
-				console.log(data);
 				setUserData(data.session);
 				navigate(routes.HOME);
 			}
