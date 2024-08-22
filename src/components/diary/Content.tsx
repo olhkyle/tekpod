@@ -1,11 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { getDiaries } from '../../supabase/diary';
+import type { Diary } from '../../supabase/schema';
 import { routes } from '../../constants';
 
 const Content = () => {
-	const { data: diaries } = useQuery({ queryKey: ['diary'], queryFn: getDiaries });
+	const { data: diaries } = useSuspenseQuery<Diary[]>({ queryKey: ['diary'], queryFn: getDiaries });
 
 	return (
 		<Diaries>
