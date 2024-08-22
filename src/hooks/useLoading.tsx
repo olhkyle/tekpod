@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useIsMountedRef } from './useIsMountedRef';
+import { useIsMountedRef } from '.';
 import { LoadingSpinner } from '../components';
 
 const useLoading = () => {
