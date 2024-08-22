@@ -54,7 +54,7 @@ const LoginPage = () => {
 
 			if (data) {
 				setUserData(data.session);
-				navigate(routes.HOME);
+				navigate(routes.HOME, { replace: true });
 			}
 		} catch (error) {
 			console.error(error);
