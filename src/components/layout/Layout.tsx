@@ -39,7 +39,6 @@ const Layout = () => {
 				<Outlet />
 			</main>
 			<BottomNav />
-			{/* <Footer /> */}
 			<ModalContainer />
 		</div>
 	);
