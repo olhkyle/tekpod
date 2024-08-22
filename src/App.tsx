@@ -4,9 +4,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
-import { Home, Diary, NotFound, Write, Profile, Login, Register, Content } from './pages';
 import AuthenticationGuard from './guard/AuthenticationGuard';
-import { Layout, RouteError, DiaryLayout } from './components';
+import { Home, NotFound, Login, Register, Content } from './pages';
+import { Layout, DiaryLayout, LoadLazy } from './components';
 import { routes } from './constants';
 
 const queryClient = new QueryClient({
@@ -19,13 +19,12 @@ const queryClient = new QueryClient({
 
 const router = createBrowserRouter([
 	{
-		path: '/',
+		path: routes.HOME,
 		element: <Layout />,
-		errorElement: <RouteError />,
 		children: [
 			{
 				index: true,
-				element: <Home />,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Home />} />,
 			},
 			{
 				path: routes.DIARY,
@@ -33,18 +32,18 @@ const router = createBrowserRouter([
 				children: [
 					{
 						index: true,
-						element: <Diary />,
+						element: LoadLazy('Diary'),
 					},
 					{ path: `:diaryId`, element: <Content /> },
 				],
 			},
 			{
 				path: routes.WRITE,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Write />} />,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Write')} />,
 			},
 			{
 				path: `${routes.USER}/:id`,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Profile />} />,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Profile')} />,
 			},
 			{ path: routes.LOGIN, element: <Login /> },
 			{ path: routes.REGISTER, element: <Register /> },
