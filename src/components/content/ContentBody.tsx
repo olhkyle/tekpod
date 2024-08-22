@@ -64,6 +64,7 @@ const EditButton = styled.button`
 	margin-left: auto;
 	padding: calc(var(--padding-container-mobile) / 2) var(--padding-container-mobile);
 	font-weight: var(--fw-semibold);
+	color: var(--black);
 	background-color: var(--greyOpacity50);
 	border: 1px solid var(--greyOpacity200);
 	border-radius: var(--radius-s);
