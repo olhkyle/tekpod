@@ -3,14 +3,24 @@ import { Diary } from './schema';
 
 const TABLE = 'diary';
 
+// const wait = (time: number) => new Promise(resolve => setTimeout(resolve, time));
+
 const getDiaries = async (): Promise<Diary[]> => {
-	const { data } = await supabase.from(TABLE).select();
+	const { data, error } = await supabase.from(TABLE).select();
+
+	if (error) {
+		throw new Error(error.message);
+	}
 
 	return data?.sort((prev, curr) => new Date(curr.updated_at).getTime() - new Date(prev.updated_at).getTime()) ?? [];
 };
 
-const getSingleDiary = async (id: string) => {
-	const { data } = await supabase.from(TABLE).select().eq('id', id).single();
+const getSingleDiary = async (id: string): Promise<Diary> => {
+	const { data, error } = await supabase.from(TABLE).select().eq('id', id).single();
+
+	if (error) {
+		throw new Error(error.message);
+	}
 
 	return data;
 };
