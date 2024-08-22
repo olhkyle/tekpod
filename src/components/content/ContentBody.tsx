@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Diary } from '../../supabase/schema';
@@ -11,7 +11,7 @@ const ContentBody = () => {
 	const { diaryId } = useParams();
 	const navigate = useNavigate();
 
-	const { data } = useQuery<Diary>({ queryKey: ['diary', diaryId], queryFn: () => getSingleDiary(diaryId!) });
+	const { data } = useSuspenseQuery<Diary>({ queryKey: ['diary', diaryId], queryFn: () => getSingleDiary(diaryId!) });
 
 	const { mutate: remove, isPending } = useDeleteDiaryMutation();
 
@@ -29,6 +29,7 @@ const ContentBody = () => {
 				</ContentList>
 				<Feeling>💡 {data?.feeling}</Feeling>
 			</Description>
+
 			<DeleteButton
 				type="button"
 				onClick={() => {
