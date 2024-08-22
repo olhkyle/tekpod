@@ -10,25 +10,21 @@ const useAuthQuery = () => {
 	const { data, isFetched, isLoading, error, refetch } = useSuspenseQuery({
 		queryKey: ['auth'],
 		queryFn: async () => {
-			try {
-				const {
-					data: { session },
-					error,
-				} = await supabase.auth.getSession();
+			const {
+				data: { session },
+				error,
+			} = await supabase.auth.getSession();
 
-				if (error) {
-					throw new Error(error.message);
-				}
-
-				if (!session) {
-					return null;
-				}
-
-				setUserData(session);
-				return session;
-			} catch (error) {
-				console.error(error);
+			if (error) {
+				throw new Error(error.message);
 			}
+
+			if (!session) {
+				return null;
+			}
+
+			setUserData(session);
+			return session;
 		},
 	});
 
