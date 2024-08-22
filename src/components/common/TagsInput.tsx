@@ -1,7 +1,11 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { RiCloseFill } from 'react-icons/ri';
-import type { Tag } from '../../pages/Write';
+
+export interface Tag {
+	id: number;
+	tag: string;
+}
 
 interface TagsInputProps {
 	tags: Tag[];

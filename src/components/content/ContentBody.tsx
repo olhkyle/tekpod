@@ -1,11 +1,13 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import styled from '@emotion/styled';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Diary } from '../../supabase/schema';
 import { getSingleDiary } from '../../supabase/diary';
 import useDeleteDiaryMutation from '../../hooks/mutations/useDeleteDiaryMutation';
-import { LoadingSpinner } from '../layout';
+import { LoadingSpinner, EditContentModal } from '..';
 import { routes } from '../../constants';
+import useModalStore from '../../store/useModalStore';
 
 const ContentBody = () => {
 	const { diaryId } = useParams();
@@ -15,8 +17,18 @@ const ContentBody = () => {
 
 	const { mutate: remove, isPending } = useDeleteDiaryMutation();
 
+	const { setModal } = useModalStore();
+	const [isEditModalOpen] = useState(true);
+
+	const handleEditModalClick = () => {
+		setModal({ Component: EditContentModal, props: { isOpen: isEditModalOpen, data } });
+	};
+
 	return (
 		<>
+			<EditButton type="button" onClick={handleEditModalClick}>
+				Edit
+			</EditButton>
 			<Description>
 				<Title>{data?.title}</Title>
 				<ContentList>
@@ -47,6 +59,21 @@ const ContentBody = () => {
 		</>
 	);
 };
+
+const EditButton = styled.button`
+	margin-left: auto;
+	padding: calc(var(--padding-container-mobile) / 2) var(--padding-container-mobile);
+	font-weight: var(--fw-semibold);
+	background-color: var(--greyOpacity50);
+	border: 1px solid var(--greyOpacity200);
+	border-radius: var(--radius-s);
+	transition: background 0.15s ease-in-out;
+
+	&:hover,
+	&:active {
+		background-color: var(--greyOpacity100);
+	}
+`;
 
 const Description = styled.div`
 	display: flex;
@@ -81,6 +108,7 @@ const Feeling = styled.p`
 `;
 
 const DeleteButton = styled.button`
+	margin-top: auto;
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	font-size: var(--fz-p);

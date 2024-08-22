@@ -16,9 +16,8 @@ const ContentPage = () => {
 const Container = styled.section`
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
 	width: 100%;
-	height: calc(100dvh - (3 * var(--nav-height) + 16px));
+	height: calc(100dvh - (3 * var(--nav-height)));
 `;
 
 export default ContentPage;

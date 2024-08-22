@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Header, BottomNav } from '.';
+import { ModalContainer } from '..';
 import { useInitialScrollToTop } from '../../hooks';
 
 const layoutCss = {
@@ -39,6 +40,7 @@ const Layout = () => {
 			</main>
 			<BottomNav />
 			{/* <Footer /> */}
+			<ModalContainer />
 		</div>
 	);
 };

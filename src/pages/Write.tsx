@@ -9,11 +9,7 @@ import { addDiary } from '../supabase/diary';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../constants';
 import useLoading from '../hooks/useLoading';
-
-export interface Tag {
-	id: number;
-	tag: string;
-}
+import { Tag } from '../components/common/TagsInput';
 
 const WritePage = () => {
 	const {
