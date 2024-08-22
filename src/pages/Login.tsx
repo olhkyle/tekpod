@@ -96,6 +96,7 @@ const Title = styled.h2`
 const SubmitButton = styled.button`
 	padding: var(--padding-container-mobile);
 	min-width: 270px;
+	color: var(--black);
 	background-color: var(--greyOpacity100);
 	border-radius: var(--radius-s);
 	font-size: var(--fz-p);
