@@ -40,8 +40,8 @@ const DayGrid = styled.div`
 
 const Day = styled.span<{ isActive: boolean }>`
 	display: inline-block;
-	width: 20px;
-	height: 20px;
+	width: 16px;
+	height: 16px;
 	background-color: ${({ isActive }) => (isActive ? 'var(--black)' : 'var(--greyOpacity200)')};
 	border-radius: var(--radius-xs);
 `;
