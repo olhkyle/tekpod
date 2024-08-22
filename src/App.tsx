@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
 import AuthenticationGuard from './guard/AuthenticationGuard';
-import { Home, NotFound, Login, Register, Content } from './pages';
+import { NotFound, Login, Register, Content } from './pages';
 import { Layout, DiaryLayout, LoadLazy } from './components';
 import { routes } from './constants';
 
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
 		children: [
 			{
 				index: true,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<Home />} />,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Home')} />,
 			},
 			{
 				path: routes.DIARY,
