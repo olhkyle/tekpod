@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Diary } from '../../supabase/schema';
+import type { Diary } from '../../supabase/schema';
 import { getSingleDiary } from '../../supabase/diary';
 import useDeleteDiaryMutation from '../../hooks/mutations/useDeleteDiaryMutation';
 import { LoadingSpinner } from '../layout';
