@@ -26,7 +26,7 @@ const useUserStore = create<UserState>(set => ({
 		}));
 	},
 	resetUser() {
-		set(() => ({ userInfo: null }));
+		set({ userInfo: null });
 	},
 }));
 

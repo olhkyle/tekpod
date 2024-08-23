@@ -20,16 +20,13 @@ const useAuthQuery = () => {
 					throw new Error(error.message);
 				}
 
-				if (!session) {
-					return null;
-				}
-
 				setUserData(session);
 				return session;
 			} catch (error) {
 				console.error(error);
 			}
 		},
+		gcTime: 1000 * 5,
 	});
 
 	return { data, isFetched, isLoading, error, refetch };

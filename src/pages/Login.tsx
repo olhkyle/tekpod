@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -39,6 +40,7 @@ const LoginPage = () => {
 		defaultValues: { email: '', password: '' },
 	});
 
+	const queryClient = useQueryClient();
 	const { Loading, isLoading, startTransition } = useLoading();
 
 	const { setUserData } = useUserStore();
@@ -54,17 +56,21 @@ const LoginPage = () => {
 
 			if (data) {
 				setUserData(data.session);
-				navigate(routes.HOME, { replace: true });
+				navigate(routes.HOME);
 			}
 		} catch (error) {
 			console.error(error);
+		} finally {
+			queryClient.invalidateQueries({ queryKey: ['auth'] });
 		}
 	};
 
 	return (
 		<div css={pageCss.container}>
 			<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
-				<Title>﹡﹡</Title>
+				<Title>
+					<Link to={routes.HOME}>TEKT</Link>
+				</Title>
 				<LabelInput label={'email'} errorMessage={errors?.email?.message}>
 					<LabelInput.TextField type={'email'} id={'email'} {...register('email')} placeholder={'Email'} />
 				</LabelInput>

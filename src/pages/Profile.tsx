@@ -1,11 +1,13 @@
-import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import supabase from '../supabase/service';
 import useUserStore from '../store/userStore';
 import { routes } from '../constants';
 import useLoading from '../hooks/useLoading';
 
 const ProfilePage = () => {
+	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { userInfo, resetUser } = useUserStore();
 
@@ -19,10 +21,12 @@ const ProfilePage = () => {
 				throw new Error(error.message);
 			}
 
+			navigate(routes.HOME);
 			resetUser();
-			navigate(routes.LOGIN);
 		} catch (error) {
 			console.error(error);
+		} finally {
+			queryClient.setQueryData(['auth'], null);
 		}
 	};
 
