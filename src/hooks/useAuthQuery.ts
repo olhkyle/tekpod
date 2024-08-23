@@ -26,7 +26,8 @@ const useAuthQuery = () => {
 				console.error(error);
 			}
 		},
-		gcTime: 1000 * 5,
+		staleTime: 1000,
+		gcTime: 1000 * 2,
 	});
 
 	return { data, isFetched, isLoading, error, refetch };
