@@ -29,27 +29,30 @@ interface TextFieldProps extends Omit<HTMLAttributes<HTMLTextAreaElement>, 'size
 	placeholder: string;
 }
 
-TextArea.TextField = forwardRef(({ id, name, placeholder, onChange, ...props }: TextFieldProps, ref: ForwardedRef<HTMLTextAreaElement>) => {
-	return (
-		<TextField
-			id={id}
-			name={name}
-			ref={ref}
-			placeholder={placeholder}
-			onChange={e => {
-				const element = e.currentTarget;
+TextArea.TextField = forwardRef(
+	({ id, name, value, onChange, placeholder, ...props }: TextFieldProps, ref: ForwardedRef<HTMLTextAreaElement>) => {
+		return (
+			<TextField
+				id={id}
+				name={name}
+				ref={ref}
+				value={value}
+				placeholder={placeholder}
+				onChange={e => {
+					const element = e.currentTarget;
 
-				element.style.height = 'auto';
-				element.style.height = `${element.scrollHeight}px`;
+					element.style.height = 'auto';
+					element.style.height = `${element.scrollHeight}px`;
 
-				if (onChange) {
-					onChange(e);
-				}
-			}}
-			{...props}
-		/>
-	);
-});
+					if (onChange) {
+						onChange(e);
+					}
+				}}
+				{...props}
+			/>
+		);
+	},
+);
 
 const Container = styled.div`
 	display: flex;

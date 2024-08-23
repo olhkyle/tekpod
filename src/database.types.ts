@@ -7,6 +7,7 @@ export interface Database {
 				Row: {
 					// the data expected from .select()
 					id: string;
+					user_id: string;
 					title: string;
 					content: string;
 					feeling: string;
@@ -17,6 +18,7 @@ export interface Database {
 				Insert: {
 					// the data to be passed to .insert()
 					id?: never; // generated columns must not be supplied
+					user_id: string;
 					title: string; // `not null` columns with no default must be supplied
 					content: string; // nullable columns can be omitted
 					feeling: string;
@@ -27,6 +29,7 @@ export interface Database {
 				Update: {
 					// the data to be passed to .update()
 					id?: never;
+					user_id: string;
 					title: string; // `not null` columns with no default must be supplied
 					content: string; // nullable columns can be omitted
 					feeling: string;

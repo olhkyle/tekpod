@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
+import { useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { v4 as uuid } from 'uuid';
+import { Session } from '@supabase/supabase-js';
 import { TagsInput, TextArea, TextInput } from '../components';
 import { WriteSchema, writeSchema } from '../components/write/schema';
 import { addDiary } from '../supabase/diary';
@@ -12,6 +14,9 @@ import useLoading from '../hooks/useLoading';
 import { Tag } from '../components/common/TagsInput';
 
 const WritePage = () => {
+	const queryClient = useQueryClient();
+	const session = queryClient.getQueryData(['auth']) as Session;
+
 	const {
 		register,
 		control,
@@ -27,7 +32,6 @@ const WritePage = () => {
 	// TODO:
 	// 1. 미리보기 Modal 띄우기
 	// 2. toast 라이브러리 구현
-	// 3. modal 미리보기 구현
 
 	const onSubmit = async (data: WriteSchema) => {
 		const today = new Date();
@@ -37,6 +41,7 @@ const WritePage = () => {
 				addDiary({
 					id: uuid(),
 					...data,
+					user_id: session?.user?.id,
 					created_at: today,
 					updated_at: today,
 					tags: tags.map(({ tag }) => tag),
