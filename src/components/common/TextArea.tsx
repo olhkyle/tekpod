@@ -27,10 +27,11 @@ interface TextFieldProps extends Omit<HTMLAttributes<HTMLTextAreaElement>, 'size
 	value: string;
 	onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 	placeholder: string;
+	modalType?: 'new' | 'edit';
 }
 
 TextArea.TextField = forwardRef(
-	({ id, name, value, onChange, placeholder, ...props }: TextFieldProps, ref: ForwardedRef<HTMLTextAreaElement>) => {
+	({ id, name, value, onChange, placeholder, modalType = 'new', ...props }: TextFieldProps, ref: ForwardedRef<HTMLTextAreaElement>) => {
 		return (
 			<TextField
 				id={id}
@@ -38,14 +39,24 @@ TextArea.TextField = forwardRef(
 				ref={ref}
 				value={value}
 				placeholder={placeholder}
+				onClick={e => {
+					const element = e.currentTarget;
+
+					if (modalType === 'edit') {
+						element.style.height = 'auto';
+						element.style.height = `${element.scrollHeight + 24}px`;
+					}
+				}}
 				onChange={e => {
 					const element = e.currentTarget;
 
-					element.style.height = 'auto';
-					element.style.height = `${element.scrollHeight}px`;
-
 					if (onChange) {
 						onChange(e);
+					}
+
+					if (modalType === 'new') {
+						element.style.height = 'auto';
+						element.style.height = `${element.scrollHeight}px`;
 					}
 				}}
 				{...props}

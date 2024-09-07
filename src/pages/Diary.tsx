@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
-import { Content, ContentLoader } from '../components';
+import { DiaryContent, DiaryContentLoader } from '../components';
 import { Suspense } from 'react';
 
 const DiaryPage = () => {
 	return (
 		<section>
 			<Title>💿 Records Of My Life</Title>
-			<Suspense fallback={<ContentLoader />}>
-				<Content />
+			<Suspense fallback={<DiaryContentLoader />}>
+				<DiaryContent />
 			</Suspense>
 		</section>
 	);

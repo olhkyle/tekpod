@@ -6,7 +6,11 @@ const TABLE = 'diary';
 // const wait = (time: number) => new Promise(resolve => setTimeout(resolve, time));
 
 const getDiaries = async (): Promise<Diary[]> => {
-	const { data, error } = await supabase.from(TABLE).select();
+	const { data, error } = await supabase.from(TABLE).select('*');
+	/**
+	 * select('*').range((page - 1) * 10, page * 9)
+		.order('created_at', { ascending: false });
+	 */
 
 	if (error) {
 		throw new Error(error.message);

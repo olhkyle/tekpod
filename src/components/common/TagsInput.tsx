@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { RiCloseFill } from 'react-icons/ri';
+import { FiHash } from 'react-icons/fi';
 
 export interface Tag {
 	id: number;
@@ -20,7 +21,7 @@ const TagsInput = ({ tags, setTags }: TagsInputProps) => {
 		<Container>
 			{tags.map(({ id, tag }) => (
 				<Tag key={`${tag}_${id}`}>
-					{`#${tag}`}
+					<FiHash size="14" /> {`${tag}`}
 					<button type="button" onClick={() => setTags(tags.filter(({ id: order }) => id !== order))}>
 						<RiCloseFill size="16" color="var(--black)" />
 					</button>
@@ -59,7 +60,7 @@ const Container = styled.div`
 	gap: 8px;
 	padding: var(--padding-container-mobile);
 	width: 100%;
-	min-height: 65px;
+	/* min-height: 65px; */
 	border: 1px solid var(--greyOpacity200);
 	overflow-x: scroll;
 `;
@@ -71,12 +72,14 @@ const Tag = styled.span`
 	padding: calc(var(--padding-container-mobile) / 4) calc(var(--padding-container-mobile) / 2);
 	color: var(--white);
 	background-color: var(--black);
+	font-weight: var(--fw-semibold);
 	border-radius: var(--radius-s);
 
 	button {
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
+		margin-left: 2px;
 		width: 20px;
 		height: 20px;
 		background-color: var(--grey200);
@@ -86,7 +89,10 @@ const Tag = styled.span`
 `;
 
 const Input = styled.input`
+	margin-left: 8px;
 	min-width: 100px;
+	width: 100%;
+	min-height: 48px;
 	font-size: var(--fz-p);
 `;
 

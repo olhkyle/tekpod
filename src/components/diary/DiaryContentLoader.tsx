@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-const ContentLoader = () => {
+const DiaryContentLoader = () => {
 	return (
 		<Container>
 			<Loader />
@@ -48,4 +48,4 @@ const Loader = styled.div`
 	}
 `;
 
-export default ContentLoader;
+export default DiaryContentLoader;

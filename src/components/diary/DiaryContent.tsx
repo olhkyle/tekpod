@@ -5,7 +5,7 @@ import { getDiaries } from '../../supabase/diary';
 import type { Diary } from '../../supabase/schema';
 import { routes } from '../../constants';
 
-const Content = () => {
+const DiaryContent = () => {
 	const { data: diaries } = useSuspenseQuery<Diary[]>({ queryKey: ['diary'], queryFn: getDiaries });
 
 	return (
@@ -84,4 +84,4 @@ const Tags = styled.div`
 	}
 `;
 
-export default Content;
+export default DiaryContent;

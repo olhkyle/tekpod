@@ -77,7 +77,15 @@ const EditContentModal = ({ id, data, isOpen, onClose }: EditContentModalProps) 
 					control={control}
 					render={({ field: { name, value, onChange, onBlur }, fieldState: { error } }) => (
 						<TextArea errorMessage={error?.message}>
-							<TextArea.TextField id="content" name={name} value={value} onChange={onChange} onBlur={onBlur} placeholder="→ What I did" />
+							<TextArea.TextField
+								id="content"
+								name={name}
+								value={value}
+								onChange={onChange}
+								onBlur={onBlur}
+								placeholder="→ What I did"
+								modalType={'edit'}
+							/>
 						</TextArea>
 					)}
 				/>
