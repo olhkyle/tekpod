@@ -98,6 +98,7 @@ const Container = styled.section`
 const Header = styled.div`
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 `;
 
 const Title = styled.h2`
@@ -107,6 +108,7 @@ const Title = styled.h2`
 
 const Preview = styled.button`
 	padding: calc(var(--padding-container-mobile) / 4) calc(var(--padding-container-mobile) / 2);
+	min-height: 36px;
 	font-weight: var(--fw-semibold);
 	border-radius: var(--radius-s);
 	color: var(--grey700);

@@ -6,7 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
 import AuthenticationGuard from './guard/AuthenticationGuard';
 import { NotFound, Login, Register, Content } from './pages';
-import { Layout, DiaryLayout, LoadLazy } from './components';
+import { Layout, DiaryLayout, LoadLazy, RouteError } from './components';
 import { routes } from './constants';
 
 const queryClient = new QueryClient({
@@ -20,11 +20,16 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter([
 	{
 		path: routes.HOME,
+		errorElement: <RouteError />,
 		element: <Layout />,
 		children: [
 			{
 				index: true,
 				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Home')} />,
+			},
+			{
+				path: routes.FILM_RECIPE,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('FilmRecipe')} />,
 			},
 			{
 				path: routes.DIARY,
@@ -41,6 +46,7 @@ const router = createBrowserRouter([
 				path: routes.WRITE,
 				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Write')} />,
 			},
+
 			{
 				path: `${routes.USER}/:id`,
 				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Profile')} />,

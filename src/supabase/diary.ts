@@ -5,8 +5,32 @@ const TABLE = 'diary';
 
 // const wait = (time: number) => new Promise(resolve => setTimeout(resolve, time));
 
-const getDiaries = async (): Promise<Diary[]> => {
+const getCommitStatus = async () => {
 	const { data, error } = await supabase.from(TABLE).select('*');
+
+	if (error) {
+		throw new Error(error.message);
+	}
+
+	return data;
+};
+
+const getDiariesPageInfo = async () => {
+	const { data, error } = await supabase.from(TABLE).select('*').explain({ format: 'json', analyze: true });
+
+	if (error) {
+		throw new Error(error.message);
+	}
+
+	return data;
+};
+
+const getDiariesByPage = async (pageParam: number, pageSize: number): Promise<Diary[]> => {
+	const { data, error } = await supabase
+		.from(TABLE)
+		.select('*')
+		.order('updated_at', { ascending: false })
+		.range((pageParam - 1) * pageSize, pageParam * pageSize - 1);
 	/**
 	 * select('*').range((page - 1) * 10, page * 9)
 		.order('created_at', { ascending: false });
@@ -16,7 +40,7 @@ const getDiaries = async (): Promise<Diary[]> => {
 		throw new Error(error.message);
 	}
 
-	return data?.sort((prev, curr) => new Date(curr.updated_at).getTime() - new Date(prev.updated_at).getTime()) ?? [];
+	return data;
 };
 
 const getSingleDiary = async (id: string): Promise<Diary> => {
@@ -41,4 +65,4 @@ const removeDiary = async ({ id }: { id: string }) => {
 	return await supabase.from(TABLE).delete().eq('id', id);
 };
 
-export { getDiaries, getSingleDiary, addDiary, updateDiary, removeDiary };
+export { getCommitStatus, getDiariesPageInfo, getDiariesByPage, getSingleDiary, addDiary, updateDiary, removeDiary };

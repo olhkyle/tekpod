@@ -2,6 +2,7 @@ const routes = {
 	HOME: '/',
 	LOGIN: '/login',
 	REGISTER: '/register',
+	FILM_RECIPE: '/film_recipe',
 	DIARY: '/diary',
 	WRITE: '/write',
 	USER: '/profile',

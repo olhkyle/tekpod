@@ -1,13 +1,32 @@
 import styled from '@emotion/styled';
+// import { useQuery } from '@tanstack/react-query';
+// import { getCommitStatus } from '../supabase/diary';
 
 const HomePage = () => {
+	// const { data } = useQuery({ queryKey: ['commits'], queryFn: getCommitStatus });
+
+	// console.log(`오늘은 올해의 ${dayOfYear}번째 날입니다.`);
+	const days = Array.from({ length: 365 }, (_, idx) => idx + 1);
+	const daysByDivider = days.reduce<number[][]>((acc, _, i) => {
+		if (i % 7 === 0) acc.push(days.slice(i, i + 7));
+		return acc;
+	}, []);
+
 	return (
 		<Container>
 			<Title>✹ Contributions</Title>
 			<DayGrid>
-				{Array.from({ length: 64 }, (_, idx) => (
-					<Day key={idx} isActive={idx % 3 === 0} />
+				{daysByDivider.map((arr, group_idx) => (
+					<div key={group_idx}>
+						{arr.map((item, idx) => (
+							<Day key={item} isActive={idx % 3 === 0} />
+						))}
+					</div>
 				))}
+
+				{/* {Array.from({ length: 365 }, (_, idx) => (
+					<Day key={idx} isActive={idx % 3 === 0} />
+				))} */}
 			</DayGrid>
 		</Container>
 	);
@@ -23,25 +42,38 @@ const Title = styled.h2`
 	width: 100%;
 	font-size: var(--fz-h6);
 	font-weight: var(--fw-black);
-	color: var(--blue200);
 `;
 
 const DayGrid = styled.div`
-	display: grid;
-	grid-template-columns: repeat(12, 1fr);
-	gap: 8px;
+	display: flex;
+	justify-content: space-between;
+	gap: 4px;
 	margin-top: 16px;
-	padding: var(--padding-container-mobile);
+	padding: calc(var(--padding-container-mobile) / 2);
 	width: 100%;
 	border: 1px solid var(--grey200);
 	background: linear-gradient(270deg, var(--blue100), var(--greyOpacity100));
 	border-radius: var(--radius-s);
+	overflow-x: scroll;
+
+	div {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		/* min-width: 24px; */
+
+		span {
+			font-size: var(--fz-xs);
+		}
+	}
 `;
 
 const Day = styled.span<{ isActive: boolean }>`
-	display: inline-block;
-	width: 16px;
-	height: 16px;
+	display: inline-flex;
+	width: 100%; // 부모 그리드 셀에 맞춤
+	min-width: 10px; // 최소 크기 보장
+	max-width: 16px; // 최대 크기 제한
+	aspect-ratio: 1;
 	background-color: ${({ isActive }) => (isActive ? 'var(--black)' : 'var(--greyOpacity200)')};
 	border-radius: var(--radius-xs);
 `;
