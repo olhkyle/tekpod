@@ -38,6 +38,7 @@ const WriteLink = styled(Link)`
 	min-height: 36px;
 	background-color: var(--blue100);
 	color: var(--blue200);
+	font-size: var(--fz-sm);
 	font-weight: var(--fw-semibold);
 	border: 1px solid var(--blue300);
 	border-radius: var(--radius-s);
