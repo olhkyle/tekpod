@@ -32,11 +32,31 @@ const Container = styled.div<{ isOpen: boolean }>`
 	padding: var(--padding-container-mobile);
 	height: 80dvh;
 	background-color: var(--white);
-	border-top-left-radius: var(--radius-xl);
-	border-top-right-radius: var(--radius-xl);
-	visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'none')};
-	transition: visibility 0.3s ease-in-out;
+	border-top-left-radius: var(--radius-l);
+	border-top-right-radius: var(--radius-l);
+	transform: ${({ isOpen }) => (isOpen ? 'translate3D(0, 0, 0)' : 'translate3D(0, 100%, 0)')};
+	visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
+	transition: transform 0.3s ease, visibility 0.3s ease;
 	z-index: var(--modal-index);
+	animation: ${({ isOpen }) => (isOpen ? 'slideUp 0.3s ease forwards' : 'slideDown 0.3s ease forwards')};
+
+	@keyframes slideUp {
+		from {
+			transform: translateY(100%);
+		}
+		to {
+			transform: translateY(0);
+		}
+	}
+
+	@keyframes slideDown {
+		from {
+			transform: translateY(0);
+		}
+		to {
+			transform: translateY(100%);
+		}
+	}
 `;
 
 const Header = styled.div`
