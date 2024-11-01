@@ -41,6 +41,71 @@ export interface Database {
 					id?: never;
 				};
 			};
+			recipes: {
+				Row: {
+					// the data expected from .select()
+					id: string;
+					user_id: string;
+					title: string;
+					film_simulation: string;
+					dynamic_range: string;
+					grain_effect: string;
+					wb: string;
+					highlight: number;
+					shadow: number;
+					color: number;
+					sharpness: number;
+					noise_reduction: number;
+					iso: string;
+					exposure_compensation: string;
+					sensors: string;
+					created_at: Date;
+					updated_at: Date;
+				};
+				Insert: {
+					// the data to be passed to .insert()
+					id?: never; // generated columns must not be supplied
+					user_id: string;
+					title: string;
+					film_simulation: string; // nullable columns can be omitted
+					dynamic_range: string;
+					grain_effect: string;
+					wb: string;
+					highlight: number;
+					shadow: number;
+					color: number;
+					sharpness: number;
+					noise_reduction: number;
+					iso: string;
+					exposure_compensation: string;
+					sensors: string;
+					created_at: Date;
+					updated_at: Date;
+				};
+				Update: {
+					// the data to be passed to .update()
+					id?: never; // generated columns must not be supplied
+					user_id: string;
+					title: string;
+					film_simulation?: string;
+					dynamic_range?: string;
+					grain_effect?: string;
+					wb?: string;
+					highlight?: number;
+					shadow?: number;
+					color?: number;
+					sharpness?: number;
+					noise_reduction?: number;
+					iso?: string;
+					exposure_compensation?: string;
+					sensors?: string;
+					updated_at: Date;
+				};
+				Delete: {
+					// the data to be passed to .delete()
+					id?: never;
+				};
+			};
 		};
 	};
 }

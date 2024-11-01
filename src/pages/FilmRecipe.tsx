@@ -1,12 +1,17 @@
+import { Suspense } from 'react';
 import styled from '@emotion/styled';
+import { FilmRecipeContent, FilmRecipeContentLoader } from '../components';
 
 const FilmRecipePage = () => {
 	return (
 		<section>
-			<Title>📷 Fuji Film Recipe</Title>
+			<Title>📷 FujiX Recipe</Title>
 			<Description>
 				with <span>Fuji x100f</span>
 			</Description>
+			<Suspense fallback={<FilmRecipeContentLoader />}>
+				<FilmRecipeContent />
+			</Suspense>
 		</section>
 	);
 };
