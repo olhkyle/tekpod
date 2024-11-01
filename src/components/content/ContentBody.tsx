@@ -36,10 +36,10 @@ const ContentBody = () => {
 						.split('-')
 						.filter(item => item !== '')
 						.map((item, idx) => (
-							<div key={`${item}_${idx}`}>- {item}</div>
+							<div key={`${item}_${idx}`}>✹ {item}</div>
 						))}
 				</ContentList>
-				<Feeling>💡 {data?.feeling}</Feeling>
+				<Feeling>⚡️ {data?.feeling}</Feeling>
 			</Description>
 
 			<DeleteButton
@@ -54,7 +54,7 @@ const ContentBody = () => {
 						},
 					);
 				}}>
-				{isPending ? <LoadingSpinner /> : 'Delete'}
+				{isPending ? <LoadingSpinner /> : '🗑️ Delete'}
 			</DeleteButton>
 		</>
 	);
@@ -64,7 +64,7 @@ const EditButton = styled.button`
 	margin-left: auto;
 	padding: calc(var(--padding-container-mobile) / 2) var(--padding-container-mobile);
 	font-weight: var(--fw-semibold);
-	color: var(--black);
+	color: var(--grey700);
 	background-color: var(--greyOpacity50);
 	border: 1px solid var(--greyOpacity200);
 	border-radius: var(--radius-s);
@@ -79,11 +79,11 @@ const EditButton = styled.button`
 const Description = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin-top: calc(100dvh / 20);
+	margin-top: calc(100dvh / 25);
 	padding: calc(var(--padding-container-mobile) * 2) var(--padding-container-mobile);
 	width: 100%;
 	border: 1px solid var(--greyOpacity200);
-	background: linear-gradient(to right, var(--blue100), #fff, var(--red100));
+	border-radius: var(--radius-s);
 `;
 
 const Title = styled.h2`
@@ -104,7 +104,7 @@ const Feeling = styled.p`
 	font-weight: var(--fw-semibold);
 	color: var(--blue200);
 	background-color: var(--blue100);
-	border: 1px solid var(--blue200);
+	border: 1px solid var(--blue300);
 	border-radius: var(--radius-s);
 `;
 
@@ -112,6 +112,7 @@ const DeleteButton = styled.button`
 	margin-top: auto;
 	padding: var(--padding-container-mobile);
 	width: 100%;
+	min-height: 57px;
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);
