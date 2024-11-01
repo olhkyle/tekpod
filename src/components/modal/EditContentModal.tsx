@@ -1,18 +1,19 @@
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BiMessageSquareEdit } from 'react-icons/bi';
 import { QueryRefetch } from '../../store/useModalStore';
 import { Diary } from '../../supabase/schema';
+import { useNavigate } from 'react-router-dom';
 import { ModalLayout } from '.';
 import { TagsInput, TextArea, TextInput } from '..';
 import { editContentSchema, EditContentSchema } from './editContentSchema';
-import { useEffect, useState } from 'react';
 import { Tag } from '../common/TagsInput';
 import { useLoading } from '../../hooks';
 import { updateDiary } from '../../supabase/diary';
-import { useNavigate } from 'react-router-dom';
 import { routes } from '../../constants';
+import useToastStore from '../../store/useToastStore';
 
 interface EditContentModalProps {
 	id: string;
@@ -38,11 +39,13 @@ const EditContentModal = ({ id, data, isOpen, onClose }: EditContentModalProps) 
 	const { isLoading, Loading, startTransition } = useLoading();
 	const [tags, setTags] = useState<Tag[]>([]);
 
-	// const initialData: Diary = data;
+	const { addToast } = useToastStore();
 
 	const onSubmit = async (updatedData: EditContentSchema) => {
-		// TODO:
-		// 1 .첫 데이터와 같은 경우 업데이트 하지 않고, toast 띄우도록
+		if (data?.title === updatedData?.title && data?.content === updatedData?.content && data?.feeling === updatedData?.feeling) {
+			addToast({ status: 'warn', message: `Not Edited` });
+			return;
+		}
 
 		try {
 			const { error } = await startTransition(updateDiary({ ...data, ...updatedData, tags: tags.map(({ tag }) => tag) }));
@@ -52,8 +55,10 @@ const EditContentModal = ({ id, data, isOpen, onClose }: EditContentModalProps) 
 			}
 
 			onClose();
+			addToast({ status: 'info', message: `Successfully Edited` });
 			navigate(routes.DIARY);
 		} catch (error) {
+			addToast({ status: 'error', message: `Error with Editing` });
 			console.error(error);
 		}
 	};
