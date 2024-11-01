@@ -52,7 +52,7 @@ const Global = css`
 
 		--blue100: #eff8ff;
 		--blue200: #1c9eff;
-		--blue300: #b9dffc;
+		--blue300: #b1dcfd;
 		--blue400: #7fc7ff;
 
 		--green100: #f1fcf8;
