@@ -8,7 +8,7 @@ const DiaryPage = () => {
 	return (
 		<section>
 			<Header>
-				<Title>💿 Records Of My Life</Title>
+				<Title>💿 Records</Title>
 				<WriteLink to={routes.WRITE}>Write</WriteLink>
 			</Header>
 			<Suspense fallback={<DiaryContentLoader />}>
@@ -34,17 +34,22 @@ const WriteLink = styled(Link)`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	padding: calc(var(--padding-container-mobile) / 4) calc(var(--padding-container-mobile) / 2);
+	padding: calc(var(--padding-container-mobile) / 4) calc(var(--padding-container-mobile));
+	min-width: 100px;
 	min-height: 36px;
-	background-color: var(--blue100);
-	color: var(--blue200);
-	font-size: var(--fz-sm);
-	font-weight: var(--fw-semibold);
+	background-color: var(--blue200);
+	color: var(--white);
+	font-size: var(--fz-p);
+	font-weight: var(--fw-bold);
 	border: 1px solid var(--blue300);
 	border-radius: var(--radius-s);
+	transition: background 0.3s ease-in-out outline 0.15s ease-in-out;
 
-	&:hover {
+	&:hover,
+	&:active {
 		background-color: var(--blue300);
+		outline: 1px solid var(--blue400);
+		outline-offset: 2px;
 	}
 `;
 
