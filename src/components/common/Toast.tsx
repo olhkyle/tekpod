@@ -27,7 +27,7 @@ const Toast = () => {
 const MotionWrapper = styled(motion.div)<{ isToastNull: boolean }>`
 	position: fixed;
 	display: ${({ isToastNull }) => (isToastNull ? 'none' : 'block')};
-	left: var(--padding-container-mobile);
+	right: var(--padding-container-mobile);
 	bottom: calc(var(--nav-height) + 3 * var(--padding-container-mobile));
 	z-index: var(--toast-index);
 `;
@@ -42,6 +42,11 @@ const Container = styled.div`
 	background-color: var(--grey100);
 	border: 1px solid var(--greyOpacity200);
 	border-radius: var(--radius-s);
+
+	@media screen and (min-width: 640px) {
+		max-width: var(--max-app-width);
+		min-width: calc(var(--min-app-width) - 2 * var(--padding-container-mobile));
+	}
 `;
 
 const Status = styled.span<{ status: 'success' | 'warn' | 'info' | 'error' }>`
