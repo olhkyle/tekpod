@@ -26,7 +26,7 @@ const DiaryContent = () => {
 				return lastPageParam + 1;
 			}
 
-			return undefined;
+			return undefined; // 명시적 반환
 		},
 	});
 
