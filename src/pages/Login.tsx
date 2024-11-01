@@ -5,10 +5,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import supabase from '../supabase/service';
-import { LabelInput } from '../components';
+import { LabelInput, Toast } from '../components';
 import { loginSchema, type LoginSchema } from '../components/auth/schema';
+import { useLoading } from '../hooks';
 import useUserStore from '../store/userStore';
-import useLoading from '../hooks/useLoading';
+import useToastStore from '../store/useToastStore';
 import { routes } from '../constants';
 
 const pageCss = {
@@ -34,6 +35,7 @@ const LoginPage = () => {
 	const {
 		register,
 		formState: { errors },
+		setValue,
 		handleSubmit,
 	} = useForm<LoginSchema>({
 		resolver: zodResolver(loginSchema),
@@ -41,24 +43,31 @@ const LoginPage = () => {
 	});
 
 	const queryClient = useQueryClient();
-	const { Loading, isLoading, startTransition } = useLoading();
+	const navigate = useNavigate();
 
 	const { setUserData } = useUserStore();
-	const navigate = useNavigate();
+
+	const { Loading, isLoading, startTransition } = useLoading();
+
+	const { addToast } = useToastStore();
 
 	const onSubmit = async (formData: LoginSchema) => {
 		try {
 			const { data, error } = await startTransition(supabase.auth.signInWithPassword(formData));
 
 			if (error) {
+				addToast({ status: 'error', message: 'Error with Login' });
 				throw new Error(error.message);
 			}
 
 			if (data) {
 				setUserData(data.session);
 				navigate(routes.HOME);
+				addToast({ status: 'success', message: 'Successfully Login' });
 			}
 		} catch (error) {
+			setValue('email', formData.email);
+			setValue('password', '');
 			console.error(error);
 		} finally {
 			queryClient.invalidateQueries({ queryKey: ['auth'] });
@@ -66,29 +75,32 @@ const LoginPage = () => {
 	};
 
 	return (
-		<div css={pageCss.container}>
-			<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
-				<Title>
-					<Link to={routes.HOME}>TEKT</Link>
-				</Title>
-				<LabelInput label={'email'} errorMessage={errors?.email?.message}>
-					<LabelInput.TextField type={'email'} id={'email'} {...register('email')} placeholder={'Email'} />
-				</LabelInput>
-				<LabelInput label={'password'} errorMessage={errors?.password?.message}>
-					<LabelInput.TextField type={'password'} id={'password'} {...register('password')} placeholder={'Password'} />
-				</LabelInput>
+		<>
+			<div css={pageCss.container}>
+				<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
+					<Title>
+						<Link to={routes.HOME}>TEKT</Link>
+					</Title>
+					<LabelInput label={'email'} errorMessage={errors?.email?.message}>
+						<LabelInput.TextField type={'email'} id={'email'} {...register('email')} placeholder={'Email'} />
+					</LabelInput>
+					<LabelInput label={'password'} errorMessage={errors?.password?.message}>
+						<LabelInput.TextField type={'password'} id={'password'} {...register('password')} placeholder={'Password'} />
+					</LabelInput>
 
-				<SubmitButton type="submit" aria-label="Login Button">
-					{isLoading ? Loading : 'LOGIN'}
-				</SubmitButton>
-				<ActionButtons>
-					<ResetPasswordButton type="button" aria-label="Reset Password Button">
-						Reset Password
-					</ResetPasswordButton>
-					<RegisterLink to={routes.REGISTER}>SignUp</RegisterLink>
-				</ActionButtons>
-			</form>
-		</div>
+					<SubmitButton type="submit" aria-label="Login Button">
+						{isLoading ? Loading : 'LOGIN'}
+					</SubmitButton>
+					<ActionButtons>
+						<ResetPasswordButton type="button" aria-label="Reset Password Button">
+							Reset Password
+						</ResetPasswordButton>
+						<RegisterLink to={routes.REGISTER}>SignUp</RegisterLink>
+					</ActionButtons>
+				</form>
+			</div>
+			<Toast />
+		</>
 	);
 };
 

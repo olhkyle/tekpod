@@ -2,7 +2,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { Header, BottomNav, LayoutLoadingSpinner } from '.';
-import { ModalContainer } from '..';
+import { ModalContainer, Toast } from '..';
 import { useInitialScrollToTop } from '../../hooks';
 
 const layoutCss = {
@@ -33,16 +33,19 @@ const Layout = () => {
 	}, [setGlobalWidth]);
 
 	return (
-		<Suspense fallback={<LayoutLoadingSpinner />}>
-			<div ref={layoutRef} css={layoutCss.wrapper}>
-				<Header />
-				<main css={layoutCss.main}>
-					<Outlet />
-				</main>
-				<BottomNav />
-				<ModalContainer />
-			</div>
-		</Suspense>
+		<>
+			<Suspense fallback={<LayoutLoadingSpinner />}>
+				<div ref={layoutRef} css={layoutCss.wrapper}>
+					<Header />
+					<main css={layoutCss.main}>
+						<Outlet />
+					</main>
+					<BottomNav />
+					<ModalContainer />
+				</div>
+			</Suspense>
+			<Toast />
+		</>
 	);
 };
 

@@ -4,7 +4,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import supabase from '../supabase/service';
 import useUserStore from '../store/userStore';
 import { routes } from '../constants';
-import useLoading from '../hooks/useLoading';
+import { useLoading } from '../hooks';
+import useToastStore from '../store/useToastStore';
 
 const ProfilePage = () => {
 	const queryClient = useQueryClient();
@@ -12,6 +13,8 @@ const ProfilePage = () => {
 	const { userInfo, resetUser } = useUserStore();
 
 	const { Loading, isLoading, startTransition } = useLoading();
+
+	const { addToast } = useToastStore();
 
 	const handleLogout = async () => {
 		try {
@@ -23,7 +26,10 @@ const ProfilePage = () => {
 
 			navigate(routes.HOME);
 			resetUser();
+
+			addToast({ status: 'success', message: 'Successfully Logout' });
 		} catch (error) {
+			addToast({ status: 'error', message: 'Error with Logout' });
 			console.error(error);
 		} finally {
 			queryClient.setQueryData(['auth'], null);

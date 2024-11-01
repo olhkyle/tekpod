@@ -1,21 +1,23 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
 import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { v4 as uuid } from 'uuid';
 import { Session } from '@supabase/supabase-js';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { TagsInput, TextArea, TextInput } from '../components';
 import { WriteSchema, writeSchema } from '../components/write/schema';
 import { addDiary } from '../supabase/diary';
-import { useNavigate } from 'react-router-dom';
 import { routes } from '../constants';
 import useLoading from '../hooks/useLoading';
 import { Tag } from '../components/common/TagsInput';
+import useToastStore from '../store/useToastStore';
 
 const WritePage = () => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
+	const navigate = useNavigate();
 
 	const {
 		register,
@@ -24,14 +26,13 @@ const WritePage = () => {
 		handleSubmit,
 	} = useForm<WriteSchema>({ resolver: zodResolver(writeSchema) });
 
-	const [tags, setTags] = useState<Tag[]>([]);
 	const { Loading, isLoading, startTransition } = useLoading();
+	const [tags, setTags] = useState<Tag[]>([]);
 
-	const navigate = useNavigate();
+	const { addToast } = useToastStore();
 
 	// TODO:
 	// 1. 미리보기 Modal 띄우기
-	// 2. toast 라이브러리 구현
 
 	const onSubmit = async (data: WriteSchema) => {
 		const today = new Date();
@@ -52,8 +53,10 @@ const WritePage = () => {
 				throw new Error(error.message);
 			}
 
+			addToast({ status: 'info', message: 'Successfully Written' });
 			navigate(routes.DIARY);
 		} catch (error) {
+			addToast({ status: 'error', message: 'Error with Writing' });
 			console.error(error);
 		}
 	};
@@ -67,22 +70,24 @@ const WritePage = () => {
 				</Preview>
 			</Header>
 			<Group onSubmit={handleSubmit(onSubmit)}>
-				<TextInput errorMessage={errors?.title?.message}>
-					<TextInput.TextField id="title" {...register('title')} placeholder="﹡ Title" />
-				</TextInput>
-				<Controller
-					name="content"
-					control={control}
-					render={({ field: { name, value, onChange, onBlur }, fieldState: { error } }) => (
-						<TextArea errorMessage={error?.message}>
-							<TextArea.TextField id="content" name={name} value={value} onChange={onChange} onBlur={onBlur} placeholder="→ What I did" />
-						</TextArea>
-					)}
-				/>
-				<TextInput errorMessage={errors?.feeling?.message}>
-					<TextInput.TextField id="feeling" {...register('feeling')} name="feeling" placeholder="💡 One Feeling" />
-				</TextInput>
-				<TagsInput tags={tags} setTags={setTags} />
+				<Wrapper>
+					<TextInput errorMessage={errors?.title?.message}>
+						<TextInput.TextField id="title" {...register('title')} placeholder="﹡ Title" />
+					</TextInput>
+					<Controller
+						name="content"
+						control={control}
+						render={({ field: { name, value, onChange, onBlur }, fieldState: { error } }) => (
+							<TextArea errorMessage={error?.message}>
+								<TextArea.TextField id="content" name={name} value={value} onChange={onChange} onBlur={onBlur} placeholder="→ What I did" />
+							</TextArea>
+						)}
+					/>
+					<TextInput errorMessage={errors?.feeling?.message}>
+						<TextInput.TextField id="feeling" {...register('feeling')} name="feeling" placeholder="💡 One Feeling" />
+					</TextInput>
+					<TagsInput tags={tags} setTags={setTags} />
+				</Wrapper>
 				<UploadButton type="submit">{isLoading ? Loading : '👆🏻 Upload'}</UploadButton>
 			</Group>
 		</Container>
@@ -123,18 +128,29 @@ const Preview = styled.button`
 const Group = styled.form`
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
+	gap: 16px;
+	min-height: calc(100dvh - 4 * var(--nav-height) - var(--padding-container-mobile));
+`;
+
+const Wrapper = styled.div`
+	display: flex;
+	flex-direction: column;
 	gap: 16px;
 `;
 
 const UploadButton = styled.button`
 	padding: var(--padding-container-mobile);
+	min-height: 57px;
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);
-	background-color: var(--black);
+	background-color: var(--blue200);
+	transition: background 0.15s ease-in-out;
 
+	&:hover,
 	&:focus {
-		background-color: var(--grey900);
+		background-color: var(--grey400);
 	}
 `;
 
