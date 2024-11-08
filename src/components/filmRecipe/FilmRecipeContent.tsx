@@ -1,14 +1,27 @@
+import { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getRecipes } from '../../supabase/filmRecipe';
 import styled from '@emotion/styled';
+import { getRecipes } from '../../supabase/filmRecipe';
+import useModalStore from '../../store/useModalStore';
+import { FilmRecipeModal } from '../modal';
 
 const FilmRecipeContent = () => {
 	const { data: recipes } = useSuspenseQuery({ queryKey: ['film_recipes'], queryFn: getRecipes });
 
+	const { setModal } = useModalStore();
+	const [isFilmRecipeModalOpen] = useState(true);
+
+	const handleIndividualFilmRecipeModal = (targetTitle: string) => {
+		setModal({
+			Component: FilmRecipeModal,
+			props: { isOpen: isFilmRecipeModalOpen, data: recipes.find(({ title }) => title === targetTitle)!, type: 'recipe' },
+		});
+	};
+
 	return (
 		<Container>
 			{recipes.map(({ title, film_simulation }, idx) => (
-				<Recipe key={idx}>
+				<Recipe key={idx} onClick={() => handleIndividualFilmRecipeModal(title)}>
 					<Title>
 						<NumberCount>{idx + 1}</NumberCount>
 						<span>{title}</span>
