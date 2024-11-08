@@ -46,6 +46,7 @@ const Recipe = styled.div`
 	align-items: center;
 	padding: calc(var(--padding-container-mobile) * 1.2) calc(var(--padding-container-mobile) * 0.5);
 	border-bottom: 1px solid var(--greyOpacity200);
+	cursor: pointer;
 
 	&:hover,
 	&:focus {
