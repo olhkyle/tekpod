@@ -14,16 +14,18 @@ import { useLoading } from '../../hooks';
 import { updateDiary } from '../../supabase/diary';
 import { routes } from '../../constants';
 import useToastStore from '../../store/useToastStore';
+import { ModalDataType } from './modalType';
 
 interface EditContentModalProps {
 	id: string;
 	data: Diary;
 	isOpen: boolean;
+	type: ModalDataType;
 	onClose: () => void;
 	refetch?: QueryRefetch;
 }
 
-const EditContentModal = ({ id, data, isOpen, onClose }: EditContentModalProps) => {
+const EditContentModal = ({ id, data, isOpen, type, onClose }: EditContentModalProps) => {
 	const {
 		register,
 		control,
@@ -72,7 +74,7 @@ const EditContentModal = ({ id, data, isOpen, onClose }: EditContentModalProps) 
 	}, [setValue]);
 
 	return (
-		<ModalLayout id={id} isOpen={isOpen} title={<BiMessageSquareEdit size="32" color="var(--black)" />} onClose={onClose}>
+		<ModalLayout id={id} isOpen={isOpen} type={type} title={<BiMessageSquareEdit size="32" color="var(--black)" />} onClose={onClose}>
 			<Group onSubmit={handleSubmit(onSubmit)}>
 				<TextInput errorMessage={errors?.title?.message}>
 					<TextInput.TextField id="title" {...register('title')} placeholder="﹡ Title" />
@@ -108,7 +110,7 @@ const Group = styled.form`
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	height: calc(100% - var(--nav-height));
+	height: 100%;
 `;
 
 const UpdateButton = styled.button`

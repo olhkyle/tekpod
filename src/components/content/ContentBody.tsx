@@ -21,7 +21,7 @@ const ContentBody = () => {
 	const [isEditModalOpen] = useState(true);
 
 	const handleEditModalClick = () => {
-		setModal({ Component: EditContentModal, props: { isOpen: isEditModalOpen, data } });
+		setModal({ Component: EditContentModal, props: { isOpen: isEditModalOpen, data, type: 'diary' } });
 	};
 
 	return (

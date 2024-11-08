@@ -1,18 +1,20 @@
 import { ReactNode } from 'react';
 import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
+import { ModalDataType } from './modalType';
 
 interface ModalLayoutProps {
 	id: string;
 	isOpen: boolean;
+	type: ModalDataType;
 	title: string | ReactNode;
 	onClose: () => void;
 	children: ReactNode;
 }
 
-const ModalLayout = ({ id, isOpen, title, onClose, children }: ModalLayoutProps) => {
+const ModalLayout = ({ id, isOpen, type, title, onClose, children }: ModalLayoutProps) => {
 	return (
-		<Container isOpen={isOpen} data-modal-id={id}>
+		<Container isOpen={isOpen} data-modal-type={type} data-modal-id={id}>
 			<Header>
 				<Title>{title}</Title>
 				<CloseButton type="button" onClick={onClose}>
@@ -30,13 +32,12 @@ const Container = styled.div<{ isOpen: boolean }>`
 	left: 0;
 	right: 0;
 	padding: var(--padding-container-mobile);
-	height: 80dvh;
+	height: 85dvh;
 	background-color: var(--white);
 	border-top-left-radius: var(--radius-l);
 	border-top-right-radius: var(--radius-l);
-	transform: ${({ isOpen }) => (isOpen ? 'translate3D(0, 0, 0)' : 'translate3D(0, 100%, 0)')};
 	visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-	transition: transform 0.3s ease, visibility 0.3s ease;
+	transition: transform 0.3s ease, visibility 0.5s ease;
 	z-index: var(--modal-index);
 	animation: ${({ isOpen }) => (isOpen ? 'slideUp 0.3s ease forwards' : 'slideDown 0.3s ease forwards')};
 
@@ -77,7 +78,8 @@ const CloseButton = styled.button`
 `;
 
 const Body = styled.div`
-	height: 100%;
+	height: calc(100% - var(--nav-height));
+	overflow-y: scroll;
 `;
 
 export default ModalLayout;

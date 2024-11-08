@@ -22,7 +22,7 @@ const layoutCss = {
 
 const Layout = () => {
 	const layoutRef = useRef<HTMLDivElement>(null);
-	const [, setGlobalWidth] = useState('');
+	const [, setGlobalWidth] = useState<string>('');
 
 	useInitialScrollToTop();
 

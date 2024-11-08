@@ -1,15 +1,17 @@
 import { ElementType } from 'react';
 import { UseQueryResult } from '@tanstack/react-query';
 import { create } from 'zustand';
-import { Diary } from '../supabase/schema';
+import { Diary, RestrictedRecipe } from '../supabase/schema';
+import { ModalDataType } from '../components/modal/modalType';
 
 export type QueryRefetch = (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<UseQueryResult>;
 
 interface Modal {
 	Component: ElementType;
 	props?: {
-		data: Diary;
+		data: Diary | RestrictedRecipe;
 		isOpen: boolean;
+		type: ModalDataType;
 		refetch?: QueryRefetch;
 	};
 }
@@ -27,7 +29,7 @@ const useModalStore = create<ModalState>(set => ({
 		set(state => ({ ...state, modals: [...state.modals, data] }));
 	},
 	removeModal(component) {
-		set(state => ({ ...state, modals: state.modals.filter(modal => modal.Component !== component) }));
+		set(state => ({ ...state, modals: state.modals.filter(({ Component }) => Component !== component) }));
 	},
 	resetModals() {
 		set(() => ({
