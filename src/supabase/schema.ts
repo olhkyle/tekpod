@@ -7,7 +7,7 @@ interface RestrictedRecipe extends Recipe {
 	dynamic_range: 'DR-Auto' | `DR-${'number'}`;
 	wb: `${string}, ${number} Red & ${number} Blue`;
 	iso: `up to ISO ${number}`;
-	exposure_compensation: `${string} to ${string}`;
+	exposure_compensation: `${string} to ${string}` | '0';
 }
 
 export type { Diary, RestrictedRecipe };

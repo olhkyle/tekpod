@@ -9,7 +9,7 @@ export type QueryRefetch = (options?: { throwOnError: boolean; cancelRefetch: bo
 interface Modal {
 	Component: ElementType;
 	props?: {
-		data: Diary | RestrictedRecipe;
+		data: Diary | RestrictedRecipe | null;
 		isOpen: boolean;
 		type: ModalDataType;
 		refetch?: QueryRefetch;

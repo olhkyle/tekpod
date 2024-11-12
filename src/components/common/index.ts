@@ -4,3 +4,4 @@ export { default as TagsInput } from './TagsInput';
 export { default as Toast } from './Toast';
 export { default as SkeletonLoader } from './SkeletonLoader';
 export { default as LazyImage } from './LazyImage';
+export { default as NativeSelect } from './NativeSelect';
