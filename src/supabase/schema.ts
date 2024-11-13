@@ -10,4 +10,6 @@ interface RestrictedRecipe extends Recipe {
 	exposure_compensation: `${string} to ${string}` | '0';
 }
 
-export type { Diary, RestrictedRecipe };
+type RestrictedRecipeForValidation = Omit<RestrictedRecipe, 'id' | 'user_id' | 'created_at' | 'updated_at'>;
+
+export type { Diary, RestrictedRecipe, RestrictedRecipeForValidation };

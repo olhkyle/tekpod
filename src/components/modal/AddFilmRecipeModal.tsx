@@ -1,12 +1,22 @@
-import { useRef, useState } from 'react';
+import { FormEventHandler, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { RiCloseFill } from 'react-icons/ri';
 import { ModalLayout } from '.';
 import { ModalDataType } from './modalType';
 import useToastStore from '../../store/useToastStore';
-import { NativeSelect, TextInput } from '../common';
-import { dynamicRange, filmSimulation, grainEffect, sensors } from '../../constants/recipes';
-import { RestrictedRecipe } from '../../supabase/schema';
+import { CustomSelect, TextInput } from '../common';
+import {
+	color,
+	dynamicRange,
+	filmSimulation,
+	grainEffect,
+	highlight,
+	noiseReduction,
+	sensors,
+	shadow,
+	sharpness,
+} from '../../constants/recipes';
+import type { RestrictedRecipeForValidation } from '../../supabase/schema';
 
 interface AddFilmRecipeModalProps {
 	id: string;
@@ -15,35 +25,100 @@ interface AddFilmRecipeModalProps {
 	onClose: () => void;
 }
 
+interface FieldUIData {
+	type: 'input' | 'select';
+	data?:
+		| typeof filmSimulation
+		| typeof dynamicRange
+		| typeof grainEffect
+		| typeof highlight
+		| typeof shadow
+		| typeof color
+		| typeof sharpness
+		| typeof noiseReduction
+		| typeof sensors;
+	target_id: keyof RestrictedRecipeForValidation;
+	placeholder?: string;
+	defaultValue?: RestrictedRecipeForValidation[keyof RestrictedRecipeForValidation];
+}
+
 const DEFAULT_IMAGE_SIZE = 10 * 1024 * 1024;
+
+const initialFilmFeatureState: RestrictedRecipeForValidation = {
+	title: '',
+	film_simulation: 'Provia',
+	dynamic_range: 'DR-Auto',
+	grain_effect: 'Weak',
+	wb: 'Auto, 0 Red & 0 Blue',
+	highlight: 0,
+	shadow: 0,
+	color: 0,
+	sharpness: 0,
+	noise_reduction: 0,
+	iso: 'up to ISO 6400',
+	exposure_compensation: '0 to +1',
+	sensors: 'X-Trans III',
+};
+
+const initialTriggeredState: { [key: string]: boolean } = {
+	title: false,
+	film_simulation: false,
+	dynamic_range: false,
+	grain_effect: false,
+	highlight: false,
+	shadow: false,
+	color: false,
+	sharpness: false,
+	noise_reduction: false,
+	sensors: false,
+};
 
 const AddFilmRecipeModal = ({ id, isOpen, type, onClose }: AddFilmRecipeModalProps) => {
 	const [previousImageUrl, setPreviousImageUrl] = useState<string>('');
 	const imageInputRef = useRef<HTMLInputElement | null>(null);
 
-	const [currentFilmFeature, setCurrentFilmFeature] = useState<Omit<RestrictedRecipe, 'id' | 'user_id' | 'created_at' | 'updated_at'>>({
-		title: '',
-		film_simulation: 'Provia',
-		dynamic_range: 'DR-Auto',
-		grain_effect: 'Weak',
-		wb: 'Auto, 0 Red & 0 Blue',
-		highlight: 0,
-		shadow: 0,
-		color: 0,
-		sharpness: 0,
-		noise_reduction: 0,
-		iso: 'up to ISO 6400',
-		exposure_compensation: '0',
-		sensors: 'X-Trans III',
-	});
+	const [currentFilmFeature, setCurrentFilmFeature] = useState<RestrictedRecipeForValidation>(initialFilmFeatureState);
+	const [isTriggered, setTriggered] = useState(initialTriggeredState);
 
 	const { addToast } = useToastStore();
 
 	const isUploaded = previousImageUrl !== '' && previousImageUrl.length !== 0;
 
+	const fieldUIData: FieldUIData[] = [
+		{ type: 'input', target_id: 'title', placeholder: 'Recipe Title' },
+		{ type: 'select', data: filmSimulation, target_id: 'film_simulation' },
+		{ type: 'select', data: dynamicRange, target_id: 'dynamic_range' },
+		{ type: 'select', data: grainEffect, target_id: 'grain_effect' },
+		{ type: 'input', target_id: 'wb', placeholder: 'White Balance(Auto, +1 Red & +1 Blue)', defaultValue: currentFilmFeature.wb },
+		{ type: 'select', data: highlight, target_id: 'highlight' },
+		{ type: 'select', data: shadow, target_id: 'shadow' },
+		{ type: 'select', data: color, target_id: 'color' },
+		{ type: 'select', data: sharpness, target_id: 'sharpness' },
+		{ type: 'select', data: noiseReduction, target_id: 'noise_reduction' },
+		{ type: 'input', target_id: 'iso', placeholder: 'up to ISO 6400', defaultValue: currentFilmFeature.iso },
+		{
+			type: 'input',
+			target_id: 'exposure_compensation',
+			placeholder: 'Exposure Compensation',
+			defaultValue: currentFilmFeature.exposure_compensation,
+		},
+		{ type: 'select', data: sensors, target_id: 'sensors' },
+	];
+
+	const checkIsDisabled = () => {
+		// TODO: Trigger 안됀 것이 하나라도 있다면? -> defaultValue 있는 InputField는 제외
+		return true;
+	};
+
+	const handleAddFilmRecipe: FormEventHandler<HTMLFormElement> = e => {
+		e.preventDefault();
+
+		// TODO: 이미지 업로드가 안돼거나, trigger 안돼었다면, submit 버튼의 disabled도 해제 하지 않고, toast 띄울 것
+	};
+
 	return (
 		<ModalLayout id={id} isOpen={isOpen} type={type} title={'Add Recipe'} onClose={onClose}>
-			<Form>
+			<Form onSubmit={handleAddFilmRecipe}>
 				<ImageUploadInput isUploaded={isUploaded}>
 					<input
 						type="file"
@@ -96,39 +171,126 @@ const AddFilmRecipeModal = ({ id, isOpen, type, onClose }: AddFilmRecipeModalPro
 					</CloseButton>
 				</ImageUploadInput>
 
-				<TextInput>
+				{fieldUIData.map(({ type, data, target_id, placeholder, defaultValue }, idx) => {
+					return type === 'input' ? (
+						<TextInput aria-label={target_id} key={`${type}_${idx}`}>
+							<TextInput.TextField
+								id={target_id}
+								name={target_id}
+								placeholder={placeholder!}
+								defaultValue={defaultValue ? defaultValue : undefined}
+							/>
+						</TextInput>
+					) : (
+						<CustomSelect
+							key={`${type}_${idx}`}
+							data={data!}
+							target_id={target_id}
+							current={currentFilmFeature}
+							setCurrent={setCurrentFilmFeature}
+							isTriggered={isTriggered}
+							setTriggered={setTriggered}
+						/>
+					);
+				})}
+
+				{/* <TextInput>
 					<TextInput.TextField id="recipe_title" name="recipe_title" placeholder="Recipe Title" />
 				</TextInput>
-				<NativeSelect data={filmSimulation} target_id={'film_simulation'} current={currentFilmFeature} setCurrent={setCurrentFilmFeature} />
-				<NativeSelect data={dynamicRange} target_id={'dynamic_range'} current={currentFilmFeature} setCurrent={setCurrentFilmFeature} />
-				<NativeSelect data={grainEffect} target_id={'grain_effect'} current={currentFilmFeature} setCurrent={setCurrentFilmFeature} />
-				<TextInput>
-					<TextInput.TextField id="wb" name="wb" placeholder="White Balance(Auto, +1 Red & +1 Blue)" />
-				</TextInput>
-				<TextInput>
-					<TextInput.TextField id="highlight" name="highlight" placeholder="Highlight" />
-				</TextInput>
-				<TextInput>
-					<TextInput.TextField id="shadow" name="shadow" placeholder="Shadow" />
-				</TextInput>
-				<TextInput>
-					<TextInput.TextField id="color" name="color" placeholder="Color" />
-				</TextInput>
-				<TextInput>
-					<TextInput.TextField id="sharpness" name="sharpness" placeholder="Sharpness" />
-				</TextInput>
-				<TextInput>
-					<TextInput.TextField id="noise_reduction" name="noise_reduction" placeholder="Noise Reduction" />
-				</TextInput>
-				<TextInput>
-					<TextInput.TextField id="iso" name="iso" placeholder="up to ISO 6400" />
-				</TextInput>
-				<TextInput>
-					<TextInput.TextField id="exposure_compensation" name="exposure_compensation" placeholder="Exposure Compensation" />
-				</TextInput>
-				<NativeSelect data={sensors} target_id={'sensors'} current={currentFilmFeature} setCurrent={setCurrentFilmFeature} />
+				<CustomSelect
+					data={filmSimulation}
+					target_id={'film_simulation'}
+					current={currentFilmFeature}
+					setCurrent={setCurrentFilmFeature}
+					isTriggered={isTriggered}
+					setTriggered={setTriggered}
+				/>
+				<CustomSelect
+					data={dynamicRange}
+					target_id={'dynamic_range'}
+					current={currentFilmFeature}
+					setCurrent={setCurrentFilmFeature}
+					isTriggered={isTriggered}
+					setTriggered={setTriggered}
+				/>
+				<CustomSelect
+					data={grainEffect}
+					target_id={'grain_effect'}
+					current={currentFilmFeature}
+					setCurrent={setCurrentFilmFeature}
+					isTriggered={isTriggered}
+					setTriggered={setTriggered}
+				/>
 
-				<AddRecipeButton type="submit">ADD RECIPE</AddRecipeButton>
+				<TextInput aria-label="white balance">
+					<TextInput.TextField id="wb" name="wb" placeholder="White Balance(Auto, +1 Red & +1 Blue)" defaultValue={currentFilmFeature.wb} />
+				</TextInput>
+
+				<CustomSelect
+					data={highlight}
+					target_id={'highlight'}
+					current={currentFilmFeature}
+					setCurrent={setCurrentFilmFeature}
+					isTriggered={isTriggered}
+					setTriggered={setTriggered}
+				/>
+				<CustomSelect
+					data={shadow}
+					target_id={'shadow'}
+					current={currentFilmFeature}
+					setCurrent={setCurrentFilmFeature}
+					isTriggered={isTriggered}
+					setTriggered={setTriggered}
+				/>
+				<CustomSelect
+					data={color}
+					target_id={'color'}
+					current={currentFilmFeature}
+					setCurrent={setCurrentFilmFeature}
+					isTriggered={isTriggered}
+					setTriggered={setTriggered}
+				/>
+				<CustomSelect
+					data={sharpness}
+					target_id={'sharpness'}
+					current={currentFilmFeature}
+					setCurrent={setCurrentFilmFeature}
+					isTriggered={isTriggered}
+					setTriggered={setTriggered}
+				/>
+				<CustomSelect
+					data={noiseReduction}
+					target_id={'noise_reduction'}
+					current={currentFilmFeature}
+					setCurrent={setCurrentFilmFeature}
+					isTriggered={isTriggered}
+					setTriggered={setTriggered}
+				/>
+
+				<TextInput aria-label="iso">
+					<TextInput.TextField id="iso" name="iso" placeholder="up to ISO 6400" defaultValue={currentFilmFeature.iso} />
+				</TextInput>
+				<TextInput aria-label="exposure compensation">
+					<TextInput.TextField
+						id="exposure_compensation"
+						name="exposure_compensation"
+						placeholder="Exposure Compensation"
+						defaultValue={currentFilmFeature.exposure_compensation}
+					/>
+				</TextInput>
+
+				<CustomSelect
+					data={sensors}
+					target_id={'sensors'}
+					current={currentFilmFeature}
+					setCurrent={setCurrentFilmFeature}
+					isTriggered={isTriggered}
+					setTriggered={setTriggered}
+				/> */}
+
+				<AddRecipeButton type="submit" disabled={checkIsDisabled()}>
+					ADD RECIPE
+				</AddRecipeButton>
 			</Form>
 		</ModalLayout>
 	);
@@ -209,6 +371,10 @@ const AddRecipeButton = styled.button`
 	&:active,
 	&:focus {
 		background-color: var(--greyOpacity900);
+	}
+
+	&:disabled {
+		background-color: var(--greyOpacity400);
 	}
 `;
 
