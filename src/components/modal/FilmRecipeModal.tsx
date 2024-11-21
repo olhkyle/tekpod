@@ -41,7 +41,13 @@ const FilmRecipeModal = ({
 	return (
 		<ModalLayout id={id} isOpen={isOpen} type={type} title={title} onClose={onClose}>
 			<Group>
-				<LazyImage src={imgSrc ?? '/sample.jpg'} alt="recipe sample image" width={'100%'} height={'100%'} lazy={true} />
+				<LazyImage
+					src={imgSrc.includes(import.meta.env.VITE_SUPABASE_FILMRECIPE_URL) ? imgSrc : '/sample.jpg'}
+					alt="recipe sample image"
+					width={'100%'}
+					height={'100%'}
+					lazy={true}
+				/>
 
 				<InfoList>
 					<li>
