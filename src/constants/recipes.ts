@@ -2,7 +2,7 @@ const filmSimulation = ['Provia', 'Velvia', 'Astia', 'Classic Chrome', 'PRO Neg.
 
 const dynamicRange = ['DR-Auto', 'DR-200', 'DR-400'] as const;
 
-const grainEffect = ['Strong', 'Weak'] as const;
+const grainEffect = ['Strong', 'Weak', 'Off'] as const;
 
 const numberRange = [-4, -3, -2, -1, 0, 1, 2, 3, 4] as const;
 const highlight = [...numberRange] as const;

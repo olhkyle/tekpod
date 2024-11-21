@@ -42,7 +42,7 @@ const CustomSelect = ({ data: options, target_id, current, setCurrent, isTrigger
 		<CustomSelectWithLabel>
 			<SelectTrigger type="button" onClick={() => setOpen(!isOpen)} aria-autocomplete="none" aria-expanded={isOpen}>
 				<SelectValue isTriggered={isTriggered[target_id]}>
-					{isTriggered ? options.find(option => option === current[target_id]) : PLACEHOLDER_PHRASE}
+					{isTriggered[target_id] ? options.find(option => option === current[target_id]) : PLACEHOLDER_PHRASE}
 				</SelectValue>
 				<Chevron size="21" color="var(--black)" $isOpen={isOpen} />
 			</SelectTrigger>
