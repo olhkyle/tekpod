@@ -150,7 +150,7 @@ const UploadButton = styled.button`
 
 	&:hover,
 	&:focus {
-		background-color: var(--grey400);
+		background-color: var(--blue300);
 	}
 `;
 

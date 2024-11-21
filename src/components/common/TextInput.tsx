@@ -1,6 +1,5 @@
-import { Children, cloneElement, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId } from 'react';
+import { ChangeEvent, Children, cloneElement, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId } from 'react';
 import styled from '@emotion/styled';
-import { ChangeHandler } from 'react-hook-form';
 
 interface TextInputProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> {
 	children: ReactElement;
@@ -30,7 +29,7 @@ interface TextFieldProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> 
 	name: string;
 	placeholder: string;
 	value?: string;
-	onChange?: ChangeHandler;
+	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 	disabled?: boolean;
 	isFocused?: boolean;
 }

@@ -22,7 +22,8 @@
 };
  */
 
-import { RestrictedRecipe } from './schema';
+import { v4 as uuid } from 'uuid';
+import { AddRestrictedRecipe, RestrictedRecipe } from './schema';
 import supabase from './service';
 
 const TABLE = 'recipes';
@@ -37,4 +38,29 @@ const getRecipes = async (): Promise<RestrictedRecipe[]> => {
 	return data;
 };
 
-export { getRecipes };
+const addRecipe = async (data: Omit<AddRestrictedRecipe, 'id'>) => {
+	// 'id' field will be generated in auto
+	const { data: uploadImage, error: uploadError } = await supabase.storage.from('recipe').upload(`film/${uuid()}`, data?.imgSrc, {
+		cacheControl: '3600',
+		upsert: false,
+	});
+
+	const { error: addRecipeError } = await supabase
+		.from(TABLE)
+		.insert({
+			...data,
+			imgSrc: `${import.meta.env.VITE_SUPABASE_PROJECT_URL}/${import.meta.env.VITE_SUPABASE_FILMRECIPE_URL}/${uploadImage?.path}`,
+		})
+		.select();
+
+	if (uploadError) {
+		console.log('here');
+		throw { error: uploadError, message: 'something image storage upload error happens' };
+	}
+
+	if (addRecipeError) {
+		throw { error: addRecipeError, message: 'something add recipe error happens' };
+	}
+};
+
+export { getRecipes, addRecipe };

@@ -1,5 +1,5 @@
 import ModalLayout from './ModalLayout';
-import { RestrictedRecipe } from '../../supabase/schema';
+import { RestricedRecipeWithImage } from '../../supabase/schema';
 import styled from '@emotion/styled';
 import { ModalDataType } from './modalType';
 import { LazyImage } from '../common';
@@ -7,7 +7,7 @@ import useOverlayFixed from '../../hooks/useOverlayFixed';
 
 interface FilmRecipeModalProps {
 	id: string;
-	data: RestrictedRecipe;
+	data: RestricedRecipeWithImage;
 	isOpen: boolean;
 	type: ModalDataType;
 	title: string;
@@ -30,17 +30,18 @@ const FilmRecipeModal = ({
 		iso,
 		exposure_compensation,
 		sensors,
+		imgSrc,
 	},
 	isOpen,
 	type,
 	onClose,
 }: FilmRecipeModalProps) => {
 	useOverlayFixed(isOpen);
-
+	console.log(title, imgSrc);
 	return (
 		<ModalLayout id={id} isOpen={isOpen} type={type} title={title} onClose={onClose}>
 			<Group>
-				<LazyImage src={'/sample.jpg'} alt="recipe sample image" width={'100%'} height={'100%'} lazy={true} />
+				<LazyImage src={imgSrc ?? '/sample.jpg'} alt="recipe sample image" width={'100%'} height={'100%'} lazy={true} />
 
 				<InfoList>
 					<li>
@@ -93,6 +94,7 @@ const FilmRecipeModal = ({
 					</li>
 				</InfoList>
 			</Group>
+			<EditRecipeButton type="button">✏️ Edit</EditRecipeButton>
 		</ModalLayout>
 	);
 };
@@ -122,6 +124,27 @@ const InfoList = styled.ul`
 		label {
 			font-weight: var(--fw-medium);
 		}
+	}
+`;
+
+const EditRecipeButton = styled.button`
+	margin-top: calc(var(--padding-container-mobile) * 8);
+	padding: var(--padding-container-mobile);
+	width: 100%;
+	min-height: 57px;
+	color: var(--white);
+	background-color: var(--black);
+	font-size: var(--fz-p);
+	font-weight: var(--fw-semibold);
+	transition: background 0.15s ease-in-out;
+
+	&:active,
+	&:focus {
+		background-color: var(--greyOpacity900);
+	}
+
+	&:disabled {
+		background-color: var(--greyOpacity400);
 	}
 `;
 
