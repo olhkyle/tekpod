@@ -5,3 +5,4 @@ export { default as Toast } from './Toast';
 export { default as SkeletonLoader } from './SkeletonLoader';
 export { default as LazyImage } from './LazyImage';
 export { default as CustomSelect } from './CustomSelect';
+export { default as EmptyMessage } from './EmptyMessage';

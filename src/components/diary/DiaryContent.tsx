@@ -7,6 +7,7 @@ import { LoadingSpinner } from '../layout';
 import { useInfinityScroll } from '../../hooks';
 import { routes } from '../../constants';
 import getCalculatedTotalPage from '../../utils/getCalculatedTotalPage';
+import { EmptyMessage } from '../common';
 
 const PAGE_SIZE = 10;
 
@@ -56,6 +57,7 @@ const DiaryContent = () => {
 						</DiaryLink>
 					</Diary>
 				))}
+				{data?.pages.flat().length === 0 && <EmptyMessage emoji={'📝'}>{'ADD DIARY PLEASE'}</EmptyMessage>}
 			</Diaries>
 			{hasNextPage && (
 				<LoadingArea ref={targetRef}>
