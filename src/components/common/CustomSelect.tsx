@@ -1,49 +1,26 @@
 import styled from '@emotion/styled';
-import { Dispatch, SetStateAction, useState } from 'react';
-import {
-	dynamicRange,
-	filmSimulation,
-	grainEffect,
-	highlight,
-	noiseReduction,
-	shadow,
-	color,
-	sharpness,
-	sensors,
-} from '../../constants/recipes';
-import type { RestrictedRecipeForValidation } from '../../supabase/schema';
+import { useState } from 'react';
 import { BiSolidChevronRight } from 'react-icons/bi';
 import { customPropReceiver } from '../../constants';
+import type { FieldDataType } from '../../constants/recipes';
+import type { RestrictedRecipeForValidation } from '../../supabase/schema';
 
 interface NativeSelectProps {
-	data:
-		| typeof filmSimulation
-		| typeof dynamicRange
-		| typeof grainEffect
-		| typeof highlight
-		| typeof shadow
-		| typeof color
-		| typeof sharpness
-		| typeof noiseReduction
-		| typeof sensors;
+	data: FieldDataType;
 	target_id: keyof RestrictedRecipeForValidation;
-	current: RestrictedRecipeForValidation;
-	setCurrent: Dispatch<SetStateAction<RestrictedRecipeForValidation>>;
-	isTriggered: { [key: string]: boolean };
-	setTriggered: Dispatch<SetStateAction<{ [key: string]: boolean }>>;
+	placeholder: string;
+	currentValue: number | string;
+	isTriggered: boolean;
+	onSelect: (option: number | string) => void;
 }
 
-const CustomSelect = ({ data: options, target_id, current, setCurrent, isTriggered, setTriggered }: NativeSelectProps) => {
+const CustomSelect = ({ data: options, target_id, placeholder, currentValue, isTriggered, onSelect }: NativeSelectProps) => {
 	const [isOpen, setOpen] = useState(false);
-
-	const PLACEHOLDER_PHRASE = `Select ${target_id.toUpperCase()}`;
 
 	return (
 		<CustomSelectWithLabel>
 			<SelectTrigger type="button" onClick={() => setOpen(!isOpen)} aria-autocomplete="none" aria-expanded={isOpen}>
-				<SelectValue isTriggered={isTriggered[target_id]}>
-					{isTriggered[target_id] ? options.find(option => option === current[target_id]) : PLACEHOLDER_PHRASE}
-				</SelectValue>
+				<SelectValue isTriggered={isTriggered}>{isTriggered ? options.find(option => option === currentValue) : placeholder}</SelectValue>
 				<Chevron size="21" color="var(--black)" $isOpen={isOpen} />
 			</SelectTrigger>
 
@@ -52,13 +29,12 @@ const CustomSelect = ({ data: options, target_id, current, setCurrent, isTrigger
 				{options.map((option, idx) => (
 					<SelectItem
 						key={`${option}_${idx}`}
-						isCurrent={option === current[target_id]}
+						isCurrent={option === currentValue}
 						onClick={() => {
-							setCurrent({ ...current, [target_id]: option });
+							onSelect(option);
 							setOpen(false);
-							setTriggered({ ...isTriggered, [target_id]: true });
 						}}>
-						<SelectItemCheckIndicator isCurrent={option === current[target_id]} />
+						<SelectItemCheckIndicator isCurrent={option === currentValue} />
 						<span>{option}</span>
 					</SelectItem>
 				))}
@@ -107,7 +83,7 @@ const SelectContent = styled.div<{ isOpen: boolean }>`
 const Label = styled.label`
 	display: block;
 	margin-bottom: 8px;
-	font-weight: var(--fw-semibold);
+	font-weight: var(--fw-bold);
 	color: var(--grey900);
 `;
 
@@ -117,6 +93,7 @@ const SelectItem = styled.div<{ isCurrent: boolean }>`
 	gap: 12px;
 	padding: calc(var(--padding-container-mobile) * 0.5) calc(var(--padding-container-mobile) * 0.75);
 	font-size: var(--fz-h6);
+	font-weight: ${({ isCurrent }) => (isCurrent ? 'var(--fw-semibold)' : 'var(--fw-regular)')};
 	color: ${({ isCurrent }) => (isCurrent ? 'var(--grey900)' : 'var(--grey700)')};
 	background-color: ${({ isCurrent }) => (isCurrent ? 'var(--greyOpacity50)' : 'var(--white)')};
 	border-radius: var(--radius-s);

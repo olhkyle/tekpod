@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
 import { ModalDataType } from './modalType';
+import { useOverlayFixed } from '../../hooks';
 
 interface ModalLayoutProps {
 	id: string;
@@ -13,6 +14,8 @@ interface ModalLayoutProps {
 }
 
 const ModalLayout = ({ id, isOpen, type, title, onClose, children }: ModalLayoutProps) => {
+	useOverlayFixed(isOpen);
+
 	return (
 		<Container isOpen={isOpen} data-modal-type={type} data-modal-id={id}>
 			<Header>

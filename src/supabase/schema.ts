@@ -1,4 +1,4 @@
-import { Database } from '../database.types';
+import { Database } from './database.types';
 
 type Diary = Database['public']['Tables']['diary']['Row'];
 type Recipe = Database['public']['Tables']['recipes']['Row'];
@@ -14,10 +14,6 @@ interface RestricedRecipeWithImage extends RestrictedRecipe {
 	imgSrc: string;
 }
 
-type RestrictedRecipeForValidation = Omit<RestrictedRecipe, 'id' | 'user_id' | 'created_at' | 'updated_at'>;
+type RestrictedRecipeForValidation = Omit<RestrictedRecipe, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'imgSrc'>;
 
-interface AddRestrictedRecipe extends RestrictedRecipe {
-	imgSrc: File;
-}
-
-export type { Diary, RestrictedRecipe, RestricedRecipeWithImage, RestrictedRecipeForValidation, AddRestrictedRecipe };
+export type { Diary, RestrictedRecipe, RestricedRecipeWithImage, RestrictedRecipeForValidation };

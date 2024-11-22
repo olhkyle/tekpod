@@ -3,7 +3,6 @@ import { RestricedRecipeWithImage } from '../../supabase/schema';
 import styled from '@emotion/styled';
 import { ModalDataType } from './modalType';
 import { LazyImage } from '../common';
-import useOverlayFixed from '../../hooks/useOverlayFixed';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -36,8 +35,6 @@ const FilmRecipeModal = ({
 	type,
 	onClose,
 }: FilmRecipeModalProps) => {
-	useOverlayFixed(isOpen);
-	console.log(title, imgSrc);
 	return (
 		<ModalLayout id={id} isOpen={isOpen} type={type} title={title} onClose={onClose}>
 			<Group>
