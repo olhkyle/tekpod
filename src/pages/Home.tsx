@@ -23,10 +23,6 @@ const HomePage = () => {
 						))}
 					</div>
 				))}
-
-				{/* {Array.from({ length: 365 }, (_, idx) => (
-					<Day key={idx} isActive={idx % 3 === 0} />
-				))} */}
 			</DayGrid>
 		</Container>
 	);

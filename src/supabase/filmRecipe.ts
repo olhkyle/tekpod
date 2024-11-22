@@ -55,7 +55,7 @@ const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id
 
 	if (uploadError) {
 		console.log('here');
-		throw { error: uploadError, message: 'something image storage upload error happens' };
+		throw { error: uploadError, message: 'Error to upload on image storage happens' };
 	}
 
 	if (addRecipeError) {
@@ -63,4 +63,12 @@ const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id
 	}
 };
 
-export { getRecipes, addRecipe };
+const deleteRecipe = async (id: string) => {
+	const { error } = await supabase.from(TABLE).delete().eq('id', id);
+
+	if (error) {
+		throw { error, message: 'Error to delete this recipe' };
+	}
+};
+
+export { getRecipes, addRecipe, deleteRecipe };

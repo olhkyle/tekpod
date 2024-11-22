@@ -3,6 +3,9 @@ import { RestricedRecipeWithImage } from '../../supabase/schema';
 import styled from '@emotion/styled';
 import { ModalDataType } from './modalType';
 import { LazyImage } from '../common';
+import { deleteRecipe } from '../../supabase/filmRecipe';
+import useToastStore from '../../store/useToastStore';
+import { useLoading } from '../../hooks';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -16,6 +19,7 @@ interface FilmRecipeModalProps {
 const FilmRecipeModal = ({
 	id,
 	data: {
+		id: recipeId,
 		title,
 		film_simulation,
 		dynamic_range,
@@ -35,6 +39,22 @@ const FilmRecipeModal = ({
 	type,
 	onClose,
 }: FilmRecipeModalProps) => {
+	const { addToast } = useToastStore();
+	const { isLoading, Loading, startTransition } = useLoading();
+
+	// TODO: Modal 상태에서 삭제하기 때문에, mutation이 필요(페이지 전환이 아님)
+	const handleRecipeDelete = async () => {
+		try {
+			await startTransition(deleteRecipe(recipeId));
+
+			addToast({ status: 'success', message: 'Successfully delete recipe' });
+			onClose();
+		} catch (error) {
+			console.error(error);
+			addToast({ status: 'error', message: 'Error happens, deleting recipe' });
+		}
+	};
+
 	return (
 		<ModalLayout id={id} isOpen={isOpen} type={type} title={title} onClose={onClose}>
 			<Group>
@@ -97,7 +117,12 @@ const FilmRecipeModal = ({
 					</li>
 				</InfoList>
 			</Group>
-			<EditRecipeButton type="button">✏️ Edit</EditRecipeButton>
+			<ButtonGroup>
+				<EditRecipeButton type="button">✏️ Edit</EditRecipeButton>
+				<DeleteRecipeButton type="button" onClick={handleRecipeDelete}>
+					{isLoading ? Loading : '🗑️ Delete'}
+				</DeleteRecipeButton>
+			</ButtonGroup>
 		</ModalLayout>
 	);
 };
@@ -130,16 +155,25 @@ const InfoList = styled.ul`
 	}
 `;
 
-const EditRecipeButton = styled.button`
+const ButtonGroup = styled.div`
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+`;
+
+const Button = styled.button`
 	margin-top: calc(var(--padding-container-mobile) * 8);
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	min-height: 57px;
 	color: var(--white);
-	background-color: var(--black);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	transition: background 0.15s ease-in-out;
+`;
+
+const EditRecipeButton = styled(Button)`
+	background-color: var(--black);
 
 	&:active,
 	&:focus {
@@ -148,6 +182,16 @@ const EditRecipeButton = styled.button`
 
 	&:disabled {
 		background-color: var(--greyOpacity400);
+	}
+`;
+
+const DeleteRecipeButton = styled(Button)`
+	background-color: var(--grey200);
+	color: var(--grey700);
+
+	&:active,
+	&:focus {
+		background-color: var(--greyOpacity300);
 	}
 `;
 
