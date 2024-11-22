@@ -14,6 +14,14 @@ const useFilmRecipeImage = (DEFAULT_IMAGE_SIZE: number) => {
 		const currentImageFile = e.target.files?.[0];
 		const currentImageFileSize = currentImageFile?.size ?? 0;
 
+		if (currentImageFile?.type !== 'image/webp') {
+			if (imageInputRef?.current) {
+				imageInputRef.current.value = '';
+			}
+
+			return addToast({ status: 'warn', message: `'image/webp' type can be uploaded only` });
+		}
+
 		if (currentImageFileSize > DEFAULT_IMAGE_SIZE) {
 			addToast({ status: 'warn', message: 'File can not be uploaded over 10mb' });
 			return;
