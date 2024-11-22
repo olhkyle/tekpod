@@ -64,6 +64,7 @@ const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id
 };
 
 const deleteRecipe = async (id: string) => {
+	console.log(id);
 	const { error } = await supabase.from(TABLE).delete().eq('id', id);
 
 	if (error) {
