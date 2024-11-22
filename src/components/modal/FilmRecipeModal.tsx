@@ -3,7 +3,10 @@ import { RestricedRecipeWithImage } from '../../supabase/schema';
 import styled from '@emotion/styled';
 import { ModalDataType } from './modalType';
 import { LazyImage } from '../common';
-import useOverlayFixed from '../../hooks/useOverlayFixed';
+
+import useModalStore from '../../store/useModalStore';
+import { useState } from 'react';
+import DeleteConfirmModal from './DeleteConfirmModal';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -14,35 +17,28 @@ interface FilmRecipeModalProps {
 	onClose: () => void;
 }
 
-const FilmRecipeModal = ({
-	id,
-	data: {
-		title,
-		film_simulation,
-		dynamic_range,
-		grain_effect,
-		wb,
-		highlight,
-		shadow,
-		color,
-		sharpness,
-		noise_reduction,
-		iso,
-		exposure_compensation,
-		sensors,
-		imgSrc,
-	},
-	isOpen,
-	type,
-	onClose,
-}: FilmRecipeModalProps) => {
-	useOverlayFixed(isOpen);
-	console.log(title, imgSrc);
+const FilmRecipeModal = ({ id, data, isOpen, type, onClose }: FilmRecipeModalProps) => {
+	const { setModal } = useModalStore();
+
+	const [isDeleteConfirmModalOpen] = useState(true);
+
+	const handleDeleteConfirmModal = () => {
+		setModal({
+			Component: DeleteConfirmModal,
+			props: {
+				isOpen: isDeleteConfirmModalOpen,
+				data,
+				type: 'recipe',
+				onTopLevelModalClose: onClose,
+			},
+		});
+	};
+
 	return (
-		<ModalLayout id={id} isOpen={isOpen} type={type} title={title} onClose={onClose}>
+		<ModalLayout id={id} isOpen={isOpen} type={type} title={data?.title} onClose={onClose}>
 			<Group>
 				<LazyImage
-					src={imgSrc.includes(import.meta.env.VITE_SUPABASE_FILMRECIPE_URL) ? imgSrc : '/sample.jpg'}
+					src={data?.imgSrc.includes(import.meta.env.VITE_SUPABASE_FILMRECIPE_URL) ? data?.imgSrc : '/sample.jpg'}
 					alt="recipe sample image"
 					width={'100%'}
 					height={'100%'}
@@ -52,55 +48,60 @@ const FilmRecipeModal = ({
 				<InfoList>
 					<li>
 						<label>FILM SIMULATION</label>
-						<p>{film_simulation}</p>
+						<p>{data?.film_simulation}</p>
 					</li>
 					<li>
 						<label>DYNAMIC RANGE</label>
-						<p>{dynamic_range}</p>
+						<p>{data?.dynamic_range}</p>
 					</li>
 					<li>
 						<label>GRAIN EFFECT</label>
-						<p>{grain_effect}</p>
+						<p>{data?.grain_effect}</p>
 					</li>
 					<li>
 						<label>WB</label>
-						<p>{wb}</p>
+						<p>{data?.wb}</p>
 					</li>
 					<li>
 						<label>HIGHLIGHT</label>
-						<p>{highlight}</p>
+						<p>{data?.highlight}</p>
 					</li>
 					<li>
 						<label>SHADOW</label>
-						<p>{shadow}</p>
+						<p>{data?.shadow}</p>
 					</li>
 					<li>
 						<label>COLOR</label>
-						<p>{color}</p>
+						<p>{data?.color}</p>
 					</li>
 					<li>
 						<label>SHARPNESS</label>
-						<p>{sharpness}</p>
+						<p>{data?.sharpness}</p>
 					</li>
 					<li>
 						<label>NOISE REDUCTION</label>
-						<p>{noise_reduction}</p>
+						<p>{data?.noise_reduction}</p>
 					</li>
 					<li>
 						<label>ISO</label>
-						<p>{iso}</p>
+						<p>{data?.iso}</p>
 					</li>
 					<li>
 						<label>EXPOSURE COMPENSATION</label>
-						<p>{exposure_compensation}</p>
+						<p>{data?.exposure_compensation}</p>
 					</li>
 					<li>
 						<label>SENSORS</label>
-						<p>{sensors}</p>
+						<p>{data?.sensors}</p>
 					</li>
 				</InfoList>
 			</Group>
-			<EditRecipeButton type="button">✏️ Edit</EditRecipeButton>
+			<ButtonGroup>
+				<EditRecipeButton type="button">✏️ Edit</EditRecipeButton>
+				<DeleteRecipeButton type="button" onClick={handleDeleteConfirmModal}>
+					🗑️ Delete
+				</DeleteRecipeButton>
+			</ButtonGroup>
 		</ModalLayout>
 	);
 };
@@ -133,16 +134,25 @@ const InfoList = styled.ul`
 	}
 `;
 
-const EditRecipeButton = styled.button`
+const ButtonGroup = styled.div`
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+`;
+
+const Button = styled.button`
 	margin-top: calc(var(--padding-container-mobile) * 8);
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	min-height: 57px;
 	color: var(--white);
-	background-color: var(--black);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	transition: background 0.15s ease-in-out;
+`;
+
+const EditRecipeButton = styled(Button)`
+	background-color: var(--black);
 
 	&:active,
 	&:focus {
@@ -151,6 +161,16 @@ const EditRecipeButton = styled.button`
 
 	&:disabled {
 		background-color: var(--greyOpacity400);
+	}
+`;
+
+const DeleteRecipeButton = styled(Button)`
+	background-color: var(--grey200);
+	color: var(--grey700);
+
+	&:active,
+	&:focus {
+		background-color: var(--greyOpacity300);
 	}
 `;
 

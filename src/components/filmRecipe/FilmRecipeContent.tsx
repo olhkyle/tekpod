@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { getRecipes } from '../../supabase/filmRecipe';
 import useModalStore from '../../store/useModalStore';
 import { FilmRecipeModal } from '../modal';
+import { EmptyMessage } from '../common';
 
 const FilmRecipeContent = () => {
 	const { data: recipes } = useSuspenseQuery({ queryKey: ['film_recipes'], queryFn: getRecipes });
@@ -20,6 +21,7 @@ const FilmRecipeContent = () => {
 
 	return (
 		<Container>
+			{recipes.length === 0 && <EmptyMessage emoji={'📷'}>{'ADD RECIPE PLEASE'}</EmptyMessage>}
 			{recipes.map(({ title, film_simulation }, idx) => (
 				<Recipe key={idx} onClick={() => handleIndividualFilmRecipeModal(title)}>
 					<Title>
@@ -36,8 +38,8 @@ const FilmRecipeContent = () => {
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	margin-top: 24px;
-	border-top: 1px solid var(--greyOpacity200);
 `;
 
 const Recipe = styled.div`
@@ -47,6 +49,10 @@ const Recipe = styled.div`
 	padding: calc(var(--padding-container-mobile) * 1.2) calc(var(--padding-container-mobile) * 0.5);
 	border-bottom: 1px solid var(--greyOpacity200);
 	cursor: pointer;
+
+	&:first-of-type {
+		border-top: 1px solid var(--greyOpacity200);
+	}
 
 	&:hover,
 	&:focus {

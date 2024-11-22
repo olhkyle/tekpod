@@ -13,6 +13,7 @@ interface Modal {
 		isOpen: boolean;
 		type: ModalDataType;
 		refetch?: QueryRefetch;
+		onTopLevelModalClose?: () => void;
 	};
 }
 

@@ -23,7 +23,7 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { AddRestrictedRecipe, RestrictedRecipe } from './schema';
+import { RestrictedRecipe } from './schema';
 import supabase from './service';
 
 const TABLE = 'recipes';
@@ -38,9 +38,9 @@ const getRecipes = async (): Promise<RestrictedRecipe[]> => {
 	return data;
 };
 
-const addRecipe = async (data: Omit<AddRestrictedRecipe, 'id'>) => {
+const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id' | 'imgSrc'>; imageFile: File }) => {
 	// 'id' field will be generated in auto
-	const { data: uploadImage, error: uploadError } = await supabase.storage.from('recipe').upload(`film/${uuid()}`, data?.imgSrc, {
+	const { data: uploadImage, error: uploadError } = await supabase.storage.from('recipe').upload(`film/${uuid()}`, imageFile, {
 		cacheControl: '3600',
 		upsert: false,
 	});
@@ -55,12 +55,21 @@ const addRecipe = async (data: Omit<AddRestrictedRecipe, 'id'>) => {
 
 	if (uploadError) {
 		console.log('here');
-		throw { error: uploadError, message: 'something image storage upload error happens' };
+		throw { error: uploadError, message: 'Error to upload on image storage happens' };
 	}
 
 	if (addRecipeError) {
-		throw { error: addRecipeError, message: 'something add recipe error happens' };
+		throw { error: addRecipeError, message: 'Error to add recipe happens' };
 	}
 };
 
-export { getRecipes, addRecipe };
+const deleteRecipe = async (id: string) => {
+	console.log(id);
+	const { error } = await supabase.from(TABLE).delete().eq('id', id);
+
+	if (error) {
+		throw { error, message: 'Error to delete this recipe' };
+	}
+};
+
+export { getRecipes, addRecipe, deleteRecipe };

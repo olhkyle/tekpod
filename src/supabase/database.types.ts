@@ -61,6 +61,7 @@ export interface Database {
 					sensors: string;
 					created_at: Date;
 					updated_at: Date;
+					imgSrc: string;
 				};
 				Insert: {
 					// the data to be passed to .insert()
@@ -81,10 +82,11 @@ export interface Database {
 					sensors: string;
 					created_at: Date;
 					updated_at: Date;
+					imgSrc: string;
 				};
 				Update: {
 					// the data to be passed to .update()
-					id?: never; // generated columns must not be supplied
+					id: never; // generated columns must not be supplied
 					user_id: string;
 					title: string;
 					film_simulation?: string;
@@ -100,10 +102,11 @@ export interface Database {
 					exposure_compensation?: string;
 					sensors?: string;
 					updated_at: Date;
+					imgSrc: string;
 				};
 				Delete: {
 					// the data to be passed to .delete()
-					id?: never;
+					id: never;
 				};
 			};
 		};

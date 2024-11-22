@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
 import { ModalDataType } from './modalType';
+import { useOverlayFixed } from '../../hooks';
 
 interface ModalLayoutProps {
 	id: string;
@@ -9,12 +10,15 @@ interface ModalLayoutProps {
 	type: ModalDataType;
 	title: string | ReactNode;
 	onClose: () => void;
+	size?: 'sm' | 'lg';
 	children: ReactNode;
 }
 
-const ModalLayout = ({ id, isOpen, type, title, onClose, children }: ModalLayoutProps) => {
+const ModalLayout = ({ id, isOpen, type, title, onClose, size = 'lg', children }: ModalLayoutProps) => {
+	useOverlayFixed(isOpen);
+
 	return (
-		<Container isOpen={isOpen} data-modal-type={type} data-modal-id={id}>
+		<Container isOpen={isOpen} size={size} order={+id.split('-')[1]} data-modal-type={type} data-modal-id={id}>
 			<Header>
 				<Title>{title}</Title>
 				<CloseButton type="button" onClick={onClose}>
@@ -26,14 +30,14 @@ const ModalLayout = ({ id, isOpen, type, title, onClose, children }: ModalLayout
 	);
 };
 
-const Container = styled.div<{ isOpen: boolean }>`
+const Container = styled.div<{ isOpen: boolean; size: 'sm' | 'lg'; order: number }>`
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
 	padding: var(--padding-container-mobile);
-	height: 85dvh;
-	background-color: var(--white);
+	height: ${({ size }) => (size === 'lg' ? ' 85dvh' : '22dvh')};
+	background-color: ${({ order }) => (order === 0 ? 'var(--white)' : `var(--grey100)`)};
 	border-top-left-radius: var(--radius-l);
 	border-top-right-radius: var(--radius-l);
 	visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
