@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BiMessageSquareEdit } from 'react-icons/bi';
 import { QueryRefetch } from '../../store/useModalStore';
 import { Diary } from '../../supabase/schema';
-import { useNavigate } from 'react-router-dom';
 import { ModalLayout } from '.';
 import { TagsInput, TextArea, TextInput } from '..';
 import { editContentSchema, EditContentSchema } from './editContentSchema';
@@ -14,7 +14,7 @@ import { useLoading } from '../../hooks';
 import { updateDiary } from '../../supabase/diary';
 import { routes } from '../../constants';
 import useToastStore from '../../store/useToastStore';
-import { ModalDataType } from './modalType';
+import type { ModalDataType } from './modalType';
 
 interface EditContentModalProps {
 	id: string;

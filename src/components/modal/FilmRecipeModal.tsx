@@ -1,34 +1,32 @@
-import ModalLayout from './ModalLayout';
-import { RestricedRecipeWithImage } from '../../supabase/schema';
-import styled from '@emotion/styled';
-import { ModalDataType } from './modalType';
-import { LazyImage } from '../common';
-
-import useModalStore from '../../store/useModalStore';
 import { useState } from 'react';
-import DeleteConfirmModal from './DeleteConfirmModal';
+import styled from '@emotion/styled';
+import { RestricedRecipeWithImage } from '../../supabase/schema';
+import type { ModalDataType } from './modalType';
+import { ModalLayout, RemoveFilmRecipeConfirmModal, LazyImage } from '..';
+import useModalStore, { QueryRefetch } from '../../store/useModalStore';
 
 interface FilmRecipeModalProps {
 	id: string;
 	data: RestricedRecipeWithImage;
 	isOpen: boolean;
 	type: ModalDataType;
-	title: string;
+	refetch: QueryRefetch;
 	onClose: () => void;
 }
 
-const FilmRecipeModal = ({ id, data, isOpen, type, onClose }: FilmRecipeModalProps) => {
+const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecipeModalProps) => {
 	const { setModal } = useModalStore();
 
 	const [isDeleteConfirmModalOpen] = useState(true);
 
 	const handleDeleteConfirmModal = () => {
 		setModal({
-			Component: DeleteConfirmModal,
+			Component: RemoveFilmRecipeConfirmModal,
 			props: {
 				isOpen: isDeleteConfirmModalOpen,
 				data,
 				type: 'recipe',
+				refetch,
 				onTopLevelModalClose: onClose,
 			},
 		});

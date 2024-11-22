@@ -2,43 +2,57 @@ import styled from '@emotion/styled';
 import ModalLayout from './ModalLayout';
 import { ModalDataType } from './modalType';
 import useToastStore from '../../store/useToastStore';
-import { useLoading } from '../../hooks';
-import { deleteRecipe } from '../../supabase/filmRecipe';
 import { RestricedRecipeWithImage } from '../../supabase/schema';
+import useRemoveRecipeMutation from '../../hooks/mutations/useRemoveFilmRecipeMutation';
+import { LoadingSpinner } from '../layout';
+import { QueryRefetch } from '../../store/useModalStore';
 
-interface DeleteConfirmModalProps {
+interface RemoveFilmRecipeConfirmModalProps {
 	id: string;
 	data: RestricedRecipeWithImage;
 	isOpen: boolean;
 	type: ModalDataType;
+	refetch: QueryRefetch;
 	onClose: () => void;
 	onTopLevelModalClose: () => void;
 }
 
-const DeleteConfirmModal = ({ id, data, isOpen, type, onClose, onTopLevelModalClose }: DeleteConfirmModalProps) => {
-	const { isLoading, Loading, startTransition } = useLoading();
+const RemoveFilmRecipeConfirmModal = ({
+	id,
+	data,
+	isOpen,
+	type,
+	refetch,
+	onClose,
+	onTopLevelModalClose,
+}: RemoveFilmRecipeConfirmModalProps) => {
+	const { mutate: remove, isPending } = useRemoveRecipeMutation(data?.id);
 	const { addToast } = useToastStore();
 
-	// TODO: Modal 상태에서 삭제하기 때문에, mutation이 필요(페이지 전환이 아님)
-
-	const handleRecipeDelete = async () => {
-		try {
-			await startTransition(deleteRecipe(data?.id));
-
-			addToast({ status: 'success', message: 'Successfully delete recipe' });
-			onClose();
-		} catch (error) {
-			console.error(error);
-			addToast({ status: 'error', message: 'Error happens, deleting recipe' });
-		} finally {
-			onTopLevelModalClose();
-		}
+	const handleRecipeDelete = () => {
+		remove(
+			{ id: data?.id, path: data?.imgSrc.replace(/^.*recipe\//, '') },
+			{
+				onSuccess: () => {
+					addToast({ status: 'success', message: 'Successfully delete recipe' });
+					onClose();
+				},
+				onError: () => {
+					addToast({ status: 'error', message: 'Error happens, deleting recipe' });
+				},
+				onSettled: () => {
+					onTopLevelModalClose();
+					refetch();
+				},
+			},
+		);
 	};
+
 	return (
 		<ModalLayout id={id} isOpen={isOpen} type={type} title={'Delete Recipe'} onClose={onClose} size="sm">
 			<ButtonGroup>
 				<YesButton type="button" onClick={handleRecipeDelete}>
-					{isLoading ? Loading : 'YES'}
+					{isPending ? <LoadingSpinner /> : 'YES'}
 				</YesButton>
 				<Button
 					type="button"
@@ -78,15 +92,4 @@ const YesButton = styled(Button)`
 	color: var(--grey700);
 `;
 
-// const DoubleOverlay = styled.div<{ order: number }>`
-// 	position: fixed;
-// 	max-width: var(--max-app-width);
-// 	min-width: var(--min-app-width);
-// 	margin: 0 auto;
-// 	height: 100dvh;
-// 	background-color: rgba(0, 0, 0, 40%);
-// 	inset: 0px;
-// 	z-index: calc((var(--overlay-index) * (order + 0.5)));
-// `;
-
-export default DeleteConfirmModal;
+export default RemoveFilmRecipeConfirmModal;

@@ -1,16 +1,20 @@
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
-import { AddFilmRecipeModal, FilmRecipeContent, FilmRecipeContentLoader } from '../components';
+import { AddFilmRecipeModal, FilmRecipeContent } from '../components';
 import useModalStore from '../store/useModalStore';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { getRecipes } from '../supabase/filmRecipe';
 
 const FilmRecipePage = () => {
+	const { data: recipes, refetch } = useSuspenseQuery({ queryKey: ['film_recipes'], queryFn: getRecipes });
+
 	const [isAddFilmRecipeModalOpen] = useState(true);
 	const { setModal } = useModalStore();
 
 	const handleAddFilmRecipeModal = () => {
 		setModal({
 			Component: AddFilmRecipeModal,
-			props: { isOpen: isAddFilmRecipeModalOpen, data: null, type: 'recipe' },
+			props: { isOpen: isAddFilmRecipeModalOpen, data: null, type: 'recipe', refetch },
 		});
 	};
 
@@ -25,9 +29,8 @@ const FilmRecipePage = () => {
 			<Description>
 				with <span>Fuji x100f</span>
 			</Description>
-			<Suspense fallback={<FilmRecipeContentLoader />}>
-				<FilmRecipeContent />
-			</Suspense>
+
+			<FilmRecipeContent recipes={recipes} refetch={refetch} />
 		</section>
 	);
 };

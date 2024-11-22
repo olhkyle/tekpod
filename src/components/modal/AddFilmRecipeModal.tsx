@@ -1,23 +1,20 @@
 import { FormEventHandler, useState } from 'react';
 import styled from '@emotion/styled';
 import { Session } from '@supabase/supabase-js';
-import { ModalLayout } from '.';
-import { ModalDataType } from './modalType';
+import { useQueryClient } from '@tanstack/react-query';
+import type { ModalDataType } from './modalType';
+import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLayout } from '..';
 import useToastStore from '../../store/useToastStore';
-import { CustomSelect, TextInput } from '../common';
+import { QueryRefetch } from '../../store/useModalStore';
+import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../hooks';
 import { FILM_RECIPE_FORM } from '../../constants/recipes';
 import type { RestrictedRecipeForValidation } from '../../supabase/schema';
-import { addRecipe } from '../../supabase/filmRecipe';
-import { useQueryClient } from '@tanstack/react-query';
-import { useFilmRecipeImage, useLoading } from '../../hooks';
-import { useNavigate } from 'react-router-dom';
-import { routes } from '../../constants';
-import { FilmRecipeImageUpload } from '../filmRecipe';
 
 interface AddFilmRecipeModalProps {
 	id: string;
 	isOpen: boolean;
 	type: ModalDataType;
+	refetch: QueryRefetch;
 	onClose: () => void;
 }
 
@@ -53,16 +50,14 @@ const initialValidationState: { [key: string]: boolean } = {
 	sensors: false,
 };
 
-const AddFilmRecipeModal = ({ id, isOpen, type, onClose }: AddFilmRecipeModalProps) => {
+const AddFilmRecipeModal = ({ id, isOpen, type, refetch, onClose }: AddFilmRecipeModalProps) => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
-
-	const navigate = useNavigate();
-	const { isLoading, Loading, startTransition } = useLoading();
 
 	const [currentFilmFeature, setCurrentFilmFeature] = useState<RestrictedRecipeForValidation>(initialFilmFieldValue);
 	const [isTriggered, setTriggered] = useState(initialValidationState);
 
+	const { mutate: addFilmRecipe, isPending } = useAddFilmRecipeMutation();
 	const { addToast } = useToastStore();
 
 	const {
@@ -79,7 +74,7 @@ const AddFilmRecipeModal = ({ id, isOpen, type, onClose }: AddFilmRecipeModalPro
 		}
 	};
 
-	const handleAddFilmRecipe: FormEventHandler<HTMLFormElement> = async e => {
+	const handleAddFilmRecipe: FormEventHandler<HTMLFormElement> = e => {
 		e.preventDefault();
 
 		const today = new Date();
@@ -89,28 +84,31 @@ const AddFilmRecipeModal = ({ id, isOpen, type, onClose }: AddFilmRecipeModalPro
 			return;
 		}
 
-		try {
-			if (currentRecipeImage) {
-				await startTransition(
-					addRecipe({
-						data: {
-							...currentFilmFeature,
-							user_id: session?.user?.id,
-							created_at: today,
-							updated_at: today,
-						},
-						imageFile: currentRecipeImage,
-					}),
-				);
-
-				addToast({ status: 'success', message: `Successfully add new film recipe` });
-				navigate(routes.FILM_RECIPE);
-			}
-		} catch (error) {
-			console.error(error);
-			addToast({ status: 'error', message: `Error happens, adding film recipe` });
-		} finally {
-			onClose();
+		if (currentRecipeImage) {
+			addFilmRecipe(
+				{
+					data: {
+						...currentFilmFeature,
+						user_id: session?.user?.id,
+						created_at: today,
+						updated_at: today,
+					},
+					imageFile: currentRecipeImage,
+				},
+				{
+					onSuccess() {
+						addToast({ status: 'success', message: `Successfully add new film recipe` });
+					},
+					onError(error) {
+						console.error(error);
+						addToast({ status: 'error', message: `Error happens, adding film recipe` });
+					},
+					onSettled() {
+						onClose();
+						refetch();
+					},
+				},
+			);
 		}
 	};
 
@@ -155,7 +153,7 @@ const AddFilmRecipeModal = ({ id, isOpen, type, onClose }: AddFilmRecipeModalPro
 				})}
 
 				<AddRecipeButton type="submit" disabled={checkIsDisabled()}>
-					{isLoading ? Loading : 'ADD RECIPE'}
+					{isPending ? <LoadingSpinner /> : 'ADD RECIPE'}
 				</AddRecipeButton>
 			</Form>
 		</ModalLayout>

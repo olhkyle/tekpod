@@ -63,13 +63,19 @@ const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id
 	}
 };
 
-const deleteRecipe = async (id: string) => {
-	console.log(id);
-	const { error } = await supabase.from(TABLE).delete().eq('id', id);
+const removeRecipe = async ({ id, path }: { id: string; path: string }) => {
+	const [removeFilmRecipeImage, removeFilmRecipe] = await Promise.all([
+		supabase.storage.from('recipe').remove([`${path}.webp`]),
+		supabase.from(TABLE).delete().eq('id', id),
+	]);
 
-	if (error) {
-		throw { error, message: 'Error to delete this recipe' };
+	if (removeFilmRecipeImage?.error) {
+		throw { error: removeFilmRecipeImage?.error, message: 'Error to delete this recipe image' };
+	}
+
+	if (removeFilmRecipe?.error) {
+		throw { error: removeFilmRecipe?.error, message: 'Error to delete this recipe' };
 	}
 };
 
-export { getRecipes, addRecipe, deleteRecipe };
+export { getRecipes, addRecipe, removeRecipe };

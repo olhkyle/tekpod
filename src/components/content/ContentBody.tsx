@@ -4,7 +4,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Diary } from '../../supabase/schema';
 import { getSingleDiary } from '../../supabase/diary';
-import useDeleteDiaryMutation from '../../hooks/mutations/useDeleteDiaryMutation';
+import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
 import { LoadingSpinner, EditContentModal } from '..';
 import { routes } from '../../constants';
 import useModalStore from '../../store/useModalStore';
@@ -15,7 +15,7 @@ const ContentBody = () => {
 
 	const { data } = useSuspenseQuery<Diary>({ queryKey: ['diary', diaryId], queryFn: () => getSingleDiary(diaryId!) });
 
-	const { mutate: remove, isPending } = useDeleteDiaryMutation();
+	const { mutate: remove, isPending } = useRemoveDiaryMutation();
 
 	const { setModal } = useModalStore();
 	const [isEditModalOpen] = useState(true);

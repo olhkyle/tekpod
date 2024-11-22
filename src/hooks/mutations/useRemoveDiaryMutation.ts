@@ -1,19 +1,20 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addDiary } from '../../supabase/diary';
+import { removeDiary } from '../../supabase/diary';
 import { Diary } from '../../supabase/schema';
 
-const add = (data: Diary) => (oldData: Diary[]) => {
-	return [...oldData, data];
-};
+const remove =
+	({ id }: { id: string }) =>
+	(oldData: Diary[]) => {
+		return oldData.filter(item => item.id !== id);
+	};
 
-// 현재 상황에서는 별도의 페이지에서 작성하고 있기 때문에, mutation이 필요 없을 수 있음
-const useAddDiaryMutation = () => {
+const useDeleteDiaryMutation = () => {
 	const queryClient = useQueryClient();
-	const queryKey = ['diaryByPage'];
+	const queryKey = ['diary'];
 
-	const { mutate } = useMutation({
-		mutationFn: async (variables: Diary) => {
-			await addDiary(variables);
+	const { mutate, isPending } = useMutation({
+		async mutationFn(variables: { id: string }) {
+			await removeDiary(variables);
 		},
 		async onMutate(variables) {
 			// Cancel any outgoing refetch
@@ -22,7 +23,7 @@ const useAddDiaryMutation = () => {
 			const previousData = queryClient.getQueryData(queryKey);
 
 			if (previousData) {
-				queryClient.setQueryData(queryKey, add(variables));
+				queryClient.setQueryData(queryKey, remove(variables));
 			}
 
 			return { previousData };
@@ -40,7 +41,7 @@ const useAddDiaryMutation = () => {
 			return queryClient.invalidateQueries({ queryKey });
 		},
 	});
-	return mutate;
+	return { mutate, isPending };
 };
 
-export default useAddDiaryMutation;
+export default useDeleteDiaryMutation;

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
-import { ModalDataType } from './modalType';
+import type { ModalDataType } from './modalType';
 import { useOverlayFixed } from '../../hooks';
 
 interface ModalLayoutProps {
@@ -36,7 +36,7 @@ const Container = styled.div<{ isOpen: boolean; size: 'sm' | 'lg'; order: number
 	left: 0;
 	right: 0;
 	padding: var(--padding-container-mobile);
-	height: ${({ size }) => (size === 'lg' ? ' 85dvh' : '22dvh')};
+	height: ${({ size }) => (size === 'lg' ? ' 85dvh' : 'auto')};
 	background-color: ${({ order }) => (order === 0 ? 'var(--white)' : `var(--grey100)`)};
 	border-top-left-radius: var(--radius-l);
 	border-top-right-radius: var(--radius-l);
