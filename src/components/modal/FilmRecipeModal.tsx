@@ -108,7 +108,7 @@ const Group = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	height: calc(100dvh - var(--nav-height));
+	/* height: calc(100dvh - var(--nav-height)); */
 	margin-top: 8px;
 	background-color: var(--white);
 `;
@@ -136,10 +136,10 @@ const ButtonGroup = styled.div`
 	display: flex;
 	justify-content: space-between;
 	gap: 16px;
+	margin-top: calc(var(--padding-container-mobile) * 8);
 `;
 
 const Button = styled.button`
-	margin-top: calc(var(--padding-container-mobile) * 8);
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	min-height: 57px;
