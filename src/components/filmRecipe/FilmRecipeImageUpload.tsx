@@ -1,16 +1,25 @@
-import { ChangeEvent, forwardRef } from 'react';
+import { ChangeEvent, forwardRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { RiCloseFill } from 'react-icons/ri';
 
 interface FilmRecipeImageUploadProps {
+	isEditing?: boolean;
 	imageUrl: string;
 	isAttached: boolean;
 	onImageUpload: (e: ChangeEvent<HTMLInputElement>) => void;
 	onImageRemove: () => void;
+	setImageUrlOnEditing?: (value: string) => void;
 }
 
 const FilmRecipeImageUpload = forwardRef<HTMLInputElement, FilmRecipeImageUploadProps>(
-	({ imageUrl, isAttached, onImageUpload, onImageRemove }, ref) => {
+	({ isEditing = false, imageUrl, isAttached, onImageUpload, onImageRemove, setImageUrlOnEditing }, ref) => {
+		useEffect(() => {
+			if (isEditing && setImageUrlOnEditing) {
+				setImageUrlOnEditing(imageUrl);
+				console.log('ref - ', ref, 'imageUrl - ', imageUrl, 'isAttatched - ', isAttached);
+			}
+		}, []);
+
 		return (
 			<ImageUploadInput isAttached={isAttached}>
 				<input type="file" id="image_upload_input" name="image_upload_input" accept="image/*" ref={ref} onChange={onImageUpload} />

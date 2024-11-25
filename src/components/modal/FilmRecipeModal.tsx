@@ -2,8 +2,10 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { RestricedRecipeWithImage } from '../../supabase/schema';
 import type { ModalDataType } from './modalType';
-import { ModalLayout, RemoveFilmRecipeConfirmModal, LazyImage } from '..';
+import { ModalLayout, RemoveFilmRecipeConfirmModal, LazyImage, FilmRecipeImageUpload } from '..';
 import useModalStore, { QueryRefetch } from '../../store/useModalStore';
+import { useFilmRecipeImage } from '../../hooks';
+import { FILM_RECIPE_FORM } from '../../constants/recipes';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -16,6 +18,14 @@ interface FilmRecipeModalProps {
 
 const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecipeModalProps) => {
 	const { setModal } = useModalStore();
+
+	const [isEditing, setEditing] = useState<boolean>(false);
+	const {
+		image: { imageUrl, currentRecipeImage, isAttached },
+		setImageUrlOnEditing,
+		handleImageUpload,
+		handleImageRemove,
+	} = useFilmRecipeImage({ DEFAULT_IMAGE_SIZE: FILM_RECIPE_FORM.IMAGE.MAX_SIZE, isEditing });
 
 	const [isDeleteConfirmModalOpen] = useState(true);
 
@@ -32,16 +42,31 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 		});
 	};
 
+	console.log(imageUrl, currentRecipeImage, isAttached);
+	// edit 할 때 이미지 변경이 없는 경우, storage에 업로드하는 로직 없이, database에 data?.imgSrc만 업로드 하는 형태
+	// edit 할 때 이미지 변경이 있는 경우, addRecipe와 같이 storage에 업로드 후, database에 uploadImage.path를 추가
+
 	return (
 		<ModalLayout id={id} isOpen={isOpen} type={type} title={data?.title} onClose={onClose}>
 			<Group>
-				<LazyImage
-					src={data?.imgSrc.includes(import.meta.env.VITE_SUPABASE_FILMRECIPE_URL) ? data?.imgSrc : '/sample.jpg'}
-					alt="recipe sample image"
-					width={'100%'}
-					height={'100%'}
-					lazy={true}
-				/>
+				{isEditing ? (
+					<FilmRecipeImageUpload
+						isEditing={isEditing}
+						imageUrl={data?.imgSrc}
+						isAttached={isAttached}
+						onImageUpload={handleImageUpload}
+						onImageRemove={handleImageRemove}
+						setImageUrlOnEditing={setImageUrlOnEditing}
+					/>
+				) : (
+					<LazyImage
+						src={data?.imgSrc.includes(import.meta.env.VITE_SUPABASE_FILMRECIPE_URL) ? data?.imgSrc : '/sample.jpg'}
+						alt="recipe sample image"
+						width={'100%'}
+						height={'100%'}
+						lazy={true}
+					/>
+				)}
 
 				<InfoList>
 					<li>
@@ -95,10 +120,23 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 				</InfoList>
 			</Group>
 			<ButtonGroup>
-				<EditRecipeButton type="button">✏️ Edit</EditRecipeButton>
-				<DeleteRecipeButton type="button" onClick={handleDeleteConfirmModal}>
-					🗑️ Delete
-				</DeleteRecipeButton>
+				{isEditing ? (
+					<>
+						<CancelButton type="button" onClick={() => setEditing(false)}>
+							Cancel
+						</CancelButton>
+						<UpdateButton type="button">Update</UpdateButton>
+					</>
+				) : (
+					<>
+						<EditRecipeButton type="button" onClick={() => setEditing(!isEditing)}>
+							✏️ Edit
+						</EditRecipeButton>
+						<DeleteRecipeButton type="button" onClick={handleDeleteConfirmModal}>
+							🗑️ Delete
+						</DeleteRecipeButton>
+					</>
+				)}
 			</ButtonGroup>
 		</ModalLayout>
 	);
@@ -108,7 +146,6 @@ const Group = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	/* height: calc(100dvh - var(--nav-height)); */
 	margin-top: 8px;
 	background-color: var(--white);
 `;
@@ -147,6 +184,24 @@ const Button = styled.button`
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	transition: background 0.15s ease-in-out;
+`;
+
+const CancelButton = styled(Button)`
+	background-color: var(--grey400);
+
+	&:active,
+	&:focus {
+		background-color: var(--greyOpacity300);
+	}
+`;
+
+const UpdateButton = styled(Button)`
+	background-color: var(--blue200);
+
+	&:active,
+	&:focus {
+		background-color: var(--blue300);
+	}
 `;
 
 const EditRecipeButton = styled(Button)`

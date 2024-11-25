@@ -64,7 +64,7 @@ const AddFilmRecipeModal = ({ id, isOpen, type, refetch, onClose }: AddFilmRecip
 		image: { imageUrl, currentRecipeImage, isAttached },
 		handleImageUpload,
 		handleImageRemove,
-	} = useFilmRecipeImage(FILM_RECIPE_FORM.IMAGE.MAX_SIZE);
+	} = useFilmRecipeImage({ DEFAULT_IMAGE_SIZE: FILM_RECIPE_FORM.IMAGE.MAX_SIZE, isEditing: false });
 
 	const checkIsDisabled = () => {
 		if (Object.values(isTriggered).every(value => value) && isAttached) {
@@ -73,6 +73,7 @@ const AddFilmRecipeModal = ({ id, isOpen, type, refetch, onClose }: AddFilmRecip
 			return true;
 		}
 	};
+	console.log(currentRecipeImage, imageUrl);
 
 	const handleAddFilmRecipe: FormEventHandler<HTMLFormElement> = e => {
 		e.preventDefault();

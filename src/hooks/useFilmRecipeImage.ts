@@ -1,14 +1,15 @@
 import { ChangeEvent, useRef, useState } from 'react';
 import useToastStore from '../store/useToastStore';
 
-const useFilmRecipeImage = (DEFAULT_IMAGE_SIZE: number) => {
+const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT_IMAGE_SIZE: number; isEditing: boolean }) => {
 	const [imageDataUrl, setImageDataUrl] = useState<string>('');
 	const [currentRecipeImage, setCurrentRecipeImage] = useState<File | null>(null);
 	const imageInputRef = useRef<HTMLInputElement | null>(null);
 
 	const { addToast } = useToastStore();
 
-	const isAttached = typeof imageDataUrl === 'string' && imageDataUrl.trim().length > 0 && currentRecipeImage !== null;
+	const isAttatchedDefault = typeof imageDataUrl === 'string' && imageDataUrl.trim().length > 0; // editRecipe
+	const isAttachedOnUpload = isAttatchedDefault && currentRecipeImage !== null; // addRecipe
 
 	const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
 		const currentImageFile = e.target.files?.[0];
@@ -56,7 +57,8 @@ const useFilmRecipeImage = (DEFAULT_IMAGE_SIZE: number) => {
 	};
 
 	return {
-		image: { imageUrl: imageDataUrl, currentRecipeImage, isAttached },
+		image: { imageUrl: imageDataUrl, currentRecipeImage, isAttached: isEditing ? isAttatchedDefault : isAttachedOnUpload },
+		setImageUrlOnEditing: (value: string) => setImageDataUrl(value),
 		handleImageUpload,
 		handleImageRemove,
 	};
