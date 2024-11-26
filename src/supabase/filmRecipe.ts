@@ -40,10 +40,12 @@ const getRecipes = async (): Promise<RestrictedRecipe[]> => {
 
 const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id' | 'imgSrc'>; imageFile: File }) => {
 	// 'id' field will be generated in auto
-	const { data: uploadImage, error: uploadError } = await supabase.storage.from('recipe').upload(`film/${uuid()}`, imageFile, {
-		cacheControl: '3600',
-		upsert: false,
-	});
+	const { data: uploadImage, error: uploadError } = await supabase.storage
+		.from('recipe')
+		.upload(`film/${data?.user_id}/${uuid()}`, imageFile, {
+			cacheControl: '3600',
+			upsert: false,
+		});
 
 	const { error: addRecipeError } = await supabase
 		.from(TABLE)
@@ -54,7 +56,6 @@ const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id
 		.select();
 
 	if (uploadError) {
-		console.log('here');
 		throw { error: uploadError, message: 'Error to upload on image storage happens' };
 	}
 
@@ -63,11 +64,60 @@ const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id
 	}
 };
 
+const editRecipe = async ({
+	type,
+	data,
+	imageFile,
+}: {
+	type: 'sameImage' | 'updatedImage';
+	data: Partial<RestrictedRecipe>;
+	imageFile: File | null;
+}) => {
+	if (type === 'sameImage') {
+		const { error: editRecipeError } = await supabase.from(TABLE).update(data).eq('id', data?.id);
+
+		if (editRecipeError) {
+			throw { error: editRecipeError, message: 'Error to update recipe on database' };
+		}
+
+		return;
+	}
+
+	if (type === 'updatedImage' && imageFile) {
+		const { data: uploadImage, error: uploadError } = await supabase.storage
+			.from('recipe')
+			.upload(`film/${data?.user_id}/${uuid()}`, imageFile, {
+				cacheControl: '3600',
+				upsert: false,
+			});
+
+		const { error: editRecipeWithUpdatedImageError } = await supabase
+			.from(TABLE)
+			.update({
+				...data,
+				imgSrc: `${import.meta.env.VITE_SUPABASE_PROJECT_URL}/${import.meta.env.VITE_SUPABASE_FILMRECIPE_URL}/${uploadImage?.path}`,
+			})
+			.eq('id', data?.id);
+
+		if (uploadError) {
+			throw { updateError: uploadError, message: 'Error to upload on image storage happens' };
+		}
+
+		if (editRecipeWithUpdatedImageError) {
+			throw { updateError: editRecipeWithUpdatedImageError, message: 'Error to upload on image storage happens' };
+		}
+
+		return;
+	}
+};
+
 const removeRecipe = async ({ id, path }: { id: string; path: string }) => {
 	const [removeFilmRecipeImage, removeFilmRecipe] = await Promise.all([
 		supabase.storage.from('recipe').remove([`${path}.webp`]),
 		supabase.from(TABLE).delete().eq('id', id),
 	]);
+
+	// TODO: recipe 데이터 베이스는 삭제되지만, storage에서 이미지가 삭제되지 않는 문제 해결 필요
 
 	if (removeFilmRecipeImage?.error) {
 		throw { error: removeFilmRecipeImage?.error, message: 'Error to delete this recipe image' };
@@ -78,4 +128,4 @@ const removeRecipe = async ({ id, path }: { id: string; path: string }) => {
 	}
 };
 
-export { getRecipes, addRecipe, removeRecipe };
+export { getRecipes, addRecipe, editRecipe, removeRecipe };

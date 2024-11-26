@@ -43,7 +43,6 @@ const TagsInput = ({ tags, setTags }: TagsInputProps) => {
 					if (trimmedValue === '') {
 						setValue('');
 					} else {
-						console.log(trimmedValue);
 						setTags(tags => [...tags, { id: Math.max(...tags.map(({ id }) => id), 0) + 1, tag: trimmedValue }]);
 						setValue('');
 					}

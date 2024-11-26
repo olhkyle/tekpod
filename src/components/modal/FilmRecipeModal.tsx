@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
-import { RestricedRecipeWithImage } from '../../supabase/schema';
+import { useQueryClient } from '@tanstack/react-query';
+import { Session } from '@supabase/supabase-js';
+import { editRecipe } from '../../supabase/filmRecipe';
+import { RestricedRecipeWithImage, RestrictedRecipeForValidation } from '../../supabase/schema';
 import type { ModalDataType } from './modalType';
-import { ModalLayout, RemoveFilmRecipeConfirmModal, LazyImage, FilmRecipeImageUpload } from '..';
+import { ModalLayout, RemoveFilmRecipeConfirmModal, LazyImage, FilmRecipeImageUpload, TextInput, CustomSelect } from '..';
 import useModalStore, { QueryRefetch } from '../../store/useModalStore';
-import { useFilmRecipeImage } from '../../hooks';
+import useToastStore from '../../store/useToastStore';
+import { useFilmRecipeImage, useLoading } from '../../hooks';
 import { FILM_RECIPE_FORM } from '../../constants/recipes';
 
 interface FilmRecipeModalProps {
@@ -17,6 +21,8 @@ interface FilmRecipeModalProps {
 }
 
 const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecipeModalProps) => {
+	const queryClient = useQueryClient();
+	const session = queryClient.getQueryData(['auth']) as Session;
 	const { setModal } = useModalStore();
 
 	const [isEditing, setEditing] = useState<boolean>(false);
@@ -27,7 +33,38 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 		handleImageRemove,
 	} = useFilmRecipeImage({ DEFAULT_IMAGE_SIZE: FILM_RECIPE_FORM.IMAGE.MAX_SIZE, isEditing });
 
+	const { isLoading, Loading, startTransition } = useLoading();
+	const { addToast } = useToastStore();
+
+	const [currentFilmFeature, setCurrentFilmFeature] = useState<RestrictedRecipeForValidation>(data);
 	const [isDeleteConfirmModalOpen] = useState(true);
+
+	const handleUpdateRecipe = async () => {
+		//TODO: field가 기존 data와 같지 않은지 검증 -> 굳이 업데이트 할 필요없음
+		// type 구분 재검증 필요
+		try {
+			await startTransition(
+				editRecipe({
+					type: imageUrl === data?.imgSrc && !currentRecipeImage ? 'sameImage' : 'updatedImage',
+					data: {
+						id: data?.id,
+						user_id: session?.user?.id,
+						...currentFilmFeature,
+						updated_at: new Date(),
+						imgSrc: imageUrl === data?.imgSrc && !currentRecipeImage ? data?.imgSrc : '',
+					},
+					imageFile: currentRecipeImage,
+				}),
+			);
+
+			addToast({ status: 'info', message: `Successfully Updated` });
+			onClose();
+			refetch();
+		} catch (e) {
+			addToast({ status: 'error', message: 'Error happens during update recipe' });
+			console.error(e);
+		}
+	};
 
 	const handleDeleteConfirmModal = () => {
 		setModal({
@@ -42,7 +79,6 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 		});
 	};
 
-	console.log(imageUrl, currentRecipeImage, isAttached);
 	// edit 할 때 이미지 변경이 없는 경우, storage에 업로드하는 로직 없이, database에 data?.imgSrc만 업로드 하는 형태
 	// edit 할 때 이미지 변경이 있는 경우, addRecipe와 같이 storage에 업로드 후, database에 uploadImage.path를 추가
 
@@ -52,7 +88,7 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 				{isEditing ? (
 					<FilmRecipeImageUpload
 						isEditing={isEditing}
-						imageUrl={data?.imgSrc}
+						imageUrl={isAttached ? imageUrl : data?.imgSrc}
 						isAttached={isAttached}
 						onImageUpload={handleImageUpload}
 						onImageRemove={handleImageRemove}
@@ -68,56 +104,88 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 					/>
 				)}
 
-				<InfoList>
-					<li>
-						<label>FILM SIMULATION</label>
-						<p>{data?.film_simulation}</p>
-					</li>
-					<li>
-						<label>DYNAMIC RANGE</label>
-						<p>{data?.dynamic_range}</p>
-					</li>
-					<li>
-						<label>GRAIN EFFECT</label>
-						<p>{data?.grain_effect}</p>
-					</li>
-					<li>
-						<label>WB</label>
-						<p>{data?.wb}</p>
-					</li>
-					<li>
-						<label>HIGHLIGHT</label>
-						<p>{data?.highlight}</p>
-					</li>
-					<li>
-						<label>SHADOW</label>
-						<p>{data?.shadow}</p>
-					</li>
-					<li>
-						<label>COLOR</label>
-						<p>{data?.color}</p>
-					</li>
-					<li>
-						<label>SHARPNESS</label>
-						<p>{data?.sharpness}</p>
-					</li>
-					<li>
-						<label>NOISE REDUCTION</label>
-						<p>{data?.noise_reduction}</p>
-					</li>
-					<li>
-						<label>ISO</label>
-						<p>{data?.iso}</p>
-					</li>
-					<li>
-						<label>EXPOSURE COMPENSATION</label>
-						<p>{data?.exposure_compensation}</p>
-					</li>
-					<li>
-						<label>SENSORS</label>
-						<p>{data?.sensors}</p>
-					</li>
-				</InfoList>
+				{isEditing ? (
+					<>
+						{FILM_RECIPE_FORM.FIELDS.map(({ type, data, target_id, placeholder }, idx) => {
+							return type === 'input' ? (
+								<TextInput key={`${type}_${idx}`} aria-label={target_id}>
+									<TextInput.ControlledTextField
+										id={target_id}
+										name={target_id}
+										placeholder={placeholder}
+										value={currentFilmFeature[target_id].toString()}
+										onChange={e => {
+											setCurrentFilmFeature({ ...currentFilmFeature, [target_id]: e.target.value });
+										}}
+									/>
+								</TextInput>
+							) : type === 'select' ? (
+								<CustomSelect
+									key={`${type}_${idx}`}
+									data={data}
+									target_id={target_id}
+									placeholder={placeholder}
+									currentValue={currentFilmFeature[target_id]}
+									isTriggered={true}
+									onSelect={(option: string | number) => {
+										setCurrentFilmFeature({ ...currentFilmFeature, [target_id]: option });
+									}}
+								/>
+							) : null;
+						})}
+					</>
+				) : (
+					<InfoList>
+						<li>
+							<label>FILM SIMULATION</label>
+							<p>{data?.film_simulation}</p>
+						</li>
+						<li>
+							<label>DYNAMIC RANGE</label>
+							<p>{data?.dynamic_range}</p>
+						</li>
+						<li>
+							<label>GRAIN EFFECT</label>
+							<p>{data?.grain_effect}</p>
+						</li>
+						<li>
+							<label>WB</label>
+							<p>{data?.wb}</p>
+						</li>
+						<li>
+							<label>HIGHLIGHT</label>
+							<p>{data?.highlight}</p>
+						</li>
+						<li>
+							<label>SHADOW</label>
+							<p>{data?.shadow}</p>
+						</li>
+						<li>
+							<label>COLOR</label>
+							<p>{data?.color}</p>
+						</li>
+						<li>
+							<label>SHARPNESS</label>
+							<p>{data?.sharpness}</p>
+						</li>
+						<li>
+							<label>NOISE REDUCTION</label>
+							<p>{data?.noise_reduction}</p>
+						</li>
+						<li>
+							<label>ISO</label>
+							<p>{data?.iso}</p>
+						</li>
+						<li>
+							<label>EXPOSURE COMPENSATION</label>
+							<p>{data?.exposure_compensation}</p>
+						</li>
+						<li>
+							<label>SENSORS</label>
+							<p>{data?.sensors}</p>
+						</li>
+					</InfoList>
+				)}
 			</Group>
 			<ButtonGroup>
 				{isEditing ? (
@@ -125,7 +193,9 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 						<CancelButton type="button" onClick={() => setEditing(false)}>
 							Cancel
 						</CancelButton>
-						<UpdateButton type="button">Update</UpdateButton>
+						<UpdateButton type="button" onClick={handleUpdateRecipe}>
+							{isLoading ? Loading : 'Update'}
+						</UpdateButton>
 					</>
 				) : (
 					<>

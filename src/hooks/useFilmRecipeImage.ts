@@ -8,19 +8,36 @@ const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT
 
 	const { addToast } = useToastStore();
 
-	const isAttatchedDefault = typeof imageDataUrl === 'string' && imageDataUrl.trim().length > 0; // editRecipe
-	const isAttachedOnUpload = isAttatchedDefault && currentRecipeImage !== null; // addRecipe
+	// 편집 모드일 때와 새로운 이미지 업로드 모드일 때 다르게 처리
+	const hasValidImage = () => {
+		const defaultValidation = typeof imageDataUrl === 'string' && imageDataUrl.trim().length > 0;
+		if (isEditing) {
+			// 편집 모드: 데이터 URL이 존재하면 유효
+			return defaultValidation;
+		} else {
+			// 새로운 이미지 업로드 모드: 데이터 URL과 현재 이미지 파일 모두 존재
+			return defaultValidation && currentRecipeImage !== null;
+		}
+	};
 
-	const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+	const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
 		const currentImageFile = e.target.files?.[0];
 		const currentImageFileSize = currentImageFile?.size ?? 0;
+
+		e.target.value = '';
 
 		if (currentImageFile?.type !== 'image/webp') {
 			if (imageInputRef?.current) {
 				imageInputRef.current.value = '';
 			}
 
-			return addToast({ status: 'warn', message: `'image/webp' type can be uploaded only` });
+			addToast({ status: 'warn', message: `'image/webp' type can be uploaded only` });
+			return;
+		}
+
+		if (!currentImageFile) {
+			addToast({ status: 'warn', message: 'Please, upload Image' });
+			return;
 		}
 
 		if (currentImageFileSize > DEFAULT_IMAGE_SIZE) {
@@ -28,28 +45,42 @@ const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT
 			return;
 		}
 
-		const fileReader = new FileReader();
+		const readFileAsDataUrl = (file: File): Promise<string> => {
+			return new Promise((resolve, reject) => {
+				const fileReader = new FileReader();
 
-		if (currentImageFile) {
-			fileReader.readAsDataURL(currentImageFile);
+				if (currentImageFile) {
+					fileReader.onload = () => {
+						if (typeof fileReader.result === 'string') {
+							resolve(fileReader.result);
+						} else {
+							reject(new Error('Failed to read File as DataUrl'));
+						}
+					};
 
-			/**
-			 * readAsDataUrl 메서드의 경우 base64로 인코딩된 문자열을 반환하여, 아래 typeof 조건문은 사실 상 필요 없으나,
-			 * 이후 한 가지 사진이 아닌 다수의 사진을 업로드할 경우, FileReader의 result가 ArrayBuffer 타입을 반환하도록 readAsArrayBuffer을 사용할 것이므로, 아래의 조건문을 추가
-			 */
-
-			fileReader.onloadend = () => {
-				if (typeof fileReader.result === 'string') {
-					setImageDataUrl(fileReader.result);
+					fileReader.onerror = reject;
+					fileReader.readAsDataURL(file);
+					/**
+					 * readAsDataUrl 메서드의 경우 base64로 인코딩된 문자열을 반환하여, 아래 typeof 조건문은 사실 상 필요 없으나,
+					 * 이후 한 가지 사진이 아닌 다수의 사진을 업로드할 경우, FileReader의 result가 ArrayBuffer 타입을 반환하도록 readAsArrayBuffer을 사용할 것이므로, 아래의 조건문을 추가
+					 */
 				}
-			};
+			});
+		};
 
+		try {
+			const imageUrl = await readFileAsDataUrl(currentImageFile);
+
+			setImageDataUrl(imageUrl);
 			setCurrentRecipeImage(currentImageFile);
+		} catch (e) {
+			addToast({ status: 'error', message: 'Error happens during image upload' });
 		}
 	};
 
 	const handleImageRemove = () => {
 		setImageDataUrl('');
+		setCurrentRecipeImage(null);
 
 		if (imageInputRef?.current) {
 			imageInputRef.current.value = '';
@@ -57,7 +88,7 @@ const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT
 	};
 
 	return {
-		image: { imageUrl: imageDataUrl, currentRecipeImage, isAttached: isEditing ? isAttatchedDefault : isAttachedOnUpload },
+		image: { imageUrl: imageDataUrl, currentRecipeImage, isAttached: hasValidImage() },
 		setImageUrlOnEditing: (value: string) => setImageDataUrl(value),
 		handleImageUpload,
 		handleImageRemove,

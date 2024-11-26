@@ -73,7 +73,6 @@ const AddFilmRecipeModal = ({ id, isOpen, type, refetch, onClose }: AddFilmRecip
 			return true;
 		}
 	};
-	console.log(currentRecipeImage, imageUrl);
 
 	const handleAddFilmRecipe: FormEventHandler<HTMLFormElement> = e => {
 		e.preventDefault();
