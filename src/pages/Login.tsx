@@ -51,6 +51,20 @@ const LoginPage = () => {
 
 	const { addToast } = useToastStore();
 
+	/**
+	 * queryClient.setQueryData(['auth'], userData)
+		- 즉시 캐시된 데이터를 직접 업데이트
+		- 새로운 데이터로 즉각적으로 쿼리의 캐시 상태를 변경
+		- 추가 네트워크 요청 없이 클라이언트 상태 즉시 반영
+		- 성능이 좋고 즉각적인 UI 업데이트에 적합
+
+
+		queryClient.invalidateQueries({ queryKey: ['auth'] })
+		- 해당 쿼리 캐시를 무효화
+		- 다음 요청 시 서버에서 데이터를 다시 가져옴
+		- 가장 최신 데이터를 확실히 불러올 때 유용
+		- 네트워크 요청을 유발하므로 약간의 오버헤드 발생
+	 */
 	const onSubmit = async (formData: LoginSchema) => {
 		try {
 			const { data, error } = await startTransition(supabase.auth.signInWithPassword(formData));
@@ -62,6 +76,7 @@ const LoginPage = () => {
 
 			if (data) {
 				setUserData(data.session);
+				queryClient.setQueryData(['auth'], data.session);
 				navigate(routes.HOME);
 				addToast({ status: 'success', message: 'Successfully Login' });
 			}
@@ -69,8 +84,6 @@ const LoginPage = () => {
 			setValue('email', formData.email);
 			setValue('password', '');
 			console.error(error);
-		} finally {
-			queryClient.invalidateQueries({ queryKey: ['auth'] });
 		}
 	};
 
