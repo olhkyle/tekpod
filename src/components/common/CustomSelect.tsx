@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { BiSolidChevronRight } from 'react-icons/bi';
 import { customPropReceiver } from '../../constants';
 import type { FieldDataType } from '../../constants/recipes';
@@ -15,25 +15,34 @@ interface NativeSelectProps {
 }
 
 const CustomSelect = ({ data: options, target_id, placeholder, currentValue, isTriggered, onSelect }: NativeSelectProps) => {
+	const generatedId = useId();
 	const [isOpen, setOpen] = useState(false);
 
 	return (
 		<CustomSelectWithLabel>
-			<SelectTrigger type="button" onClick={() => setOpen(!isOpen)} aria-autocomplete="none" aria-expanded={isOpen}>
+			<SelectTrigger
+				type="button"
+				onClick={() => setOpen(!isOpen)}
+				tabIndex={0}
+				aria-autocomplete="none"
+				aria-controls={`custom-select-${generatedId}`}
+				aria-expanded={isOpen}>
 				<SelectValue isTriggered={isTriggered}>{isTriggered ? options.find(option => option === currentValue) : placeholder}</SelectValue>
 				<Chevron size="21" color="var(--black)" $isOpen={isOpen} />
 			</SelectTrigger>
 
-			<SelectContent isOpen={isOpen}>
+			<SelectContent isOpen={isOpen} aria-labelledby={`custom-select-${generatedId}-content`}>
 				<Label htmlFor={target_id}>{target_id.toUpperCase()}</Label>
 				{options.map((option, idx) => (
 					<SelectItem
 						key={`${option}_${idx}`}
 						isCurrent={option === currentValue}
+						tabIndex={0}
 						onClick={() => {
 							onSelect(option);
 							setOpen(false);
-						}}>
+						}}
+						data-selected={option === currentValue}>
 						<SelectItemCheckIndicator isCurrent={option === currentValue} />
 						<span>{option}</span>
 					</SelectItem>
