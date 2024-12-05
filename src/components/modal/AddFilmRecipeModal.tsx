@@ -98,6 +98,7 @@ const AddFilmRecipeModal = ({ id, isOpen, type, refetch, onClose }: AddFilmRecip
 				{
 					onSuccess() {
 						addToast({ status: 'success', message: `Successfully add new film recipe` });
+						refetch();
 					},
 					onError(error) {
 						console.error(error);
@@ -105,7 +106,6 @@ const AddFilmRecipeModal = ({ id, isOpen, type, refetch, onClose }: AddFilmRecip
 					},
 					onSettled() {
 						onClose();
-						refetch();
 					},
 				},
 			);

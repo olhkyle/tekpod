@@ -35,6 +35,7 @@ const RemoveFilmRecipeConfirmModal = ({
 			{
 				onSuccess: () => {
 					addToast({ status: 'success', message: 'Successfully delete recipe' });
+					refetch();
 					onClose();
 				},
 				onError: () => {
@@ -42,7 +43,6 @@ const RemoveFilmRecipeConfirmModal = ({
 				},
 				onSettled: () => {
 					onTopLevelModalClose();
-					refetch();
 				},
 			},
 		);
