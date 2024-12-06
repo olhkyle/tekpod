@@ -3,6 +3,7 @@ export * from './spinner';
 export { default as Layout } from './Layout';
 export { default as DiaryLayout } from './DiaryLayout';
 export { default as Portal } from './Portal';
+export { default as ErrorFallback } from './ErrorFallback';
 export { default as RouteError } from './RouteError';
 export { default as LoadLazy } from './LoadLazy';
 export { default as Header } from './Header';
