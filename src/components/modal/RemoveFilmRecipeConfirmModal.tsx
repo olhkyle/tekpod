@@ -1,17 +1,15 @@
 import styled from '@emotion/styled';
-import ModalLayout from './ModalLayout';
+import { RestricedRecipeWithImage } from '../../supabase/schema';
+import { ModalLayout, LoadingSpinner, Button } from '..';
 import { ModalDataType } from './modalType';
 import useToastStore from '../../store/useToastStore';
-import { RestricedRecipeWithImage } from '../../supabase/schema';
 import useRemoveRecipeMutation from '../../hooks/mutations/useRemoveFilmRecipeMutation';
-import { LoadingSpinner } from '../layout';
 import { QueryRefetch } from '../../store/useModalStore';
 
 interface RemoveFilmRecipeConfirmModalProps {
 	id: string;
-	data: RestricedRecipeWithImage;
-	isOpen: boolean;
 	type: ModalDataType;
+	data: RestricedRecipeWithImage;
 	refetch: QueryRefetch;
 	onClose: () => void;
 	onTopLevelModalClose: () => void;
@@ -19,9 +17,9 @@ interface RemoveFilmRecipeConfirmModalProps {
 
 const RemoveFilmRecipeConfirmModal = ({
 	id,
-	data,
-	isOpen,
 	type,
+	data,
+
 	refetch,
 	onClose,
 	onTopLevelModalClose,
@@ -49,7 +47,7 @@ const RemoveFilmRecipeConfirmModal = ({
 	};
 
 	return (
-		<ModalLayout id={id} isOpen={isOpen} type={type} title={'Delete Recipe'} onClose={onClose} size="sm">
+		<ModalLayout id={id} type={type} title={'Delete Recipe'} onClose={onClose} bottomSheetType="doubleCheck">
 			<ButtonGroup>
 				<YesButton type="button" onClick={handleRecipeDelete}>
 					{isPending ? <LoadingSpinner /> : 'YES'}
@@ -75,7 +73,7 @@ const ButtonGroup = styled.div`
 	margin-top: 16px;
 `;
 
-const Button = styled.button`
+const StyledButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	min-height: 40px;
@@ -87,7 +85,7 @@ const Button = styled.button`
 	transition: background 0.15s ease-in-out;
 `;
 
-const YesButton = styled(Button)`
+const YesButton = styled(StyledButton)`
 	background-color: var(--grey300);
 	color: var(--grey700);
 `;

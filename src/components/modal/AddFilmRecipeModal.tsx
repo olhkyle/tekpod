@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { Session } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import type { ModalDataType } from './modalType';
-import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLayout } from '..';
+import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLayout, Button } from '..';
 import useToastStore from '../../store/useToastStore';
 import { QueryRefetch } from '../../store/useModalStore';
 import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../hooks';
@@ -12,7 +12,6 @@ import type { RestrictedRecipeForValidation } from '../../supabase/schema';
 
 interface AddFilmRecipeModalProps {
 	id: string;
-	isOpen: boolean;
 	type: ModalDataType;
 	refetch: QueryRefetch;
 	onClose: () => void;
@@ -50,7 +49,7 @@ const initialValidationState: { [key: string]: boolean } = {
 	sensors: false,
 };
 
-const AddFilmRecipeModal = ({ id, isOpen, type, refetch, onClose }: AddFilmRecipeModalProps) => {
+const AddFilmRecipeModal = ({ id, type, refetch, onClose }: AddFilmRecipeModalProps) => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
 
@@ -113,7 +112,7 @@ const AddFilmRecipeModal = ({ id, isOpen, type, refetch, onClose }: AddFilmRecip
 	};
 
 	return (
-		<ModalLayout id={id} isOpen={isOpen} type={type} title={'Add Recipe'} onClose={onClose}>
+		<ModalLayout id={id} type={type} title={'Add Recipe'} onClose={onClose}>
 			<Form onSubmit={handleAddFilmRecipe}>
 				<FilmRecipeImageUpload
 					imageUrl={imageUrl}
@@ -166,7 +165,7 @@ const Form = styled.form`
 	gap: 8px;
 `;
 
-const AddRecipeButton = styled.button`
+const AddRecipeButton = styled(Button)`
 	margin-top: 32px;
 	padding: var(--padding-container-mobile);
 	width: 100%;

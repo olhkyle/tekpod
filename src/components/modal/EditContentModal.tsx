@@ -4,10 +4,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BiMessageSquareEdit } from 'react-icons/bi';
-import { QueryRefetch } from '../../store/useModalStore';
 import { Diary } from '../../supabase/schema';
 import { ModalLayout } from '.';
-import { TagsInput, TextArea, TextInput } from '..';
+import { Button, TagsInput, TextArea, TextInput } from '..';
 import { editContentSchema, EditContentSchema } from './editContentSchema';
 import { Tag } from '../common/TagsInput';
 import { useLoading } from '../../hooks';
@@ -19,13 +18,11 @@ import type { ModalDataType } from './modalType';
 interface EditContentModalProps {
 	id: string;
 	data: Diary;
-	isOpen: boolean;
 	type: ModalDataType;
 	onClose: () => void;
-	refetch?: QueryRefetch;
 }
 
-const EditContentModal = ({ id, data, isOpen, type, onClose }: EditContentModalProps) => {
+const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) => {
 	const {
 		register,
 		control,
@@ -74,7 +71,7 @@ const EditContentModal = ({ id, data, isOpen, type, onClose }: EditContentModalP
 	}, [setValue]);
 
 	return (
-		<ModalLayout id={id} isOpen={isOpen} type={type} title={<BiMessageSquareEdit size="32" color="var(--black)" />} onClose={onClose}>
+		<ModalLayout id={id} type={type} title={<BiMessageSquareEdit size="32" color="var(--black)" />} onClose={onClose}>
 			<Group onSubmit={handleSubmit(onSubmit)}>
 				<TextInput errorMessage={errors?.title?.message}>
 					<TextInput.TextField id="title" {...register('title')} placeholder="﹡ Title" />
@@ -100,7 +97,17 @@ const EditContentModal = ({ id, data, isOpen, type, onClose }: EditContentModalP
 					<TextInput.TextField id="feeling" {...register('feeling')} name="feeling" placeholder="💡 One Feeling" />
 				</TextInput>
 				<TagsInput tags={tags} setTags={setTags} />
-				<UpdateButton type="submit">{isLoading ? Loading : '👆🏻 Upload'}</UpdateButton>
+				<UpdateButton
+					type="submit"
+					onTouchEnd={e => {
+						e.preventDefault();
+						e.currentTarget?.blur();
+					}}
+					onBlur={e => {
+						e.target.blur();
+					}}>
+					{isLoading ? Loading : '👆🏻 Upload'}
+				</UpdateButton>
 			</Group>
 		</ModalLayout>
 	);
@@ -113,7 +120,7 @@ const Group = styled.form`
 	height: 100%;
 `;
 
-const UpdateButton = styled.button`
+const UpdateButton = styled(Button)`
 	margin-top: auto;
 	padding: var(--padding-container-mobile);
 	font-size: var(--fz-p);

@@ -5,7 +5,7 @@ import { Session } from '@supabase/supabase-js';
 import { editRecipe } from '../../supabase/filmRecipe';
 import { RestricedRecipeWithImage, RestrictedRecipeForValidation } from '../../supabase/schema';
 import type { ModalDataType } from './modalType';
-import { ModalLayout, RemoveFilmRecipeConfirmModal, LazyImage, FilmRecipeImageUpload, TextInput, CustomSelect } from '..';
+import { ModalLayout, RemoveFilmRecipeConfirmModal, LazyImage, FilmRecipeImageUpload, TextInput, CustomSelect, Button } from '..';
 import useModalStore, { QueryRefetch } from '../../store/useModalStore';
 import useToastStore from '../../store/useToastStore';
 import { useFilmRecipeImage, useLoading } from '../../hooks';
@@ -13,14 +13,13 @@ import { FILM_RECIPE_FORM } from '../../constants/recipes';
 
 interface FilmRecipeModalProps {
 	id: string;
-	data: RestricedRecipeWithImage;
-	isOpen: boolean;
 	type: ModalDataType;
+	data: RestricedRecipeWithImage;
 	refetch: QueryRefetch;
 	onClose: () => void;
 }
 
-const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecipeModalProps) => {
+const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalProps) => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
 	const { setModal } = useModalStore();
@@ -37,7 +36,6 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 	const { addToast } = useToastStore();
 
 	const [currentFilmFeature, setCurrentFilmFeature] = useState<RestrictedRecipeForValidation>(data);
-	const [isDeleteConfirmModalOpen] = useState(true);
 
 	const handleUpdateRecipe = async () => {
 		//TODO: field가 기존 data와 같지 않은지 검증 -> 굳이 업데이트 할 필요없음
@@ -70,7 +68,6 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 		setModal({
 			Component: RemoveFilmRecipeConfirmModal,
 			props: {
-				isOpen: isDeleteConfirmModalOpen,
 				data,
 				type: 'recipe',
 				refetch,
@@ -83,7 +80,7 @@ const FilmRecipeModal = ({ id, data, isOpen, type, refetch, onClose }: FilmRecip
 	// edit 할 때 이미지 변경이 있는 경우, addRecipe와 같이 storage에 업로드 후, database에 uploadImage.path를 추가
 
 	return (
-		<ModalLayout id={id} isOpen={isOpen} type={type} title={data?.title} onClose={onClose}>
+		<ModalLayout id={id} type={type} title={data?.title} onClose={onClose}>
 			<Group>
 				{isEditing ? (
 					<FilmRecipeImageUpload
@@ -246,7 +243,7 @@ const ButtonGroup = styled.div`
 	margin-top: calc(var(--padding-container-mobile) * 8);
 `;
 
-const Button = styled.button`
+const StyledButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	min-height: 57px;
@@ -256,7 +253,7 @@ const Button = styled.button`
 	transition: background 0.15s ease-in-out;
 `;
 
-const CancelButton = styled(Button)`
+const CancelButton = styled(StyledButton)`
 	background-color: var(--grey400);
 
 	&:active,
@@ -265,7 +262,7 @@ const CancelButton = styled(Button)`
 	}
 `;
 
-const UpdateButton = styled(Button)`
+const UpdateButton = styled(StyledButton)`
 	background-color: var(--blue200);
 
 	&:active,
@@ -274,7 +271,7 @@ const UpdateButton = styled(Button)`
 	}
 `;
 
-const EditRecipeButton = styled(Button)`
+const EditRecipeButton = styled(StyledButton)`
 	background-color: var(--black);
 
 	&:active,
@@ -287,7 +284,7 @@ const EditRecipeButton = styled(Button)`
 	}
 `;
 
-const DeleteRecipeButton = styled(Button)`
+const DeleteRecipeButton = styled(StyledButton)`
 	background-color: var(--grey200);
 	color: var(--grey700);
 
