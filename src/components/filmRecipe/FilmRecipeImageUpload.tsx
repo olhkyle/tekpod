@@ -2,6 +2,7 @@ import { ChangeEvent, forwardRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { RiCloseFill } from 'react-icons/ri';
 import { Button } from '../common';
+import { customPropReceiver } from '../../constants';
 
 interface FilmRecipeImageUploadProps {
 	isEditing?: boolean;
@@ -22,13 +23,13 @@ const FilmRecipeImageUpload = forwardRef<HTMLInputElement, FilmRecipeImageUpload
 		}, []);
 
 		return (
-			<ImageUploadInput isAttached={isAttached}>
+			<ImageUploadInput $isAttached={isAttached}>
 				<input type="file" id="image_upload_input" name="image_upload_input" accept="image/webp*" ref={ref} onChange={onImageUpload} />
 				<label htmlFor="image_upload_input">+ UPLOAD IMAGE</label>
-				<PreviewImage isAttached={isAttached}>
+				<PreviewImage $isAttached={isAttached}>
 					<img src={imageUrl} alt="preview_image" />
 				</PreviewImage>
-				<CloseButton type="button" isAttached={isAttached} onClick={onImageRemove}>
+				<CloseButton type="button" $isAttached={isAttached} onClick={onImageRemove}>
 					<RiCloseFill size="24" color="var(--black)" />
 				</CloseButton>
 			</ImageUploadInput>
@@ -36,7 +37,7 @@ const FilmRecipeImageUpload = forwardRef<HTMLInputElement, FilmRecipeImageUpload
 	},
 );
 
-const ImageUploadInput = styled.div<{ isAttached: boolean }>`
+const ImageUploadInput = styled('div', customPropReceiver)<{ $isAttached: boolean }>`
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -45,7 +46,8 @@ const ImageUploadInput = styled.div<{ isAttached: boolean }>`
 	width: 100%;
 	font-size: var(--fz-h7);
 	font-weight: var(--fw-semibold);
-	background: ${({ isAttached }) => (isAttached ? 'var(--white)' : 'linear-gradient(90deg, var(--greyOpacity100), var(--greyOpacity200))')};
+	background: ${({ $isAttached }) =>
+		$isAttached ? 'var(--white)' : 'linear-gradient(90deg, var(--greyOpacity100), var(--greyOpacity200))'};
 	border: 1px solid var(--greyOpacity200);
 	cursor: pointer;
 
@@ -54,7 +56,7 @@ const ImageUploadInput = styled.div<{ isAttached: boolean }>`
 	}
 
 	label {
-		display: ${({ isAttached }) => (isAttached ? 'none' : 'inline-flex')};
+		display: ${({ $isAttached }) => ($isAttached ? 'none' : 'inline-flex')};
 		justify-content: center;
 		align-items: center;
 		width: 100%;
@@ -65,8 +67,8 @@ const ImageUploadInput = styled.div<{ isAttached: boolean }>`
 	}
 `;
 
-const PreviewImage = styled.div<{ isAttached: boolean }>`
-	display: ${({ isAttached }) => (isAttached ? 'flex' : 'none')};
+const PreviewImage = styled('div', customPropReceiver)<{ $isAttached: boolean }>`
+	display: ${({ $isAttached }) => ($isAttached ? 'flex' : 'none')};
 	justify-content: center;
 	align-items: center;
 	object-fit: cover;
@@ -78,11 +80,11 @@ const PreviewImage = styled.div<{ isAttached: boolean }>`
 	}
 `;
 
-const CloseButton = styled(Button)<{ isAttached: boolean }>`
+const CloseButton = styled(Button, customPropReceiver)<{ $isAttached: boolean }>`
 	position: absolute;
 	top: -12px;
 	right: 0;
-	display: ${({ isAttached }) => (isAttached ? 'inline-flex' : 'none')};
+	display: ${({ $isAttached }) => ($isAttached ? 'inline-flex' : 'none')};
 	justify-content: center;
 	align-items: center;
 	width: 24px;

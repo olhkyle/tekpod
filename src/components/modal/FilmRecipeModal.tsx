@@ -1,15 +1,23 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
-import { useQueryClient } from '@tanstack/react-query';
-import { Session } from '@supabase/supabase-js';
 import { editRecipe } from '../../supabase/filmRecipe';
-import { RestricedRecipeWithImage, RestrictedRecipeForValidation } from '../../supabase/schema';
+import type { RestricedRecipeWithImage } from '../../supabase/schema';
 import type { ModalDataType } from './modalType';
-import { ModalLayout, RemoveFilmRecipeConfirmModal, LazyImage, FilmRecipeImageUpload, TextInput, CustomSelect, Button } from '..';
+import {
+	ModalLayout,
+	RemoveFilmRecipeConfirmModal,
+	LazyImage,
+	FilmRecipeImageUpload,
+	TextInput,
+	CustomSelect,
+	Button,
+	FilmRecipeStaticFields,
+} from '..';
 import useModalStore, { QueryRefetch } from '../../store/useModalStore';
 import useToastStore from '../../store/useToastStore';
 import { useFilmRecipeImage, useLoading } from '../../hooks';
-import { FILM_RECIPE_FORM } from '../../constants/recipes';
+import { fieldData, FILM_RECIPE_FORM, PLACEHOLDER_IMAGE_URL } from '../../constants/recipes';
+import { validateTitle } from '../../utils/validateField';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -20,8 +28,6 @@ interface FilmRecipeModalProps {
 }
 
 const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalProps) => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(['auth']) as Session;
 	const { setModal } = useModalStore();
 
 	const [isEditing, setEditing] = useState<boolean>(false);
@@ -35,18 +41,35 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 	const { isLoading, Loading, startTransition } = useLoading();
 	const { addToast } = useToastStore();
 
-	const [currentFilmFeature, setCurrentFilmFeature] = useState<RestrictedRecipeForValidation>(data);
+	const [currentFilmFeature, setCurrentFilmFeature] = useState<RestricedRecipeWithImage>(data);
+
+	const hasChanges = () => {
+		// 이미지가 변경되었는지 확인
+		const isImageChanged = imageUrl !== data?.imgSrc || currentRecipeImage !== null;
+
+		// 다른 필드들이 변경되었는지 확인
+		const isFieldsChanged = Object.keys(fieldData).some(key => {
+			const fieldKey = key.toLowerCase().replace(/([A-Z])/g, '_$1') as keyof typeof data;
+			return currentFilmFeature[fieldKey]?.toString() !== data[fieldKey]?.toString();
+		});
+
+		return isImageChanged || isFieldsChanged;
+	};
 
 	const handleUpdateRecipe = async () => {
-		//TODO: field가 기존 data와 같지 않은지 검증 -> 굳이 업데이트 할 필요없음
-		// type 구분 재검증 필요
+		const titleValidationResult = validateTitle(currentFilmFeature.title);
+
+		if (titleValidationResult) {
+			return addToast({ status: 'error', message: titleValidationResult });
+		}
+
 		try {
+			// edit 할 때 이미지 변경이 없는 경우, storage에 업로드하는 로직 없이, database에 data?.imgSrc만 업로드 하는 형태
+			// edit 할 때 이미지 변경이 있는 경우, addRecipe와 같이 storage에 업로드 후, database에 uploadImage.path를 추가
 			await startTransition(
 				editRecipe({
 					type: imageUrl === data?.imgSrc && !currentRecipeImage ? 'sameImage' : 'updatedImage',
 					data: {
-						id: data?.id,
-						user_id: session?.user?.id,
 						...currentFilmFeature,
 						updated_at: new Date(),
 						imgSrc: imageUrl === data?.imgSrc && !currentRecipeImage ? data?.imgSrc : '',
@@ -68,16 +91,13 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 		setModal({
 			Component: RemoveFilmRecipeConfirmModal,
 			props: {
-				data,
 				type: 'recipe',
+				data,
 				refetch,
 				onTopLevelModalClose: onClose,
 			},
 		});
 	};
-
-	// edit 할 때 이미지 변경이 없는 경우, storage에 업로드하는 로직 없이, database에 data?.imgSrc만 업로드 하는 형태
-	// edit 할 때 이미지 변경이 있는 경우, addRecipe와 같이 storage에 업로드 후, database에 uploadImage.path를 추가
 
 	return (
 		<ModalLayout id={id} type={type} title={data?.title} onClose={onClose}>
@@ -93,7 +113,11 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 					/>
 				) : (
 					<LazyImage
-						src={data?.imgSrc.includes(import.meta.env.VITE_SUPABASE_FILMRECIPE_URL) ? data?.imgSrc : '/sample.jpg'}
+						src={
+							data?.imgSrc?.includes(`${import.meta.env.VITE_SUPABASE_PROJECT_URL}/${import.meta.env.VITE_SUPABASE_FILMRECIPE_URL}`)
+								? data?.imgSrc
+								: PLACEHOLDER_IMAGE_URL
+						}
 						alt="recipe sample image"
 						width={'100%'}
 						height={'100%'}
@@ -132,56 +156,7 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 						})}
 					</>
 				) : (
-					<InfoList>
-						<li>
-							<label>FILM SIMULATION</label>
-							<p>{data?.film_simulation}</p>
-						</li>
-						<li>
-							<label>DYNAMIC RANGE</label>
-							<p>{data?.dynamic_range}</p>
-						</li>
-						<li>
-							<label>GRAIN EFFECT</label>
-							<p>{data?.grain_effect}</p>
-						</li>
-						<li>
-							<label>WB</label>
-							<p>{data?.wb}</p>
-						</li>
-						<li>
-							<label>HIGHLIGHT</label>
-							<p>{data?.highlight}</p>
-						</li>
-						<li>
-							<label>SHADOW</label>
-							<p>{data?.shadow}</p>
-						</li>
-						<li>
-							<label>COLOR</label>
-							<p>{data?.color}</p>
-						</li>
-						<li>
-							<label>SHARPNESS</label>
-							<p>{data?.sharpness}</p>
-						</li>
-						<li>
-							<label>NOISE REDUCTION</label>
-							<p>{data?.noise_reduction}</p>
-						</li>
-						<li>
-							<label>ISO</label>
-							<p>{data?.iso}</p>
-						</li>
-						<li>
-							<label>EXPOSURE COMPENSATION</label>
-							<p>{data?.exposure_compensation}</p>
-						</li>
-						<li>
-							<label>SENSORS</label>
-							<p>{data?.sensors}</p>
-						</li>
-					</InfoList>
+					<FilmRecipeStaticFields data={data} />
 				)}
 			</Group>
 			<ButtonGroup>
@@ -190,7 +165,7 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 						<CancelButton type="button" onClick={() => setEditing(false)}>
 							Cancel
 						</CancelButton>
-						<UpdateButton type="button" onClick={handleUpdateRecipe}>
+						<UpdateButton type="button" disabled={!hasChanges()} onClick={handleUpdateRecipe}>
 							{isLoading ? Loading : 'Update'}
 						</UpdateButton>
 					</>
@@ -215,25 +190,6 @@ const Group = styled.div`
 	gap: 16px;
 	margin-top: 8px;
 	background-color: var(--white);
-`;
-
-const InfoList = styled.ul`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	border-top: 1px solid var(--greyOpacity100);
-
-	li {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 8px 0;
-		border-bottom: 1px solid var(--greyOpacity100);
-
-		label {
-			font-weight: var(--fw-medium);
-		}
-	}
 `;
 
 const ButtonGroup = styled.div`

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { useIsImageLoaded } from '../../hooks';
-
-const placeholderImageUrl: string = '/placeholder-gray.webp';
+import { PLACEHOLDER_IMAGE_URL } from '../../constants/recipes';
 
 interface LazyImageProps {
 	src: string;
@@ -18,7 +17,7 @@ const LazyImage = ({ src, alt, width, height, lazy = true }: LazyImageProps) => 
 		<Container>
 			<img
 				ref={elementRef}
-				src={isLoaded ? src : placeholderImageUrl}
+				src={isLoaded ? src : PLACEHOLDER_IMAGE_URL}
 				alt={alt}
 				style={{ display: 'block', width, height }}
 				sizes="(max-width: 640px) 240px, 300px"

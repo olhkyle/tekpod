@@ -32,6 +32,9 @@ const pageCss = {
 };
 
 const LoginPage = () => {
+	const queryClient = useQueryClient();
+	const navigate = useNavigate();
+
 	const {
 		register,
 		formState: { errors },
@@ -42,13 +45,8 @@ const LoginPage = () => {
 		defaultValues: { email: '', password: '' },
 	});
 
-	const queryClient = useQueryClient();
-	const navigate = useNavigate();
-
-	const { setUserData } = useUserStore();
-
 	const { Loading, isLoading, startTransition } = useLoading();
-
+	const { setUserData } = useUserStore();
 	const { addToast } = useToastStore();
 
 	/**

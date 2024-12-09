@@ -1,6 +1,7 @@
 import { ReactNode, useState } from 'react';
 import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
+import { Button } from '../common';
 import type { ModalDataType } from './modalType';
 import { useOverlayFixed } from '../../hooks';
 
@@ -51,7 +52,7 @@ const Container = styled.div<{ isVisible: boolean; bottomSheetType: 'plain' | 'd
 	right: 0;
 	padding: var(--padding-container-mobile);
 	height: ${({ bottomSheetType }) => (bottomSheetType === 'plain' ? ' 85dvh' : 'auto')};
-	background-color: ${({ order }) => (order === 0 ? 'var(--white)' : `var(--grey100)`)};
+	background-color: ${({ order }) => (order === 0 ? 'var(--white)' : `var(--grey50)`)};
 	border-top-left-radius: var(--radius-l);
 	border-top-right-radius: var(--radius-l);
 	transition: transform 0.3s ease;
@@ -87,7 +88,7 @@ const Title = styled.h2`
 	font-weight: var(--fw-bold);
 `;
 
-const CloseButton = styled.button`
+const CloseButton = styled(Button)`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;

@@ -7,7 +7,6 @@ import queryKey from '../constants/queryKey';
 
 const FilmRecipePage = () => {
 	const { data: recipes, refetch } = useSuspenseQuery({ queryKey: queryKey.FILM_RECIPE, queryFn: getRecipes });
-
 	const { setModal } = useModalStore();
 
 	const handleAddFilmRecipeModal = () => {
@@ -28,7 +27,6 @@ const FilmRecipePage = () => {
 			<Description>
 				with <span>Fuji x100f</span>
 			</Description>
-
 			<FilmRecipeContent recipes={recipes} refetch={refetch} />
 		</section>
 	);

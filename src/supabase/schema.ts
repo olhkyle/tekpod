@@ -16,6 +16,14 @@ interface RestricedRecipeWithImage extends RestrictedRecipe {
 	imgSrc: string;
 }
 
-type RestrictedRecipeForValidation = Omit<RestrictedRecipe, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'imgSrc'>;
+type RestrictedRecipeForValidation = Omit<RestrictedRecipe, 'id' | 'user_id' | 'created_at' | 'updated_at'>;
+type RestrictedRecipeForValidatioWithImage = Omit<RestricedRecipeWithImage, 'id' | 'user_id' | 'created_at' | 'updated_at'>;
 
-export type { ServiceDataType, Diary, RestrictedRecipe, RestricedRecipeWithImage, RestrictedRecipeForValidation };
+export type {
+	ServiceDataType,
+	Diary,
+	RestrictedRecipe,
+	RestricedRecipeWithImage,
+	RestrictedRecipeForValidation,
+	RestrictedRecipeForValidatioWithImage,
+};

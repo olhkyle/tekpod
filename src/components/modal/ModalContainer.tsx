@@ -26,7 +26,7 @@ const Container = styled.div<{ isVisible: boolean }>`
 	min-width: var(--min-app-width);
 	margin: 0 auto;
 	height: 100dvh;
-	background-color: rgba(0, 0, 0, 40%);
+	background-color: rgba(0, 0, 0, 30%);
 	visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
 	inset: 0px;
 	z-index: var(--overlay-index);

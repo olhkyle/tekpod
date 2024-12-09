@@ -15,15 +15,7 @@ interface RemoveFilmRecipeConfirmModalProps {
 	onTopLevelModalClose: () => void;
 }
 
-const RemoveFilmRecipeConfirmModal = ({
-	id,
-	type,
-	data,
-
-	refetch,
-	onClose,
-	onTopLevelModalClose,
-}: RemoveFilmRecipeConfirmModalProps) => {
+const RemoveFilmRecipeConfirmModal = ({ id, type, data, refetch, onClose, onTopLevelModalClose }: RemoveFilmRecipeConfirmModalProps) => {
 	const { mutate: remove, isPending } = useRemoveRecipeMutation(data?.id);
 	const { addToast } = useToastStore();
 
@@ -52,14 +44,14 @@ const RemoveFilmRecipeConfirmModal = ({
 				<YesButton type="button" onClick={handleRecipeDelete}>
 					{isPending ? <LoadingSpinner /> : 'YES'}
 				</YesButton>
-				<Button
+				<StyledButton
 					type="button"
 					onClick={() => {
 						onClose();
 						onTopLevelModalClose();
 					}}>
 					NO
-				</Button>
+				</StyledButton>
 			</ButtonGroup>
 		</ModalLayout>
 	);

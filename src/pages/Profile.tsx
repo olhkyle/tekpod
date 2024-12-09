@@ -11,10 +11,9 @@ import { Button } from '../components';
 const ProfilePage = () => {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
-	const { userInfo, resetUser } = useUserStore();
 
 	const { Loading, isLoading, startTransition } = useLoading();
-
+	const { userInfo, resetUser } = useUserStore();
 	const { addToast } = useToastStore();
 
 	const handleLogout = async () => {
