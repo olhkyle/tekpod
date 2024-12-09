@@ -6,23 +6,22 @@ import type { Diary } from '../../supabase/schema';
 import { getSingleDiary } from '../../supabase/diary';
 import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
 import { LoadingSpinner, EditContentModal } from '..';
-import { routes } from '../../constants';
 import useModalStore from '../../store/useModalStore';
+import { routes } from '../../constants';
+import queryKey from '../../constants/queryKey';
 
 const ContentBody = () => {
 	const { diaryId } = useParams();
 	const navigate = useNavigate();
 
-	const { data } = useSuspenseQuery<Diary>({ queryKey: ['diary', diaryId], queryFn: () => getSingleDiary(diaryId!) });
+	const { data } = useSuspenseQuery<Diary>({ queryKey: [...queryKey.DIARY, diaryId], queryFn: () => getSingleDiary(diaryId!) });
 
 	const { mutate: remove, isPending } = useRemoveDiaryMutation();
 
 	const { setModal } = useModalStore();
 	const [isEditModalOpen] = useState(true);
 
-	const handleEditModalClick = () => {
-		setModal({ Component: EditContentModal, props: { isOpen: isEditModalOpen, data, type: 'diary' } });
-	};
+	const handleEditModalClick = () => setModal({ Component: EditContentModal, props: { isOpen: isEditModalOpen, data, type: 'diary' } });
 
 	return (
 		<>

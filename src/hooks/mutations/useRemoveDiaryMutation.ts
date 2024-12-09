@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { removeDiary } from '../../supabase/diary';
 import { Diary } from '../../supabase/schema';
+import queryKey from '../../constants/queryKey';
 
 const remove =
 	({ id }: { id: string }) =>
@@ -10,7 +11,6 @@ const remove =
 
 const useDeleteDiaryMutation = () => {
 	const queryClient = useQueryClient();
-	const queryKey = ['diary'];
 
 	const { mutate, isPending } = useMutation({
 		async mutationFn(variables: { id: string }) {
@@ -19,11 +19,11 @@ const useDeleteDiaryMutation = () => {
 		async onMutate(variables) {
 			// Cancel any outgoing refetch
 			// (so they don't overwrite our optimistic update)
-			await queryClient.cancelQueries({ queryKey });
-			const previousData = queryClient.getQueryData(queryKey);
+			await queryClient.cancelQueries({ queryKey: queryKey.DIARY });
+			const previousData = queryClient.getQueryData(queryKey.DIARY);
 
 			if (previousData) {
-				queryClient.setQueryData(queryKey, remove(variables));
+				queryClient.setQueryData(queryKey.DIARY, remove(variables));
 			}
 
 			return { previousData };
@@ -33,12 +33,12 @@ const useDeleteDiaryMutation = () => {
 		onError(error, _, context) {
 			if (context?.previousData) {
 				console.error(error);
-				queryClient.setQueryData(queryKey, context?.previousData);
+				queryClient.setQueryData(queryKey.DIARY, context?.previousData);
 			}
 		},
 		// Always refetch after error or success:
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey });
+			return queryClient.invalidateQueries({ queryKey: queryKey.DIARY });
 		},
 	});
 	return { mutate, isPending };

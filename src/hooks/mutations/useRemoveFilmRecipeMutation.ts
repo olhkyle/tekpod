@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { removeRecipe } from '../../supabase/filmRecipe';
 import { RestrictedRecipe } from '../../supabase/schema';
+import queryKey from '../../constants/queryKey';
 
 const remove =
 	({ id }: { id: string }) =>
@@ -10,19 +11,20 @@ const remove =
 
 const useRemoveRecipeMutation = (id: string) => {
 	const queryClient = useQueryClient();
-	const queryKey = ['film_recipes', id];
+
+	const QUERY_KEY = [...queryKey.FILM_RECIPE, id];
 
 	const { mutate, isPending } = useMutation({
 		async mutationFn(variables: { id: string; path: string }) {
 			await removeRecipe(variables);
 		},
 		async onMutate(variables) {
-			await queryClient.cancelQueries({ queryKey });
+			await queryClient.cancelQueries({ queryKey: QUERY_KEY });
 
-			const previousData = queryClient.getQueryData(queryKey);
+			const previousData = queryClient.getQueryData(QUERY_KEY);
 
 			if (previousData) {
-				queryClient.setQueryData(queryKey, remove(variables));
+				queryClient.setQueryData(QUERY_KEY, remove(variables));
 			}
 
 			return { previousData };
@@ -31,11 +33,11 @@ const useRemoveRecipeMutation = (id: string) => {
 		onError(error, _, context) {
 			if (context?.previousData) {
 				console.error(error);
-				queryClient.setQueryData(queryKey, context?.previousData);
+				queryClient.setQueryData(QUERY_KEY, context?.previousData);
 			}
 		},
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey });
+			return queryClient.invalidateQueries({ queryKey: QUERY_KEY });
 		},
 	});
 

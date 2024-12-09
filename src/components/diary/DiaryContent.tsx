@@ -8,16 +8,17 @@ import { useInfinityScroll } from '../../hooks';
 import { routes } from '../../constants';
 import getCalculatedTotalPage from '../../utils/getCalculatedTotalPage';
 import { EmptyMessage } from '../common';
+import queryKey from '../../constants/queryKey';
 
 const PAGE_SIZE = 10;
 
 const DiaryContent = () => {
-	const { data: pageInfo } = useSuspenseQuery({ queryKey: ['pageInfo'], queryFn: getDiariesPageInfo });
+	const { data: pageInfo } = useSuspenseQuery({ queryKey: queryKey.PAGE_INFO, queryFn: getDiariesPageInfo });
 
 	const calculatedTotalPage = getCalculatedTotalPage(pageInfo, PAGE_SIZE);
 
 	const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery({
-		queryKey: ['diaryByPage'],
+		queryKey: queryKey.DIARY_BY_PAGE,
 		queryFn: ({ pageParam }) => getDiariesByPage(pageParam, PAGE_SIZE),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage, __, lastPageParam) => {
