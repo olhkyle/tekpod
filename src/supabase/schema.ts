@@ -1,5 +1,7 @@
 import { Database } from './database.types';
 
+type ServiceDataType = Diary | Recipe | null;
+
 type Diary = Database['public']['Tables']['diary']['Row'];
 type Recipe = Database['public']['Tables']['recipes']['Row'];
 
@@ -16,4 +18,4 @@ interface RestricedRecipeWithImage extends RestrictedRecipe {
 
 type RestrictedRecipeForValidation = Omit<RestrictedRecipe, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'imgSrc'>;
 
-export type { Diary, RestrictedRecipe, RestricedRecipeWithImage, RestrictedRecipeForValidation };
+export type { ServiceDataType, Diary, RestrictedRecipe, RestricedRecipeWithImage, RestrictedRecipeForValidation };
