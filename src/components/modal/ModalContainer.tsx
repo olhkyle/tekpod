@@ -9,7 +9,9 @@ const ModalContainer = () => {
 		<Portal>
 			<Container isVisible={modals.length > 0}>
 				{modals.map(({ Component, props }, index) => {
-					const closeModal = () => removeModal(Component);
+					const closeModal = () => {
+						removeModal(Component);
+					};
 
 					if (props) {
 						return <Component key={index} id={`modal-${index}`} onClose={closeModal} {...props} />;

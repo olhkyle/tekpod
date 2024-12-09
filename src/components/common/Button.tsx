@@ -9,10 +9,6 @@ const Button = ({ type, children, ...props }: ButtonProps) => {
 	return (
 		<button
 			type={type}
-			onTouchEnd={e => {
-				e.preventDefault();
-				e.currentTarget?.blur();
-			}}
 			onBlur={e => {
 				e.target.blur();
 			}}

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { AnimationEvent, ReactNode, useState } from 'react';
 import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
 import { Button } from '../common';
@@ -19,9 +19,12 @@ const ModalLayout = ({ id, type, title, onClose, bottomSheetType = 'plain', chil
 
 	useOverlayFixed(!isClosing);
 
-	const handleModalClose = () => setIsClosing(true);
-	const handleAnimationEnd = () => {
-		if (isClosing) {
+	const handleModalClose = () => {
+		setIsClosing(true);
+	};
+
+	const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
+		if (isClosing && e.target === e.currentTarget) {
 			onClose();
 		}
 	};
@@ -58,6 +61,7 @@ const Container = styled.div<{ isVisible: boolean; bottomSheetType: 'plain' | 'd
 	transition: transform 0.3s ease;
 	z-index: var(--modal-index);
 	animation: ${({ isVisible }) => (isVisible ? 'slideUp 0.3s ease forwards' : 'slideDown 0.2s ease forwards')};
+	-webkit-animation: ${({ isVisible }) => (isVisible ? 'slideUp 0.3s ease forwards' : 'slideDown 0.2s ease forwards')};
 
 	@keyframes slideUp {
 		from {
