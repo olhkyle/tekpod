@@ -12,7 +12,7 @@ const ModalContainer = () => {
 					const closeModal = () => removeModal(Component);
 
 					if (props) {
-						return <Component key={index} onClose={closeModal} id={`modal-${index}`} {...props} />;
+						return <Component key={index} id={`modal-${index}`} onClose={closeModal} {...props} />;
 					}
 				})}
 			</Container>

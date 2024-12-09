@@ -1,6 +1,7 @@
 import { ChangeEvent, forwardRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { RiCloseFill } from 'react-icons/ri';
+import { Button } from '../common';
 
 interface FilmRecipeImageUploadProps {
 	isEditing?: boolean;
@@ -77,7 +78,7 @@ const PreviewImage = styled.div<{ isAttached: boolean }>`
 	}
 `;
 
-const CloseButton = styled.button<{ isAttached: boolean }>`
+const CloseButton = styled(Button)<{ isAttached: boolean }>`
 	position: absolute;
 	top: -12px;
 	right: 0;

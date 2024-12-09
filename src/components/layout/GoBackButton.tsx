@@ -1,18 +1,19 @@
 import styled from '@emotion/styled';
 import { RiArrowLeftLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../common';
 
 const GoBackButton = () => {
 	const navigate = useNavigate();
 
 	return (
-		<Button type="button" onClick={() => navigate(-1)}>
+		<StyledButton type="button" onClick={() => navigate(-1)}>
 			<RiArrowLeftLine size="24" color="var(--grey500)" />
-		</Button>
+		</StyledButton>
 	);
 };
 
-const Button = styled.button`
+const StyledButton = styled(Button)`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;

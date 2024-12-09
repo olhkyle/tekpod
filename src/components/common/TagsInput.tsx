@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { RiCloseFill } from 'react-icons/ri';
 import { FiHash } from 'react-icons/fi';
+import { Button } from '.';
 
 export interface Tag {
 	id: number;
@@ -23,9 +24,9 @@ const TagsInput = ({ tags, setTags }: TagsInputProps) => {
 				<Tag key={`${tag}_${id}`}>
 					<FiHash size="16" />
 					<span>{`${tag}`}</span>
-					<button type="button" onClick={() => setTags(tags.filter(({ id: order }) => id !== order))}>
+					<Button type="button" onClick={() => setTags(tags.filter(({ id: order }) => id !== order))}>
 						<RiCloseFill size="16" color="var(--black)" />
-					</button>
+					</Button>
 				</Tag>
 			))}
 			<Input

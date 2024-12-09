@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { FiSearch } from 'react-icons/fi';
 import { routes } from '../../constants';
+import { Button } from '../common';
 
 const Header = () => {
 	return (
@@ -9,9 +10,9 @@ const Header = () => {
 			<Logo>
 				<Link to={routes.HOME}>TEKT</Link>
 			</Logo>
-			<Button>
+			<StyledButton type="button">
 				<FiSearch size={24} color="var(--black)" />
-			</Button>
+			</StyledButton>
 		</Container>
 	);
 };
@@ -38,7 +39,7 @@ const Logo = styled.h1`
 	font-weight: var(--fw-black);
 `;
 
-const Button = styled.button`
+const StyledButton = styled(Button)`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;

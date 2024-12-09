@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import styled from '@emotion/styled';
-import { AddFilmRecipeModal, FilmRecipeContent } from '../components';
+import { AddFilmRecipeModal, Button, FilmRecipeContent } from '../components';
 import useModalStore from '../store/useModalStore';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getRecipes } from '../supabase/filmRecipe';
@@ -9,13 +8,12 @@ import queryKey from '../constants/queryKey';
 const FilmRecipePage = () => {
 	const { data: recipes, refetch } = useSuspenseQuery({ queryKey: queryKey.FILM_RECIPE, queryFn: getRecipes });
 
-	const [isAddFilmRecipeModalOpen] = useState(true);
 	const { setModal } = useModalStore();
 
 	const handleAddFilmRecipeModal = () => {
 		setModal({
 			Component: AddFilmRecipeModal,
-			props: { isOpen: isAddFilmRecipeModalOpen, data: null, type: 'recipe', refetch },
+			props: { type: 'recipe', data: null, refetch },
 		});
 	};
 
@@ -48,7 +46,7 @@ const Title = styled.h2`
 	color: var(--grey900);
 `;
 
-const AddButton = styled.button`
+const AddButton = styled(Button)`
 	padding: calc(var(--padding-container-mobile) * 0.5) var(--padding-container-mobile);
 	min-height: 40px;
 	background-color: var(--black);

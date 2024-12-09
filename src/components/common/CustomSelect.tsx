@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 import { useId, useState } from 'react';
 import { BiSolidChevronRight } from 'react-icons/bi';
+import { Button } from '.';
+import type { RestrictedRecipeForValidation } from '../../supabase/schema';
 import { customPropReceiver } from '../../constants';
 import type { FieldDataType } from '../../constants/recipes';
-import type { RestrictedRecipeForValidation } from '../../supabase/schema';
 
 interface NativeSelectProps {
 	data: FieldDataType;
@@ -54,7 +55,7 @@ const CustomSelect = ({ data: options, target_id, placeholder, currentValue, isT
 
 const CustomSelectWithLabel = styled.div``;
 
-const SelectTrigger = styled.button`
+const SelectTrigger = styled(Button)`
 	display: inline-flex;
 	justify-content: space-between;
 	align-items: center;

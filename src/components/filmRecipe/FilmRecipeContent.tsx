@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from '@emotion/styled';
 import useModalStore, { QueryRefetch } from '../../store/useModalStore';
 import { FilmRecipeModal } from '../modal';
@@ -12,12 +11,11 @@ interface FilmRecipeContentProps {
 
 const FilmRecipeContent = ({ recipes, refetch }: FilmRecipeContentProps) => {
 	const { setModal } = useModalStore();
-	const [isFilmRecipeModalOpen] = useState(true);
 
 	const handleIndividualFilmRecipeModal = (targetTitle: string) => {
 		setModal({
 			Component: FilmRecipeModal,
-			props: { isOpen: isFilmRecipeModalOpen, data: recipes.find(({ title }) => title === targetTitle)!, type: 'recipe', refetch },
+			props: { type: 'recipe', data: recipes.find(({ title }) => title === targetTitle)!, refetch },
 		});
 	};
 

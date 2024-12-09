@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import supabase from '../supabase/service';
-import { LabelInput, Toast } from '../components';
+import { Button, LabelInput, Toast } from '../components';
 import { loginSchema, type LoginSchema } from '../components/auth/schema';
 import { useLoading } from '../hooks';
 import useUserStore from '../store/userStore';
@@ -123,7 +123,7 @@ const Title = styled.h2`
 	font-weight: var(--fw-black);
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	min-width: 270px;
 	color: var(--black);
@@ -145,7 +145,7 @@ const ActionButtons = styled.div`
 	width: 270px;
 `;
 
-const ResetPasswordButton = styled.button`
+const ResetPasswordButton = styled(Button)`
 	padding: calc(var(--padding-container-mobile) / 4);
 	font-size: var(--fz-sm);
 	font-weight: var(--fw-medium);

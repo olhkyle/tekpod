@@ -1,8 +1,8 @@
-import { css } from '@emotion/react';
-
-import { useNavigate } from 'react-router-dom';
-import { routes } from '../constants';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { css } from '@emotion/react';
+import { Button } from '../components';
+import { routes } from '../constants';
 
 const layoutCss = {
 	wrapper: css`
@@ -66,9 +66,9 @@ const NotFound = () => {
 			<div css={layoutCss.container}>
 				<h1 css={layoutCss.title}>TEKT</h1>
 				<p css={layoutCss.description}>🌪️ Something went wrong</p>
-				<button type="button" css={layoutCss.button} onClick={() => navigate(routes.HOME)}>
+				<Button type="button" css={layoutCss.button} onClick={() => navigate(routes.HOME)}>
 					Go Back to 🏠
-				</button>
+				</Button>
 			</div>
 		</div>
 	);

@@ -1,31 +1,48 @@
-import { useState } from 'react';
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Diary } from '../../supabase/schema';
 import { getSingleDiary } from '../../supabase/diary';
 import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
-import { LoadingSpinner, EditContentModal } from '..';
+import { LoadingSpinner, EditContentModal, Button } from '..';
 import useModalStore from '../../store/useModalStore';
 import { routes } from '../../constants';
 import queryKey from '../../constants/queryKey';
+import useToastStore from '../../store/useToastStore';
 
 const ContentBody = () => {
 	const { diaryId } = useParams();
 	const navigate = useNavigate();
 
 	const { data } = useSuspenseQuery<Diary>({ queryKey: [...queryKey.DIARY, diaryId], queryFn: () => getSingleDiary(diaryId!) });
-
 	const { mutate: remove, isPending } = useRemoveDiaryMutation();
-
 	const { setModal } = useModalStore();
-	const [isEditModalOpen] = useState(true);
+	const { addToast } = useToastStore();
 
-	const handleEditModalClick = () => setModal({ Component: EditContentModal, props: { isOpen: isEditModalOpen, data, type: 'diary' } });
+	const handleEditContentModalClick = () =>
+		setModal({
+			Component: EditContentModal,
+			props: { type: 'diary', data },
+		});
+
+	const handleDeleteDiaryClick = () => {
+		remove(
+			{ id: diaryId! },
+			{
+				onSuccess: () => {
+					addToast({ status: 'success', message: 'Successfully delete diary' });
+					navigate(routes.DIARY);
+				},
+				onError: () => {
+					addToast({ status: 'error', message: 'Error happens to delete diary' });
+				},
+			},
+		);
+	};
 
 	return (
 		<>
-			<EditButton type="button" onClick={handleEditModalClick}>
+			<EditButton type="button" onClick={handleEditContentModalClick}>
 				Edit
 			</EditButton>
 			<Description>
@@ -41,25 +58,14 @@ const ContentBody = () => {
 				<Feeling>⚡️ {data?.feeling}</Feeling>
 			</Description>
 
-			<DeleteButton
-				type="button"
-				onClick={() => {
-					remove(
-						{ id: diaryId! },
-						{
-							onSuccess: () => {
-								navigate(routes.DIARY);
-							},
-						},
-					);
-				}}>
+			<DeleteButton type="button" onClick={handleDeleteDiaryClick}>
 				{isPending ? <LoadingSpinner /> : '🗑️ Delete'}
 			</DeleteButton>
 		</>
 	);
 };
 
-const EditButton = styled.button`
+const EditButton = styled(Button)`
 	margin-left: auto;
 	padding: calc(var(--padding-container-mobile) / 2) var(--padding-container-mobile);
 	font-weight: var(--fw-semibold);
@@ -107,7 +113,7 @@ const Feeling = styled.p`
 	border-radius: var(--radius-s);
 `;
 
-const DeleteButton = styled.button`
+const DeleteButton = styled(Button)`
 	margin-top: auto;
 	padding: var(--padding-container-mobile);
 	width: 100%;

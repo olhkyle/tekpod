@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { FallbackProps } from 'react-error-boundary';
+import { Button } from '../common';
 
 const layoutCss = {
 	wrapper: css`
@@ -30,12 +31,12 @@ const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 						minHeight: 'calc(100dvh - 2 * var(--nav-height))',
 					}}>
 					<div css={{ fontWeight: 'var(--fw-bold)' }}>문제가 발생하였습니다</div>
-					<button
+					<Button
 						type="button"
 						css={{ marginTop: '16px', padding: '16px', backgroundColor: 'var(--black)', color: 'var(--white)', borderRadius: '8px' }}
 						onClick={() => resetErrorBoundary()}>
 						다시 시도하기
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>

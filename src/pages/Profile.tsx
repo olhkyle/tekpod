@@ -6,6 +6,7 @@ import useUserStore from '../store/userStore';
 import { routes } from '../constants';
 import { useLoading } from '../hooks';
 import useToastStore from '../store/useToastStore';
+import { Button } from '../components';
 
 const ProfilePage = () => {
 	const queryClient = useQueryClient();
@@ -84,7 +85,7 @@ const Title = styled.p`
 	text-align: center;
 `;
 
-const LogoutButton = styled.button`
+const LogoutButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	min-width: 270px;
 	color: var(--white);

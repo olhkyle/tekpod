@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 import { Session } from '@supabase/supabase-js';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TagsInput, TextArea, TextInput } from '../components';
+import { Button, TagsInput, TextArea, TextInput } from '../components';
 import { WriteSchema, writeSchema } from '../components/write/schema';
 import { addDiary } from '../supabase/diary';
 import { routes } from '../constants';
@@ -111,7 +111,7 @@ const Title = styled.h2`
 	font-weight: var(--fw-black);
 `;
 
-const Preview = styled.button`
+const Preview = styled(Button)`
 	padding: calc(var(--padding-container-mobile) / 4) calc(var(--padding-container-mobile) / 2);
 	min-height: 36px;
 	font-size: var(--fz-sm);
@@ -139,7 +139,7 @@ const Wrapper = styled.div`
 	gap: 16px;
 `;
 
-const UploadButton = styled.button`
+const UploadButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	min-height: 57px;
 	font-size: var(--fz-p);
