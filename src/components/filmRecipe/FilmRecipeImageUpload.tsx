@@ -16,8 +16,8 @@ const FilmRecipeImageUpload = forwardRef<HTMLInputElement, FilmRecipeImageUpload
 		useEffect(() => {
 			if (isEditing && setImageUrlOnEditing) {
 				setImageUrlOnEditing(imageUrl);
-				console.log('ref - ', ref, 'imageUrl - ', imageUrl, 'isAttatched - ', isAttached);
 			}
+			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
 
 		return (
