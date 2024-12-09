@@ -17,7 +17,7 @@ interface AddFilmRecipeModalProps {
 	onClose: () => void;
 }
 
-const initialFilmFieldValue: RestrictedRecipeForValidation = {
+const initialFilmFieldValue: Omit<RestrictedRecipeForValidation, 'imgSrc'> = {
 	title: '',
 	film_simulation: 'Provia',
 	dynamic_range: 'DR-Auto',
@@ -53,7 +53,7 @@ const AddFilmRecipeModal = ({ id, type, refetch, onClose }: AddFilmRecipeModalPr
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
 
-	const [currentFilmFeature, setCurrentFilmFeature] = useState<RestrictedRecipeForValidation>(initialFilmFieldValue);
+	const [currentFilmFeature, setCurrentFilmFeature] = useState<Omit<RestrictedRecipeForValidation, 'imgSrc'>>(initialFilmFieldValue);
 	const [isTriggered, setTriggered] = useState(initialValidationState);
 
 	const { mutate: addFilmRecipe, isPending } = useAddFilmRecipeMutation();
