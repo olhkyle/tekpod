@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
 import type { ModalDataType } from './modalType';
@@ -6,22 +6,36 @@ import { useOverlayFixed } from '../../hooks';
 
 interface ModalLayoutProps {
 	id: string;
-	isOpen: boolean;
 	type: ModalDataType;
 	title: string | ReactNode;
 	onClose: () => void;
-	size?: 'sm' | 'lg';
+	bottomSheetType?: 'plain' | 'doubleCheck';
 	children: ReactNode;
 }
 
-const ModalLayout = ({ id, isOpen, type, title, onClose, size = 'lg', children }: ModalLayoutProps) => {
-	useOverlayFixed(isOpen);
+const ModalLayout = ({ id, type, title, onClose, bottomSheetType = 'plain', children }: ModalLayoutProps) => {
+	const [isClosing, setIsClosing] = useState(false);
+
+	useOverlayFixed(!isClosing);
+
+	const handleModalClose = () => setIsClosing(true);
+	const handleAnimationEnd = () => {
+		if (isClosing) {
+			onClose();
+		}
+	};
 
 	return (
-		<Container isOpen={isOpen} size={size} order={+id.split('-')[1]} data-modal-type={type} data-modal-id={id}>
+		<Container
+			isVisible={!isClosing}
+			bottomSheetType={bottomSheetType}
+			order={+id.split('-')[1]}
+			data-modal-type={type}
+			data-modal-id={id}
+			onAnimationEnd={handleAnimationEnd}>
 			<Header>
 				<Title>{title}</Title>
-				<CloseButton type="button" onClick={onClose}>
+				<CloseButton type="button" onClick={handleModalClose}>
 					<CgClose size="24" color="var(--black)" />
 				</CloseButton>
 			</Header>
@@ -30,20 +44,19 @@ const ModalLayout = ({ id, isOpen, type, title, onClose, size = 'lg', children }
 	);
 };
 
-const Container = styled.div<{ isOpen: boolean; size: 'sm' | 'lg'; order: number }>`
+const Container = styled.div<{ isVisible: boolean; bottomSheetType: 'plain' | 'doubleCheck'; order: number }>`
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
 	padding: var(--padding-container-mobile);
-	height: ${({ size }) => (size === 'lg' ? ' 85dvh' : 'auto')};
+	height: ${({ bottomSheetType }) => (bottomSheetType === 'plain' ? ' 85dvh' : 'auto')};
 	background-color: ${({ order }) => (order === 0 ? 'var(--white)' : `var(--grey100)`)};
 	border-top-left-radius: var(--radius-l);
 	border-top-right-radius: var(--radius-l);
-	visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-	transition: transform 0.3s ease, visibility 0.5s ease;
+	transition: transform 0.3s ease;
 	z-index: var(--modal-index);
-	animation: ${({ isOpen }) => (isOpen ? 'slideUp 0.3s ease forwards' : 'slideDown 0.3s ease forwards')};
+	animation: ${({ isVisible }) => (isVisible ? 'slideUp 0.3s ease forwards' : 'slideDown 0.2s ease forwards')};
 
 	@keyframes slideUp {
 		from {

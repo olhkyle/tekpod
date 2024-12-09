@@ -1,7 +1,7 @@
 import { ElementType } from 'react';
 import { UseQueryResult } from '@tanstack/react-query';
 import { create } from 'zustand';
-import { Diary, RestrictedRecipe } from '../supabase/schema';
+import { ServiceDataType } from '../supabase/schema';
 import { ModalDataType } from '../components/modal/modalType';
 
 export type QueryRefetch = (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<UseQueryResult>;
@@ -9,9 +9,8 @@ export type QueryRefetch = (options?: { throwOnError: boolean; cancelRefetch: bo
 interface Modal {
 	Component: ElementType;
 	props?: {
-		data: Diary | RestrictedRecipe | null;
-		isOpen: boolean;
 		type: ModalDataType;
+		data: ServiceDataType;
 		refetch?: QueryRefetch;
 		onTopLevelModalClose?: () => void;
 	};
