@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
+import { FaStar } from 'react-icons/fa';
+import { FaRegStar } from 'react-icons/fa6';
 import { editRecipe } from '../../supabase/filmRecipe';
 import type { RestricedRecipeWithImage } from '../../supabase/schema';
 import type { ModalDataType } from './modalType';
@@ -31,6 +33,8 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 	const { setModal } = useModalStore();
 
 	const [isEditing, setEditing] = useState<boolean>(false);
+	const [isPrimary, setIsPrimary] = useState<boolean>(data?.primary);
+
 	const {
 		image: { imageUrl, currentRecipeImage, isAttached },
 		setImageUrlOnEditing,
@@ -45,6 +49,7 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 
 	const hasChanges = () => {
 		// 이미지가 변경되었는지 확인
+		const isFilmRecipePrimaryChanged = isPrimary !== data?.primary;
 		const isImageChanged = imageUrl !== data?.imgSrc || currentRecipeImage !== null;
 
 		// 다른 필드들이 변경되었는지 확인
@@ -53,7 +58,7 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 			return currentFilmFeature[fieldKey]?.toString() !== data[fieldKey]?.toString();
 		});
 
-		return isImageChanged || isFieldsChanged;
+		return isFilmRecipePrimaryChanged || isImageChanged || isFieldsChanged;
 	};
 
 	const handleUpdateRecipe = async () => {
@@ -73,6 +78,7 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 						...currentFilmFeature,
 						updated_at: new Date(),
 						imgSrc: imageUrl === data?.imgSrc && !currentRecipeImage ? data?.imgSrc : '',
+						primary: isPrimary,
 					},
 					imageFile: currentRecipeImage,
 				}),
@@ -162,21 +168,26 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 			<ButtonGroup>
 				{isEditing ? (
 					<>
-						<CancelButton type="button" onClick={() => setEditing(false)}>
-							Cancel
-						</CancelButton>
+						<Left>
+							<RankActivateButton type="button" onClick={() => setIsPrimary(!isPrimary)}>
+								{isPrimary ? <FaStar size="27" color="var(--blue200)" /> : <FaRegStar size="27" color="var(--blue200)" />}
+							</RankActivateButton>
+							<CancelButton type="button" onClick={() => setEditing(false)}>
+								Cancel
+							</CancelButton>
+						</Left>
 						<UpdateButton type="button" disabled={!hasChanges()} onClick={handleUpdateRecipe}>
 							{isLoading ? Loading : 'Update'}
 						</UpdateButton>
 					</>
 				) : (
 					<>
-						<EditRecipeButton type="button" onClick={() => setEditing(!isEditing)}>
-							✏️ Edit
-						</EditRecipeButton>
 						<DeleteRecipeButton type="button" onClick={handleDeleteConfirmModal}>
-							🗑️ Delete
+							Delete
 						</DeleteRecipeButton>
+						<EditRecipeButton type="button" onClick={() => setEditing(!isEditing)}>
+							Edit
+						</EditRecipeButton>
 					</>
 				)}
 			</ButtonGroup>
@@ -199,6 +210,19 @@ const ButtonGroup = styled.div`
 	margin-top: calc(var(--padding-container-mobile) * 8);
 `;
 
+const Left = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 16px;
+`;
+
+const RankActivateButton = styled(Button)`
+	padding: 8px 16px;
+	min-height: 57px;
+	background-color: var(--blue100);
+`;
+
 const StyledButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
@@ -210,7 +234,7 @@ const StyledButton = styled(Button)`
 `;
 
 const CancelButton = styled(StyledButton)`
-	background-color: var(--grey400);
+	background-color: var(--grey300);
 
 	&:active,
 	&:focus {
@@ -225,22 +249,24 @@ const UpdateButton = styled(StyledButton)`
 	&:focus {
 		background-color: var(--blue300);
 	}
-`;
-
-const EditRecipeButton = styled(StyledButton)`
-	background-color: var(--black);
-
-	&:active,
-	&:focus {
-		background-color: var(--greyOpacity900);
-	}
 
 	&:disabled {
 		background-color: var(--greyOpacity400);
 	}
 `;
 
+const EditRecipeButton = styled(StyledButton)`
+	width: 70%;
+	background-color: var(--black);
+
+	&:active,
+	&:focus {
+		background-color: var(--greyOpacity900);
+	}
+`;
+
 const DeleteRecipeButton = styled(StyledButton)`
+	width: 30%;
 	background-color: var(--grey200);
 	color: var(--grey700);
 

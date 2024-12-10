@@ -3,8 +3,6 @@ import { Diary } from './schema';
 
 const TABLE = 'diary';
 
-// const wait = (time: number) => new Promise(resolve => setTimeout(resolve, time));
-
 const getCommitStatus = async () => {
 	const { data, error } = await supabase.from(TABLE).select('*');
 
