@@ -4,6 +4,7 @@ type ServiceDataType = Diary | Recipe | null;
 
 type Diary = Database['public']['Tables']['diary']['Row'];
 type Recipe = Database['public']['Tables']['recipes']['Row'];
+type Todo = Database['public']['Tables']['todos']['Row'];
 
 interface RestrictedRecipe extends Recipe {
 	dynamic_range: 'DR-Auto' | `DR-${'number'}`;
@@ -26,4 +27,5 @@ export type {
 	RestricedRecipeWithImage,
 	RestrictedRecipeForValidation,
 	RestrictedRecipeForValidatioWithImage,
+	Todo,
 };

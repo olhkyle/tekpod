@@ -1,77 +1,96 @@
 import styled from '@emotion/styled';
-// import { useQuery } from '@tanstack/react-query';
-// import { getCommitStatus } from '../supabase/diary';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { BsPlus } from 'react-icons/bs';
+import { Button, EmptyMessage, TextInput, TodoItem } from '../components';
+import queryKey from '../constants/queryKey';
+import { addTodo, getTodos } from '../supabase/todos';
+import { Suspense, useState } from 'react';
+import { useLoading } from '../hooks';
+import { Session } from '@supabase/supabase-js';
+import useToastStore from '../store/useToastStore';
 
 const HomePage = () => {
-	// const { data } = useQuery({ queryKey: ['commits'], queryFn: getCommitStatus });
+	const queryClient = useQueryClient();
+	const session = queryClient.getQueryData(['auth']) as Session;
 
-	// console.log(`오늘은 올해의 ${dayOfYear}번째 날입니다.`);
-	const days = Array.from({ length: 365 }, (_, idx) => idx + 1);
-	const daysByDivider = days.reduce<number[][]>((acc, _, i) => {
-		if (i % 7 === 0) acc.push(days.slice(i, i + 7));
-		return acc;
-	}, []);
+	const { data: todoList } = useSuspenseQuery({ queryKey: queryKey.TODOS, queryFn: getTodos });
 
+	const [value, setValue] = useState('');
+	const { addToast } = useToastStore();
+	const { Loading, isLoading, startTransition } = useLoading();
+
+	const handleTodoAdd = async () => {
+		try {
+			await startTransition(
+				addTodo({
+					user_id: session?.user?.id,
+					completed: false,
+					content: value,
+					created_at: new Date(),
+					updated_at: new Date(),
+				}),
+			);
+
+			addToast({ status: 'success', message: 'Successfully Add' });
+		} catch (e) {
+			console.error(e);
+			addToast({ status: 'error', message: 'Error happens' });
+		}
+	};
+
+	// TODO: 각 아이템을 길게 클릭 시 상단에서 전체 선택 등의 부가기능 선택할 수 있는 TopSheet 나오도록
 	return (
-		<Container>
-			<Title>✹ Contributions</Title>
-			<DayGrid>
-				{daysByDivider.map((arr, group_idx) => (
-					<div key={group_idx}>
-						{arr.map((item, idx) => (
-							<Day key={item} isActive={idx % 3 === 0} />
-						))}
-					</div>
-				))}
-			</DayGrid>
-		</Container>
+		<section>
+			<Flex>
+				<TextInput>
+					<TextInput.ControlledTextField
+						id="todo-input"
+						name="todo-input"
+						placeholder={'Add New Reminder'}
+						value={value}
+						onChange={e => setValue(e.target.value)}
+					/>
+				</TextInput>
+				<AddTodoButton type="button" onClick={handleTodoAdd}>
+					{isLoading ? Loading : <BsPlus size="24" color="var(--white)" />}
+				</AddTodoButton>
+			</Flex>
+
+			<Suspense fallback={Loading}>
+				<TodoList>
+					{todoList.length === 0 ? (
+						<EmptyMessage emoji={'🔄'}>Add New Reminder</EmptyMessage>
+					) : (
+						<>
+							{todoList.map((todo, idx) => (
+								<TodoItem key={todo.id} todo={todo} order={idx} />
+							))}
+						</>
+					)}
+				</TodoList>
+			</Suspense>
+		</section>
 	);
 };
 
-const Container = styled.section`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-`;
-
-const Title = styled.h2`
-	width: 100%;
-	font-size: var(--fz-h6);
-	font-weight: var(--fw-black);
-`;
-
-const DayGrid = styled.div`
+const Flex = styled.div`
 	display: flex;
 	justify-content: space-between;
-	gap: 4px;
-	margin-top: 16px;
-	padding: calc(var(--padding-container-mobile) / 2);
+	align-items: center;
 	width: 100%;
-	border: 1px solid var(--grey200);
-	background: linear-gradient(270deg, var(--blue100), var(--greyOpacity100));
-	border-radius: var(--radius-s);
-	overflow-x: scroll;
-
-	div {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-		/* min-width: 24px; */
-
-		span {
-			font-size: var(--fz-xs);
-		}
-	}
 `;
 
-const Day = styled.span<{ isActive: boolean }>`
-	display: inline-flex;
-	width: 100%; // 부모 그리드 셀에 맞춤
-	min-width: 10px; // 최소 크기 보장
-	max-width: 16px; // 최대 크기 제한
-	aspect-ratio: 1;
-	background-color: ${({ isActive }) => (isActive ? 'var(--black)' : 'var(--greyOpacity200)')};
-	border-radius: var(--radius-xs);
+const AddTodoButton = styled(Button)`
+	padding: 16px;
+	font-weight: var(--fw-semibold);
+	color: var(--white);
+	background-color: var(--black);
+`;
+
+const TodoList = styled.ul`
+	display: flex;
+	flex-direction: column;
+	padding: 16px 0;
 `;
 
 export default HomePage;
