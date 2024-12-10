@@ -59,7 +59,6 @@ export interface Database {
 					iso: string;
 					exposure_compensation: string;
 					sensors: string;
-					rank: number | null;
 					primary: boolean;
 					created_at: Date;
 					updated_at: Date;
@@ -82,7 +81,6 @@ export interface Database {
 					iso: string;
 					exposure_compensation: string;
 					sensors: string;
-					rank: number | null;
 					primary: boolean;
 					created_at: Date;
 					updated_at: Date;
@@ -105,7 +103,6 @@ export interface Database {
 					iso?: string;
 					exposure_compensation?: string;
 					sensors?: string;
-					rank?: number | null;
 					primary?: boolean;
 					updated_at: Date;
 					imgSrc: string;
