@@ -13,7 +13,7 @@ const HomePage = () => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
 
-	const { data: todoList } = useSuspenseQuery({ queryKey: queryKey.TODOS, queryFn: getTodos });
+	const { data: todoList, refetch } = useSuspenseQuery({ queryKey: queryKey.TODOS, queryFn: getTodos });
 
 	const [value, setValue] = useState('');
 	const { addToast } = useToastStore();
@@ -63,7 +63,7 @@ const HomePage = () => {
 					) : (
 						<>
 							{todoList.map((todo, idx) => (
-								<TodoItem key={todo.id} todo={todo} order={idx} />
+								<TodoItem key={todo.id} todo={todo} order={idx} refetch={refetch} />
 							))}
 						</>
 					)}

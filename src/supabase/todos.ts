@@ -1,5 +1,5 @@
-import { Todo } from './schema';
 import supabase from './service';
+import { Todo } from './schema';
 
 const TABLE = 'todos';
 
@@ -21,4 +21,12 @@ const addTodo = async (data: Omit<Todo, 'id'>) => {
 	}
 };
 
-export { getTodos, addTodo };
+const removeTodo = async ({ id }: { id: string }) => {
+	const { error: deleteTodoError } = await supabase.from(TABLE).delete().eq('id', id);
+
+	if (deleteTodoError) {
+		throw new Error(deleteTodoError.message);
+	}
+};
+
+export { getTodos, addTodo, removeTodo };
