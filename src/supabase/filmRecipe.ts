@@ -35,7 +35,7 @@ const getRecipes = async (): Promise<RestrictedRecipe[]> => {
 		throw new Error(error.message);
 	}
 
-	return data;
+	return [...data.filter(({ primary }) => primary), ...data.filter(({ primary }) => !primary)];
 };
 
 const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id' | 'imgSrc'>; imageFile: File }) => {

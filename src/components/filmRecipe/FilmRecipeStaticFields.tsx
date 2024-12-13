@@ -8,72 +8,72 @@ interface FilmRecipeStaticFieldsProps {
 const FilmRecipeStaticFields = ({ data }: FilmRecipeStaticFieldsProps) => {
 	return (
 		<InfoList>
-			<li>
-				<label>FILM SIMULATION</label>
-				<p>{data?.film_simulation}</p>
-			</li>
-			<li>
-				<label>DYNAMIC RANGE</label>
-				<p>{data?.dynamic_range}</p>
-			</li>
-			<li>
-				<label>GRAIN EFFECT</label>
-				<p>{data?.grain_effect}</p>
-			</li>
-			<li>
-				<label>WB</label>
-				<p>{data?.wb}</p>
-			</li>
-			<li>
-				<label>HIGHLIGHT</label>
-				<p>{data?.highlight}</p>
-			</li>
-			<li>
-				<label>SHADOW</label>
-				<p>{data?.shadow}</p>
-			</li>
-			<li>
-				<label>COLOR</label>
-				<p>{data?.color}</p>
-			</li>
-			<li>
-				<label>SHARPNESS</label>
-				<p>{data?.sharpness}</p>
-			</li>
-			<li>
-				<label>NOISE REDUCTION</label>
-				<p>{data?.noise_reduction}</p>
-			</li>
-			<li>
-				<label>ISO</label>
-				<p>{data?.iso}</p>
-			</li>
-			<li>
-				<label>EXPOSURE COMPENSATION</label>
-				<p>{data?.exposure_compensation}</p>
-			</li>
-			<li>
-				<label>SENSORS</label>
-				<p>{data?.sensors}</p>
-			</li>
+			<div>
+				<dt>FILM SIMULATION</dt>
+				<dd>{data?.film_simulation}</dd>
+			</div>
+			<div>
+				<dt>DYNAMIC RANGE</dt>
+				<dd>{data?.dynamic_range}</dd>
+			</div>
+			<div>
+				<dt>GRAIN EFFECT</dt>
+				<dd>{data?.grain_effect}</dd>
+			</div>
+			<div>
+				<dt>WB</dt>
+				<dd>{data?.wb}</dd>
+			</div>
+			<div>
+				<dt>HIGHdivGHT</dt>
+				<dd>{data?.highlight}</dd>
+			</div>
+			<div>
+				<dt>SHADOW</dt>
+				<dd>{data?.shadow}</dd>
+			</div>
+			<div>
+				<dt>COLOR</dt>
+				<dd>{data?.color}</dd>
+			</div>
+			<div>
+				<dt>SHARPNESS</dt>
+				<dd>{data?.sharpness}</dd>
+			</div>
+			<div>
+				<dt>NOISE REDUCTION</dt>
+				<dd>{data?.noise_reduction}</dd>
+			</div>
+			<div>
+				<dt>ISO</dt>
+				<dd>{data?.iso}</dd>
+			</div>
+			<div>
+				<dt>EXPOSURE COMPENSATION</dt>
+				<dd>{data?.exposure_compensation}</dd>
+			</div>
+			<div>
+				<dt>SENSORS</dt>
+				<dd>{data?.sensors}</dd>
+			</div>
 		</InfoList>
 	);
 };
 
-const InfoList = styled.ul`
+const InfoList = styled.dl`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	border-top: 1px solid var(--greyOpacity100);
 
-	li {
+	div {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		padding: 8px 0;
 		border-bottom: 1px solid var(--greyOpacity100);
 
-		label {
+		dt {
 			font-weight: var(--fw-medium);
 		}
 	}

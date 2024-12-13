@@ -15,17 +15,21 @@ const FilmRecipeContent = ({ recipes, refetch }: FilmRecipeContentProps) => {
 	const handleIndividualFilmRecipeModal = (targetTitle: string) => {
 		setModal({
 			Component: FilmRecipeModal,
-			props: { type: 'recipe', data: recipes.find(({ title }) => title === targetTitle)!, refetch },
+			props: {
+				type: 'recipe',
+				data: recipes.find(({ title }) => title === targetTitle)!,
+				refetch,
+			},
 		});
 	};
 
 	return (
 		<Container>
 			{recipes.length === 0 && <EmptyMessage emoji={'📷'}>{'ADD RECIPE PLEASE'}</EmptyMessage>}
-			{recipes.map(({ title, film_simulation }, idx) => (
-				<Recipe key={idx} onClick={() => handleIndividualFilmRecipeModal(title)}>
+			{recipes.map(({ title, film_simulation, primary }, idx) => (
+				<Recipe key={idx} primary={primary} onClick={() => handleIndividualFilmRecipeModal(title)}>
 					<Title>
-						<NumberCount>{idx + 1}</NumberCount>
+						<NumberCount primary={primary}>{idx + 1}</NumberCount>
 						<span>{title}</span>
 					</Title>
 					<FilmSimulation>{film_simulation}</FilmSimulation>
@@ -42,21 +46,22 @@ const Container = styled.div`
 	margin-top: 24px;
 `;
 
-const Recipe = styled.div`
+const Recipe = styled.div<{ primary: boolean }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	padding: calc(var(--padding-container-mobile) * 1.2) calc(var(--padding-container-mobile) * 0.5);
-	border-bottom: 1px solid var(--greyOpacity200);
+	border-bottom: 1px solid var(--greyOpacity100);
+	transition: background 0.15s ease-in-out;
 	cursor: pointer;
 
 	&:first-of-type {
-		border-top: 1px solid var(--greyOpacity200);
+		border-top: 1px solid var(--greyOpacity100);
 	}
 
 	&:hover,
 	&:focus {
-		background-color: var(--greyOpacity50);
+		background-color: ${({ primary }) => (primary ? 'var(--blue100)' : ' var(--greyOpacity50)')};
 	}
 `;
 
@@ -69,7 +74,7 @@ const Title = styled.div`
 	font-weight: var(--fw-bold);
 `;
 
-const NumberCount = styled.span`
+const NumberCount = styled.span<{ primary: boolean }>`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
@@ -77,8 +82,8 @@ const NumberCount = styled.span`
 	height: 20px;
 	font-size: var(--fz-sm);
 	font-weight: var(--fw-semibold);
-	color: var(--grey700);
-	background-color: var(--grey200);
+	color: ${({ primary }) => (primary ? 'var(--white)' : 'var(--grey700)')};
+	background-color: ${({ primary }) => (primary ? 'var(--blue200)' : 'var(--grey200)')};
 `;
 
 const FilmSimulation = styled.span`

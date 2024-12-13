@@ -31,6 +31,7 @@ const initialFilmFieldValue: Omit<RestrictedRecipeForValidation, 'imgSrc'> = {
 	iso: 'up to ISO 6400',
 	exposure_compensation: '0 to +1',
 	sensors: 'X-Trans III',
+	primary: false,
 };
 
 const initialValidationState: { [key: string]: boolean } = {

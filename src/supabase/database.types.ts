@@ -28,17 +28,17 @@ export interface Database {
 				};
 				Update: {
 					// the data to be passed to .update()
-					id?: never;
+					id: never;
 					user_id: string;
-					title: string; // `not null` columns with no default must be supplied
-					content: string; // nullable columns can be omitted
-					feeling: string;
+					title?: string; // `not null` columns with no default must be supplied
+					content?: string; // nullable columns can be omitted
+					feeling?: string;
 					updated_at: Date;
-					tags: string[] | null;
+					tags?: string[] | null;
 				};
 				Delete: {
 					// the data to be passed to .delete()
-					id?: never;
+					id: never;
 				};
 			};
 			recipes: {
@@ -59,6 +59,7 @@ export interface Database {
 					iso: string;
 					exposure_compensation: string;
 					sensors: string;
+					primary: boolean;
 					created_at: Date;
 					updated_at: Date;
 					imgSrc: string;
@@ -80,6 +81,7 @@ export interface Database {
 					iso: string;
 					exposure_compensation: string;
 					sensors: string;
+					primary: boolean;
 					created_at: Date;
 					updated_at: Date;
 					imgSrc: string;
@@ -101,8 +103,42 @@ export interface Database {
 					iso?: string;
 					exposure_compensation?: string;
 					sensors?: string;
+					primary?: boolean;
 					updated_at: Date;
 					imgSrc: string;
+				};
+				Delete: {
+					// the data to be passed to .delete()
+					id: never;
+				};
+			};
+			todos: {
+				Row: {
+					// the data expected from .select()
+					id: string;
+					user_id: string;
+					completed: boolean;
+					content: string;
+					created_at: Date;
+					updated_at: Date;
+				};
+				Insert: {
+					// the data to be passed to .insert()
+					id?: never; // generated columns must not be supplied
+					user_id: string;
+					completed: boolean;
+					content: string;
+					created_at: Date;
+					updated_at: Date;
+				};
+				Update: {
+					// the data to be passed to .update()
+					id: never;
+					user_id: string;
+					completed?: boolean;
+					content?: string;
+					created_at?: Date;
+					updated_at: Date;
 				};
 				Delete: {
 					// the data to be passed to .delete()
