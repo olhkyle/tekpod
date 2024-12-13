@@ -77,7 +77,7 @@ const Flex = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	width: 100%;
+	max-width: 100dvw;
 `;
 
 const AddTodoButton = styled(Button)`
