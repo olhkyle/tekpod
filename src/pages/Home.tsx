@@ -40,7 +40,7 @@ const HomePage = () => {
 
 	// TODO: 각 아이템을 길게 클릭 시 상단에서 전체 선택 등의 부가기능 선택할 수 있는 TopSheet 나오도록
 	return (
-		<section>
+		<Container>
 			<Flex>
 				<TextInput>
 					<TextInput.ControlledTextField
@@ -69,15 +69,18 @@ const HomePage = () => {
 					)}
 				</TodoList>
 			</Suspense>
-		</section>
+		</Container>
 	);
 };
+
+const Container = styled.section`
+	width: 100%;
+`;
 
 const Flex = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	max-width: 100dvw;
 `;
 
 const AddTodoButton = styled(Button)`
