@@ -13,28 +13,33 @@ const HomePage = () => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
 
-	const { data: todoList, refetch } = useSuspenseQuery({ queryKey: queryKey.TODOS, queryFn: getTodos });
+	const { data: todoList } = useSuspenseQuery({ queryKey: queryKey.TODOS, queryFn: getTodos });
 
 	const [value, setValue] = useState('');
 	const { addToast } = useToastStore();
 	const { Loading, isLoading, startTransition } = useLoading();
 
 	const handleTodoAdd = async () => {
+		const currentKoreanTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+
 		try {
 			await startTransition(
 				addTodo({
 					user_id: session?.user?.id,
 					completed: false,
 					content: value,
-					created_at: new Date(),
-					updated_at: new Date(),
+					created_at: currentKoreanTime,
+					updated_at: currentKoreanTime,
 				}),
 			);
 
 			addToast({ status: 'success', message: 'Successfully Add' });
+			setValue('');
 		} catch (e) {
 			console.error(e);
 			addToast({ status: 'error', message: 'Error happens' });
+		} finally {
+			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
 		}
 	};
 
@@ -46,7 +51,7 @@ const HomePage = () => {
 					<TextInput.ControlledTextField
 						id="todo-input"
 						name="todo-input"
-						placeholder={'Add New Reminder'}
+						placeholder={'New Reminder'}
 						value={value}
 						onChange={e => setValue(e.target.value)}
 					/>
@@ -57,17 +62,15 @@ const HomePage = () => {
 			</Flex>
 
 			<Suspense fallback={Loading}>
-				<TodoList>
-					{todoList.length === 0 ? (
-						<EmptyMessage emoji={'🔄'}>Add New Reminder</EmptyMessage>
-					) : (
-						<>
-							{todoList.map((todo, idx) => (
-								<TodoItem key={todo.id} todo={todo} order={idx} refetch={refetch} />
-							))}
-						</>
-					)}
-				</TodoList>
+				{todoList.length === 0 ? (
+					<EmptyMessage emoji={'🔄'}>Add New Reminder</EmptyMessage>
+				) : (
+					<TodoList>
+						{todoList.map((todo, idx) => (
+							<TodoItem key={todo.id} todo={todo} order={idx} />
+						))}
+					</TodoList>
+				)}
 			</Suspense>
 		</Container>
 	);
@@ -81,6 +84,11 @@ const Flex = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+
+	& > div:first-of-type {
+		flex: 1; // TextInput이 남은 공간을 차지하되
+		min-width: 250px; // 최소 너비를 0으로 설정하여 축소 가능하게 함
+	}
 `;
 
 const AddTodoButton = styled(Button)`
@@ -88,6 +96,7 @@ const AddTodoButton = styled(Button)`
 	font-weight: var(--fw-semibold);
 	color: var(--white);
 	background-color: var(--black);
+	border-radius: var(--radius-xs);
 `;
 
 const TodoList = styled.ul`
