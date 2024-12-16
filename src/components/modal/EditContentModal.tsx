@@ -45,7 +45,7 @@ const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) =>
 			addToast({ status: 'warn', message: `Not Edited` });
 			return;
 		}
-
+		console.log(updatedData);
 		try {
 			const { error } = await startTransition(updateDiary({ ...data, ...updatedData, tags: tags.map(({ tag }) => tag) }));
 
@@ -97,17 +97,7 @@ const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) =>
 					<TextInput.TextField id="feeling" {...register('feeling')} name="feeling" placeholder="💡 One Feeling" />
 				</TextInput>
 				<TagsInput tags={tags} setTags={setTags} />
-				<UpdateButton
-					type="submit"
-					onTouchEnd={e => {
-						e.preventDefault();
-						e.currentTarget?.blur();
-					}}
-					onBlur={e => {
-						e.target.blur();
-					}}>
-					{isLoading ? Loading : '👆🏻 Upload'}
-				</UpdateButton>
+				<UpdateButton type="submit">{isLoading ? Loading : '👆🏻 Upload'}</UpdateButton>
 			</Group>
 		</ModalLayout>
 	);
