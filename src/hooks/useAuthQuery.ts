@@ -3,8 +3,8 @@ import supabase from '../supabase/service';
 import useUserStore from '../store/userStore';
 import queryKey from '../constants/queryKey';
 
-const STALE_TIME = 1000;
-const GC_TIME = 1000 * 2;
+const STALE_TIME = 1000 * 5; // 5 sec
+const GC_TIME = 1000 * 60; // 1 min
 
 const useAuthQuery = () => {
 	const { setUserData } = useUserStore();
@@ -14,21 +14,17 @@ const useAuthQuery = () => {
 	const { data, isFetched, isLoading, error, refetch } = useSuspenseQuery({
 		queryKey: queryKey.AUTH,
 		queryFn: async () => {
-			try {
-				const {
-					data: { session },
-					error,
-				} = await supabase.auth.getSession();
+			const {
+				data: { session },
+				error,
+			} = await supabase.auth.getSession();
 
-				if (error) {
-					throw new Error(error.message);
-				}
-
-				setUserData(session);
-				return session;
-			} catch (error) {
-				console.error(error);
+			if (error || !session) {
+				throw new Error(error?.message ?? 'Not Validated Session');
 			}
+
+			setUserData(session);
+			return session;
 		},
 		staleTime: STALE_TIME,
 		gcTime: GC_TIME,
