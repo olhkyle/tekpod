@@ -52,11 +52,11 @@ const getSingleDiary = async (id: string): Promise<Diary> => {
 };
 
 const addDiary = async (data: Diary) => {
-	return await supabase.from(TABLE).insert(data);
+	return await supabase.from(TABLE).insert(data).select();
 };
 
 const updateDiary = async (data: Diary) => {
-	return await supabase.from(TABLE).update(data).eq('id', data.id);
+	return await supabase.from(TABLE).update(data).eq('id', data.id).select();
 };
 
 const removeDiary = async ({ id }: { id: string }) => {
