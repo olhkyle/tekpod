@@ -19,8 +19,18 @@ const useAuthQuery = () => {
 				error,
 			} = await supabase.auth.getSession();
 
-			if (error || !session) {
+			if (error) {
 				throw new Error(error?.message ?? 'Not Validated Session');
+			}
+
+			if (!session) {
+				const {
+					data: { user },
+				} = await supabase.auth.getUser();
+
+				if (!user) {
+					return null;
+				}
 			}
 
 			setUserData(session);
