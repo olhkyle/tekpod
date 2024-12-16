@@ -1,27 +1,52 @@
-import { useState } from 'react';
+import { TouchEvent, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import type { Todo } from '../../supabase/schema';
+import { useQueryClient } from '@tanstack/react-query';
 import { RiCloseFill } from 'react-icons/ri';
-import { Button } from '../common';
-import { useLoading } from '../../hooks';
+import type { Todo } from '../../supabase/schema';
+import { Button, Checkbox } from '../common';
+import { useClickOutside, useLoading } from '../../hooks';
 import useToastStore from '../../store/useToastStore';
 import { removeTodo } from '../../supabase/todos';
-import { QueryRefetch } from '../../store/useModalStore';
+import queryKey from '../../constants/queryKey';
 
 interface TodoProps {
 	todo: Todo;
 	order: number;
-	refetch: QueryRefetch;
 }
 
-const TodoItem = ({ todo, order, refetch }: TodoProps) => {
+const TodoItem = ({ todo, order }: TodoProps) => {
+	const queryClient = useQueryClient();
 	const [isCompleted, setIsCompleted] = useState(todo?.completed);
 
 	const { addToast } = useToastStore();
 	const { Loading, isLoading, startTransition } = useLoading();
 
+	const [dragX, setDragX] = useState(0);
+	const dragRef = useRef<number>(0);
+
+	const containerRef = useClickOutside<HTMLLIElement>({
+		eventHandler: () => {
+			setDragX(0);
+			dragRef.current = 0;
+		},
+	});
+
+	const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+		dragRef.current = event.touches[0].clientX;
+	};
+
+	const handleTouchMove = (event: TouchEvent<HTMLDivElement>) => {
+		if (!dragRef.current) return;
+
+		const currentX = event.touches[0].clientX;
+		const diff = currentX - dragRef.current; // 현재 위치 - 첫 터치 드래그 시작 위치 (음수)
+
+		if (diff < 0) {
+			setDragX(Math.max(diff, -80));
+		}
+	};
+
 	// TODO: web-socket 연결로 reminder 만들기
-	// drag 이벤트를 활용해 뒤쪽에서 왼쪽으로 슬라이드 시 휴지통 버튼
 	// 오른쪽으로 슬라이드 시 primary (bookmark)
 
 	const handleRemoveTodo = async () => {
@@ -29,98 +54,65 @@ const TodoItem = ({ todo, order, refetch }: TodoProps) => {
 			await startTransition(removeTodo({ id: todo.id }));
 
 			addToast({ status: 'success', message: 'Successfully remove todo' });
-			refetch();
 		} catch (error) {
 			console.error(error);
 			addToast({ status: 'error', message: 'Error happens during removing todo' });
+		} finally {
+			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
 		}
 	};
 	return (
-		<Container>
-			{isLoading ? (
-				Loading
-			) : (
-				<>
-					<Checkbox>
-						<CheckboxRoleButton
-							type="button"
-							role="checkbox"
-							onClick={() => setIsCompleted(!isCompleted)}
-							aria-checked={isCompleted}
-							data-state={isCompleted ? 'checked' : 'unchecked'}>
-							{isCompleted ? (
-								<span data-state={isCompleted ? 'checked' : 'unchecked'}>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="16"
-										height="16"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round">
-										<path d="M20 6 9 17l-5-5"></path>
-									</svg>
-								</span>
-							) : null}
-						</CheckboxRoleButton>
-						<HiddenCheckbox
-							type="checkbox"
-							id={`todoItem-checkbox-${order + 1}`}
-							checked={isCompleted}
-							onChange={e => setIsCompleted(e.target.checked)}
-							aria-hidden={true}
-							tabIndex={-1}
-						/>
-						<Label htmlFor={`todoItem-checkbox-${order + 1}`}>{todo.content}</Label>
-					</Checkbox>
-					{isCompleted && (
-						<DeleteButton type="button" onClick={handleRemoveTodo}>
-							<RiCloseFill size="24" color="var(--black)" />
-						</DeleteButton>
-					)}
-				</>
-			)}
+		<Container ref={containerRef}>
+			<DeleteBackground onClick={handleRemoveTodo}>{isLoading ? Loading : <RiCloseFill size="24" color="white" />}</DeleteBackground>
+			<TodoContent dragX={dragX} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+				<Flex>
+					<Checkbox id={order} checked={isCompleted} onCheckedChange={setIsCompleted} />
+					<Label htmlFor={`checkbox-${order + 1}`}>{todo.content}</Label>
+				</Flex>
+				{isCompleted && dragX >= 0 && (
+					<DeleteButton type="button" onClick={handleRemoveTodo}>
+						{isLoading ? Loading : <RiCloseFill size="24" color="var(--black)" />}
+					</DeleteButton>
+				)}
+			</TodoContent>
 		</Container>
 	);
 };
 
 const Container = styled.li`
+	position: relative;
+	overflow: hidden;
+`;
+
+const DeleteBackground = styled.div`
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 60px;
+	background-color: var(--orange800);
+`;
+
+const TodoContent = styled.div<{ dragX: number }>`
+	position: relative;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	background-color: var(--white);
+	border-radius: ${({ dragX }) => (dragX < 0 ? 'var(--radius-s)' : 0)};
+	transform: ${({ dragX }) => `translateX(${dragX}px)`};
+	transition: transform 0.1s ease-out;
+	z-index: 1;
 `;
 
-const Checkbox = styled.div`
+const Flex = styled.div`
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
-	gap: 32px;
-	padding: 16px 8px;
-	width: 100%;
-`;
-
-const CheckboxRoleButton = styled.button`
-	width: 18px;
-	height: 18px;
-	border: 1px solid var(--black);
-	border-radius: var(--radius-xs);
-	cursor: pointer;
-
-	&[data-state='checked'] {
-		background-color: var(--black);
-		color: var(--white);
-	}
-`;
-
-const HiddenCheckbox = styled.input`
-	position: absolute;
-	margin: 0;
-	width: 16px;
-	height: 16px;
-	opacity: 0;
-	pointer-events: none;
-	transform: translateX(-100%);
+	gap: 8px;
 `;
 
 const Label = styled.label`
@@ -133,6 +125,7 @@ const DeleteButton = styled(Button)`
 	align-items: center;
 	padding: 8px;
 	background-color: var(--greyOpacity50);
+	border: 1px solid var(--greyOpacity100);
 	border-radius: var(--radius-s);
 	transition: background 0.15s ease-in-out;
 
