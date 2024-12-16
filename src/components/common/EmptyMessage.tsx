@@ -20,6 +20,7 @@ const Container = styled.div`
 	flex-direction: column;
 	align-items: center;
 	gap: 8px;
+	margin-top: 16px;
 	padding: calc(var(--padding-container-mobile) * 3) var(--padding-container-mobile);
 	font-size: var(--fz-h7);
 	font-weight: var(--fw-bold);
