@@ -47,7 +47,6 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 	};
 
 	// TODO: web-socket 연결로 reminder 만들기
-	// 오른쪽으로 슬라이드 시 primary (bookmark)
 
 	const handleRemoveTodo = async () => {
 		try {

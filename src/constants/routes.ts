@@ -6,6 +6,8 @@ const routes = {
 	DIARY: '/diary',
 	WRITE: '/write',
 	USER: '/profile',
+	TODO_REMINDER: '/todo_reminder',
+	FINANCIAL_LEDGER: '/financial_ledger',
 } as const;
 
 // eslint-disable-next-line @typescript-eslint/ban-types

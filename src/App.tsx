@@ -1,4 +1,5 @@
 import './styles/font.css';
+import 'react-day-picker/style.css';
 import { Global } from '@emotion/react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -46,7 +47,14 @@ const router = createBrowserRouter([
 				path: routes.WRITE,
 				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Write')} />,
 			},
-
+			{
+				path: routes.TODO_REMINDER,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('TodoReminder')} />,
+			},
+			{
+				path: routes.FINANCIAL_LEDGER,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('FinancialLedger')} />,
+			},
 			{
 				path: `${routes.USER}/:id`,
 				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Profile')} />,

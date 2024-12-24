@@ -51,6 +51,7 @@ const AddButton = styled(Button)`
 	color: var(--white);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-bold);
+	border-radius: var(--radius-s);
 
 	&:hover,
 	&:active {

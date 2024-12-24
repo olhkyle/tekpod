@@ -1,14 +1,18 @@
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { ButtonHTMLAttributes, ForwardedRef, forwardRef, ReactNode } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	type: 'button' | 'submit';
 	children: ReactNode;
 }
 
-const Button = ({ type, children, ...props }: ButtonProps) => {
+const Button = forwardRef(({ type, children, ...props }: ButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
 	return (
 		<button
 			type={type}
+			ref={ref}
+			css={{
+				cursor: 'pointer',
+			}}
 			onBlur={e => {
 				e.target.blur();
 			}}
@@ -16,6 +20,6 @@ const Button = ({ type, children, ...props }: ButtonProps) => {
 			{children}
 		</button>
 	);
-};
+});
 
 export default Button;

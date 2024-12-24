@@ -41,6 +41,7 @@ const WriteLink = styled(Link)`
 	font-size: var(--fz-p);
 	font-weight: var(--fw-bold);
 	background-color: var(--black);
+	border-radius: var(--radius-s);
 	transition: background 0.3s ease-in-out outline 0.15s ease-in-out;
 
 	&:hover,

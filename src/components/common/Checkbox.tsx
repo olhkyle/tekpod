@@ -51,7 +51,6 @@ const Container = styled.div`
 	align-items: center;
 	gap: 32px;
 	padding: 16px 8px;
-	width: 100%;
 `;
 
 const CheckboxRoleButton = styled.button`

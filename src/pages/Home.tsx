@@ -1,77 +1,41 @@
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { BsPlus } from 'react-icons/bs';
-import { Button, EmptyMessage, TextInput, TodoItem } from '../components';
-import queryKey from '../constants/queryKey';
-import { addTodo, getTodos } from '../supabase/todos';
-import { Suspense, useState } from 'react';
-import { useLoading } from '../hooks';
-import { Session } from '@supabase/supabase-js';
-import useToastStore from '../store/useToastStore';
+import { IoMdNotifications } from 'react-icons/io';
+import { FaCalculator } from 'react-icons/fa';
+import { routes } from '../constants';
+
+const linkGroup = [
+	{
+		to: routes.TODO_REMINDER,
+		icon: <IoMdNotifications size="24" color="var(--blue200)" />,
+		title: '리마인더',
+	},
+	{
+		to: routes.FINANCIAL_LEDGER,
+		icon: <FaCalculator size="18" color="var(--blue100)" />,
+		title: '여행 가계부',
+	},
+];
 
 const HomePage = () => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(['auth']) as Session;
-
-	const { data: todoList } = useSuspenseQuery({ queryKey: queryKey.TODOS, queryFn: getTodos });
-
-	const [value, setValue] = useState('');
-	const { addToast } = useToastStore();
-	const { Loading, isLoading, startTransition } = useLoading();
-
-	const handleTodoAdd = async () => {
-		const currentKoreanTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
-
-		try {
-			await startTransition(
-				addTodo({
-					user_id: session?.user?.id,
-					completed: false,
-					content: value,
-					created_at: currentKoreanTime,
-					updated_at: currentKoreanTime,
-				}),
-			);
-
-			addToast({ status: 'success', message: 'Successfully Add' });
-			setValue('');
-		} catch (e) {
-			console.error(e);
-			addToast({ status: 'error', message: 'Error happens' });
-		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
-		}
-	};
-
-	// TODO: 각 아이템을 길게 클릭 시 상단에서 전체 선택 등의 부가기능 선택할 수 있는 TopSheet 나오도록
 	return (
 		<Container>
 			<Flex>
-				<TextInput>
-					<TextInput.ControlledTextField
-						id="todo-input"
-						name="todo-input"
-						placeholder={'New Reminder'}
-						value={value}
-						onChange={e => setValue(e.target.value)}
-					/>
-				</TextInput>
-				<AddTodoButton type="button" onClick={handleTodoAdd}>
-					{isLoading ? Loading : <BsPlus size="24" color="var(--white)" />}
-				</AddTodoButton>
+				{linkGroup.map(({ to, icon, title }) => (
+					<Link to={to} key={to}>
+						<StyledMotion
+							initial="rest"
+							whileTap={{
+								scale: 0.95,
+								transition: { duration: 0.2 },
+							}}>
+							<IconBackground>{icon}</IconBackground>
+							<span>{title}</span>
+						</StyledMotion>
+					</Link>
+				))}
 			</Flex>
-
-			<Suspense fallback={Loading}>
-				{todoList.length === 0 ? (
-					<EmptyMessage emoji={'🔄'}>Add New Reminder</EmptyMessage>
-				) : (
-					<TodoList>
-						{todoList.map((todo, idx) => (
-							<TodoItem key={todo.id} todo={todo} order={idx} />
-						))}
-					</TodoList>
-				)}
-			</Suspense>
 		</Container>
 	);
 };
@@ -82,27 +46,28 @@ const Container = styled.section`
 
 const Flex = styled.div`
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
-
-	& > div:first-of-type {
-		flex: 1; // TextInput이 남은 공간을 차지하되
-		min-width: 250px; // 최소 너비를 0으로 설정하여 축소 가능하게 함
-	}
-`;
-
-const AddTodoButton = styled(Button)`
-	padding: 16px;
-	font-weight: var(--fw-semibold);
-	color: var(--white);
-	background-color: var(--black);
-	border-radius: var(--radius-xs);
-`;
-
-const TodoList = styled.ul`
-	display: flex;
 	flex-direction: column;
-	padding: 16px 0;
+	gap: 12px;
+`;
+
+const IconBackground = styled.div`
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	width: 32px;
+	height: 32px;
+	background-color: var(--blue300);
+	border-radius: var(--radius-s);
+`;
+
+const StyledMotion = styled(motion.div)`
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: var(--padding-container-mobile);
+	background-color: var(--greyOpacity50);
+	border-radius: var(--radius-m);
+	font-weight: var(--fw-semibold);
 `;
 
 export default HomePage;

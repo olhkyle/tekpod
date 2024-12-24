@@ -214,6 +214,22 @@ const Global = css`
 	::selection {
 		background: var(--blue100);
 	}
+
+	.rdp-root {
+		position: absolute;
+		top: 60px;
+		background-color: var(--white);
+		--rdp-accent-color: var(--grey600); /* Change the accent color to indigo. */
+		--rdp-accent-background-color: var(--blue300); /* Change the accent background color. */
+		--rdp-today-color: var(--blue200);
+		--rdp-selected-border: 1px solid var(--blue200);
+	}
+
+	.rdp-months {
+		padding: 12px 16px;
+		border: 1px solid var(--grey100);
+		border-radius: var(--radius-m);
+	}
 `;
 
 export default Global;
