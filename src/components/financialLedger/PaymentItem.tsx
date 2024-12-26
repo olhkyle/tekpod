@@ -1,30 +1,42 @@
-import { FaWonSign } from 'react-icons/fa6';
 import styled from '@emotion/styled';
+import { FaWonSign } from 'react-icons/fa6';
+import { BsFillCreditCardFill } from 'react-icons/bs';
+import { FinancialLedger } from '../../supabase/schema';
+import { monetizeWithWon } from '../../utils/money';
 
-const PaymentItem = () => {
+interface PaymentItemProps {
+	data: FinancialLedger;
+}
+
+const PaymentItem = ({ data: { place, price, payment_method, bank } }: PaymentItemProps) => {
 	return (
 		<Container
 			onBlur={e => {
 				e.target.blur();
 			}}>
-			<WonIconWrapper>
-				<FaWonSign size="18" />
-			</WonIconWrapper>
+			<WonIconWrapper>{payment_method === 'Card' ? <BsFillCreditCardFill size="18" /> : <FaWonSign size="18" />}</WonIconWrapper>
 			<PaymentInfo>
 				<Main>
 					<div>
 						<dt>금 액</dt>
-						<dd>30,000</dd>
+						<dd>{monetizeWithWon(price)}</dd>
 					</div>
-					<div>
-						<dt>은 행</dt>
-						<dd>신한은행</dd>
-					</div>
+					{payment_method === 'Cash' ? (
+						<div>
+							<dt>사용방법</dt>
+							<dd>현 금</dd>
+						</div>
+					) : (
+						<div>
+							<dt>은 행</dt>
+							<dd>{bank}은행</dd>
+						</div>
+					)}
 				</Main>
 				<Sub>
 					<div>
 						<dt>사용처</dt>
-						<dd>런던아이</dd>
+						<dd>{place}</dd>
 					</div>
 				</Sub>
 			</PaymentInfo>

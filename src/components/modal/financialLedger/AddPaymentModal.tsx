@@ -6,6 +6,13 @@ import { ModalDataType } from '../modalType';
 import { AddPaymentFormSchema, addPaymentFormSchema } from './addPaymentFormSchema';
 import { Button, CustomSelect, DatePicker, TextInput } from '../../common';
 import { paymentData } from '../../../constants/financialLedger';
+import { addPayment } from '../../../supabase/financialLedger';
+import { useLoading } from '../../../hooks';
+import { Session } from '@supabase/supabase-js';
+import { useQueryClient } from '@tanstack/react-query';
+import useToastStore from '../../../store/useToastStore';
+import queryKey from '../../../constants/queryKey';
+import { monetizeWithWon } from '../../../utils/money';
 
 interface AddPaymentModalProps {
 	id: string;
@@ -22,6 +29,9 @@ interface AddPaymentModalProps {
  */
 
 const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
+	const queryClient = useQueryClient();
+	const session = queryClient.getQueryData(['auth']) as Session;
+
 	const {
 		register,
 		control,
@@ -32,53 +42,38 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 	} = useForm<AddPaymentFormSchema>({
 		resolver: zodResolver(addPaymentFormSchema),
 	});
-	console.log(errors);
 
-	const onSubmit = async (data: unknown) => {
-		console.log(data);
+	const { startTransition, Loading, isLoading } = useLoading();
+	const { addToast } = useToastStore();
+
+	const onSubmit = async (data: AddPaymentFormSchema) => {
+		try {
+			const today = new Date();
+			await startTransition(addPayment({ ...data, user_id: session?.user?.id, price: data?.price, created_at: today, updated_at: today }));
+
+			onClose();
+			addToast({ status: 'success', message: 'Successfully add payment' });
+		} catch (e) {
+			console.error(e);
+			addToast({ status: 'error', message: 'Error with adding payment' });
+		} finally {
+			queryClient.invalidateQueries({ queryKey: queryKey.FINANCIAL_LEDGER });
+		}
 	};
 
 	return (
 		<ModalLayout id={id} type={type} title={'Add Payment'} onClose={onClose}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
-				<Flex>
+				<Flex direction="column">
 					<DatePicker
-						selected={watch('selectedDate')}
-						setSelected={(date: Date) => setValue('selectedDate', date, { shouldValidate: true })}
-						error={errors['selectedDate']}
+						selected={watch('usage_date')}
+						setSelected={(date: Date) => setValue('usage_date', date, { shouldValidate: true })}
+						error={errors['usage_date']}
 					/>
 
 					<TextInput errorMessage={errors['place']?.message}>
 						<TextInput.TextField type="text" id="place" {...register('place')} placeholder="Where to use" />
 					</TextInput>
-
-					<Controller
-						name="price"
-						control={control}
-						render={({ field: { name, value, onChange, onBlur } }) => (
-							<TextInput errorMessage={errors['price']?.message}>
-								<TextInput.ControlledTextField
-									type="text"
-									inputMode="numeric" // 모바일에서 숫자 키패드 표시
-									id="price"
-									name={name}
-									value={
-										value
-											? value
-													.toString()
-													.replace(/,/gi, '')
-													.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
-											: ''
-									}
-									onChange={e => {
-										const numericValue = e.target.value.replace(/[^0-9]/g, '');
-										onChange(numericValue);
-									}}
-									onBlur={onBlur}
-									placeholder="Price to Pay"
-								/>
-							</TextInput>
-						)}></Controller>
 
 					<CustomSelect
 						data={paymentData.paymentMethod}
@@ -94,14 +89,51 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 						data={paymentData.banks}
 						target_id={'bank'}
 						placeholder={'Select Bank'}
-						currentValue={watch('bank')!}
-						isTriggered={touchedFields['bank']!}
+						currentValue={watch('payment_method') === 'Cash' ? '해당없음' : watch('bank')}
+						isTriggered={watch('payment_method') === 'Cash' ? true : touchedFields['bank']!}
 						error={errors['bank']}
-						onSelect={data => setValue('bank', data, { shouldValidate: true, shouldTouch: true })}
+						onSelect={data =>
+							setValue('bank', watch('payment_method') === 'Cash' ? '해당없음' : data, {
+								shouldValidate: watch('payment_method') === 'Cash' ? false : true,
+								shouldTouch: watch('payment_method') === 'Cash' ? false : true,
+							})
+						}
 					/>
+					<Flex direction="row">
+						<Controller
+							name="price"
+							control={control}
+							render={({ field: { name, value, onChange, onBlur } }) => (
+								<TextInput errorMessage={errors['price']?.message}>
+									<TextInput.ControlledTextField
+										type="text"
+										inputMode="numeric" // 모바일에서 숫자 키패드 표시
+										id="price"
+										name={name}
+										value={value ? monetizeWithWon(value.toString()) : ''}
+										onChange={e => {
+											const numericValue = e.target.value.replace(/[^0-9]/g, '');
+											onChange(numericValue);
+										}}
+										onBlur={onBlur}
+										placeholder="Price to Pay"
+									/>
+								</TextInput>
+							)}
+						/>
+						<CustomSelect
+							data={paymentData.priceUnits}
+							target_id={'price_unit'}
+							placeholder={'Unit'}
+							currentValue={watch('price_unit')}
+							isTriggered={touchedFields['price_unit']!}
+							error={errors['price_unit']}
+							onSelect={data => setValue('price_unit', data, { shouldValidate: true, shouldTouch: true })}
+						/>
+					</Flex>
 				</Flex>
 
-				<SubmitButton type="submit">추가하기</SubmitButton>
+				<SubmitButton type="submit">{isLoading ? Loading : '추가하기'}</SubmitButton>
 			</Form>
 		</ModalLayout>
 	);
@@ -115,10 +147,12 @@ const Form = styled.form`
 	height: 100%;
 `;
 
-const Flex = styled.div`
+const Flex = styled.div<{ direction: 'column' | 'row' }>`
 	display: flex;
-	flex-direction: column;
+	flex: 1 1 0;
+	flex-direction: ${({ direction }) => direction};
 	gap: 8px;
+	margin-top: 8px;
 `;
 
 const SubmitButton = styled(Button)`

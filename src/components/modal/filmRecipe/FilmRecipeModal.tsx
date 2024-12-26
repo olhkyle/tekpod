@@ -20,6 +20,8 @@ import useToastStore from '../../../store/useToastStore';
 import { useFilmRecipeImage, useLoading } from '../../../hooks';
 import { filmRecipeFieldData, FILM_RECIPE_FORM, PLACEHOLDER_IMAGE_URL } from '../../../constants/recipes';
 import { validateTitle } from '../../../utils/validateField';
+import { useQueryClient } from '@tanstack/react-query';
+import queryKey from '../../../constants/queryKey';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -29,7 +31,8 @@ interface FilmRecipeModalProps {
 	onClose: () => void;
 }
 
-const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalProps) => {
+const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
+	const queryClient = useQueryClient();
 	const { setModal } = useModalStore();
 
 	const [isEditing, setEditing] = useState<boolean>(false);
@@ -86,10 +89,11 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 
 			addToast({ status: 'info', message: `Successfully Updated` });
 			onClose();
-			refetch();
 		} catch (e) {
 			addToast({ status: 'error', message: 'Error happens during update recipe' });
 			console.error(e);
+		} finally {
+			queryClient.invalidateQueries({ queryKey: queryKey.FILM_RECIPE });
 		}
 	};
 
@@ -99,7 +103,6 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 			props: {
 				type: 'recipe',
 				data,
-				refetch,
 				onTopLevelModalClose: onClose,
 			},
 		});

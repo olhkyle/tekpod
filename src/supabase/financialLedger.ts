@@ -1,3 +1,4 @@
+import { FinancialLedger } from './schema';
 import supabase from './service';
 
 /**
@@ -14,14 +15,32 @@ import supabase from './service';
 
 const TABLE = 'financial_ledger';
 
-const getPaymentsByDate = async (date: Date) => {
-	const { data, error } = await supabase.from(TABLE).select('*').filter('usage_date', 'is', date);
+const getPaymentsByDate = async (date: Date): Promise<{ data: FinancialLedger[]; totalPrice: number }> => {
+	const startOfDay = new Date(date);
+	startOfDay.setHours(0, 0, 0, 0);
+
+	const endOfDay = new Date(date);
+	endOfDay.setHours(23, 59, 59, 999);
+
+	const { data, error } = await supabase
+		.from(TABLE)
+		.select('*')
+		.gte('usage_date', startOfDay.toISOString())
+		.lte('usage_date', endOfDay.toISOString());
 
 	if (error) {
 		throw new Error(error.message);
 	}
 
-	return data;
+	return { data, totalPrice: data.length === 1 ? data[0].price : data.reduce((prev, curr) => Number(prev.price) + Number(curr.price), 0) };
 };
 
-export { getPaymentsByDate };
+const addPayment = async (data: Omit<FinancialLedger, 'id'>) => {
+	const { error: addPaymentError } = await supabase.from(TABLE).insert(data).select();
+
+	if (addPaymentError) {
+		throw { error: addPaymentError, message: 'Error to add payment' };
+	}
+};
+
+export { getPaymentsByDate, addPayment };

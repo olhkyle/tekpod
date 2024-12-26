@@ -150,8 +150,9 @@ export interface Database {
 					// the data expected from .select()
 					id: string;
 					user_id: string;
-					place: boolean;
+					place: string;
 					price: string;
+					price_unit: string;
 					payment_method: string;
 					bank: string;
 					usage_date: Date;
@@ -162,10 +163,11 @@ export interface Database {
 					// the data to be passed to .insert()
 					id?: never; // generated columns must not be supplied
 					user_id: string;
-					place: boolean;
+					place: string;
 					price: string;
+					price_unit: string;
 					payment_method: string;
-					bank: string;
+					bank?: string;
 					usage_date: Date;
 					created_at: Date;
 					updated_at: Date;
@@ -174,8 +176,9 @@ export interface Database {
 					// the data to be passed to .update()
 					id: never;
 					user_id: string;
-					place?: boolean;
+					place?: string;
 					price?: string;
+					price_unit?: string;
 					payment_method?: string;
 					bank?: string;
 					usage_date?: Date;

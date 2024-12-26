@@ -5,7 +5,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { ModalDataType } from '../modalType';
 import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLayout, Button } from '../..';
 import useToastStore from '../../../store/useToastStore';
-import { QueryRefetch } from '../../../store/useModalStore';
 import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../../hooks';
 import { FILM_RECIPE_FORM } from '../../../constants/recipes';
 import type { RestrictedRecipeForValidation } from '../../../supabase/schema';
@@ -13,7 +12,6 @@ import type { RestrictedRecipeForValidation } from '../../../supabase/schema';
 interface AddFilmRecipeModalProps {
 	id: string;
 	type: ModalDataType;
-	refetch: QueryRefetch;
 	onClose: () => void;
 }
 
@@ -50,7 +48,7 @@ const initialValidationState: { [key: string]: boolean } = {
 	sensors: false,
 };
 
-const AddFilmRecipeModal = ({ id, type, refetch, onClose }: AddFilmRecipeModalProps) => {
+const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
 
@@ -98,14 +96,11 @@ const AddFilmRecipeModal = ({ id, type, refetch, onClose }: AddFilmRecipeModalPr
 				{
 					onSuccess() {
 						addToast({ status: 'success', message: `Successfully add new film recipe` });
-						refetch();
+						onClose();
 					},
 					onError(error) {
 						console.error(error);
 						addToast({ status: 'error', message: `Error happens, adding film recipe` });
-					},
-					onSettled() {
-						onClose();
 					},
 				},
 			);

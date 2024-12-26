@@ -4,18 +4,16 @@ import { ModalLayout, LoadingSpinner, Button } from '../..';
 import { ModalDataType } from '../modalType';
 import useToastStore from '../../../store/useToastStore';
 import useRemoveRecipeMutation from '../../../hooks/mutations/useRemoveFilmRecipeMutation';
-import { QueryRefetch } from '../../../store/useModalStore';
 
 interface RemoveFilmRecipeConfirmModalProps {
 	id: string;
 	type: ModalDataType;
 	data: RestricedRecipeWithImage;
-	refetch: QueryRefetch;
 	onClose: () => void;
 	onTopLevelModalClose: () => void;
 }
 
-const RemoveFilmRecipeConfirmModal = ({ id, type, data, refetch, onClose, onTopLevelModalClose }: RemoveFilmRecipeConfirmModalProps) => {
+const RemoveFilmRecipeConfirmModal = ({ id, type, data, onClose, onTopLevelModalClose }: RemoveFilmRecipeConfirmModalProps) => {
 	const { mutate: remove, isPending } = useRemoveRecipeMutation(data?.id);
 	const { addToast } = useToastStore();
 
@@ -25,7 +23,6 @@ const RemoveFilmRecipeConfirmModal = ({ id, type, data, refetch, onClose, onTopL
 			{
 				onSuccess: () => {
 					addToast({ status: 'success', message: 'Successfully delete recipe' });
-					refetch();
 					onClose();
 				},
 				onError: () => {

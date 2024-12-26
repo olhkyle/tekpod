@@ -16,6 +16,7 @@ const ContentBody = () => {
 
 	const { data } = useSuspenseQuery<Diary>({ queryKey: [...queryKey.DIARY, diaryId], queryFn: () => getSingleDiary(diaryId!) });
 	const { mutate: remove, isPending } = useRemoveDiaryMutation();
+
 	const { setModal } = useModalStore();
 	const { addToast } = useToastStore();
 

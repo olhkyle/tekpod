@@ -9,3 +9,4 @@ export { default as CustomSelect } from './CustomSelect';
 export { default as EmptyMessage } from './EmptyMessage';
 export { default as Checkbox } from './Checkbox';
 export { default as DatePicker } from './DatePicker';
+export { default as SegmentedControl } from './SegmentedControl';

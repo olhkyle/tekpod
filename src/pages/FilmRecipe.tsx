@@ -12,7 +12,7 @@ const FilmRecipePage = () => {
 	const handleAddFilmRecipeModal = () => {
 		setModal({
 			Component: AddFilmRecipeModal,
-			props: { type: 'recipe', data: null, refetch },
+			props: { type: 'recipe', data: null },
 		});
 	};
 

@@ -37,7 +37,7 @@ const useRemoveRecipeMutation = (id: string) => {
 			}
 		},
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+			return queryClient.invalidateQueries({ queryKey: queryKey.FILM_RECIPE });
 		},
 	});
 

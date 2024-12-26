@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { AddPaymentModal, DatePicker, PaymentItem } from '../components';
+import { AddPaymentModal, DatePicker, PaymentList } from '../components';
 import useModalStore from '../store/useModalStore';
 
 /**
@@ -18,7 +18,7 @@ import useModalStore from '../store/useModalStore';
  */
 
 const FinancialLedgerPage = () => {
-	const [selected, setSelected] = useState<Date | undefined>(new Date());
+	const [selected, setSelected] = useState<Date>(new Date());
 	const { setModal } = useModalStore();
 
 	const handleAddPaymentModal = () => {
@@ -40,12 +40,12 @@ const FinancialLedgerPage = () => {
 				</AddPaymentButton>
 			</Header>
 			<DatePicker selected={selected} setSelected={setSelected} />
-			<PaymentList>
+			<PaymentListLayout>
 				<PaymentListTitle>사용내역</PaymentListTitle>
-				{Array.from({ length: 3 }, (_, idx) => (
-					<PaymentItem key={idx} />
-				))}
-			</PaymentList>
+				<Suspense fallback={<div>Loading...</div>}>
+					<PaymentList selectedDate={selected} />
+				</Suspense>
+			</PaymentListLayout>
 		</section>
 	);
 };
@@ -66,6 +66,7 @@ const AddPaymentButton = styled.button`
 	min-height: 40px;
 	color: var(--white);
 	background-color: var(--blue200);
+	font-size: var(--fz-p);
 	font-weight: var(--fw-bold);
 	border-radius: var(--radius-s);
 	transition: opacity 0.15 ease-in-out;
@@ -76,7 +77,7 @@ const AddPaymentButton = styled.button`
 	}
 `;
 
-const PaymentList = styled.div`
+const PaymentListLayout = styled.div`
 	margin-top: 32px;
 `;
 

@@ -44,7 +44,7 @@ const CustomSelect = <T extends CustomSelectDataType>({
 				<SelectValue isTriggered={isTriggered}>{isTriggered ? options.find(option => option === currentValue) : placeholder}</SelectValue>
 				<Chevron size="21" color="var(--black)" $isOpen={isOpen} />
 			</SelectTrigger>
-			{error && <ErrorMessage>{error?.message}</ErrorMessage>}
+			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
 
 			<SelectContent isOpen={isOpen} aria-labelledby={`custom-select-${generatedId}-content`}>
 				<Label htmlFor={target_id}>{target_id.toUpperCase()}</Label>
@@ -71,11 +71,12 @@ const SelectTrigger = styled(Button)`
 	display: inline-flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 4px;
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	background-color: var(--white);
 	border-bottom: 1px solid var(--greyOpacity100);
-	border-radius: none;
+	border-radius: 0;
 	cursor: pointer;
 
 	&:focus {
@@ -103,7 +104,7 @@ const SelectContent = styled.div<{ isOpen: boolean }>`
 	display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
 	flex-direction: column;
 	padding: var(--padding-container-mobile);
-	height: ${({ isOpen }) => (isOpen ? '100%' : '0')};
+	height: ${({ isOpen }) => (isOpen ? 'auto' : '0')};
 	transition: height 0.3s ease-in-out display 0.5s ease-in-out;
 	border: 1px solid var(--black);
 `;
