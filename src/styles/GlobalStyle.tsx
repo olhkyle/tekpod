@@ -218,6 +218,7 @@ const Global = css`
 	.rdp-root {
 		position: absolute;
 		top: 60px;
+		z-index: var(--modal-index);
 		background-color: var(--white);
 		--rdp-accent-color: var(--grey600); /* Change the accent color to indigo. */
 		--rdp-accent-background-color: var(--blue300); /* Change the accent background color. */
