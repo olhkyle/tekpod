@@ -22,7 +22,6 @@ const StyledButton = styled(Button)`
 	background-color: var(--greyOpacity50);
 	border: 1px solid var(--greyOpacity200);
 	border-radius: var(--radius-s);
-	transition: background 0.15s ease-in-out;
 
 	&:hover {
 		background-color: var(--greyOpacity100);

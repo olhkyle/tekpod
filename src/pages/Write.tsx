@@ -146,7 +146,6 @@ const UploadButton = styled(Button)`
 	font-weight: var(--fw-semibold);
 	color: var(--white);
 	background-color: var(--blue200);
-	transition: background 0.15s ease-in-out;
 
 	&:hover,
 	&:focus {

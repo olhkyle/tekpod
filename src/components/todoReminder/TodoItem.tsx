@@ -126,7 +126,6 @@ const DeleteButton = styled(Button)`
 	background-color: var(--greyOpacity50);
 	border: 1px solid var(--greyOpacity100);
 	border-radius: var(--radius-s);
-	transition: background 0.15s ease-in-out;
 
 	&:hover,
 	&:active {

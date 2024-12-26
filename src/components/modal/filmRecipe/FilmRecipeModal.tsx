@@ -2,9 +2,9 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { FaStar } from 'react-icons/fa';
 import { FaRegStar } from 'react-icons/fa6';
-import { editRecipe } from '../../supabase/filmRecipe';
-import type { RestricedRecipeWithImage } from '../../supabase/schema';
-import type { ModalDataType } from './modalType';
+import { editRecipe } from '../../../supabase/filmRecipe';
+import type { RestricedRecipeWithImage } from '../../../supabase/schema';
+import type { ModalDataType } from '../modalType';
 import {
 	ModalLayout,
 	RemoveFilmRecipeConfirmModal,
@@ -14,12 +14,12 @@ import {
 	CustomSelect,
 	Button,
 	FilmRecipeStaticFields,
-} from '..';
-import useModalStore, { QueryRefetch } from '../../store/useModalStore';
-import useToastStore from '../../store/useToastStore';
-import { useFilmRecipeImage, useLoading } from '../../hooks';
-import { fieldData, FILM_RECIPE_FORM, PLACEHOLDER_IMAGE_URL } from '../../constants/recipes';
-import { validateTitle } from '../../utils/validateField';
+} from '../..';
+import useModalStore, { QueryRefetch } from '../../../store/useModalStore';
+import useToastStore from '../../../store/useToastStore';
+import { useFilmRecipeImage, useLoading } from '../../../hooks';
+import { filmRecipeFieldData, FILM_RECIPE_FORM, PLACEHOLDER_IMAGE_URL } from '../../../constants/recipes';
+import { validateTitle } from '../../../utils/validateField';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -53,7 +53,7 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 		const isImageChanged = imageUrl !== data?.imgSrc || currentRecipeImage !== null;
 
 		// 다른 필드들이 변경되었는지 확인
-		const isFieldsChanged = Object.keys(fieldData).some(key => {
+		const isFieldsChanged = Object.keys(filmRecipeFieldData).some(key => {
 			const fieldKey = key.toLowerCase().replace(/([A-Z])/g, '_$1') as keyof typeof data;
 			return currentFilmFeature[fieldKey]?.toString() !== data[fieldKey]?.toString();
 		});
@@ -154,7 +154,7 @@ const FilmRecipeModal = ({ id, type, data, refetch, onClose }: FilmRecipeModalPr
 									placeholder={placeholder}
 									currentValue={currentFilmFeature[target_id]}
 									isTriggered={true}
-									onSelect={(option: string | number) => {
+									onSelect={option => {
 										setCurrentFilmFeature({ ...currentFilmFeature, [target_id]: option });
 									}}
 								/>
@@ -230,7 +230,6 @@ const StyledButton = styled(Button)`
 	color: var(--white);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
-	transition: background 0.15s ease-in-out;
 `;
 
 const CancelButton = styled(StyledButton)`

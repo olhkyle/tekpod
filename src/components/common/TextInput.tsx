@@ -1,4 +1,4 @@
-import { ChangeEvent, Children, cloneElement, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId } from 'react';
+import { ChangeEvent, Children, cloneElement, FocusEvent, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId } from 'react';
 import styled from '@emotion/styled';
 
 interface TextInputProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> {
@@ -25,30 +25,33 @@ const TextInput = ({ children, label, errorMessage, ...props }: TextInputProps) 
 };
 
 interface TextFieldProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> {
+	type?: 'text' | 'number';
 	id: string;
 	name: string;
 	placeholder: string;
 	value?: string;
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+	onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
 	disabled?: boolean;
-	isFocused?: boolean;
 }
 
-TextInput.TextField = forwardRef(({ name, id, placeholder, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
-	return <Input type="text" id={id} name={name} placeholder={placeholder} ref={ref} {...props} />;
-});
+TextInput.TextField = forwardRef(
+	({ type = 'text', id, name, placeholder, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
+		return <Input type={type} id={id} name={name} placeholder={placeholder} ref={ref} {...props} />;
+	},
+);
 
-TextInput.ControlledTextField = ({ name, id, placeholder, value, onChange, disabled, isFocused, ...props }: TextFieldProps) => {
+TextInput.ControlledTextField = ({ type = 'text', id, name, placeholder, value, onChange, onBlur, disabled, ...props }: TextFieldProps) => {
 	return (
 		<Input
-			type="text"
+			type={type}
 			id={id}
 			name={name}
 			placeholder={placeholder}
 			value={value}
 			onChange={onChange}
+			onBlur={onBlur}
 			disabled={disabled}
-			ref={ref => isFocused && ref?.focus()}
 			{...props}
 		/>
 	);

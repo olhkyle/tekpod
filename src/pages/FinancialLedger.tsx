@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
-import { ko } from 'date-fns/locale';
-import { IoMdCalendar } from 'react-icons/io';
-import { DayPicker } from 'react-day-picker';
-import { format } from '../utils/date';
-import { Button, PaymentItem } from '../components';
-import { customPropReceiver } from '../constants';
+import { AddPaymentModal, DatePicker, PaymentItem } from '../components';
+import useModalStore from '../store/useModalStore';
 
 /**
  * Tour_Payment
@@ -22,37 +18,28 @@ import { customPropReceiver } from '../constants';
  */
 
 const FinancialLedgerPage = () => {
-	const [isOpen, setIsOpen] = useState(false);
 	const [selected, setSelected] = useState<Date | undefined>(new Date());
+	const { setModal } = useModalStore();
+
+	const handleAddPaymentModal = () => {
+		setModal({
+			Component: AddPaymentModal,
+			props: {
+				type: 'financialLedger',
+				data: null,
+			},
+		});
+	};
 
 	return (
 		<section>
 			<Header>
 				<Title>여행 가계부</Title>
-				<AddPaymentButton type="button">추가하기</AddPaymentButton>
+				<AddPaymentButton type="button" onClick={handleAddPaymentModal}>
+					추가하기
+				</AddPaymentButton>
 			</Header>
-			<DatePicker>
-				<TriggerButton type="button" $isDaySelected={selected ? true : false} onClick={() => setIsOpen(!isOpen)}>
-					<IconBackground>
-						<IoMdCalendar size="24" color="var(--blue200)" />
-					</IconBackground>
-					{selected ? format(selected) : '날짜를 선택해 주세요'}
-				</TriggerButton>
-				{isOpen && (
-					<DayPicker
-						mode="single"
-						locale={ko}
-						selected={selected}
-						onSelect={setSelected}
-						captionLayout="dropdown"
-						timeZone="Asia/Seoul"
-						showOutsideDays
-						onDayClick={() => {
-							setIsOpen(false);
-						}}
-					/>
-				)}
-			</DatePicker>
+			<DatePicker selected={selected} setSelected={setSelected} />
 			<PaymentList>
 				<PaymentListTitle>사용내역</PaymentListTitle>
 				{Array.from({ length: 3 }, (_, idx) => (
@@ -87,37 +74,6 @@ const AddPaymentButton = styled.button`
 	&:focus {
 		opacity: 0.95;
 	}
-`;
-
-const DatePicker = styled.div`
-	position: relative;
-	display: inline-flex;
-	flex-direction: column;
-	gap: 4px;
-	margin-top: 8px;
-`;
-
-const TriggerButton = styled(Button, customPropReceiver)<{ $isDaySelected: boolean }>`
-	display: inline-flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 6px;
-	padding: calc(var(--padding-container-mobile) * 0.5) var(--padding-container-mobile);
-	color: ${({ $isDaySelected }) => ($isDaySelected ? 'var(--grey900)' : 'var(--grey500)')};
-	background-color: var(--greyOpacity50);
-	border: 1px solid var(--grey100);
-	border-radius: var(--radius-m);
-	font-size: var(--fz-p);
-	font-weight: var(--fw-semibold);
-`;
-
-const IconBackground = styled.div`
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	padding: 4px;
-	background-color: var(--blue100);
-	border-radius: var(--radius-m);
 `;
 
 const PaymentList = styled.div`

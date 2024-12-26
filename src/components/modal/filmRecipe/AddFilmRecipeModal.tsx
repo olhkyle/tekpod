@@ -2,13 +2,13 @@ import { FormEventHandler, useState } from 'react';
 import styled from '@emotion/styled';
 import { Session } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
-import type { ModalDataType } from './modalType';
-import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLayout, Button } from '..';
-import useToastStore from '../../store/useToastStore';
-import { QueryRefetch } from '../../store/useModalStore';
-import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../hooks';
-import { FILM_RECIPE_FORM } from '../../constants/recipes';
-import type { RestrictedRecipeForValidation } from '../../supabase/schema';
+import type { ModalDataType } from '../modalType';
+import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLayout, Button } from '../..';
+import useToastStore from '../../../store/useToastStore';
+import { QueryRefetch } from '../../../store/useModalStore';
+import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../../hooks';
+import { FILM_RECIPE_FORM } from '../../../constants/recipes';
+import type { RestrictedRecipeForValidation } from '../../../supabase/schema';
 
 interface AddFilmRecipeModalProps {
 	id: string;
@@ -175,7 +175,6 @@ const AddRecipeButton = styled(Button)`
 	background-color: var(--black);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
-	transition: background 0.15s ease-in-out;
 
 	&:active,
 	&:focus {

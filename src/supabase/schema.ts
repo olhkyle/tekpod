@@ -5,6 +5,7 @@ type ServiceDataType = Diary | Recipe | null;
 type Diary = Database['public']['Tables']['diary']['Row'];
 type Recipe = Database['public']['Tables']['recipes']['Row'];
 type Todo = Database['public']['Tables']['todos']['Row'];
+type FinancialLedger = Database['public']['Tables']['financial_ledger']['Row'];
 
 interface RestrictedRecipe extends Recipe {
 	dynamic_range: 'DR-Auto' | `DR-${'number'}`;
@@ -23,9 +24,11 @@ type RestrictedRecipeForValidatioWithImage = Omit<RestricedRecipeWithImage, 'id'
 export type {
 	ServiceDataType,
 	Diary,
+	Recipe,
 	RestrictedRecipe,
 	RestricedRecipeWithImage,
 	RestrictedRecipeForValidation,
 	RestrictedRecipeForValidatioWithImage,
 	Todo,
+	FinancialLedger,
 };

@@ -11,7 +11,9 @@ const Button = forwardRef(({ type, children, ...props }: ButtonProps, ref: Forwa
 			type={type}
 			ref={ref}
 			css={{
+				borderRadius: 'var(--radius-s)',
 				cursor: 'pointer',
+				transition: 'background 0.15s ease-in-out',
 			}}
 			onBlur={e => {
 				e.target.blur();

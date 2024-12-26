@@ -129,7 +129,6 @@ const SubmitButton = styled(Button)`
 	border-radius: var(--radius-s);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
-	transition: background 0.15s ease-in-out;
 
 	&:hover {
 		background-color: var(--greyOpacity200);
@@ -151,7 +150,6 @@ const ResetPasswordButton = styled(Button)`
 	background-color: var(--grey100);
 	border: 1px solid var(--grey200);
 	border-radius: var(--radius-xs);
-	transition: background 0.15s ease-in-out;
 
 	&:hover {
 		background-color: var(--grey200);

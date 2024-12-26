@@ -73,7 +73,6 @@ const EditButton = styled(Button)`
 	background-color: var(--greyOpacity50);
 	border: 1px solid var(--greyOpacity200);
 	border-radius: var(--radius-s);
-	transition: background 0.15s ease-in-out;
 
 	&:hover,
 	&:active {
@@ -122,7 +121,6 @@ const DeleteButton = styled(Button)`
 	font-weight: var(--fw-semibold);
 	color: var(--white);
 	background-color: var(--black);
-	transition: background 0.15s ease-in-out;
 
 	&:focus {
 		background-color: var(--grey900);

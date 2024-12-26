@@ -1,1 +1,1 @@
-export type ModalDataType = 'diary' | 'recipe';
+export type ModalDataType = 'diary' | 'recipe' | 'financialLedger';

@@ -145,6 +145,48 @@ export interface Database {
 					id: never;
 				};
 			};
+			financial_ledger: {
+				Row: {
+					// the data expected from .select()
+					id: string;
+					user_id: string;
+					place: boolean;
+					price: string;
+					payment_method: string;
+					bank: string;
+					usage_date: Date;
+					created_at: Date;
+					updated_at: Date;
+				};
+				Insert: {
+					// the data to be passed to .insert()
+					id?: never; // generated columns must not be supplied
+					user_id: string;
+					place: boolean;
+					price: string;
+					payment_method: string;
+					bank: string;
+					usage_date: Date;
+					created_at: Date;
+					updated_at: Date;
+				};
+				Update: {
+					// the data to be passed to .update()
+					id: never;
+					user_id: string;
+					place?: boolean;
+					price?: string;
+					payment_method?: string;
+					bank?: string;
+					usage_date?: Date;
+					created_at?: Date;
+					updated_at?: Date;
+				};
+				Delete: {
+					// the data to be passed to .delete()
+					id: never;
+				};
+			};
 		};
 	};
 }

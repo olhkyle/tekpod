@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { RestricedRecipeWithImage } from '../../supabase/schema';
-import { ModalLayout, LoadingSpinner, Button } from '..';
-import { ModalDataType } from './modalType';
-import useToastStore from '../../store/useToastStore';
-import useRemoveRecipeMutation from '../../hooks/mutations/useRemoveFilmRecipeMutation';
-import { QueryRefetch } from '../../store/useModalStore';
+import { RestricedRecipeWithImage } from '../../../supabase/schema';
+import { ModalLayout, LoadingSpinner, Button } from '../..';
+import { ModalDataType } from '../modalType';
+import useToastStore from '../../../store/useToastStore';
+import useRemoveRecipeMutation from '../../../hooks/mutations/useRemoveFilmRecipeMutation';
+import { QueryRefetch } from '../../../store/useModalStore';
 
 interface RemoveFilmRecipeConfirmModalProps {
 	id: string;
@@ -74,7 +74,6 @@ const StyledButton = styled(Button)`
 	font-size: var(--fz-p);
 	font-weight: var(--fw-bold);
 	border-radius: var(--radius-s);
-	transition: background 0.15s ease-in-out;
 `;
 
 const YesButton = styled(StyledButton)`

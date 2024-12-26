@@ -1,26 +1,39 @@
-import styled from '@emotion/styled';
 import { useId, useState } from 'react';
+import styled from '@emotion/styled';
+import { FieldError } from 'react-hook-form';
 import { BiSolidChevronRight } from 'react-icons/bi';
 import { Button } from '.';
-import type { RestrictedRecipeForValidation } from '../../supabase/schema';
+import type { FinancialLedger, RestrictedRecipeForValidation } from '../../supabase/schema';
 import { customPropReceiver } from '../../constants';
-import type { FieldDataType } from '../../constants/recipes';
+import { PaymentDataType } from '../../constants/financialLedger';
+import { FilmRecipeFieldDataType } from '../../constants/recipes';
 
-interface NativeSelectProps {
-	data: FieldDataType;
-	target_id: keyof RestrictedRecipeForValidation;
+export type CustomSelectDataType = PaymentDataType | FilmRecipeFieldDataType[number] | string | number;
+
+interface CustomSelectProps<T extends CustomSelectDataType> {
+	data: readonly T[];
+	target_id: keyof RestrictedRecipeForValidation | keyof FinancialLedger;
 	placeholder: string;
-	currentValue: number | string;
+	currentValue: T;
 	isTriggered: boolean;
-	onSelect: (option: number | string) => void;
+	error?: FieldError;
+	onSelect: (option: T) => void;
 }
 
-const CustomSelect = ({ data: options, target_id, placeholder, currentValue, isTriggered, onSelect }: NativeSelectProps) => {
+const CustomSelect = <T extends CustomSelectDataType>({
+	data: options,
+	target_id,
+	placeholder,
+	currentValue,
+	isTriggered,
+	error,
+	onSelect,
+}: CustomSelectProps<T>) => {
 	const generatedId = useId();
 	const [isOpen, setOpen] = useState(false);
 
 	return (
-		<CustomSelectWithLabel>
+		<div>
 			<SelectTrigger
 				type="button"
 				onClick={() => setOpen(!isOpen)}
@@ -31,6 +44,7 @@ const CustomSelect = ({ data: options, target_id, placeholder, currentValue, isT
 				<SelectValue isTriggered={isTriggered}>{isTriggered ? options.find(option => option === currentValue) : placeholder}</SelectValue>
 				<Chevron size="21" color="var(--black)" $isOpen={isOpen} />
 			</SelectTrigger>
+			{error && <ErrorMessage>{error?.message}</ErrorMessage>}
 
 			<SelectContent isOpen={isOpen} aria-labelledby={`custom-select-${generatedId}-content`}>
 				<Label htmlFor={target_id}>{target_id.toUpperCase()}</Label>
@@ -49,11 +63,9 @@ const CustomSelect = ({ data: options, target_id, placeholder, currentValue, isT
 					</SelectItem>
 				))}
 			</SelectContent>
-		</CustomSelectWithLabel>
+		</div>
 	);
 };
-
-const CustomSelectWithLabel = styled.div``;
 
 const SelectTrigger = styled(Button)`
 	display: inline-flex;
@@ -79,6 +91,12 @@ const SelectValue = styled.span<{ isTriggered: boolean }>`
 const Chevron = styled(BiSolidChevronRight, customPropReceiver)<{ $isOpen: boolean }>`
 	transform: ${({ $isOpen }) => ($isOpen ? 'rotate(90deg)' : 'rotate(0deg)')};
 	transition: transform 0.15s ease-in-out;
+`;
+
+const ErrorMessage = styled.p`
+	padding-left: 4px;
+	font-size: var(--fz-sm);
+	color: var(--red200);
 `;
 
 const SelectContent = styled.div<{ isOpen: boolean }>`

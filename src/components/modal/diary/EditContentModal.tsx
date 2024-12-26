@@ -4,16 +4,16 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BiMessageSquareEdit } from 'react-icons/bi';
-import { Diary } from '../../supabase/schema';
-import { ModalLayout } from '.';
-import { Button, TagsInput, TextArea, TextInput } from '..';
-import { editContentSchema, EditContentSchema } from './editContentSchema';
-import { Tag } from '../common/TagsInput';
-import { useLoading } from '../../hooks';
-import { updateDiary } from '../../supabase/diary';
-import { routes } from '../../constants';
-import useToastStore from '../../store/useToastStore';
-import type { ModalDataType } from './modalType';
+import { Diary } from '../../../supabase/schema';
+import { ModalLayout } from '..';
+import { Button, TagsInput, TextArea, TextInput } from '../..';
+import { editContentFormSchema, EditContentFormSchema } from './editContentSchema';
+import { Tag } from '../../common/TagsInput';
+import { useLoading } from '../../../hooks';
+import { updateDiary } from '../../../supabase/diary';
+import { routes } from '../../../constants';
+import useToastStore from '../../../store/useToastStore';
+import type { ModalDataType } from '../modalType';
 
 interface EditContentModalProps {
 	id: string;
@@ -29,8 +29,8 @@ const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) =>
 		setValue,
 		formState: { errors },
 		handleSubmit,
-	} = useForm<EditContentSchema>({
-		resolver: zodResolver(editContentSchema),
+	} = useForm<EditContentFormSchema>({
+		resolver: zodResolver(editContentFormSchema),
 	});
 
 	const navigate = useNavigate();
@@ -40,7 +40,7 @@ const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) =>
 
 	const { addToast } = useToastStore();
 
-	const onSubmit = async (updatedData: EditContentSchema) => {
+	const onSubmit = async (updatedData: EditContentFormSchema) => {
 		if (data?.title === updatedData?.title && data?.content === updatedData?.content && data?.feeling === updatedData?.feeling) {
 			addToast({ status: 'warn', message: `Not Edited` });
 			return;
@@ -117,7 +117,6 @@ const UpdateButton = styled(Button)`
 	font-weight: var(--fw-semibold);
 	color: var(--white);
 	background-color: var(--black);
-	transition: background 0.15s ease-in-out;
 
 	&:active,
 	&:focus {
