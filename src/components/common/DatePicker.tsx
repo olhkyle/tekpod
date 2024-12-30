@@ -22,7 +22,7 @@ const DatePicker = ({ selected, setSelected, error, ...props }: DatePickerProps)
 		<Container>
 			<TriggerButton type="button" $isDaySelected={selected ? true : false} onClick={() => setIsOpen(!isOpen)} $isOpen={isOpen}>
 				<IconBackground>
-					<IoMdCalendar size="24" color="var(--blue200)" />
+					<IoMdCalendar size="24" color="var(--grey800)" />
 				</IconBackground>
 				<span>{selected ? format(selected) : '날짜를 선택해 주세요'}</span>
 			</TriggerButton>
@@ -74,7 +74,7 @@ const IconBackground = styled.div`
 	justify-content: center;
 	align-items: center;
 	padding: 4px;
-	background-color: var(--blue100);
+	background-color: var(--grey100);
 	border-radius: var(--radius-m);
 `;
 

@@ -32,7 +32,7 @@ const getPaymentsByDate = async (date: Date): Promise<{ data: FinancialLedger[];
 		throw new Error(error.message);
 	}
 
-	return { data, totalPrice: data.length === 1 ? data[0].price : data.reduce((prev, curr) => Number(prev.price) + Number(curr.price), 0) };
+	return { data, totalPrice: data.length === 1 ? data[0].price : data.reduce((sum, curr) => sum + Number(curr.price), 0) };
 };
 
 const addPayment = async (data: Omit<FinancialLedger, 'id'>) => {

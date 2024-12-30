@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { AddPaymentModal, DatePicker, PaymentList } from '../components';
+import { AddPaymentModal, DatePicker, PaymentItemLoader, PaymentList } from '../components';
 import useModalStore from '../store/useModalStore';
 
 /**
@@ -42,7 +42,7 @@ const FinancialLedgerPage = () => {
 			<DatePicker selected={selected} setSelected={setSelected} />
 			<PaymentListLayout>
 				<PaymentListTitle>사용내역</PaymentListTitle>
-				<Suspense fallback={<div>Loading...</div>}>
+				<Suspense fallback={<PaymentItemLoader />}>
 					<PaymentList selectedDate={selected} />
 				</Suspense>
 			</PaymentListLayout>
@@ -82,7 +82,7 @@ const PaymentListLayout = styled.div`
 `;
 
 const PaymentListTitle = styled.div`
-	font-size: var(--fz-p);
+	font-size: var(--fz-h7);
 	font-weight: var(--fw-semibold);
 `;
 

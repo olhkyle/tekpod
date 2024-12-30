@@ -21,6 +21,14 @@ const addTodo = async (data: Omit<Todo, 'id'>) => {
 	}
 };
 
+const updatedTodoCompleted = async ({ id, completed, updated_at }: { id: string; completed: boolean; updated_at: Date }) => {
+	const { error: updateTodoCompletedError } = await supabase.from(TABLE).update({ completed, updated_at }).eq('id', id);
+
+	if (updateTodoCompletedError) {
+		throw new Error(updateTodoCompletedError.message);
+	}
+};
+
 const removeTodo = async ({ id }: { id: string }) => {
 	const { error: deleteTodoError } = await supabase.from(TABLE).delete().eq('id', id);
 
@@ -29,4 +37,4 @@ const removeTodo = async ({ id }: { id: string }) => {
 	}
 };
 
-export { getTodos, addTodo, removeTodo };
+export { getTodos, addTodo, updatedTodoCompleted, removeTodo };

@@ -6,7 +6,7 @@ import type { Todo } from '../../supabase/schema';
 import { Button, Checkbox } from '../common';
 import { useClickOutside, useLoading } from '../../hooks';
 import useToastStore from '../../store/useToastStore';
-import { removeTodo } from '../../supabase/todos';
+import { removeTodo, updatedTodoCompleted } from '../../supabase/todos';
 import queryKey from '../../constants/queryKey';
 
 interface TodoProps {
@@ -48,6 +48,18 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 
 	// TODO: web-socket 연결로 reminder 만들기
 
+	const handleTodoIsCompleted = async (completed: boolean) => {
+		try {
+			await startTransition(updatedTodoCompleted({ id: todo.id, completed, updated_at: new Date() }));
+			addToast({ status: 'success', message: 'Successfully Change todo' });
+		} catch (e) {
+			console.error(e);
+			addToast({ status: 'error', message: 'Error happends during changing todo' });
+		} finally {
+			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
+		}
+	};
+
 	const handleRemoveTodo = async () => {
 		try {
 			await startTransition(removeTodo({ id: todo.id }));
@@ -60,12 +72,13 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
 		}
 	};
+
 	return (
 		<Container ref={containerRef}>
 			<DeleteBackground onClick={handleRemoveTodo}>{isLoading ? Loading : <RiCloseFill size="24" color="white" />}</DeleteBackground>
 			<TodoContent dragX={dragX} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
 				<Flex>
-					<Checkbox id={order} checked={isCompleted} onCheckedChange={setIsCompleted} />
+					<Checkbox id={order} checked={isCompleted} onCheckedChange={setIsCompleted} onServerTodoCompletedChange={handleTodoIsCompleted} />
 					<Label htmlFor={`checkbox-${order + 1}`}>{todo.content}</Label>
 				</Flex>
 				{isCompleted && dragX >= 0 && (

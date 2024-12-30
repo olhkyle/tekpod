@@ -1,20 +1,35 @@
-import { Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
+import { debounce } from 'es-toolkit';
 
 interface CheckboxProps {
 	id: number;
 	checked: boolean;
 	onCheckedChange: Dispatch<SetStateAction<boolean>>;
+	onServerTodoCompletedChange?: (completed: boolean) => Promise<void>;
 }
 
-const Checkbox = ({ id, checked, onCheckedChange, ...props }: CheckboxProps) => {
+const Checkbox = ({ id, checked, onCheckedChange: onClientCheckedChange, onServerTodoCompletedChange, ...props }: CheckboxProps) => {
+	const handleCheckedChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { checked } = e.target;
+		onClientCheckedChange(checked);
+
+		const debouncedUpdate = debounce((isChecked: boolean) => {
+			if (onServerTodoCompletedChange) {
+				onServerTodoCompletedChange(isChecked);
+			}
+		}, 1000);
+
+		debouncedUpdate(checked);
+	};
+
 	return (
 		<Container>
 			<CheckboxRoleButton
 				type="button"
 				role="checkbox"
-				onClick={() => onCheckedChange(!checked)}
 				aria-checked={checked}
+				aria-labelledby={`checkbox-${id + 1}`}
 				data-state={checked ? 'checked' : 'unchecked'}>
 				{checked ? (
 					<span data-state={checked ? 'checked' : 'unchecked'}>
@@ -33,15 +48,7 @@ const Checkbox = ({ id, checked, onCheckedChange, ...props }: CheckboxProps) => 
 					</span>
 				) : null}
 			</CheckboxRoleButton>
-			<HiddenCheckbox
-				type="checkbox"
-				id={`checkbox-${id + 1}`}
-				checked={checked}
-				onChange={e => onCheckedChange(e.target.checked)}
-				aria-hidden={true}
-				tabIndex={-1}
-				{...props}
-			/>
+			<HiddenCheckbox type="checkbox" id={`checkbox-${id + 1}`} checked={checked} onChange={handleCheckedChange} tabIndex={-1} {...props} />
 		</Container>
 	);
 };
