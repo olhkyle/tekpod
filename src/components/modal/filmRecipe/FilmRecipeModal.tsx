@@ -90,8 +90,8 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 			addToast({ status: 'info', message: `Successfully Updated` });
 			onClose();
 		} catch (e) {
-			addToast({ status: 'error', message: 'Error happens during update recipe' });
 			console.error(e);
+			addToast({ status: 'error', message: 'Error happens during update recipe' });
 		} finally {
 			queryClient.invalidateQueries({ queryKey: queryKey.FILM_RECIPE });
 		}
