@@ -78,7 +78,7 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 		const today = new Date();
 
 		if (checkIsDisabled()) {
-			addToast({ status: 'warn', message: 'Some Fields are not filled' });
+			addToast({ status: 'warn', message: 'Some fields are not filled' });
 			return;
 		}
 
