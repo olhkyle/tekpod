@@ -45,7 +45,7 @@ const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) =>
 			addToast({ status: 'warn', message: `Not Edited` });
 			return;
 		}
-		console.log(updatedData);
+
 		try {
 			const { error } = await startTransition(updateDiary({ ...data, ...updatedData, tags: tags.map(({ tag }) => tag) }));
 
