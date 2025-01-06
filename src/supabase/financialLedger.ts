@@ -15,7 +15,27 @@ import supabase from './service';
 
 const TABLE = 'financial_ledger';
 
-const getPaymentsByDate = async (date: Date): Promise<{ data: FinancialLedger[]; totalPrice: number }> => {
+const calculatePriceUnits = (data: FinancialLedger[]) => {
+	const groupByUnit = data.reduce((acc, item) => {
+		const { price_unit, price } = item;
+
+		if (!acc[price_unit]) {
+			acc[price_unit] = [];
+		}
+
+		acc[price_unit].push(Number(price));
+		return acc;
+	}, {} as Record<string, number[]>);
+
+	const priceUnits = Object.entries(groupByUnit).reduce((acc, [unit, prices]) => {
+		acc[unit] = prices.length === 1 ? prices[0] : prices.reduce((sum, price) => sum + Number(price), 0);
+		return acc;
+	}, {} as Record<string, number>);
+
+	return priceUnits;
+};
+
+const getPaymentsByDate = async (date: Date): Promise<{ data: FinancialLedger[]; totalPrice: number | Record<string, number> }> => {
 	const startOfDay = new Date(date);
 	startOfDay.setHours(0, 0, 0, 0);
 
@@ -32,7 +52,7 @@ const getPaymentsByDate = async (date: Date): Promise<{ data: FinancialLedger[];
 		throw new Error(error.message);
 	}
 
-	return { data, totalPrice: data.length === 1 ? data[0].price : data.reduce((sum, curr) => sum + Number(curr.price), 0) };
+	return { data, totalPrice: data.length ? calculatePriceUnits(data) : 0 };
 };
 
 const addPayment = async (data: Omit<FinancialLedger, 'id'>) => {
