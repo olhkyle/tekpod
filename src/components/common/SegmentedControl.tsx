@@ -24,7 +24,7 @@ const Container = styled.ul`
 	justify-content: space-between;
 	align-items: center;
 	gap: 6px;
-	padding: calc(var(--padding-container-mobile) * 0.5);
+	padding: calc(var(--padding-container-mobile) * 0.35);
 	background-color: var(--grey50);
 	border-radius: var(--radius-s);
 `;
