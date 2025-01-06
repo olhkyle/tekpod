@@ -12,7 +12,7 @@ import { Session } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import useToastStore from '../../../store/useToastStore';
 import queryKey from '../../../constants/queryKey';
-import { monetizeWithWon } from '../../../utils/money';
+import { monetizeWithSeparator } from '../../../utils/money';
 
 interface AddPaymentModalProps {
 	id: string;
@@ -110,7 +110,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 										inputMode="numeric" // 모바일에서 숫자 키패드 표시
 										id="price"
 										name={name}
-										value={value ? monetizeWithWon(value.toString()) : ''}
+										value={value ? monetizeWithSeparator(value.toString()) : ''}
 										onChange={e => {
 											const numericValue = e.target.value.replace(/[^0-9]/g, '');
 											onChange(numericValue);
