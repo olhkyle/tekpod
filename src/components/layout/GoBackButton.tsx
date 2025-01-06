@@ -28,7 +28,6 @@ const GoBackButton = ({ children = <RiArrowLeftLine size="24" color="var(--grey5
 
 const StyledMotion = styled(motion.div)`
 	display: flex;
-	justify-content: center;
 	align-items: center;
 `;
 
