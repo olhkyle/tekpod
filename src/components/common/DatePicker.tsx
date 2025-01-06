@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import styled from '@emotion/styled';
 import { IoMdCalendar } from 'react-icons/io';
-
 import { ko } from 'date-fns/locale';
 import { customPropReceiver } from '../../constants';
 import Button from './Button';
