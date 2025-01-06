@@ -65,6 +65,10 @@ const SelectTrigger = styled(Button)`
 	background-color: var(--greyOpacity50);
 	border: 1px solid var(--grey100);
 	border-radius: var(--radius-s);
+
+	span {
+		color: var(--black);
+	}
 `;
 
 const Chevron = styled(BiSolidChevronRight, customPropReceiver)<{ $isOpen: boolean }>`
