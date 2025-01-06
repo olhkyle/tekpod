@@ -8,7 +8,7 @@ const BottomNav = () => {
 	const { data } = useAuthQuery();
 
 	return (
-		<Nav>
+		<Container>
 			<Links>
 				<NavLink href={routes.HOME}>
 					<RiHome6Line size={24} />
@@ -24,11 +24,11 @@ const BottomNav = () => {
 				</NavLink>
 			</Links>
 			<Spacer />
-		</Nav>
+		</Container>
 	);
 };
 
-const Nav = styled.header`
+const Container = styled.header`
 	position: fixed;
 	bottom: 0;
 	max-width: var(--max-app-width);
@@ -36,6 +36,7 @@ const Nav = styled.header`
 	width: 100%;
 	background-color: var(--white);
 	border-top: 1px solid var(--grey200);
+	z-index: var(--nav-index);
 `;
 
 const Links = styled.div`
