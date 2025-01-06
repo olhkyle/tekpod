@@ -38,6 +38,7 @@ const Control = styled.li<{ isCurrent: boolean }>`
 	border: 1px solid var(--grey200);
 	border-radius: var(--radius-s);
 	text-align: center;
+	cursor: pointer;
 `;
 
 export default SegmentedControl;
