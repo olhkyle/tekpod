@@ -15,9 +15,7 @@ const Button = forwardRef(({ type, children, ...props }: ButtonProps, ref: Forwa
 				cursor: 'pointer',
 				transition: 'background 0.15s ease-in-out',
 			}}
-			onBlur={e => {
-				e.target.blur();
-			}}
+			onBlur={e => e.target.blur()}
 			{...props}>
 			{children}
 		</button>
