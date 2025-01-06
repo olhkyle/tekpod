@@ -219,7 +219,7 @@ const Global = css`
 		position: absolute;
 		top: 60px;
 		z-index: var(--modal-index);
-		background-color: var(--white);
+		background-color: none;
 		--rdp-accent-color: var(--grey600); /* Change the accent color to indigo. */
 		--rdp-accent-background-color: var(--blue300); /* Change the accent background color. */
 		--rdp-today-color: var(--blue200);
@@ -227,7 +227,8 @@ const Global = css`
 	}
 
 	.rdp-months {
-		padding: 12px 16px;
+		padding: 6px 12px;
+		background-color: var(--white);
 		border: 1px solid var(--grey100);
 		border-radius: var(--radius-m);
 	}
