@@ -33,12 +33,12 @@ const CustomSelect = <T extends CustomSelectDataType>({
 	const [isOpen, setOpen] = useState(false);
 
 	return (
-		<div>
+		<SelectRoot>
 			<SelectTrigger
 				type="button"
+				role="combobox"
 				onClick={() => setOpen(!isOpen)}
 				tabIndex={0}
-				aria-autocomplete="none"
 				aria-controls={`custom-select-${generatedId}`}
 				aria-expanded={isOpen}>
 				<SelectValue isTriggered={isTriggered}>{isTriggered ? options.find(option => option === currentValue) : placeholder}</SelectValue>
@@ -47,7 +47,7 @@ const CustomSelect = <T extends CustomSelectDataType>({
 			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
 
 			<SelectContent isOpen={isOpen} aria-labelledby={`custom-select-${generatedId}-content`}>
-				<Label htmlFor={target_id}>{target_id.toUpperCase()}</Label>
+				<Label>{target_id.toUpperCase()}</Label>
 				{options.map((option, idx) => (
 					<SelectItem
 						key={`${option}_${idx}`}
@@ -63,9 +63,14 @@ const CustomSelect = <T extends CustomSelectDataType>({
 					</SelectItem>
 				))}
 			</SelectContent>
-		</div>
+		</SelectRoot>
 	);
 };
+
+const SelectRoot = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
 
 const SelectTrigger = styled(Button)`
 	display: inline-flex;
@@ -109,7 +114,7 @@ const SelectContent = styled.div<{ isOpen: boolean }>`
 	border: 1px solid var(--black);
 `;
 
-const Label = styled.label`
+const Label = styled.p`
 	display: block;
 	margin-bottom: 8px;
 	font-weight: var(--fw-bold);
