@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
 import { FinancialLedger } from '../../supabase/schema';
-import { monetizeWithWon } from '../../utils/money';
+import { monetizeWithSeparator } from '../../utils/money';
 
 interface PaymentItemProps {
 	data: FinancialLedger;
@@ -19,7 +19,7 @@ const PaymentItem = ({ data: { place, price, payment_method, bank } }: PaymentIt
 				<Main>
 					<div>
 						<dt>금 액</dt>
-						<dd>{monetizeWithWon(price)}</dd>
+						<dd>{monetizeWithSeparator(price)}</dd>
 					</div>
 					{payment_method === 'Cash' ? (
 						<div>
