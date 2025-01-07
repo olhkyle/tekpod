@@ -14,6 +14,7 @@ const ContentPage = () => {
 };
 
 const Container = styled.section`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	width: 100%;

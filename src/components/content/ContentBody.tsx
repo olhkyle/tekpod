@@ -114,7 +114,8 @@ const Feeling = styled.p`
 `;
 
 const DeleteButton = styled(Button)`
-	margin-top: auto;
+	position: absolute;
+	bottom: 0;
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	min-height: 57px;
