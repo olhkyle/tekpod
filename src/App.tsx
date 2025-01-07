@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
 import AuthenticationGuard from './guard/AuthenticationGuard';
-import { NotFound, Login, Register, Content } from './pages';
-import { Layout, DiaryLayout, LoadLazy, RouteError } from './components';
+import { NotFound, Login, Register, Content, FinancialLedgerItem } from './pages';
+import { Layout, DiaryLayout, LoadLazy, RouteError, FinancialLedgerLayout } from './components';
 import { routes } from './constants';
 
 const queryClient = new QueryClient({
@@ -53,7 +53,14 @@ const router = createBrowserRouter([
 			},
 			{
 				path: routes.FINANCIAL_LEDGER,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('FinancialLedger')} />,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<FinancialLedgerLayout />} />,
+				children: [
+					{
+						index: true,
+						element: LoadLazy('FinancialLedger'),
+					},
+					{ path: `:id`, element: <FinancialLedgerItem /> },
+				],
 			},
 			{
 				path: `${routes.USER}/:id`,

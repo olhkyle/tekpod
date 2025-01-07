@@ -64,7 +64,7 @@ const WonIconWrapper = styled.div`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	padding: 8px;
+	padding: calc(var(--padding-container-mobile) * 0.5);
 	color: var(--white);
 	background-color: var(--grey800);
 	border-radius: var(--radius-m);

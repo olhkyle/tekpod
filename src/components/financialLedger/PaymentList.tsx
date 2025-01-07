@@ -6,6 +6,7 @@ import PaymentItem from './PaymentItem';
 import { monetizeWithSeparator } from '../../utils/money';
 import { EmptyMessage, SegmentedControl, Select } from '../common';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface PaymentListProps {
 	selectedDate: Date;
@@ -20,6 +21,8 @@ const PaymentList = ({ selectedDate }: PaymentListProps) => {
 		queryKey: [...queryKey.FINANCIAL_LEDGER, selectedDate],
 		queryFn: () => getPaymentsByDate(selectedDate),
 	});
+
+	const navigate = useNavigate();
 
 	const [currentPaymentMethod, setCurrentPaymentMethod] = useState<string>(segmentedControlOptions[0]);
 	const [currentPriceUnit, setCurrentPriceUnit] = useState<string>('WON');
@@ -58,11 +61,13 @@ const PaymentList = ({ selectedDate }: PaymentListProps) => {
 				<PaymentListContent>
 					{(currentPaymentMethod === segmentedControlOptions[0]
 						? data
-						: data.filter(item => item.payment_method === currentPaymentMethod && item.price_unit === currentPriceUnit)
+						: data.filter(({ payment_method }) => payment_method === currentPaymentMethod)
 					)
-						.filter(item => item.price_unit === currentPriceUnit)
+						.filter(({ price_unit }) => price_unit === currentPriceUnit)
 						.map((payment, idx) => (
-							<li key={`${payment.place}_${payment.bank}_${idx}`}>
+							<li
+								key={`${payment.place}_${payment.bank}_${idx}`}
+								onClick={() => navigate(`${payment.id}`, { state: { payment, currentDate: selectedDate } })}>
 								<PaymentItem data={payment} />
 							</li>
 						))}
