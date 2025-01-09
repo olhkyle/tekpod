@@ -14,6 +14,8 @@ interface TodoProps {
 	order: number;
 }
 
+const DRAG_THRESHOLD = 10; // 픽셀 단위
+
 const TodoItem = ({ todo, order }: TodoProps) => {
 	const queryClient = useQueryClient();
 	const [isCompleted, setIsCompleted] = useState(todo?.completed);
@@ -22,6 +24,7 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 	const { Loading, isLoading, startTransition } = useLoading();
 
 	const [dragX, setDragX] = useState(0);
+	const [dragStartX, setDragStartX] = useState<number | null>(null);
 	const dragRef = useRef<number>(0);
 
 	const containerRef = useClickOutside<HTMLLIElement>({
@@ -31,19 +34,39 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 		},
 	});
 
+	// TODO: 리팩토링 필요
 	const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+		setDragStartX(event.touches[0].clientX);
 		dragRef.current = event.touches[0].clientX;
 	};
 
 	const handleTouchMove = (event: TouchEvent<HTMLDivElement>) => {
-		if (!dragRef.current) return;
+		if (dragStartX === null) return;
 
 		const currentX = event.touches[0].clientX;
 		const diff = currentX - dragRef.current; // 현재 위치 - 첫 터치 드래그 시작 위치 (음수)
 
-		if (diff < 0) {
-			setDragX(Math.max(diff, -80));
+		// 최소 이동 거리를 넘어선 경우에만 드래그 적용
+		if (Math.abs(diff) > DRAG_THRESHOLD) {
+			const dampingFactor = 0.8;
+			const dragAmount = currentX - dragRef.current;
+			if (dragAmount < 0) {
+				setDragX(Math.max(dampingFactor * dragAmount, -80));
+			}
 		}
+	};
+
+	const handleTouchEnd = () => {
+		const SNAP_THRESHOLD = -40;
+
+		if (dragX < SNAP_THRESHOLD) {
+			setDragX(-80);
+		} else {
+			setDragX(0);
+		}
+
+		setDragStartX(null);
+		dragRef.current = 0;
 	};
 
 	// TODO: web-socket 연결로 reminder 만들기
@@ -76,7 +99,7 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 	return (
 		<Container ref={containerRef}>
 			<DeleteBackground onClick={handleRemoveTodo}>{isLoading ? Loading : <RiCloseFill size="24" color="white" />}</DeleteBackground>
-			<TodoContent dragX={dragX} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove}>
+			<TodoContent dragX={dragX} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
 				<Flex>
 					<Checkbox id={order} checked={isCompleted} onCheckedChange={setIsCompleted} onServerTodoCompletedChange={handleTodoIsCompleted} />
 					<Label htmlFor={`checkbox-${order + 1}`}>{todo.content}</Label>
