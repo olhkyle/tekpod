@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import useModalStore, { QueryRefetch } from '../../store/useModalStore';
-import { FilmRecipeModal } from '../modal';
 import { EmptyMessage } from '../common';
 import { RestrictedRecipe } from '../../supabase/schema';
+import { MODAL_CONFIG } from '../modal/modalType';
 
 interface FilmRecipeContentProps {
 	recipes: RestrictedRecipe[];
@@ -14,9 +14,9 @@ const FilmRecipeContent = ({ recipes, refetch }: FilmRecipeContentProps) => {
 
 	const handleIndividualFilmRecipeModal = (targetTitle: string) => {
 		setModal({
-			Component: FilmRecipeModal,
+			Component: MODAL_CONFIG.FILM_RECIPE.READ.Component,
 			props: {
-				type: 'recipe',
+				type: MODAL_CONFIG.FILM_RECIPE.READ.type,
 				data: recipes.find(({ title }) => title === targetTitle)!,
 				refetch,
 			},

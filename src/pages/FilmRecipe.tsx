@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
-import { AddFilmRecipeModal, Button, FilmRecipeContent } from '../components';
+import { Button, FilmRecipeContent } from '../components';
 import useModalStore from '../store/useModalStore';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getRecipes } from '../supabase/filmRecipe';
 import queryKey from '../constants/queryKey';
+import { MODAL_CONFIG } from '../components/modal/modalType';
 
 const FilmRecipePage = () => {
 	const { data: recipes, refetch } = useSuspenseQuery({ queryKey: queryKey.FILM_RECIPE, queryFn: getRecipes });
@@ -11,8 +12,8 @@ const FilmRecipePage = () => {
 
 	const handleAddFilmRecipeModal = () => {
 		setModal({
-			Component: AddFilmRecipeModal,
-			props: { type: 'recipe', data: null },
+			Component: MODAL_CONFIG.FILM_RECIPE.ADD.Component,
+			props: { type: MODAL_CONFIG.FILM_RECIPE.ADD.type, data: null },
 		});
 	};
 

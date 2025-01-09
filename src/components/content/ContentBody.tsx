@@ -4,11 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { Diary } from '../../supabase/schema';
 import { getSingleDiary } from '../../supabase/diary';
 import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
-import { LoadingSpinner, EditContentModal, Button } from '..';
+import { LoadingSpinner, Button } from '..';
 import useModalStore from '../../store/useModalStore';
 import { routes } from '../../constants';
 import queryKey from '../../constants/queryKey';
 import useToastStore from '../../store/useToastStore';
+import { MODAL_CONFIG } from '../modal/modalType';
 
 const ContentBody = () => {
 	const { diaryId } = useParams();
@@ -22,7 +23,7 @@ const ContentBody = () => {
 
 	const handleEditContentModalClick = () =>
 		setModal({
-			Component: EditContentModal,
+			Component: MODAL_CONFIG.DIARY.EDIT?.Component,
 			props: { type: 'diary', data },
 		});
 

@@ -4,17 +4,8 @@ import { FaStar } from 'react-icons/fa';
 import { FaRegStar } from 'react-icons/fa6';
 import { editRecipe } from '../../../supabase/filmRecipe';
 import type { RestricedRecipeWithImage } from '../../../supabase/schema';
-import type { ModalDataType } from '../modalType';
-import {
-	ModalLayout,
-	RemoveFilmRecipeConfirmModal,
-	LazyImage,
-	FilmRecipeImageUpload,
-	TextInput,
-	CustomSelect,
-	Button,
-	FilmRecipeStaticFields,
-} from '../..';
+import { MODAL_CONFIG, type ModalDataType } from '../modalType';
+import { ModalLayout, LazyImage, FilmRecipeImageUpload, TextInput, CustomSelect, Button, FilmRecipeStaticFields } from '../..';
 import useModalStore, { QueryRefetch } from '../../../store/useModalStore';
 import useToastStore from '../../../store/useToastStore';
 import { useFilmRecipeImage, useLoading } from '../../../hooks';
@@ -99,9 +90,9 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 
 	const handleDeleteConfirmModal = () => {
 		setModal({
-			Component: RemoveFilmRecipeConfirmModal,
+			Component: MODAL_CONFIG.FILM_RECIPE.REMOVE.Component,
 			props: {
-				type: 'recipe',
+				type: MODAL_CONFIG.FILM_RECIPE.REMOVE.type,
 				data,
 				onTopLevelModalClose: onClose,
 			},
