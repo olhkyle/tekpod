@@ -27,10 +27,7 @@ const PaymentList = ({ selectedDate }: PaymentListProps) => {
 	const [currentPaymentMethod, setCurrentPaymentMethod] = useState<string>(segmentedControlOptions[0]);
 	const [currentPriceUnit, setCurrentPriceUnit] = useState<string>('WON');
 
-	// TODO: SegmentedControl <Card | Cash>
-	// - Pagination 구현
-	// TODO: CustomSelect 파운드, 달러 일 때 환산해서 보기
-	// 원화 + 파운드 썼을 경우
+	// TODO: - Pagination 구현
 
 	return (
 		<Container>
