@@ -63,4 +63,8 @@ const addPayment = async (data: Omit<FinancialLedger, 'id'>) => {
 	}
 };
 
-export { getPaymentsByDate, addPayment };
+const removePayment = async ({ id }: { id: string }) => {
+	await supabase.from(TABLE).delete().eq('id', id);
+};
+
+export { getPaymentsByDate, addPayment, removePayment };

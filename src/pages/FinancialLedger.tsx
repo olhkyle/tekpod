@@ -1,31 +1,20 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { AddPaymentModal, DatePicker, PaymentItemLoader, PaymentList } from '../components';
+import { DatePicker, PaymentItemLoader, PaymentList } from '../components';
 import useModalStore from '../store/useModalStore';
-
-/**
- * Tour_Payment
- *
- * {
- *  id: string;
- * bank: '신한' | '국민' | '하나' | 'IBK기업' | '우리'
- * price: number;
- * place: string;
- * created_at: Date;
- * updated_at: Date;
- * }
- *
- */
+import { useLocation } from 'react-router-dom';
+import { MODAL_CONFIG } from '../components/modal/modalType';
 
 const FinancialLedgerPage = () => {
-	const [selected, setSelected] = useState<Date>(new Date());
+	const { state } = useLocation();
+	const [selected, setSelected] = useState<Date>(state?.currentDate ?? new Date());
 	const { setModal } = useModalStore();
 
 	const handleAddPaymentModal = () => {
 		setModal({
-			Component: AddPaymentModal,
+			Component: MODAL_CONFIG.FINANCIAL_LEDGER.ADD.Component,
 			props: {
-				type: 'financialLedger',
+				type: MODAL_CONFIG.FINANCIAL_LEDGER.ADD.type,
 				data: null,
 			},
 		});

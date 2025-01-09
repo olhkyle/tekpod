@@ -1,19 +1,40 @@
 import styled from '@emotion/styled';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
+import { Button } from '../components';
+import { useLoading } from '../hooks';
 import { format } from '../utils/date';
 import { monetizeWithSeparator } from '../utils/money';
-import { Button } from '../components';
+import { removePayment } from '../supabase/financialLedger';
+import useToastStore from '../store/useToastStore';
+import { useQueryClient } from '@tanstack/react-query';
+import queryKey from '../constants/queryKey';
+import { routes } from '../constants';
 
 const FinancialLedgerItemPage = () => {
+	const queryClient = useQueryClient();
 	const {
 		state: { payment, currentDate },
 	} = useLocation();
 
-	// const { Loading, isLoading, startTransition } = useLoading();
+	const { Loading, isLoading, startTransition } = useLoading();
+	const { addToast } = useToastStore();
+	const navigate = useNavigate();
 
-	// TODO: delete Payment
+	const handlePaymentDelete = async () => {
+		try {
+			await startTransition(removePayment({ id: payment.id }));
+
+			addToast({ status: 'success', message: 'Successfully Delete' });
+			navigate(routes.FINANCIAL_LEDGER, { state: { currentDate } });
+		} catch (e) {
+			console.error(e);
+			addToast({ status: 'error', message: 'Error with deleting payment' });
+		} finally {
+			queryClient.invalidateQueries({ queryKey: [...queryKey.FINANCIAL_LEDGER, currentDate] });
+		}
+	};
 
 	return (
 		<Container>
@@ -44,7 +65,9 @@ const FinancialLedgerItemPage = () => {
 				</div>
 			</Detail>
 
-			<DeleteButton type="button">삭제하기</DeleteButton>
+			<DeleteButton type="button" onClick={handlePaymentDelete}>
+				{isLoading ? Loading : '삭제하기'}
+			</DeleteButton>
 		</Container>
 	);
 };
