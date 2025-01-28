@@ -1,14 +1,21 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { DatePicker, PaymentItemLoader, PaymentList } from '../components';
+import { DatePicker, PaymentItemLoader, PaymentList, SegmentedControl, Select } from '../components';
 import useModalStore from '../store/useModalStore';
 import { useLocation } from 'react-router-dom';
 import { MODAL_CONFIG } from '../components/modal/modalType';
+import { priceUnit, PriceUnitType } from '../constants/financialLedger';
+
+export type ExtendedPaymentMethodType = (typeof segmentedControlOptions)[number];
+const segmentedControlOptions = ['All', 'Card', 'Cash'] as const;
 
 const FinancialLedgerPage = () => {
 	const { state } = useLocation();
 	const [selected, setSelected] = useState<Date>(state?.currentDate ?? new Date());
 	const { setModal } = useModalStore();
+
+	const [currentPaymentMethod, setCurrentPaymentMethod] = useState<ExtendedPaymentMethodType>(segmentedControlOptions[0]);
+	const [currentPriceUnit, setCurrentPriceUnit] = useState<PriceUnitType>('WON');
 
 	const handleAddPaymentModal = () => {
 		setModal({
@@ -23,7 +30,7 @@ const FinancialLedgerPage = () => {
 	return (
 		<section>
 			<Header>
-				<Title>여행 가계부</Title>
+				<Title>가계부</Title>
 				<AddPaymentButton type="button" onClick={handleAddPaymentModal}>
 					추가하기
 				</AddPaymentButton>
@@ -31,8 +38,17 @@ const FinancialLedgerPage = () => {
 			<DatePicker selected={selected} setSelected={setSelected} />
 			<PaymentListLayout>
 				<PaymentListTitle>사용내역</PaymentListTitle>
+				<Flex>
+					<SegmentedControl options={segmentedControlOptions} current={currentPaymentMethod} setCurrent={setCurrentPaymentMethod} />
+					<Select
+						data={priceUnit.unitType}
+						currentValue={currentPriceUnit}
+						placeholder={'Select Price Unit'}
+						onSelect={option => setCurrentPriceUnit(option)}
+					/>
+				</Flex>
 				<Suspense fallback={<PaymentItemLoader />}>
-					<PaymentList selectedDate={selected} />
+					<PaymentList selectedDate={selected} currentPaymentMethod={currentPaymentMethod} currentPriceUnit={currentPriceUnit} />
 				</Suspense>
 			</PaymentListLayout>
 		</section>
@@ -46,7 +62,7 @@ const Header = styled.div`
 `;
 
 const Title = styled.h2`
-	font-size: var(--fz-h6);
+	font-size: var(--fz-h5);
 	font-weight: var(--fw-bold);
 `;
 
@@ -73,6 +89,14 @@ const PaymentListLayout = styled.div`
 const PaymentListTitle = styled.div`
 	font-size: var(--fz-h7);
 	font-weight: var(--fw-semibold);
+`;
+
+const Flex = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 4px;
+	margin-top: 8px;
 `;
 
 export default FinancialLedgerPage;

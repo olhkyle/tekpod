@@ -10,7 +10,6 @@ const paymentMethodSchema = z.union([
 ]);
 
 const bankSchema = z.enum(paymentData.banks);
-
 const priceUnitSchema = z.enum(paymentData.priceUnits);
 
 const addPaymentFormSchema = z
@@ -26,7 +25,8 @@ const addPaymentFormSchema = z
 			.refine(date => date <= new Date(), "Can't choose the future date"),
 		payment_method: paymentMethodSchema,
 		bank: bankSchema.default('해당없음'),
-		price: z.string().min(1, 'Please write the Price'),
+		priceIntegerPart: z.string().min(1, 'Please write the Price'),
+		priceDecimalPart: z.string().min(1, 'Please write the Price').max(2, 'Please write up to 2 decimal points'),
 		price_unit: priceUnitSchema,
 	})
 	.refine(

@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import supabase from '../supabase/service';
 import useUserStore from '../store/userStore';
-import { routes } from '../constants';
+import { Button } from '../components';
 import { useLoading } from '../hooks';
 import useToastStore from '../store/useToastStore';
-import { Button } from '../components';
+import { routes } from '../constants';
 
 const ProfilePage = () => {
 	const queryClient = useQueryClient();
@@ -33,6 +33,7 @@ const ProfilePage = () => {
 			console.error(error);
 		} finally {
 			queryClient.setQueryData(['auth'], null);
+			queryClient.clear();
 		}
 	};
 

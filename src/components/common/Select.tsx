@@ -6,15 +6,15 @@ import { FieldError } from 'react-hook-form';
 import Button from './Button';
 import { priceUnit } from '../../constants/financialLedger';
 
-interface SelectProps {
-	data: readonly string[];
+interface SelectProps<T extends string> {
+	data: readonly T[];
 	placeholder: string;
-	currentValue: string;
+	currentValue: T;
 	error?: FieldError;
-	onSelect: (option: string) => void;
+	onSelect: (option: T) => void;
 }
 
-const Select = ({ data: options, placeholder, currentValue, error, onSelect }: SelectProps) => {
+const Select = <T extends string>({ data: options, placeholder, currentValue, error, onSelect }: SelectProps<T>) => {
 	const generatedId = useId();
 	const [isOpen, setOpen] = useState(false);
 

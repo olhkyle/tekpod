@@ -46,7 +46,10 @@ const FinancialLedgerItemPage = () => {
 					<span>{payment.payment_method}</span>
 				</PaymentMethod>
 				<Price>
-					<span>{monetizeWithSeparator(payment.price)}</span> <span>{payment.price_unit}</span>
+					<span>
+						{monetizeWithSeparator(payment.priceIntegerPart)}.{payment.priceDecimalPart}
+					</span>{' '}
+					<span>{payment.price_unit}</span>
 				</Price>
 			</MainContent>
 

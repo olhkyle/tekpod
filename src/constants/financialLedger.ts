@@ -1,4 +1,5 @@
 type PaymentDataType = (typeof paymentData)[keyof typeof paymentData][number];
+type PaymentMethodType = (typeof paymentData)['paymentMethod'][number];
 
 type PriceUnitType = (typeof priceUnit)['unitType'][number];
 type PriceUnitSymbolType = (typeof priceUnit)['unitSymbol'][number];
@@ -14,5 +15,5 @@ const priceUnit = {
 	unitSymbol: ['₩', '$', '£', '€', '¥'] as const,
 } as const;
 
-export type { PaymentDataType, PriceUnitType, PriceUnitSymbolType };
+export type { PaymentDataType, PaymentMethodType, PriceUnitType, PriceUnitSymbolType };
 export { paymentData, priceUnit };

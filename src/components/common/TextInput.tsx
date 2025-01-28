@@ -32,6 +32,7 @@ interface TextFieldProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> 
 	value?: string;
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 	onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+	maxLength?: number;
 	disabled?: boolean;
 }
 
@@ -41,7 +42,18 @@ TextInput.TextField = forwardRef(
 	},
 );
 
-TextInput.ControlledTextField = ({ type = 'text', id, name, placeholder, value, onChange, onBlur, disabled, ...props }: TextFieldProps) => {
+TextInput.ControlledTextField = ({
+	type = 'text',
+	id,
+	name,
+	placeholder,
+	value,
+	onChange,
+	onBlur,
+	maxLength,
+	disabled,
+	...props
+}: TextFieldProps) => {
 	return (
 		<Input
 			type={type}
@@ -51,6 +63,7 @@ TextInput.ControlledTextField = ({ type = 'text', id, name, placeholder, value, 
 			value={value}
 			onChange={onChange}
 			onBlur={onBlur}
+			maxLength={maxLength ? maxLength : undefined}
 			disabled={disabled}
 			{...props}
 		/>
@@ -76,7 +89,7 @@ const Message = styled.p`
 
 const Input = styled.input<{ name: string }>`
 	padding: var(--padding-container-mobile);
-	width: 100%;
+
 	font-size: var(--fz-h5);
 	font-weight: ${({ name }) => (name === 'title' ? 'var(--fw-semibold)' : 'var(--fw-regular)')};
 	color: var(--black);

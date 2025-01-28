@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 
-interface SegmentedControlProps {
-	options: readonly string[];
+interface SegmentedControlProps<T extends string> {
+	options: readonly T[];
 	current: string;
-	setCurrent: Dispatch<SetStateAction<string>>;
+	setCurrent: Dispatch<SetStateAction<T>>;
 }
 
-const SegmentedControl = ({ options, current, setCurrent }: SegmentedControlProps) => {
+const SegmentedControl = <T extends string>({ options, current, setCurrent }: SegmentedControlProps<T>) => {
 	return (
 		<Container>
 			{options.map(option => (

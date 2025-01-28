@@ -47,10 +47,10 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: AddPaymentFormSchema) => {
+		const today = new Date();
+		console.log(data);
 		try {
-			const today = new Date();
-			await startTransition(addPayment({ ...data, user_id: session?.user?.id, price: data?.price, created_at: today, updated_at: today }));
-
+			await startTransition(addPayment({ ...data, user_id: session?.user?.id, created_at: today, updated_at: today }));
 			onClose();
 			addToast({ status: 'success', message: 'Successfully add payment' });
 		} catch (e) {
@@ -99,16 +99,27 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 							})
 						}
 					/>
-					<Flex direction="row">
+
+					<CustomSelect
+						data={paymentData.priceUnits}
+						target_id={'price_unit'}
+						placeholder={'Unit'}
+						currentValue={watch('price_unit')}
+						isTriggered={touchedFields['price_unit']!}
+						error={errors['price_unit']}
+						onSelect={data => setValue('price_unit', data, { shouldValidate: true, shouldTouch: true })}
+					/>
+
+					<BottomFixedFlex direction="row">
 						<Controller
-							name="price"
+							name="priceIntegerPart"
 							control={control}
 							render={({ field: { name, value, onChange, onBlur } }) => (
-								<TextInput errorMessage={errors['price']?.message}>
+								<TextInput errorMessage={errors['priceIntegerPart']?.message}>
 									<TextInput.ControlledTextField
 										type="text"
 										inputMode="numeric" // 모바일에서 숫자 키패드 표시
-										id="price"
+										id="priceIntegerPart"
 										name={name}
 										value={value ? monetizeWithSeparator(value.toString()) : ''}
 										onChange={e => {
@@ -116,21 +127,39 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 											onChange(numericValue);
 										}}
 										onBlur={onBlur}
-										placeholder="Price to Pay"
+										placeholder="000"
 									/>
 								</TextInput>
 							)}
 						/>
-						<CustomSelect
-							data={paymentData.priceUnits}
-							target_id={'price_unit'}
-							placeholder={'Unit'}
-							currentValue={watch('price_unit')}
-							isTriggered={touchedFields['price_unit']!}
-							error={errors['price_unit']}
-							onSelect={data => setValue('price_unit', data, { shouldValidate: true, shouldTouch: true })}
-						/>
-					</Flex>
+						{watch('price_unit') !== 'WON' && watch('price_unit') !== 'JPY' && (
+							<>
+								<Point>.</Point>
+								<Controller
+									name="priceDecimalPart"
+									control={control}
+									render={({ field: { name, value, onChange, onBlur } }) => (
+										<TextInput errorMessage={errors['priceDecimalPart']?.message}>
+											<TextInput.ControlledTextField
+												type="text"
+												inputMode="numeric" // 모바일에서 숫자 키패드 표시
+												id="priceDecimalPart"
+												name={name}
+												value={value ? value.toString() : ''}
+												onChange={e => {
+													const numericValue = e.target.value.replace(/[^0-9]/g, '');
+													onChange(numericValue);
+												}}
+												onBlur={onBlur}
+												maxLength={2}
+												placeholder="00"
+											/>
+										</TextInput>
+									)}
+								/>
+							</>
+						)}
+					</BottomFixedFlex>
 				</Flex>
 
 				<SubmitButton type="submit">{isLoading ? Loading : '추가하기'}</SubmitButton>
@@ -147,12 +176,21 @@ const Form = styled.form`
 	height: 100%;
 `;
 
-const Flex = styled.div<{ direction: 'column' | 'row' }>`
+const Flex = styled.div<{ direction: 'row' | 'column' }>`
 	display: flex;
-	flex: 1 1 0;
 	flex-direction: ${({ direction }) => direction};
 	gap: 8px;
 	margin-top: 8px;
+`;
+
+const BottomFixedFlex = styled(Flex)`
+	justify-content: space-between;
+`;
+
+const Point = styled.div`
+	padding-top: 32px;
+	font-size: 16px;
+	font-weight: var(--fw-black);
 `;
 
 const SubmitButton = styled(Button)`

@@ -17,13 +17,13 @@ const TABLE = 'financial_ledger';
 
 const calculatePriceUnits = (data: FinancialLedger[]) => {
 	const groupByUnit = data.reduce((acc, item) => {
-		const { price_unit, price } = item;
+		const { price_unit, priceIntegerPart, priceDecimalPart } = item;
 
 		if (!acc[price_unit]) {
 			acc[price_unit] = [];
 		}
 
-		acc[price_unit].push(Number(price));
+		acc[price_unit].push(Number(`${priceIntegerPart}.${priceDecimalPart}`));
 		return acc;
 	}, {} as Record<string, number[]>);
 

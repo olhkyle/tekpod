@@ -1,20 +1,21 @@
+import { useNavigate } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
+import { PaymentItem } from '.';
+import { EmptyMessage } from '../common';
 import queryKey from '../../constants/queryKey';
 import { getPaymentsByDate } from '../../supabase/financialLedger';
-import PaymentItem from './PaymentItem';
 import { monetizeWithSeparator } from '../../utils/money';
-import { EmptyMessage, SegmentedControl, Select } from '../common';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { PriceUnitType } from '../../constants/financialLedger';
+import { ExtendedPaymentMethodType } from '../../pages/FinancialLedger';
 
 interface PaymentListProps {
 	selectedDate: Date;
+	currentPaymentMethod: ExtendedPaymentMethodType;
+	currentPriceUnit: PriceUnitType;
 }
 
-const segmentedControlOptions = ['All', 'Card', 'Cash'] as const;
-
-const PaymentList = ({ selectedDate }: PaymentListProps) => {
+const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: PaymentListProps) => {
 	const {
 		data: { data, totalPrice },
 	} = useSuspenseQuery({
@@ -24,23 +25,10 @@ const PaymentList = ({ selectedDate }: PaymentListProps) => {
 
 	const navigate = useNavigate();
 
-	const [currentPaymentMethod, setCurrentPaymentMethod] = useState<string>(segmentedControlOptions[0]);
-	const [currentPriceUnit, setCurrentPriceUnit] = useState<string>('WON');
-
 	// TODO: - Pagination 구현
 
 	return (
 		<Container>
-			<Flex>
-				<SegmentedControl options={segmentedControlOptions} current={currentPaymentMethod} setCurrent={setCurrentPaymentMethod} />
-				<Select
-					data={['WON', 'USD', 'GBP', 'EUR', 'JPY']}
-					currentValue={currentPriceUnit}
-					placeholder={'Select Price Unit'}
-					onSelect={option => setCurrentPriceUnit(option)}
-				/>
-			</Flex>
-
 			{totalPrice !== 0 && (
 				<TotalPrice>
 					{Object.entries(totalPrice).map(([priceUnit, price], idx) => (
@@ -56,10 +44,7 @@ const PaymentList = ({ selectedDate }: PaymentListProps) => {
 				<EmptyMessage emoji={'💳'}>사용한 금액이 없습니다</EmptyMessage>
 			) : (
 				<PaymentListContent>
-					{(currentPaymentMethod === segmentedControlOptions[0]
-						? data
-						: data.filter(({ payment_method }) => payment_method === currentPaymentMethod)
-					)
+					{(currentPaymentMethod === 'All' ? data : data.filter(({ payment_method }) => payment_method === currentPaymentMethod))
 						.filter(({ price_unit }) => price_unit === currentPriceUnit)
 						.map((payment, idx) => (
 							<li
@@ -78,14 +63,6 @@ const Container = styled.div`
 	display: flex;
 	flex-direction: column;
 	margin: 0 0 16px 0;
-`;
-
-const Flex = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 4px;
-	margin-top: 8px;
 `;
 
 const TotalPrice = styled.dl`

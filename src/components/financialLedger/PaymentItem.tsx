@@ -8,7 +8,7 @@ interface PaymentItemProps {
 	data: FinancialLedger;
 }
 
-const PaymentItem = ({ data: { place, price, payment_method, bank } }: PaymentItemProps) => {
+const PaymentItem = ({ data: { place, priceIntegerPart, priceDecimalPart, payment_method, bank } }: PaymentItemProps) => {
 	return (
 		<Container
 			onBlur={e => {
@@ -19,7 +19,9 @@ const PaymentItem = ({ data: { place, price, payment_method, bank } }: PaymentIt
 				<Main>
 					<div>
 						<dt>금 액</dt>
-						<dd>{monetizeWithSeparator(price)}</dd>
+						<dd>
+							{monetizeWithSeparator(priceIntegerPart)}.{priceDecimalPart}
+						</dd>
 					</div>
 					{payment_method === 'Cash' ? (
 						<div>
