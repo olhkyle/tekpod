@@ -89,7 +89,7 @@ const Message = styled.p`
 
 const Input = styled.input<{ name: string }>`
 	padding: var(--padding-container-mobile);
-
+	width: 100%;
 	font-size: var(--fz-h5);
 	font-weight: ${({ name }) => (name === 'title' ? 'var(--fw-semibold)' : 'var(--fw-regular)')};
 	color: var(--black);
