@@ -62,6 +62,7 @@ const Container = styled.div`
 	gap: 8px;
 	padding: var(--padding-container-mobile);
 	width: 100%;
+	min-height: 48px;
 	border: 1px solid var(--greyOpacity200);
 	overflow-x: scroll;
 `;
