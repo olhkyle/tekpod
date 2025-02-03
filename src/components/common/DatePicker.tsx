@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import styled from '@emotion/styled';
+import { FieldError } from 'react-hook-form';
 import { IoMdCalendar } from 'react-icons/io';
 import { ko } from 'date-fns/locale';
 import { customPropReceiver } from '../../constants';
 import Button from './Button';
 import { format } from '../../utils/date';
 import { DayPicker } from 'react-day-picker';
-import { FieldError } from 'react-hook-form';
 
 interface DatePickerProps {
 	selected: Date | undefined;
@@ -23,7 +23,7 @@ const DatePicker = ({ selected, setSelected, error, ...props }: DatePickerProps)
 				<IconBackground>
 					<IoMdCalendar size="24" color="var(--grey800)" />
 				</IconBackground>
-				<span>{selected ? format(selected) : '날짜를 선택해 주세요'}</span>
+				<span>{selected ? format(selected) : 'Select Date'}</span>
 			</TriggerButton>
 			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
 			{isOpen && (
