@@ -51,7 +51,7 @@ const getSingleDiary = async (id: string): Promise<Diary> => {
 	return data;
 };
 
-const addDiary = async (data: Diary) => {
+const addDiary = async (data: Omit<Diary, 'id'>) => {
 	return await supabase.from(TABLE).insert(data).select();
 };
 
