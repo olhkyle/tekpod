@@ -26,7 +26,7 @@ const addPaymentFormSchema = z
 		payment_method: paymentMethodSchema,
 		bank: bankSchema.default('해당없음'),
 		priceIntegerPart: z.string().min(1, 'Please write the Price'),
-		priceDecimalPart: z.string().min(1, 'Please write the Price').max(2, 'Please write up to 2 decimal points'),
+		priceDecimalPart: z.string().max(2, 'Please write up to 2 decimal points').default(''),
 		price_unit: priceUnitSchema,
 	})
 	.refine(

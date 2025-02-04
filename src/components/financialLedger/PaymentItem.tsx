@@ -20,7 +20,8 @@ const PaymentItem = ({ data: { place, priceIntegerPart, priceDecimalPart, paymen
 					<div>
 						<dt>금 액</dt>
 						<dd>
-							{monetizeWithSeparator(priceIntegerPart)}.{priceDecimalPart}
+							{monetizeWithSeparator(priceIntegerPart)}
+							{priceDecimalPart.length ? `.${priceDecimalPart}` : ''}
 						</dd>
 					</div>
 					{payment_method === 'Cash' ? (

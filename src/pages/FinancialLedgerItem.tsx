@@ -47,8 +47,9 @@ const FinancialLedgerItemPage = () => {
 				</PaymentMethod>
 				<Price>
 					<span>
-						{monetizeWithSeparator(payment.priceIntegerPart)}.{payment.priceDecimalPart}
-					</span>{' '}
+						{monetizeWithSeparator(payment.priceIntegerPart)}
+						{payment.priceDecimalPart.length ? `.${payment.priceDecimalPart}` : ''}
+					</span>
 					<span>{payment.price_unit}</span>
 				</Price>
 			</MainContent>
@@ -108,7 +109,7 @@ const WonIconWrapper = styled.div`
 const Price = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 4px;
+	gap: 6px;
 	font-size: var(--fz-h4);
 	font-weight: var(--fw-bold);
 `;
