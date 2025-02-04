@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from '@emotion/styled';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +10,6 @@ import { WriteSchema, writeSchema } from '../components/write/schema';
 import { addDiary } from '../supabase/diary';
 import { routes } from '../constants';
 import useLoading from '../hooks/useLoading';
-import { Tag } from '../components/common/TagsInput';
 import useToastStore from '../store/useToastStore';
 
 const WritePage = () => {
@@ -24,10 +22,9 @@ const WritePage = () => {
 		control,
 		formState: { errors },
 		handleSubmit,
-	} = useForm<WriteSchema>({ resolver: zodResolver(writeSchema) });
+	} = useForm<WriteSchema>({ resolver: zodResolver(writeSchema), defaultValues: { tags: [] } });
 
 	const { Loading, isLoading, startTransition } = useLoading();
-	const [tags, setTags] = useState<Tag[]>([]);
 
 	const { addToast } = useToastStore();
 
@@ -45,7 +42,7 @@ const WritePage = () => {
 					user_id: session?.user?.id,
 					created_at: today,
 					updated_at: today,
-					tags: tags.map(({ tag }) => tag),
+					tags: data.tags.map(({ tag }) => tag),
 				}),
 			);
 
@@ -86,7 +83,11 @@ const WritePage = () => {
 					<TextInput errorMessage={errors?.feeling?.message}>
 						<TextInput.TextField id="feeling" {...register('feeling')} name="feeling" placeholder="💡 One Feeling" />
 					</TextInput>
-					<TagsInput tags={tags} setTags={setTags} />
+					<Controller
+						name="tags"
+						control={control}
+						render={({ field: { value, onChange } }) => <TagsInput tags={value} onChange={onChange} />}
+					/>
 				</Wrapper>
 				<UploadButton type="submit">{isLoading ? Loading : '👆🏻 Upload'}</UploadButton>
 			</Group>

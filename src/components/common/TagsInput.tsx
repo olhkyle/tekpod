@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { RiCloseFill } from 'react-icons/ri';
 import { FiHash } from 'react-icons/fi';
@@ -11,12 +11,29 @@ export interface Tag {
 
 interface TagsInputProps {
 	tags: Tag[];
-	setTags: Dispatch<SetStateAction<Tag[]>>;
+	onChange: (tags: Tag[]) => void;
 }
 
-const TagsInput = ({ tags, setTags }: TagsInputProps) => {
+const TagsInput = ({ tags, onChange }: TagsInputProps) => {
 	const [value, setValue] = useState<string>('');
 	const inputRef = useRef<HTMLInputElement | null>(null);
+
+	const handleAddTag = (newTag: string) => {
+		const trimmedValue = newTag.trim();
+		if (trimmedValue === '') return;
+
+		onChange([
+			...tags,
+			{
+				id: Math.max(...tags.map(({ id }) => id), 0) + 1,
+				tag: trimmedValue,
+			},
+		]);
+	};
+
+	const handleRemoveTag = (removeId: number) => {
+		onChange(tags.filter(({ id }) => id !== removeId));
+	};
 
 	return (
 		<Container>
@@ -24,7 +41,7 @@ const TagsInput = ({ tags, setTags }: TagsInputProps) => {
 				<Tag key={`${tag}_${id}`}>
 					<FiHash size="16" />
 					<span>{`${tag}`}</span>
-					<Button type="button" onClick={() => setTags(tags.filter(({ id: order }) => id !== order))}>
+					<Button type="button" onClick={() => handleRemoveTag(id)}>
 						<RiCloseFill size="16" color="var(--black)" />
 					</Button>
 				</Tag>
@@ -39,15 +56,8 @@ const TagsInput = ({ tags, setTags }: TagsInputProps) => {
 
 					e.preventDefault();
 
-					const trimmedValue = value.trim();
-
-					if (trimmedValue === '') {
-						setValue('');
-					} else {
-						setTags(tags => [...tags, { id: Math.max(...tags.map(({ id }) => id), 0) + 1, tag: trimmedValue }]);
-						setValue('');
-					}
-
+					handleAddTag(value);
+					setValue('');
 					inputRef.current?.focus();
 				}}
 				placeholder="# 태그"
@@ -62,7 +72,7 @@ const Container = styled.div`
 	gap: 8px;
 	padding: var(--padding-container-mobile);
 	width: 100%;
-	min-height: 48px;
+	min-height: 65px;
 	border: 1px solid var(--greyOpacity200);
 	overflow-x: scroll;
 `;
@@ -98,7 +108,6 @@ const Input = styled.input`
 	min-width: 80px;
 	flex-shrink: 0;
 	width: 100%;
-	min-height: 48px;
 	font-size: var(--fz-p);
 `;
 

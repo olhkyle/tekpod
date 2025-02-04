@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -8,12 +8,12 @@ import { Diary } from '../../../supabase/schema';
 import { ModalLayout } from '..';
 import { Button, TagsInput, TextArea, TextInput } from '../..';
 import { editContentFormSchema, EditContentFormSchema } from './editContentSchema';
-import { Tag } from '../../common/TagsInput';
 import { useLoading } from '../../../hooks';
 import { updateDiary } from '../../../supabase/diary';
 import { routes } from '../../../constants';
 import useToastStore from '../../../store/useToastStore';
 import type { ModalDataType } from '../modalType';
+import { isEqual } from 'es-toolkit';
 
 interface EditContentModalProps {
 	id: string;
@@ -31,23 +31,31 @@ const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) =>
 		handleSubmit,
 	} = useForm<EditContentFormSchema>({
 		resolver: zodResolver(editContentFormSchema),
+		defaultValues: { tags: [] },
 	});
 
 	const navigate = useNavigate();
 
 	const { isLoading, Loading, startTransition } = useLoading();
-	const [tags, setTags] = useState<Tag[]>([]);
-
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (updatedData: EditContentFormSchema) => {
-		if (data?.title === updatedData?.title && data?.content === updatedData?.content && data?.feeling === updatedData?.feeling) {
+		const isUnedited =
+			data?.title === updatedData?.title &&
+			data?.content === updatedData?.content &&
+			data?.feeling === updatedData?.feeling &&
+			isEqual(
+				data?.tags,
+				updatedData.tags.map(({ tag }) => tag),
+			);
+
+		if (isUnedited) {
 			addToast({ status: 'warn', message: `Not Edited` });
 			return;
 		}
 
 		try {
-			const { error } = await startTransition(updateDiary({ ...data, ...updatedData, tags: tags.map(({ tag }) => tag) }));
+			const { error } = await startTransition(updateDiary({ ...data, ...updatedData, tags: updatedData.tags.map(({ tag }) => tag) }));
 
 			if (error) {
 				throw new Error(error.message);
@@ -66,7 +74,10 @@ const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) =>
 		setValue('title', data?.title);
 		setValue('content', data?.content);
 		setValue('feeling', data?.feeling);
-		setTags(data?.tags!.map((tag, idx) => ({ id: idx, tag })));
+		setValue(
+			'tags',
+			data?.tags!.map((tag, idx) => ({ id: idx, tag })),
+		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [setValue]);
 
@@ -96,7 +107,11 @@ const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) =>
 				<TextInput errorMessage={errors?.feeling?.message}>
 					<TextInput.TextField id="feeling" {...register('feeling')} name="feeling" placeholder="💡 One Feeling" />
 				</TextInput>
-				<TagsInput tags={tags} setTags={setTags} />
+				<Controller
+					name="tags"
+					control={control}
+					render={({ field: { value, onChange } }) => <TagsInput tags={value} onChange={onChange} />}
+				/>
 				<UpdateButton type="submit">{isLoading ? Loading : '👆🏻 Upload'}</UpdateButton>
 			</Group>
 		</ModalLayout>
