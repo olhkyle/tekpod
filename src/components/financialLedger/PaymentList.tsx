@@ -25,6 +25,11 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 
 	const navigate = useNavigate();
 
+	const filteredData = data.filter(
+		({ payment_method, price_unit }) =>
+			(currentPaymentMethod === 'All' || payment_method === currentPaymentMethod) && price_unit === currentPriceUnit,
+	);
+
 	// TODO: - Pagination 구현
 
 	return (
@@ -40,19 +45,19 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 				</TotalPrice>
 			)}
 
-			{data?.length === 0 ? (
-				<EmptyMessage emoji={'💳'}>사용한 금액이 없습니다</EmptyMessage>
+			{filteredData?.length === 0 ? (
+				<EmptyMessage emoji={'💳'}>
+					{currentPaymentMethod === 'All' ? '사용한 금액이 없습니다' : `${currentPaymentMethod}로 사용한 금액이 없습니다`}
+				</EmptyMessage>
 			) : (
 				<PaymentListContent>
-					{(currentPaymentMethod === 'All' ? data : data.filter(({ payment_method }) => payment_method === currentPaymentMethod))
-						.filter(({ price_unit }) => price_unit === currentPriceUnit)
-						.map((payment, idx) => (
-							<li
-								key={`${payment.place}_${payment.bank}_${idx}`}
-								onClick={() => navigate(`${payment.id}`, { state: { payment, currentDate: selectedDate } })}>
-								<PaymentItem data={payment} />
-							</li>
-						))}
+					{filteredData.map((payment, idx) => (
+						<li
+							key={`${payment.place}_${payment.bank}_${idx}`}
+							onClick={() => navigate(`${payment.id}`, { state: { payment, currentDate: selectedDate } })}>
+							<PaymentItem data={payment} />
+						</li>
+					))}
 				</PaymentListContent>
 			)}
 		</Container>
