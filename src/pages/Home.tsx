@@ -9,12 +9,12 @@ const linkGroup = [
 	{
 		to: routes.TODO_REMINDER,
 		icon: <IoMdNotifications size="24" color="var(--blue200)" />,
-		title: '리마인더',
+		title: 'Reminder',
 	},
 	{
 		to: routes.FINANCIAL_LEDGER,
 		icon: <FaCalculator size="18" color="var(--blue100)" />,
-		title: '여행 가계부',
+		title: 'Expense Tracker',
 	},
 ];
 
