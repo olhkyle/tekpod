@@ -168,6 +168,7 @@ const Global = css`
 	}
 
 	a {
+		-webkit-touch-callout: none;
 		text-decoration: none;
 		color: inherit;
 	}
