@@ -48,7 +48,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 
 	const onSubmit = async (data: AddPaymentFormSchema) => {
 		const today = new Date();
-		console.log(data);
+
 		try {
 			await startTransition(addPayment({ ...data, user_id: session?.user?.id, created_at: today, updated_at: today }));
 			onClose();
