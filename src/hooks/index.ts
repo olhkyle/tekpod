@@ -11,3 +11,4 @@ export { default as useIsElementInViewport } from './useIsElementInViewport';
 export { default as useOverlayFixed } from './useOverlayFixed';
 export { default as useFilmRecipeImage } from './useFilmRecipeImage';
 export { default as useClickOutside } from './useClickOutside';
+export { default as useFunnel } from './useFunnel';
