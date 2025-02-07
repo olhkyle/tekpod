@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface UseFunnelTrigger<T> {
 	id: string;
@@ -8,27 +8,40 @@ interface UseFunnelTrigger<T> {
 }
 
 const useFunnel = <T>(trigger: UseFunnelTrigger<T>) => {
-	const [initialized, setInitialized] = useState(false);
-	const [history, setHistory] = useState<(keyof T)[]>([]);
+	const [history, setHistory] = useState<{ step: keyof T; isDone: boolean }[]>([]);
 	const [currentStep, setCurrentStep] = useState(trigger.initial.step);
 
-	useEffect(() => {
-		if (!initialized) {
-			setInitialized(true);
-			return;
+	const push = () => {
+		const step = trigger.steps?.[currentStep];
+
+		console.log(step?.isDone, step?.next, step?.next !== 'done');
+		if (step?.isDone && step.next && step.next !== 'done') {
+			setHistory([...history, { step: currentStep, isDone: step.isDone }]);
+			setCurrentStep(step.next);
+		}
+	};
+
+	const back = () => {
+		if (history.length) {
+			const previousStep = history[history.length - 1];
+			setHistory(history.slice(0, -1));
+			setCurrentStep(previousStep.step);
+		}
+	};
+
+	const isStepValidated = (step: keyof T) => {
+		// 현재 단계의 유효성 상태 확인
+		const currentStepData = trigger.steps?.[step];
+		if (currentStepData) {
+			return currentStepData.isDone;
 		}
 
-		if (trigger.steps?.[currentStep].isDone) {
-			const nextStep = trigger.steps?.[currentStep].next;
+		// 히스토리에서 해당 단계의 유효성 상태 확인
+		const historyStep = history.find(h => h.step === step);
+		return historyStep ? historyStep.isDone : false;
+	};
 
-			if (nextStep !== 'done' && nextStep) {
-				setHistory([...history, currentStep]);
-				setCurrentStep(nextStep);
-			}
-		}
-	}, [trigger.steps, initialized, currentStep]);
-
-	return { step: currentStep, isLastStepDone: trigger.steps?.[currentStep].next === 'done', history };
+	return { step: currentStep, isLastStepDone: trigger.steps?.[currentStep].next === 'done', push, back, isStepValidated };
 };
 
 export default useFunnel;

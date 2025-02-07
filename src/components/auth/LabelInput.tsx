@@ -1,5 +1,7 @@
-import { Children, cloneElement, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId } from 'react';
+import { Children, cloneElement, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId, useState } from 'react';
 import styled from '@emotion/styled';
+import { IoEyeOutline } from 'react-icons/io5';
+import { IoEyeOffOutline } from 'react-icons/io5';
 
 interface LabelInputProps extends HTMLAttributes<HTMLInputElement> {
 	label: string;
@@ -30,18 +32,30 @@ interface TextFieldProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> 
 }
 
 LabelInput.TextField = forwardRef(
-	({ type, id, name, placeholder, disabled, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
+	({ type: initialType, id, name, placeholder, disabled, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
+		const [showPassword, setShowPassword] = useState(false);
+		const type = initialType === 'password' ? (showPassword ? 'text' : 'password') : initialType;
 		return (
-			<input
-				type={type}
-				id={id}
-				name={name}
-				ref={ref}
-				placeholder={placeholder}
-				disabled={disabled}
-				autoComplete={type === 'email' ? 'off' : 'on'}
-				{...props}
-			/>
+			<InputWrapper>
+				<input
+					type={type}
+					id={id}
+					name={name}
+					ref={ref}
+					placeholder={placeholder}
+					disabled={disabled}
+					autoComplete={type === 'email' ? 'off' : 'on'}
+					{...props}
+				/>
+				{initialType === 'password' && (
+					<ToggleButton
+						type="button"
+						onClick={() => setShowPassword(!showPassword)}
+						aria-label={showPassword ? 'Hide Password' : 'Show Password'}>
+						{showPassword ? <IoEyeOffOutline size="21" /> : <IoEyeOutline size="21" />}
+					</ToggleButton>
+				)}
+			</InputWrapper>
 		);
 	},
 );
@@ -79,6 +93,23 @@ const Message = styled.p`
 	padding-left: 4px;
 	font-size: var(--fz-sm);
 	color: var(--grey400);
+`;
+
+const InputWrapper = styled.div`
+	position: relative;
+	display: flex;
+	align-items: center;
+`;
+
+const ToggleButton = styled.button`
+	position: absolute;
+	right: 12px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: none;
+	border: 0;
+	cursor: pointer;
 `;
 
 export default LabelInput;

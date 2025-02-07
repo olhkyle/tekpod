@@ -17,7 +17,6 @@ type RegisterSchema = z.infer<typeof registerSchema>;
 const registerSchema = z
 	.object({
 		email: z.string({ required_error: 'Please, Write an email' }).email({ message: 'Incorrect email format' }),
-
 		password: z
 			.string({ required_error: 'Please, Write a password' })
 			.min(1, { message: 'Please, Write a password' })

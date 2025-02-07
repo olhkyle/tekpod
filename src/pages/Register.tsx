@@ -7,6 +7,7 @@ import { Button, LabelInput } from '../components';
 import { Link } from 'react-router-dom';
 import { routes } from '../constants';
 import { useFunnel } from '../hooks';
+import { useEffect } from 'react';
 
 const pageCss = {
 	container: css`
@@ -31,33 +32,38 @@ const RegisterPage = () => {
 	const {
 		register,
 		watch,
-		formState: { errors },
+		formState: { errors, isValid },
+		trigger,
+		setFocus,
 	} = useForm<RegisterSchema>({
 		resolver: zodResolver(registerSchema),
-		mode: 'onChange',
 	});
 
-	const { step, isLastStepDone } = useFunnel<RegisterSchema>({
+	const { step, isLastStepDone, push, back, isStepValidated } = useFunnel<RegisterSchema>({
 		id: 'register-form-funnel',
 		initial: { step: 'email' },
 		steps: {
 			email: {
 				step: 'email',
-				isDone: !errors['email'] && !!watch('email')?.trim(),
+				isDone: !errors['email'] && !!watch('email')?.trim() && isValid,
 				next: 'password',
 			},
 			password: {
 				step: 'password',
-				isDone: !errors['password'] && !!watch('password')?.trim(),
+				isDone: !errors['password'] && !!watch('password')?.trim() && isValid,
 				next: 'nickname',
 			},
 			nickname: {
 				step: 'nickname',
-				isDone: !errors['nickname'] && !!watch('nickname')?.trim(),
+				isDone: !errors['nickname'] && !!watch('nickname')?.trim() && isValid,
 				next: 'done',
 			},
 		},
 	});
+
+	useEffect(() => {
+		setFocus('email');
+	}, []);
 
 	return (
 		<div css={pageCss.container}>
@@ -81,8 +87,29 @@ const RegisterPage = () => {
 						<LabelInput.TextField type={'text'} id={'nickname'} {...register('nickname')} placeholder={'Nickname'} />
 					</LabelInput>
 				)}
-				{!isLastStepDone && <NextButton type="button">Next</NextButton>}
-				{isLastStepDone && <button type="submit">Submit</button>}
+				{!isLastStepDone && (
+					<ContinueButton
+						type="button"
+						onClick={async () => {
+							const isStepValid = await trigger(step);
+
+							if (isStepValid && isStepValidated(step)) {
+								push();
+							}
+						}}>
+						Continue
+					</ContinueButton>
+				)}
+				{isLastStepDone && (
+					<SubmitButton type="submit" disabled={!(!errors['nickname'] && !!watch('nickname')?.trim() && isValid)}>
+						Submit
+					</SubmitButton>
+				)}
+				{!isLastStepDone && step !== 'email' && (
+					<GoBackButton type="button" onClick={back}>
+						Go Back
+					</GoBackButton>
+				)}
 			</form>
 		</div>
 	);
@@ -100,12 +127,40 @@ const Description = styled.div`
 	font-weight: var(--fw-medium);
 `;
 
-const NextButton = styled(Button)`
+const ContinueButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	min-width: 270px;
 	background-color: var(--black);
 	color: var(--white);
+	font-weight: var(--fw-semibold);
 	border-radius: var(--radius-s);
+`;
+
+const SubmitButton = styled(Button)`
+	padding: var(--padding-container-mobile);
+	min-width: 270px;
+	background-color: var(--black);
+	color: var(--white);
+	font-weight: var(--fw-semibold);
+	border-radius: var(--radius-s);
+
+	&:disabled {
+		background-color: var(--grey300);
+	}
+`;
+
+const GoBackButton = styled(Button)`
+	padding: var(--padding-container-mobile);
+	min-width: 270px;
+	color: var(--black);
+	font-weight: var(--fw-semibold);
+	border: 1px solid var(--greyOpacity50);
+	border-radius: var(--radius-s);
+
+	&:hover,
+	&:focus {
+		background-color: var(--greyOpacity100);
+	}
 `;
 
 export default RegisterPage;
