@@ -12,7 +12,7 @@ const linkGroup = [
 		title: 'Reminder',
 	},
 	{
-		to: routes.FINANCIAL_LEDGER,
+		to: routes.EXPENSE_TRACKER,
 		icon: <FaCalculator size="18" color="var(--blue100)" />,
 		title: 'Expense Tracker',
 	},

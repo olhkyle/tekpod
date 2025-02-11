@@ -145,7 +145,7 @@ export interface Database {
 					id: never;
 				};
 			};
-			financial_ledger: {
+			expense_tracker: {
 				Row: {
 					// the data expected from .select()
 					id: string;

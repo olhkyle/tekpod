@@ -4,10 +4,10 @@ import styled from '@emotion/styled';
 import { PaymentItem } from '.';
 import { EmptyMessage } from '../common';
 import queryKey from '../../constants/queryKey';
-import { getPaymentsByDate } from '../../supabase/financialLedger';
+import { getPaymentsByDate } from '../../supabase/expenseTracker';
 import { monetizeWithSeparator } from '../../utils/money';
-import { PriceUnitType } from '../../constants/financialLedger';
-import { ExtendedPaymentMethodType } from '../../pages/FinancialLedger';
+import { PriceUnitType } from '../../constants/expenseTracker';
+import { ExtendedPaymentMethodType } from '../../pages/ExpenseTrackerByMonth';
 
 interface PaymentListProps {
 	selectedDate: Date;
@@ -19,7 +19,7 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 	const {
 		data: { data, totalPrice },
 	} = useSuspenseQuery({
-		queryKey: [...queryKey.FINANCIAL_LEDGER, selectedDate],
+		queryKey: [...queryKey.EXPENSE_TRACKER, selectedDate],
 		queryFn: () => getPaymentsByDate(selectedDate),
 	});
 

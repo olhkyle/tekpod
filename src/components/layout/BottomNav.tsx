@@ -19,7 +19,7 @@ const BottomNav = () => {
 				<NavLink href={routes.DIARY}>
 					<RiBook3Line size={24} />
 				</NavLink>
-				<NavLink href={data?.user ? `${routes.USER}/${data?.user?.id}` : routes.LOGIN}>
+				<NavLink href={data?.user ? `${routes.USER}` : routes.LOGIN}>
 					<RiUser3Line size={24} />
 				</NavLink>
 			</Links>

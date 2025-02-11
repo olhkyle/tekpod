@@ -1,1 +1,1 @@
-export { default as EditContentModal } from './EditContentModal';
+export { default as EditDiaryContentModal } from './EditDiaryContentModal';

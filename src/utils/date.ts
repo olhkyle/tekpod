@@ -1,4 +1,9 @@
 const today = new Date();
+const currentYear = today.getFullYear();
+const currentMonth = today.getMonth();
+const currentDate = today.getDate();
+
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
 
 const format = (targetDate: Date) => {
 	const _date = new Date(targetDate);
@@ -7,4 +12,6 @@ const format = (targetDate: Date) => {
 	return `${year + ''}.${(month + '').padStart(2, '0')}.${(date + '').padStart(2, '0')}`;
 };
 
-export { today, format };
+const translateNumberIntoMonth = (month: number) => months[month];
+
+export { today, currentYear, currentMonth, currentDate, months, format, translateNumberIntoMonth };

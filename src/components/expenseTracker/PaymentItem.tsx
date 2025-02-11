@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
-import { FinancialLedger } from '../../supabase/schema';
+import { ExpenseTracker } from '../../supabase/schema';
 import { monetizeWithSeparator } from '../../utils/money';
 
 interface PaymentItemProps {
-	data: FinancialLedger;
+	data: ExpenseTracker;
 }
 
 const PaymentItem = ({ data: { place, priceIntegerPart, priceDecimalPart, payment_method, bank } }: PaymentItemProps) => {

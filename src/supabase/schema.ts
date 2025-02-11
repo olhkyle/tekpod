@@ -5,7 +5,7 @@ type ServiceDataType = Diary | Recipe | null;
 type Diary = Database['public']['Tables']['diary']['Row'];
 type Recipe = Database['public']['Tables']['recipes']['Row'];
 type Todo = Database['public']['Tables']['todos']['Row'];
-type FinancialLedger = Database['public']['Tables']['financial_ledger']['Row'];
+type ExpenseTracker = Database['public']['Tables']['expense_tracker']['Row'];
 
 interface RestrictedRecipe extends Recipe {
 	dynamic_range: 'DR-Auto' | `DR-${'number'}`;
@@ -30,5 +30,5 @@ export type {
 	RestrictedRecipeForValidation,
 	RestrictedRecipeForValidatioWithImage,
 	Todo,
-	FinancialLedger,
+	ExpenseTracker,
 };

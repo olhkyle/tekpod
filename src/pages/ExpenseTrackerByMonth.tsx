@@ -4,12 +4,12 @@ import { DatePicker, PaymentItemLoader, PaymentList, SegmentedControl, Select } 
 import useModalStore from '../store/useModalStore';
 import { useLocation } from 'react-router-dom';
 import { MODAL_CONFIG } from '../components/modal/modalType';
-import { priceUnit, PriceUnitType } from '../constants/financialLedger';
+import { priceUnit, PriceUnitType } from '../constants/expenseTracker';
 
 export type ExtendedPaymentMethodType = (typeof segmentedControlOptions)[number];
 const segmentedControlOptions = ['All', 'Card', 'Cash'] as const;
 
-const FinancialLedgerPage = () => {
+const ExpenseTrackerByMonthPage = () => {
 	const { state } = useLocation();
 	const [selected, setSelected] = useState<Date>(state?.currentDate ?? new Date());
 	const { setModal } = useModalStore();
@@ -44,6 +44,7 @@ const FinancialLedgerPage = () => {
 						data={priceUnit.unitType}
 						currentValue={currentPriceUnit}
 						placeholder={'Select Price Unit'}
+						descriptionLabel={priceUnit.unitSymbol.join(' ')}
 						onSelect={option => setCurrentPriceUnit(option)}
 					/>
 				</Flex>
@@ -99,4 +100,4 @@ const Flex = styled.div`
 	margin-top: 8px;
 `;
 
-export default FinancialLedgerPage;
+export default ExpenseTrackerByMonthPage;

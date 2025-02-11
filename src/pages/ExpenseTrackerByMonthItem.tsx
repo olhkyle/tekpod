@@ -6,13 +6,13 @@ import { Button } from '../components';
 import { useLoading } from '../hooks';
 import { format } from '../utils/date';
 import { monetizeWithSeparator } from '../utils/money';
-import { removePayment } from '../supabase/financialLedger';
+import { removePayment } from '../supabase/expenseTracker';
 import useToastStore from '../store/useToastStore';
 import { useQueryClient } from '@tanstack/react-query';
 import queryKey from '../constants/queryKey';
 import { routes } from '../constants';
 
-const FinancialLedgerItemPage = () => {
+const ExpenseTrackerByMonthItemPage = () => {
 	const queryClient = useQueryClient();
 	const {
 		state: { payment, currentDate },
@@ -27,12 +27,12 @@ const FinancialLedgerItemPage = () => {
 			await startTransition(removePayment({ id: payment.id }));
 
 			addToast({ status: 'success', message: 'Successfully Delete' });
-			navigate(routes.FINANCIAL_LEDGER, { state: { currentDate } });
+			navigate(routes.EXPENSE_TRACKER, { state: { currentDate } });
 		} catch (e) {
 			console.error(e);
 			addToast({ status: 'error', message: 'Error with deleting payment' });
 		} finally {
-			queryClient.invalidateQueries({ queryKey: [...queryKey.FINANCIAL_LEDGER, currentDate] });
+			queryClient.invalidateQueries({ queryKey: [...queryKey.EXPENSE_TRACKER, currentDate] });
 		}
 	};
 
@@ -153,4 +153,4 @@ const DeleteButton = styled(Button)`
 	}
 `;
 
-export default FinancialLedgerItemPage;
+export default ExpenseTrackerByMonthItemPage;

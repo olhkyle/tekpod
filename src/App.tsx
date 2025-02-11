@@ -1,14 +1,21 @@
 import './styles/font.css';
 import 'react-day-picker/style.css';
+import { lazy } from 'react';
 import { Global } from '@emotion/react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
 import AuthenticationGuard from './guard/AuthenticationGuard';
-import { NotFound, Login, Register, Content, FinancialLedgerItem } from './pages';
-import { Layout, DiaryLayout, LoadLazy, RouteError, FinancialLedgerLayout } from './components';
+import { Layout, DiaryLayout, LoadLazy, RouteError, ExpenseTrackerLayout, DiaryContent } from './components';
 import { routes } from './constants';
+
+const ExpenseTrackerByMonthPage = lazy(() => import('./pages/ExpenseTrackerByMonth'));
+const ExpenseTrackerByMonthItemPage = lazy(() => import('./pages/ExpenseTrackerByMonthItem'));
+const ExpenseTrackerUpcomingPage = lazy(() => import('./pages/ExpenseTrackerUpcoming'));
+const LoginPage = lazy(() => import('./pages/Login'));
+const RegisterPage = lazy(() => import('./pages/Register'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -40,7 +47,7 @@ const router = createBrowserRouter([
 						index: true,
 						element: LoadLazy('Diary'),
 					},
-					{ path: `:diaryId`, element: <Content /> },
+					{ path: `:diaryId`, element: <DiaryContent /> },
 				],
 			},
 			{
@@ -52,24 +59,26 @@ const router = createBrowserRouter([
 				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('TodoReminder')} />,
 			},
 			{
-				path: routes.FINANCIAL_LEDGER,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<FinancialLedgerLayout />} />,
+				path: routes.EXPENSE_TRACKER,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<ExpenseTrackerLayout />} />,
 				children: [
 					{
 						index: true,
-						element: LoadLazy('FinancialLedger'),
+						element: LoadLazy('ExpenseTracker'),
 					},
-					{ path: `:id`, element: <FinancialLedgerItem /> },
+					{ path: `daily`, element: <ExpenseTrackerByMonthPage /> },
+					{ path: `daily/:id`, element: <ExpenseTrackerByMonthItemPage /> },
+					{ path: `upcoming`, element: <ExpenseTrackerUpcomingPage /> },
 				],
 			},
 			{
-				path: `${routes.USER}/:id`,
+				path: `${routes.USER}`,
 				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Profile')} />,
 			},
 		],
 	},
-	{ path: routes.LOGIN, element: <Login /> },
-	{ path: routes.REGISTER, element: <Register /> },
+	{ path: routes.LOGIN, element: <LoginPage /> },
+	{ path: routes.REGISTER, element: <RegisterPage /> },
 	{
 		path: '/*',
 		element: <NotFound />,

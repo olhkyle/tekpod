@@ -69,7 +69,8 @@ const ContentBody = () => {
 
 const EditButton = styled(Button)`
 	margin-left: auto;
-	padding: calc(var(--padding-container-mobile) / 2) var(--padding-container-mobile);
+	padding: calc(var(--padding-container-mobile) * 0.75) var(--padding-container-mobile);
+	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--grey700);
 	background-color: var(--greyOpacity50);

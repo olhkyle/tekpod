@@ -11,3 +11,4 @@ export { default as Checkbox } from './Checkbox';
 export { default as DatePicker } from './DatePicker';
 export { default as SegmentedControl } from './SegmentedControl';
 export { default as Select } from './Select';
+export { default as WorkInProgress } from './WorkInProgress';

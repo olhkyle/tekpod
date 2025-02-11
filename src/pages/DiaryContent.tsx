@@ -1,11 +1,10 @@
 import styled from '@emotion/styled';
-import { ContentBody, ContentBodyLoader, GoBackButton } from '../components';
+import { ContentBody, ContentBodyLoader } from '../components';
 import { Suspense } from 'react';
 
-const ContentPage = () => {
+const DiaryContentPage = () => {
 	return (
 		<Container>
-			<GoBackButton />
 			<Suspense fallback={<ContentBodyLoader />}>
 				<ContentBody />
 			</Suspense>
@@ -21,4 +20,4 @@ const Container = styled.section`
 	height: calc(100dvh - (3 * var(--nav-height)));
 `;
 
-export default ContentPage;
+export default DiaryContentPage;

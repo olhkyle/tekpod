@@ -5,9 +5,9 @@ const routes = {
 	FILM_RECIPE: '/film_recipe',
 	DIARY: '/diary',
 	WRITE: '/write',
-	USER: '/profile',
+	USER: '/mypage',
 	TODO_REMINDER: '/todo_reminder',
-	FINANCIAL_LEDGER: '/financial_ledger',
+	EXPENSE_TRACKER: '/expense',
 } as const;
 
 // eslint-disable-next-line @typescript-eslint/ban-types

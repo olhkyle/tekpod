@@ -1,20 +1,20 @@
 import { useId, useState } from 'react';
 import styled from '@emotion/styled';
 import { BiSolidChevronRight } from 'react-icons/bi';
-import { customPropReceiver } from '../../constants';
 import { FieldError } from 'react-hook-form';
+import { customPropReceiver } from '../../constants';
 import Button from './Button';
-import { priceUnit } from '../../constants/financialLedger';
 
 interface SelectProps<T extends string> {
 	data: readonly T[];
 	placeholder: string;
+	descriptionLabel?: string;
 	currentValue: T;
 	error?: FieldError;
 	onSelect: (option: T) => void;
 }
 
-const Select = <T extends string>({ data: options, placeholder, currentValue, error, onSelect }: SelectProps<T>) => {
+const Select = <T extends string>({ data: options, placeholder, descriptionLabel, currentValue, error, onSelect }: SelectProps<T>) => {
 	const generatedId = useId();
 	const [isOpen, setOpen] = useState(false);
 
@@ -32,7 +32,7 @@ const Select = <T extends string>({ data: options, placeholder, currentValue, er
 			</SelectTrigger>
 			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
 			<SelectContent isOpen={isOpen} aria-labelledby={`select-${generatedId}-content`}>
-				<span>{priceUnit.unitSymbol.join(' ')}</span>
+				{descriptionLabel && <SelectDescriptionLabel>{descriptionLabel}</SelectDescriptionLabel>}
 				{options.map((option, idx) => (
 					<SelectItem
 						key={`${option}_${idx}`}
@@ -62,7 +62,8 @@ const SelectTrigger = styled(Button)`
 	align-items: center;
 	gap: 4px;
 	padding: calc(var(--padding-container-mobile) * 0.5);
-	background-color: var(--greyOpacity50);
+	background-color: var(--grey50);
+	font-size: var(--fz-p);
 	border: 1px solid var(--grey100);
 	border-radius: var(--radius-s);
 
@@ -94,6 +95,11 @@ const SelectContent = styled.div<{ isOpen: boolean }>`
 	border: 1px solid var(--grey100);
 	border-radius: var(--radius-s);
 	transition: height 0.3s ease-in-out display 0.5s ease-in-out;
+`;
+
+const SelectDescriptionLabel = styled.span`
+	color: var(--black);
+	font-weight: var(--fw-medium);
 `;
 
 const SelectItem = styled.div<{ isCurrent: boolean }>`

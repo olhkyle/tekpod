@@ -12,7 +12,9 @@ const Header = () => {
 	return (
 		<Container>
 			<Logo>
-				{pathname.includes(routes.FINANCIAL_LEDGER) || pathname.includes(routes.TODO_REMINDER) ? (
+				{pathname.includes(routes.EXPENSE_TRACKER) ||
+				pathname.includes(routes.TODO_REMINDER) ||
+				[...pathname].filter(item => item === '/').length >= 2 ? (
 					<GoBackButton>
 						<IoIosArrowBack size="24" color="var(--grey700)" />
 					</GoBackButton>

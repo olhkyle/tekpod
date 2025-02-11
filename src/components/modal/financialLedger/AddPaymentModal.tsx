@@ -5,8 +5,8 @@ import ModalLayout from '../ModalLayout';
 import { ModalDataType } from '../modalType';
 import { AddPaymentFormSchema, addPaymentFormSchema } from './addPaymentFormSchema';
 import { Button, CustomSelect, DatePicker, TextInput } from '../../common';
-import { paymentData } from '../../../constants/financialLedger';
-import { addPayment } from '../../../supabase/financialLedger';
+import { paymentData } from '../../../constants/expenseTracker';
+import { addPayment } from '../../../supabase/expenseTracker';
 import { useLoading } from '../../../hooks';
 import { Session } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
@@ -57,7 +57,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 			console.error(e);
 			addToast({ status: 'error', message: 'Error with adding payment' });
 		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.FINANCIAL_LEDGER });
+			queryClient.invalidateQueries({ queryKey: queryKey.EXPENSE_TRACKER });
 		}
 	};
 

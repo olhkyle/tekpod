@@ -3,16 +3,16 @@ import styled from '@emotion/styled';
 import { FieldError } from 'react-hook-form';
 import { BiSolidChevronRight } from 'react-icons/bi';
 import { Button } from '.';
-import type { FinancialLedger, RestrictedRecipeForValidation } from '../../supabase/schema';
+import type { ExpenseTracker, RestrictedRecipeForValidation } from '../../supabase/schema';
 import { customPropReceiver } from '../../constants';
-import { PaymentDataType } from '../../constants/financialLedger';
+import { PaymentDataType } from '../../constants/expenseTracker';
 import { FilmRecipeFieldDataType } from '../../constants/recipes';
 
 export type CustomSelectDataType = PaymentDataType | FilmRecipeFieldDataType[number] | string | number;
 
 interface CustomSelectProps<T extends CustomSelectDataType> {
 	data: readonly T[];
-	target_id: keyof RestrictedRecipeForValidation | keyof FinancialLedger;
+	target_id: keyof RestrictedRecipeForValidation | keyof ExpenseTracker;
 	placeholder: string;
 	currentValue: T;
 	isTriggered: boolean;

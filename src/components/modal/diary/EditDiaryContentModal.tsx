@@ -22,7 +22,7 @@ interface EditContentModalProps {
 	onClose: () => void;
 }
 
-const EditContentModal = ({ id, type, data, onClose }: EditContentModalProps) => {
+const EditDiaryContentModal = ({ id, type, data, onClose }: EditContentModalProps) => {
 	const {
 		register,
 		control,
@@ -139,4 +139,4 @@ const UpdateButton = styled(Button)`
 	}
 `;
 
-export default EditContentModal;
+export default EditDiaryContentModal;

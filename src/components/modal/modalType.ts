@@ -1,7 +1,7 @@
 import { ElementType } from 'react';
 import { AddPaymentModal } from './financialLedger';
 import { AddFilmRecipeModal, FilmRecipeModal, RemoveFilmRecipeConfirmModal } from './filmRecipe';
-import { EditContentModal } from './diary';
+import { EditDiaryContentModal } from './diary';
 
 type ModalDataType = 'diary' | 'filmRecipe' | 'financialLedger';
 
@@ -54,7 +54,7 @@ const MODAL_CONFIG: ModalConfig = {
 	DIARY: {
 		EDIT: {
 			type: 'diary',
-			Component: EditContentModal,
+			Component: EditDiaryContentModal,
 		},
 	},
 };
