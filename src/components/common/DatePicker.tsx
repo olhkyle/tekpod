@@ -1,12 +1,13 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import styled from '@emotion/styled';
 import { FieldError } from 'react-hook-form';
+import { DayPicker } from 'react-day-picker';
 import { IoMdCalendar } from 'react-icons/io';
 import { ko } from 'date-fns/locale';
 import { customPropReceiver } from '../../constants';
 import Button from './Button';
 import { format } from '../../utils/date';
-import { DayPicker } from 'react-day-picker';
+import { useClickOutside } from '../../hooks';
 
 interface DatePickerProps {
 	selected: Date | undefined;
@@ -17,8 +18,10 @@ interface DatePickerProps {
 const DatePicker = ({ selected, setSelected, error, ...props }: DatePickerProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
+	const targetRef = useClickOutside<HTMLDivElement>({ eventHandler: () => setIsOpen(false) });
+
 	return (
-		<Container>
+		<Container ref={targetRef}>
 			<TriggerButton type="button" $isDaySelected={selected ? true : false} onClick={() => setIsOpen(!isOpen)} $isOpen={isOpen}>
 				<IconBackground>
 					<IoMdCalendar size="24" color="var(--grey800)" />
