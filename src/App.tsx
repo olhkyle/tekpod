@@ -7,9 +7,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
 import AuthenticationGuard from './guard/AuthenticationGuard';
-import { Layout, DiaryLayout, LoadLazy, RouteError, ExpenseTrackerLayout, DiaryContent } from './components';
+import { Layout, DiaryLayout, LoadLazy, RouteError, ExpenseTrackerLayout } from './components';
 import { routes } from './constants';
 
+const DiaryContentPage = lazy(() => import('./pages/DiaryContent'));
 const ExpenseTrackerByMonthPage = lazy(() => import('./pages/ExpenseTrackerByMonth'));
 const ExpenseTrackerByMonthItemPage = lazy(() => import('./pages/ExpenseTrackerByMonthItem'));
 const ExpenseTrackerUpcomingPage = lazy(() => import('./pages/ExpenseTrackerUpcoming'));
@@ -47,7 +48,7 @@ const router = createBrowserRouter([
 						index: true,
 						element: LoadLazy('Diary'),
 					},
-					{ path: `:diaryId`, element: <DiaryContent /> },
+					{ path: `:diaryId`, element: <DiaryContentPage /> },
 				],
 			},
 			{
