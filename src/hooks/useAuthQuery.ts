@@ -3,8 +3,8 @@ import supabase from '../supabase/service';
 import useUserStore from '../store/userStore';
 import queryKey from '../constants/queryKey';
 
-const STALE_TIME = 1000 * 5; // 5 sec
-const GC_TIME = 1000 * 60; // 1 min
+const STALE_TIME = 1000 * 60; // 1 min
+const GC_TIME = 1000 * 60 * 5; // 5 min
 
 const useAuthQuery = () => {
 	const { setUserData } = useUserStore();
@@ -32,7 +32,7 @@ const useAuthQuery = () => {
 					return null;
 				}
 			}
-
+			console.log(session);
 			setUserData(session);
 			return session;
 		},
