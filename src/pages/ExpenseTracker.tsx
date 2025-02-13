@@ -1,17 +1,17 @@
+import { useState } from 'react';
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { MdUpcoming } from 'react-icons/md';
 import { BsCalendar2MonthFill } from 'react-icons/bs';
-import { months, currentMonth, translateNumberIntoMonth } from '../utils/date';
+import { months, currentMonth } from '../utils/date';
 import queryKey from '../constants/queryKey';
 import { getAllPaymentsByMonth } from '../supabase/expenseTracker';
 import { monetizeWithSeparator } from '../utils/money';
 import { matchedPriceUnitWithSymbol } from '../constants/expenseTracker';
 import type { MatchedPriceUnitWithSymbol } from '../constants/expenseTracker';
-import { Link } from 'react-router-dom';
 import { routes } from '../constants';
-import { useState } from 'react';
 import { Select } from '../components';
 
 const linkGroup = [
@@ -44,7 +44,7 @@ const ExpenseTracker = () => {
 						data={months}
 						placeholder="Select Month"
 						descriptionLabel="Month"
-						currentValue={translateNumberIntoMonth(+targetMonth)}
+						currentValue={targetMonth}
 						onSelect={option => setTargetMonth(months[months.findIndex(month => month === option)])}
 					/>
 				</Flex>
