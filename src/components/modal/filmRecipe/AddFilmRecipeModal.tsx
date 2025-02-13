@@ -148,7 +148,7 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 				})}
 
 				<AddRecipeButton type="submit" disabled={checkIsDisabled()}>
-					{isPending ? <LoadingSpinner /> : 'ADD RECIPE'}
+					{isPending ? <LoadingSpinner /> : 'Add Recipe'}
 				</AddRecipeButton>
 			</Form>
 		</ModalLayout>
