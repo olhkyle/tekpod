@@ -4,6 +4,7 @@ import { BiSolidChevronRight } from 'react-icons/bi';
 import { FieldError } from 'react-hook-form';
 import { customPropReceiver } from '../../constants';
 import Button from './Button';
+import { useClickOutside } from '../../hooks';
 
 interface SelectProps<T extends string> {
 	data: readonly T[];
@@ -18,8 +19,10 @@ const Select = <T extends string>({ data: options, placeholder, descriptionLabel
 	const generatedId = useId();
 	const [isOpen, setOpen] = useState(false);
 
+	const targetRef = useClickOutside<HTMLDivElement>({ eventHandler: () => setOpen(false) });
+
 	return (
-		<SelectRoot>
+		<SelectRoot ref={targetRef}>
 			<SelectTrigger
 				type="button"
 				role="combobox"
