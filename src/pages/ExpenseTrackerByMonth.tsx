@@ -30,9 +30,9 @@ const ExpenseTrackerByMonthPage = () => {
 	return (
 		<section>
 			<Header>
-				<Title>가계부</Title>
+				<Title>Expense Tracker</Title>
 				<AddPaymentButton type="button" onClick={handleAddPaymentModal}>
-					추가하기
+					NEW
 				</AddPaymentButton>
 			</Header>
 			<DatePicker selected={selected} setSelected={setSelected} />
