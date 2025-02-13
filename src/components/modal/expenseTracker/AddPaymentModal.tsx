@@ -41,6 +41,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 		formState: { errors, touchedFields },
 	} = useForm<AddPaymentFormSchema>({
 		resolver: zodResolver(addPaymentFormSchema),
+		defaultValues: { usage_date: new Date() },
 	});
 
 	const { startTransition, Loading, isLoading } = useLoading();
@@ -162,7 +163,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 					</BottomFixedFlex>
 				</Flex>
 
-				<SubmitButton type="submit">{isLoading ? Loading : '추가하기'}</SubmitButton>
+				<SubmitButton type="submit">{isLoading ? Loading : 'Add'}</SubmitButton>
 			</Form>
 		</ModalLayout>
 	);

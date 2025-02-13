@@ -1,5 +1,5 @@
 import { ElementType } from 'react';
-import { AddPaymentModal } from './financialLedger';
+import { AddPaymentModal } from './expenseTracker';
 import { AddFilmRecipeModal, FilmRecipeModal, RemoveFilmRecipeConfirmModal } from './filmRecipe';
 import { EditDiaryContentModal } from './diary';
 
