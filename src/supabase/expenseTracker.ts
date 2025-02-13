@@ -18,7 +18,7 @@ const TABLE = 'expense_tracker';
 const ZERO_PRICE = 0;
 
 const calculatePriceUnits = (data: ExpenseTracker[]) => {
-	const groupByUnit = data.reduce((acc, item) => {
+	const groupByUnit = data.reduce<Record<string, number[]>>((acc, item) => {
 		const { price_unit, priceIntegerPart, priceDecimalPart } = item;
 
 		if (!acc[price_unit]) {
@@ -27,12 +27,12 @@ const calculatePriceUnits = (data: ExpenseTracker[]) => {
 
 		acc[price_unit].push(Number(`${priceIntegerPart}.${priceDecimalPart}`));
 		return acc;
-	}, {} as Record<string, number[]>);
+	}, {});
 
-	const priceUnits = Object.entries(groupByUnit).reduce((acc, [unit, prices]) => {
+	const priceUnits = Object.entries(groupByUnit).reduce<Record<string, number>>((acc, [unit, prices]) => {
 		acc[unit] = prices.length === 1 ? prices[0] : prices.reduce((sum, price) => sum + Number(price), ZERO_PRICE);
 		return acc;
-	}, {} as Record<string, number>);
+	}, {});
 
 	return priceUnits;
 };
@@ -68,7 +68,7 @@ const getAllPaymentsByMonth = async (month: number) => {
 		throw new Error(error.message);
 	}
 
-	return calculatePriceUnits(data);
+	return Object.values(calculatePriceUnits(data)).length === 0 ? { price: 0 } : calculatePriceUnits(data);
 };
 
 const addPayment = async (data: Omit<ExpenseTracker, 'id'>) => {
