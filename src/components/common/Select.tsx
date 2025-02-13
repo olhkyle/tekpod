@@ -61,7 +61,7 @@ const SelectTrigger = styled(Button)`
 	justify-content: center;
 	align-items: center;
 	gap: 4px;
-	padding: calc(var(--padding-container-mobile) * 0.5);
+	padding: calc(var(--padding-container-mobile) * 0.5) calc(var(--padding-container-mobile) * 0.75);
 	background-color: var(--grey50);
 	font-size: var(--fz-p);
 	border: 1px solid var(--grey100);
@@ -106,7 +106,7 @@ const SelectItem = styled.div<{ isCurrent: boolean }>`
 	display: flex;
 	align-items: center;
 	gap: 12px;
-	padding: calc(var(--padding-container-mobile) * 0.25);
+	padding: calc(var(--padding-container-mobile) * 0.25) calc(var(--padding-container-mobile) * 0.5);
 	font-size: var(--fz-p);
 	font-weight: ${({ isCurrent }) => (isCurrent ? 'var(--fw-semibold)' : 'var(--fw-regular)')};
 	color: ${({ isCurrent }) => (isCurrent ? 'var(--grey900)' : 'var(--grey700)')};
