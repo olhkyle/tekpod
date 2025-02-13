@@ -32,7 +32,6 @@ const useAuthQuery = () => {
 					return null;
 				}
 			}
-			console.log(session);
 			setUserData(session);
 			return session;
 		},
