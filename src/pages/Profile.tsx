@@ -21,7 +21,7 @@ const ProfilePage = () => {
 			const { error } = await startTransition(supabase.auth.signOut());
 
 			if (error) {
-				throw new Error(error.message);
+				throw new Error(error?.message);
 			}
 
 			navigate(routes.HOME);
