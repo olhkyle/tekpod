@@ -52,7 +52,7 @@ LabelInput.TextField = forwardRef(
 						type="button"
 						onClick={() => setShowPassword(!showPassword)}
 						aria-label={showPassword ? 'Hide Password' : 'Show Password'}>
-						{showPassword ? <IoEyeOffOutline size="21" /> : <IoEyeOutline size="21" />}
+						{showPassword ? <IoEyeOffOutline size="21" color="var(--black)" /> : <IoEyeOutline size="21" color="var(--black)" />}
 					</ToggleButton>
 				)}
 			</InputWrapper>
