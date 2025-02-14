@@ -3,12 +3,18 @@ import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
 import { IoMdNotifications } from 'react-icons/io';
 import { FaCalculator } from 'react-icons/fa';
+import { RiOpenaiFill } from 'react-icons/ri';
 import { routes } from '../constants';
 
 const linkGroup = [
 	{
+		to: routes.REFLECT,
+		icon: <RiOpenaiFill size="24" color="var(--white)" />,
+		title: 'Reflect AI Agent',
+	},
+	{
 		to: routes.TODO_REMINDER,
-		icon: <IoMdNotifications size="24" color="var(--blue200)" />,
+		icon: <IoMdNotifications size="24" color="var(--white)" />,
 		title: 'Reminder',
 	},
 	{
