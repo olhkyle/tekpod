@@ -1,11 +1,7 @@
 import { WorkInProgress } from '../components';
 
 const ExpenseTrackerUpcoming = () => {
-	return (
-		<>
-			<WorkInProgress />
-		</>
-	);
+	return <WorkInProgress />;
 };
 
 export default ExpenseTrackerUpcoming;
