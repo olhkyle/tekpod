@@ -15,6 +15,7 @@ const ExpenseTrackerByMonthPage = lazy(() => import('./pages/ExpenseTrackerByMon
 const ExpenseTrackerByMonthItemPage = lazy(() => import('./pages/ExpenseTrackerByMonthItem'));
 const ExpenseTrackerUpcomingPage = lazy(() => import('./pages/ExpenseTrackerUpcoming'));
 const ExpenseTrackerReportPage = lazy(() => import('./pages/ExpenseTrackerReport'));
+const ExpenseTrackerCreditCardTransactionPage = lazy(() => import('./pages/ExpenseTrackerCreditCardTransaction'));
 const LoginPage = lazy(() => import('./pages/Login'));
 const RegisterPage = lazy(() => import('./pages/Register'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -72,6 +73,7 @@ const router = createBrowserRouter([
 					{ path: `daily/:id`, element: <ExpenseTrackerByMonthItemPage /> },
 					{ path: `upcoming`, element: <ExpenseTrackerUpcomingPage /> },
 					{ path: `report`, element: <ExpenseTrackerReportPage /> },
+					{ path: `credit_card`, element: <ExpenseTrackerCreditCardTransactionPage /> },
 				],
 			},
 			{

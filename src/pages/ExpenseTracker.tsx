@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MdUpcoming } from 'react-icons/md';
+import { IoCardOutline } from 'react-icons/io5';
 import { BsCalendar2MonthFill } from 'react-icons/bs';
 import { Button, Select, TotalExpensePrice, TotalExpensePriceLoader } from '../components';
 import { months, currentMonth } from '../utils/date';
@@ -15,6 +16,11 @@ const linkGroup = [
 		to: `${routes.EXPENSE_TRACKER}/daily`,
 		icon: <BsCalendar2MonthFill size="18" color="var(--blue100)" />,
 		title: 'Daily Transaction',
+	},
+	{
+		to: `${routes.EXPENSE_TRACKER}/credit_card`,
+		icon: <IoCardOutline size="18" color="var(--blue100)" />,
+		title: 'Credit Card Transaction',
 	},
 	{
 		to: `${routes.EXPENSE_TRACKER}/upcoming`,
