@@ -56,21 +56,21 @@ const ExpenseTrackerByMonthItemPage = () => {
 
 			<Detail>
 				<div>
-					<dt>사용처</dt>
+					<dt>Place</dt>
 					<dd>{payment.place}</dd>
 				</div>
 				<div>
-					<dt>은행</dt>
+					<dt>Bank</dt>
 					<dd>{payment.bank}</dd>
 				</div>
 				<div>
-					<dt>결제일시</dt>
+					<dt>Transaction Date</dt>
 					<dd>{format(currentDate)}</dd>
 				</div>
 			</Detail>
 
 			<DeleteButton type="button" onClick={handlePaymentDelete}>
-				{isLoading ? Loading : '삭제하기'}
+				{isLoading ? Loading : 'Delete'}
 			</DeleteButton>
 		</Container>
 	);

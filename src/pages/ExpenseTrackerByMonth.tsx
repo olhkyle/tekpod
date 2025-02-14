@@ -37,7 +37,7 @@ const ExpenseTrackerByMonthPage = () => {
 			</Header>
 			<DatePicker selected={selected} setSelected={setSelected} />
 			<PaymentListLayout>
-				<PaymentListTitle>사용내역</PaymentListTitle>
+				<PaymentListTitle>List</PaymentListTitle>
 				<Flex>
 					<SegmentedControl options={segmentedControlOptions} current={currentPaymentMethod} setCurrent={setCurrentPaymentMethod} />
 					<Select
