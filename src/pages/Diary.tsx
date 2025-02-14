@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 import { DiaryContent, DiaryContentLoader } from '../components';
 import { routes } from '../constants';
-import { Link } from 'react-router-dom';
 
 const DiaryPage = () => {
 	return (
