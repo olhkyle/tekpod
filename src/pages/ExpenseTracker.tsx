@@ -1,17 +1,11 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useSuspenseQuery } from '@tanstack/react-query';
 import { MdUpcoming } from 'react-icons/md';
 import { BsCalendar2MonthFill } from 'react-icons/bs';
-import { getAllPaymentsByMonth } from '../supabase/expenseTracker';
-import { Button, Select } from '../components';
-import { monetizeWithSeparator } from '../utils/money';
+import { Button, Select, TotalExpensePrice, TotalExpensePriceLoader } from '../components';
 import { months, currentMonth } from '../utils/date';
-import queryKey from '../constants/queryKey';
-import { matchedPriceUnitWithSymbol } from '../constants/expenseTracker';
-import type { MatchedPriceUnitWithSymbol } from '../constants/expenseTracker';
 import { routes } from '../constants';
 import useModalStore from '../store/useModalStore';
 import { MODAL_CONFIG } from '../components/modal/modalType';
@@ -30,16 +24,10 @@ const linkGroup = [
 ];
 
 const ExpenseTracker = () => {
-	const [targetMonth, setTargetMonth] = useState<string>(months[currentMonth]); // Jan ~
-
-	// months ['Jan', 'Feb' , ']
+	const [targetMonth, setTargetMonth] = useState<string>(months[currentMonth]); // Jan ~ Dec
 	const currentMonthIndex = months.findIndex(month => month === targetMonth);
 
-	const { data } = useSuspenseQuery({
-		queryKey: [...queryKey.EXPENSE_TRACKER, currentMonthIndex], // 0 ~ 11
-		queryFn: () => getAllPaymentsByMonth(currentMonthIndex), // 0 ~ 11
-	});
-
+	const navigate = useNavigate();
 	const { setModal } = useModalStore();
 
 	const handleAddPaymentModal = () => {
@@ -65,29 +53,17 @@ const ExpenseTracker = () => {
 							onSelect={option => setTargetMonth(months[months.findIndex(month => month === option)])}
 						/>
 					</Flex>
-					{data.price === 0 ? (
-						<Price>
-							<span>₩</span>
-							<span>{monetizeWithSeparator(data.price + '')}</span>
-						</Price>
-					) : (
-						<PriceList>
-							{Object.entries(data).map(([priceUnit, price], idx) => (
-								<Price key={`${price}_${priceUnit}_${idx}`}>
-									<span>{matchedPriceUnitWithSymbol[priceUnit as keyof MatchedPriceUnitWithSymbol]}</span>
-									<span>{monetizeWithSeparator(price + '')}</span>
-								</Price>
-							))}
-						</PriceList>
-					)}
+					<Suspense fallback={<TotalExpensePriceLoader />}>
+						<TotalExpensePrice currentMonthIndex={currentMonthIndex} />
+					</Suspense>
 				</TotalExpenseContent>
 				<Flex direction="row" alignItems="center" gap="0px">
 					<AddNewExpenseButton type="button" onClick={handleAddPaymentModal}>
-						Add New Expense
+						Add Expense
 					</AddNewExpenseButton>
-					<WipButton type="button" onClick={handleAddPaymentModal}>
-						🤔
-					</WipButton>
+					<PersonalExpenseLink type="button" onClick={() => navigate(`${routes.EXPENSE_TRACKER}/report`)}>
+						Expense Report
+					</PersonalExpenseLink>
 				</Flex>
 			</TotalExpense>
 			<Flex direction={'column'} alignItems={'flex-start'} gap="8px">
@@ -111,7 +87,6 @@ const ExpenseTracker = () => {
 
 const TotalExpense = styled.div`
 	margin-bottom: 16px;
-	border: 1px solid var(--grey100);
 	border-radius: var(--radius-l);
 `;
 
@@ -137,34 +112,25 @@ const Flex = styled.div<{
 	}
 `;
 
-const PriceList = styled.ul`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-`;
-
-const Price = styled.li`
-	display: flex;
-	font-size: var(--fz-h4);
-	font-weight: var(--fw-black);
-`;
-
 const AddNewExpenseButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	background-color: var(--grey100);
 	color: var(--black);
+	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	border-radius: 0 0 0 var(--radius-l);
 `;
 
-const WipButton = styled(Button)`
+const PersonalExpenseLink = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	background-color: var(--grey200);
 	color: var(--black);
+	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	border-radius: 0 0 var(--radius-l) 0;
+	text-align: center;
 `;
 
 const StyledMotion = styled(motion.div)`
