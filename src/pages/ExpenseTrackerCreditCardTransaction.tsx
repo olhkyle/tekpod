@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import { WorkInProgress } from '../components';
 
-const ExpenseTrackerUpcoming = () => {
+const ExpenseTrackerCreditCardTransaction = () => {
 	return (
 		<div>
-			<Title>Upcoming</Title>
+			<Title>Credit Card</Title>
 			<WorkInProgress />
 		</div>
 	);
@@ -17,4 +17,4 @@ const Title = styled.h2`
 	color: var(--grey900);
 `;
 
-export default ExpenseTrackerUpcoming;
+export default ExpenseTrackerCreditCardTransaction;

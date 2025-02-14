@@ -4,7 +4,7 @@ import { Todo } from './schema';
 const TABLE = 'todos';
 
 const getTodos = async (): Promise<Todo[]> => {
-	const { data, error } = await supabase.from(TABLE).select('*').order('updated_at', { ascending: false });
+	const { data, error } = await supabase.from(TABLE).select('*').order('created_at', { ascending: false });
 
 	if (error) {
 		throw new Error(error.message);

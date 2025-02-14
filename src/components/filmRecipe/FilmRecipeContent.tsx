@@ -25,7 +25,7 @@ const FilmRecipeContent = ({ recipes, refetch }: FilmRecipeContentProps) => {
 
 	return (
 		<Container>
-			{recipes.length === 0 && <EmptyMessage emoji={'📷'}>{'ADD RECIPE PLEASE'}</EmptyMessage>}
+			{recipes.length === 0 && <EmptyMessage emoji={'📷'}>{'Add Recipe Please'}</EmptyMessage>}
 			{recipes.map(({ title, film_simulation, primary }, idx) => (
 				<Recipe key={idx} primary={primary} onClick={() => handleIndividualFilmRecipeModal(title)}>
 					<Title>
@@ -50,14 +50,10 @@ const Recipe = styled.div<{ primary: boolean }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: calc(var(--padding-container-mobile) * 1.2) calc(var(--padding-container-mobile) * 0.5);
-	border-bottom: 1px solid var(--greyOpacity100);
+	padding: calc(var(--padding-container-mobile) * 1.2) calc(var(--padding-container-mobile) * 0.75);
+	border-radius: var(--radius-m);
 	transition: background 0.15s ease-in-out;
 	cursor: pointer;
-
-	&:first-of-type {
-		border-top: 1px solid var(--greyOpacity100);
-	}
 
 	&:hover,
 	&:focus {

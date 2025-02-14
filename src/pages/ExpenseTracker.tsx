@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MdUpcoming } from 'react-icons/md';
+import { IoCardOutline } from 'react-icons/io5';
 import { BsCalendar2MonthFill } from 'react-icons/bs';
 import { Button, Select, TotalExpensePrice, TotalExpensePriceLoader } from '../components';
 import { months, currentMonth } from '../utils/date';
@@ -17,13 +18,18 @@ const linkGroup = [
 		title: 'Daily Transaction',
 	},
 	{
+		to: `${routes.EXPENSE_TRACKER}/credit_card`,
+		icon: <IoCardOutline size="18" color="var(--blue100)" />,
+		title: 'Credit Card Transaction',
+	},
+	{
 		to: `${routes.EXPENSE_TRACKER}/upcoming`,
 		icon: <MdUpcoming size="18" color="var(--blue100)" />,
 		title: 'Upcoming Transaction',
 	},
 ];
 
-const ExpenseTracker = () => {
+const ExpenseTrackerPage = () => {
 	const [targetMonth, setTargetMonth] = useState<string>(months[currentMonth]); // Jan ~ Dec
 	const currentMonthIndex = months.findIndex(month => month === targetMonth);
 
@@ -155,4 +161,4 @@ const IconBackground = styled.div`
 	border-radius: var(--radius-s);
 `;
 
-export default ExpenseTracker;
+export default ExpenseTrackerPage;

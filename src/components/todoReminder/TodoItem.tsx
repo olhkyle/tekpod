@@ -74,10 +74,10 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 	const handleTodoIsCompleted = async (completed: boolean) => {
 		try {
 			await startTransition(updatedTodoCompleted({ id: todo.id, completed, updated_at: new Date() }));
-			addToast({ status: 'success', message: 'Successfully Change todo' });
+			addToast({ status: 'success', message: 'Successfully change todo' });
 		} catch (e) {
 			console.error(e);
-			addToast({ status: 'error', message: 'Error happends during changing todo' });
+			addToast({ status: 'error', message: 'Error happens during changing todo' });
 		} finally {
 			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
 		}

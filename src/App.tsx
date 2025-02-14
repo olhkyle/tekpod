@@ -9,12 +9,13 @@ import GlobalStyle from './styles/GlobalStyle';
 import AuthenticationGuard from './guard/AuthenticationGuard';
 import { Layout, DiaryLayout, LoadLazy, RouteError, ExpenseTrackerLayout } from './components';
 import { routes } from './constants';
-import ExpenseTrackerReport from './pages/ExpenseTrackerReport';
 
 const DiaryContentPage = lazy(() => import('./pages/DiaryContent'));
 const ExpenseTrackerByMonthPage = lazy(() => import('./pages/ExpenseTrackerByMonth'));
 const ExpenseTrackerByMonthItemPage = lazy(() => import('./pages/ExpenseTrackerByMonthItem'));
 const ExpenseTrackerUpcomingPage = lazy(() => import('./pages/ExpenseTrackerUpcoming'));
+const ExpenseTrackerReportPage = lazy(() => import('./pages/ExpenseTrackerReport'));
+const ExpenseTrackerCreditCardTransactionPage = lazy(() => import('./pages/ExpenseTrackerCreditCardTransaction'));
 const LoginPage = lazy(() => import('./pages/Login'));
 const RegisterPage = lazy(() => import('./pages/Register'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -71,8 +72,13 @@ const router = createBrowserRouter([
 					{ path: `daily`, element: <ExpenseTrackerByMonthPage /> },
 					{ path: `daily/:id`, element: <ExpenseTrackerByMonthItemPage /> },
 					{ path: `upcoming`, element: <ExpenseTrackerUpcomingPage /> },
-					{ path: `report`, element: <ExpenseTrackerReport /> },
+					{ path: `report`, element: <ExpenseTrackerReportPage /> },
+					{ path: `credit_card`, element: <ExpenseTrackerCreditCardTransactionPage /> },
 				],
+			},
+			{
+				path: `${routes.REFLECT}`,
+				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('ReflectAI')} />,
 			},
 			{
 				path: `${routes.USER}`,

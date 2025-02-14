@@ -33,7 +33,7 @@ const TodoReminderPage = () => {
 				}),
 			);
 
-			addToast({ status: 'success', message: 'Successfully Add' });
+			addToast({ status: 'success', message: 'Successfully add' });
 			setValue('');
 		} catch (e) {
 			console.error(e);

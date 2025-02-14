@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { FiSearch } from 'react-icons/fi';
+import { MdOutlineAdd } from 'react-icons/md';
 import { IoIosArrowBack } from 'react-icons/io';
 import { routes } from '../../constants';
 import { Button } from '../common';
@@ -14,6 +14,7 @@ const Header = () => {
 			<Logo>
 				{pathname.includes(routes.EXPENSE_TRACKER) ||
 				pathname.includes(routes.TODO_REMINDER) ||
+				pathname.includes(routes.REFLECT) ||
 				[...pathname].filter(item => item === '/').length >= 2 ? (
 					<GoBackButton>
 						<IoIosArrowBack size="24" color="var(--grey700)" />
@@ -23,7 +24,7 @@ const Header = () => {
 				)}
 			</Logo>
 			<StyledButton type="button">
-				<FiSearch size={24} color="var(--black)" />
+				<MdOutlineAdd size={24} color="var(--black)" />
 			</StyledButton>
 		</Container>
 	);

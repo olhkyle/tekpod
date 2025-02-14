@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import { WorkInProgress } from '../components';
 
-const ExpenseTrackerUpcoming = () => {
+const ReflectAIPage = () => {
 	return (
 		<div>
-			<Title>Upcoming</Title>
+			<Title>Reflect AI</Title>
 			<WorkInProgress />
 		</div>
 	);
@@ -16,5 +16,4 @@ const Title = styled.h2`
 	font-weight: var(--fw-black);
 	color: var(--grey900);
 `;
-
-export default ExpenseTrackerUpcoming;
+export default ReflectAIPage;
