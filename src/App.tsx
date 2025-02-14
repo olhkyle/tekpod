@@ -9,6 +9,7 @@ import GlobalStyle from './styles/GlobalStyle';
 import AuthenticationGuard from './guard/AuthenticationGuard';
 import { Layout, DiaryLayout, LoadLazy, RouteError, ExpenseTrackerLayout } from './components';
 import { routes } from './constants';
+import ExpenseTrackerReport from './pages/ExpenseTrackerReport';
 
 const DiaryContentPage = lazy(() => import('./pages/DiaryContent'));
 const ExpenseTrackerByMonthPage = lazy(() => import('./pages/ExpenseTrackerByMonth'));
@@ -70,6 +71,7 @@ const router = createBrowserRouter([
 					{ path: `daily`, element: <ExpenseTrackerByMonthPage /> },
 					{ path: `daily/:id`, element: <ExpenseTrackerByMonthItemPage /> },
 					{ path: `upcoming`, element: <ExpenseTrackerUpcomingPage /> },
+					{ path: `report`, element: <ExpenseTrackerReport /> },
 				],
 			},
 			{
