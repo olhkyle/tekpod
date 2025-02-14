@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { WorkInProgress } from '../components';
 
-const ExpenseTrackerReport = () => {
+const ExpenseTrackerReportPage = () => {
 	return (
 		<div>
 			<Title>Report</Title>
@@ -17,4 +17,4 @@ const Title = styled.h2`
 	color: var(--grey900);
 `;
 
-export default ExpenseTrackerReport;
+export default ExpenseTrackerReportPage;
