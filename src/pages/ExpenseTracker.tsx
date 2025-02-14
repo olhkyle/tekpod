@@ -23,7 +23,7 @@ const linkGroup = [
 	},
 ];
 
-const ExpenseTracker = () => {
+const ExpenseTrackerPage = () => {
 	const [targetMonth, setTargetMonth] = useState<string>(months[currentMonth]); // Jan ~ Dec
 	const currentMonthIndex = months.findIndex(month => month === targetMonth);
 
@@ -155,4 +155,4 @@ const IconBackground = styled.div`
 	border-radius: var(--radius-s);
 `;
 
-export default ExpenseTracker;
+export default ExpenseTrackerPage;
