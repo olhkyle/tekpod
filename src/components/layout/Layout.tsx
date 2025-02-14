@@ -11,6 +11,7 @@ const layoutCss = {
 		max-width: var(--max-app-width);
 		min-width: var(--min-app-width);
 		margin: 0 auto;
+		background-color: var(--white);
 		overflow: hidden;
 	`,
 	main: css`
