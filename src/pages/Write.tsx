@@ -81,7 +81,7 @@ const WritePage = () => {
 						render={({ field: { value, onChange } }) => <TagsInput tags={value} onChange={onChange} />}
 					/>
 				</Wrapper>
-				<UploadButton type="submit">{isLoading ? Loading : '👆🏻 Upload'}</UploadButton>
+				<UploadButton type="submit">{isLoading ? Loading : 'Upload'}</UploadButton>
 			</Group>
 		</Container>
 	);
