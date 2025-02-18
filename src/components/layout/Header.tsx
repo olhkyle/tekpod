@@ -1,10 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { MdOutlineAdd } from 'react-icons/md';
 import { IoIosArrowBack } from 'react-icons/io';
 import { routes } from '../../constants';
-import { Button } from '../common';
-import GoBackButton from './GoBackButton';
+import { GoBackButton, AddQuickMemoButton } from '..';
 
 const Header = () => {
 	const { pathname } = useLocation();
@@ -23,9 +21,7 @@ const Header = () => {
 					<Link to={routes.HOME}>TEKT</Link>
 				)}
 			</Logo>
-			<StyledButton type="button">
-				<MdOutlineAdd size={24} color="var(--black)" />
-			</StyledButton>
+			<AddQuickMemoButton />
 		</Container>
 	);
 };
@@ -53,15 +49,6 @@ const Logo = styled.h1`
 	align-items: center;
 	font-size: var(--fz-h6);
 	font-weight: var(--fw-black);
-`;
-
-const StyledButton = styled(Button)`
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	width: 27px;
-	height: 27px;
-	cursor: pointer;
 `;
 
 export default Header;
