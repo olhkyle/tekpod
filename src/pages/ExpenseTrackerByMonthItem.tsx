@@ -11,6 +11,7 @@ import useToastStore from '../store/useToastStore';
 import { useQueryClient } from '@tanstack/react-query';
 import queryKey from '../constants/queryKey';
 import { routes } from '../constants';
+import { toastData } from '../constants/toast';
 
 const ExpenseTrackerByMonthItemPage = () => {
 	const queryClient = useQueryClient();
@@ -26,11 +27,11 @@ const ExpenseTrackerByMonthItemPage = () => {
 		try {
 			await startTransition(removePayment({ id: payment.id }));
 
-			addToast({ status: 'success', message: 'Successfully Delete' });
+			addToast(toastData.EXPENSE_TRACKER.REMOVE.SUCCESS);
 			navigate(routes.EXPENSE_TRACKER, { state: { currentDate } });
 		} catch (e) {
 			console.error(e);
-			addToast({ status: 'error', message: 'Error with deleting payment' });
+			addToast(toastData.EXPENSE_TRACKER.REMOVE.ERROR);
 		} finally {
 			queryClient.invalidateQueries({ queryKey: [...queryKey.EXPENSE_TRACKER, currentDate] });
 		}

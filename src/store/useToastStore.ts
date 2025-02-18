@@ -21,4 +21,5 @@ const useToastStore = create<ToastState>(set => ({
 	},
 }));
 
+export type { Toast };
 export default useToastStore;

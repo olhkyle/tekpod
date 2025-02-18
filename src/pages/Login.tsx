@@ -11,6 +11,7 @@ import { useLoading } from '../hooks';
 import useUserStore from '../store/userStore';
 import useToastStore from '../store/useToastStore';
 import { routes } from '../constants';
+import { toastData } from '../constants/toast';
 
 const pageCss = {
 	container: css`
@@ -68,7 +69,7 @@ const LoginPage = () => {
 			const { data, error } = await startTransition(supabase.auth.signInWithPassword(formData));
 
 			if (error) {
-				addToast({ status: 'error', message: 'Error with Login' });
+				addToast(toastData.PROFILE.LOGIN.ERROR);
 				throw new Error(error.message);
 			}
 
@@ -76,7 +77,7 @@ const LoginPage = () => {
 				setUserData(data.session);
 				queryClient.setQueryData(['auth'], data.session);
 				navigate(routes.HOME);
-				addToast({ status: 'success', message: 'Successfully Login' });
+				addToast(toastData.PROFILE.LOGIN.SUCCESS);
 			}
 		} catch (error) {
 			setValue('email', formData.email);

@@ -13,6 +13,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import useToastStore from '../../../store/useToastStore';
 import queryKey from '../../../constants/queryKey';
 import { monetizeWithSeparator } from '../../../utils/money';
+import { toastData } from '../../../constants/toast';
 
 interface AddPaymentModalProps {
 	id: string;
@@ -53,10 +54,10 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 		try {
 			await startTransition(addPayment({ ...data, user_id: session?.user?.id, created_at: today, updated_at: today }));
 			onClose();
-			addToast({ status: 'success', message: 'Successfully add payment' });
+			addToast(toastData.EXPENSE_TRACKER.CREATE.SUCCESS);
 		} catch (e) {
 			console.error(e);
-			addToast({ status: 'error', message: 'Error with adding payment' });
+			addToast(toastData.EXPENSE_TRACKER.CREATE.ERROR);
 		} finally {
 			queryClient.invalidateQueries({ queryKey: queryKey.EXPENSE_TRACKER });
 		}

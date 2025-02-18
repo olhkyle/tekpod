@@ -13,3 +13,4 @@ export { default as GoBackButton } from './GoBackButton';
 export { default as Footer } from './Footer';
 export { default as BottomNav } from './BottomNav';
 export { default as NotAuthenticated } from './NotAuthenticated';
+export { default as AddQuickMemoButton } from './AddQuickMemoButton';

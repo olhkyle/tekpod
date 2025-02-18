@@ -1,5 +1,6 @@
 import { ChangeEvent, useRef, useState } from 'react';
 import useToastStore from '../store/useToastStore';
+import { toastData } from '../constants/toast';
 
 const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT_IMAGE_SIZE: number; isEditing: boolean }) => {
 	const [imageDataUrl, setImageDataUrl] = useState<string>('');
@@ -31,17 +32,17 @@ const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT
 				imageInputRef.current.value = '';
 			}
 
-			addToast({ status: 'warn', message: `'image/webp' type can be uploaded only` });
+			addToast(toastData.FILM_RECIPE.CREATE.IMAGE.WARN.IMAGE_TYPE);
 			return;
 		}
 
 		if (!currentImageFile) {
-			addToast({ status: 'warn', message: 'Please, upload Image' });
+			addToast(toastData.FILM_RECIPE.CREATE.IMAGE.WARN.NOT_UPLOADED);
 			return;
 		}
 
 		if (currentImageFileSize > DEFAULT_IMAGE_SIZE) {
-			addToast({ status: 'warn', message: 'File can not be uploaded over 10mb' });
+			addToast(toastData.FILM_RECIPE.CREATE.IMAGE.WARN.FILE_SIZE);
 			return;
 		}
 
@@ -74,7 +75,7 @@ const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT
 			setImageDataUrl(imageUrl);
 			setCurrentRecipeImage(currentImageFile);
 		} catch (e) {
-			addToast({ status: 'error', message: 'Error happens during image upload' });
+			addToast(toastData.FILM_RECIPE.CREATE.IMAGE.ERROR);
 		}
 	};
 

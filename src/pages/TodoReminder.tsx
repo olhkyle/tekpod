@@ -4,10 +4,11 @@ import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
 import { BsPlus } from 'react-icons/bs';
 import { Button, EmptyMessage, TextInput, TodoItem } from '../components';
-import queryKey from '../constants/queryKey';
 import { addTodo, getTodos } from '../supabase/todos';
 import { useLoading } from '../hooks';
 import useToastStore from '../store/useToastStore';
+import queryKey from '../constants/queryKey';
+import { toastData } from '../constants/toast';
 
 const TodoReminderPage = () => {
 	const queryClient = useQueryClient();
@@ -33,11 +34,11 @@ const TodoReminderPage = () => {
 				}),
 			);
 
-			addToast({ status: 'success', message: 'Successfully add' });
+			addToast(toastData.TODO_REMINDER.CREATE.SUCCESS);
 			setValue('');
 		} catch (e) {
 			console.error(e);
-			addToast({ status: 'error', message: 'Error happens' });
+			addToast(toastData.TODO_REMINDER.CREATE.ERROR);
 		} finally {
 			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
 		}

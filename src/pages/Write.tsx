@@ -10,6 +10,7 @@ import { addDiary } from '../supabase/diary';
 import { routes } from '../constants';
 import useLoading from '../hooks/useLoading';
 import useToastStore from '../store/useToastStore';
+import { toastData } from '../constants/toast';
 
 const WritePage = () => {
 	const queryClient = useQueryClient();
@@ -24,7 +25,6 @@ const WritePage = () => {
 	} = useForm<WriteSchema>({ resolver: zodResolver(writeSchema), defaultValues: { tags: [] } });
 
 	const { Loading, isLoading, startTransition } = useLoading();
-
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: WriteSchema) => {
@@ -45,10 +45,10 @@ const WritePage = () => {
 				throw new Error(error.message);
 			}
 
-			addToast({ status: 'info', message: 'Successfully Written' });
+			addToast(toastData.DIARY.CREATE.SUCCESS);
 			navigate(routes.DIARY);
 		} catch (error) {
-			addToast({ status: 'error', message: 'Error with Writing' });
+			addToast(toastData.DIARY.CREATE.ERROR);
 			console.error(error);
 		}
 	};

@@ -2,6 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { removeDiary } from '../../supabase/diary';
 import { Diary } from '../../supabase/schema';
 import queryKey from '../../constants/queryKey';
+import useToastStore from '../../store/useToastStore';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '../../constants';
+import { toastData } from '../../constants/toast';
 
 const remove =
 	({ id }: { id: string }) =>
@@ -11,6 +15,8 @@ const remove =
 
 const useDeleteDiaryMutation = () => {
 	const queryClient = useQueryClient();
+	const { addToast } = useToastStore();
+	const navigate = useNavigate();
 
 	const { mutate, isPending } = useMutation({
 		async mutationFn(variables: { id: string }) {
@@ -33,8 +39,14 @@ const useDeleteDiaryMutation = () => {
 		onError(error, _, context) {
 			if (context?.previousData) {
 				console.error(error);
+
+				addToast(toastData.DIARY.REMOVE.ERROR);
 				queryClient.setQueryData(queryKey.DIARY, context?.previousData);
 			}
+		},
+		onSuccess() {
+			addToast(toastData.DIARY.REMOVE.SUCCESS);
+			navigate(routes.DIARY);
 		},
 		// Always refetch after error or success:
 		onSettled() {

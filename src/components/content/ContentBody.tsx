@@ -1,25 +1,21 @@
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import type { Diary } from '../../supabase/schema';
 import { getSingleDiary } from '../../supabase/diary';
-import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
 import { LoadingSpinner, Button } from '..';
+import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
 import useModalStore from '../../store/useModalStore';
-import { routes } from '../../constants';
 import queryKey from '../../constants/queryKey';
-import useToastStore from '../../store/useToastStore';
 import { MODAL_CONFIG } from '../modal/modalType';
 
 const ContentBody = () => {
 	const { diaryId } = useParams();
-	const navigate = useNavigate();
 
 	const { data } = useSuspenseQuery<Diary>({ queryKey: [...queryKey.DIARY, diaryId], queryFn: () => getSingleDiary(diaryId!) });
 	const { mutate: remove, isPending } = useRemoveDiaryMutation();
 
 	const { setModal } = useModalStore();
-	const { addToast } = useToastStore();
 
 	const handleEditContentModalClick = () =>
 		setModal({
@@ -27,20 +23,7 @@ const ContentBody = () => {
 			props: { type: 'diary', data },
 		});
 
-	const handleDeleteDiaryClick = () => {
-		remove(
-			{ id: diaryId! },
-			{
-				onSuccess: () => {
-					addToast({ status: 'success', message: 'Successfully delete diary' });
-					navigate(routes.DIARY);
-				},
-				onError: () => {
-					addToast({ status: 'error', message: 'Error happens to delete diary' });
-				},
-			},
-		);
-	};
+	const handleDeleteDiaryClick = () => remove({ id: diaryId! });
 
 	return (
 		<>
@@ -61,7 +44,7 @@ const ContentBody = () => {
 			</Description>
 
 			<DeleteButton type="button" onClick={handleDeleteDiaryClick}>
-				{isPending ? <LoadingSpinner /> : '🗑️ Delete'}
+				{isPending ? <LoadingSpinner /> : 'Delete'}
 			</DeleteButton>
 		</>
 	);
