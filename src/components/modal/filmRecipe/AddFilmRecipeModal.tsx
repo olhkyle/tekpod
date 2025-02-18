@@ -8,6 +8,7 @@ import useToastStore from '../../../store/useToastStore';
 import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../../hooks';
 import { FILM_RECIPE_FORM } from '../../../constants/recipes';
 import type { RestrictedRecipeForValidation } from '../../../supabase/schema';
+import { toastData } from '../../../constants/toast';
 
 interface AddFilmRecipeModalProps {
 	id: string;
@@ -78,7 +79,7 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 		const today = new Date();
 
 		if (checkIsDisabled()) {
-			addToast({ status: 'warn', message: 'Some fields are not filled' });
+			addToast(toastData.FILM_RECIPE.CREATE.SUBMIT.WARN);
 			return;
 		}
 
@@ -95,12 +96,12 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 				},
 				{
 					onSuccess() {
-						addToast({ status: 'success', message: `Successfully add new film recipe` });
+						addToast(toastData.FILM_RECIPE.CREATE.SUBMIT.SUCCESS);
 						onClose();
 					},
 					onError(error) {
 						console.error(error);
-						addToast({ status: 'error', message: `Error happens, adding film recipe` });
+						addToast(toastData.FILM_RECIPE.CREATE.SUBMIT.ERROR);
 					},
 				},
 			);

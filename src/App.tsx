@@ -18,7 +18,7 @@ const ExpenseTrackerReportPage = lazy(() => import('./pages/ExpenseTrackerReport
 const ExpenseTrackerCreditCardTransactionPage = lazy(() => import('./pages/ExpenseTrackerCreditCardTransaction'));
 const LoginPage = lazy(() => import('./pages/Login'));
 const RegisterPage = lazy(() => import('./pages/Register'));
-const NotFound = lazy(() => import('./pages/NotFound'));
+const NotFoundPage = lazy(() => import('./pages/NotFound'));
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -90,7 +90,7 @@ const router = createBrowserRouter([
 	{ path: routes.REGISTER, element: <RegisterPage /> },
 	{
 		path: '/*',
-		element: <NotFound />,
+		element: <NotFoundPage />,
 	},
 ]);
 

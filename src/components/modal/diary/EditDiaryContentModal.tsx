@@ -5,15 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BiMessageSquareEdit } from 'react-icons/bi';
 import { Diary } from '../../../supabase/schema';
+import { isEqual } from 'es-toolkit';
 import { ModalLayout } from '..';
 import { Button, TagsInput, TextArea, TextInput } from '../..';
 import { editContentFormSchema, EditContentFormSchema } from './editContentSchema';
 import { useLoading } from '../../../hooks';
 import { updateDiary } from '../../../supabase/diary';
 import { routes } from '../../../constants';
+import { toastData } from '../../../constants/toast';
 import useToastStore from '../../../store/useToastStore';
 import type { ModalDataType } from '../modalType';
-import { isEqual } from 'es-toolkit';
 
 interface EditContentModalProps {
 	id: string;
@@ -50,7 +51,7 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditContentModalProp
 			);
 
 		if (isUnedited) {
-			addToast({ status: 'warn', message: `Not Edited` });
+			addToast(toastData.DIARY.EDIT.WARN);
 			return;
 		}
 
@@ -62,10 +63,10 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditContentModalProp
 			}
 
 			onClose();
-			addToast({ status: 'info', message: `Successfully Edited` });
+			addToast(toastData.DIARY.EDIT.SUCCESS);
 			navigate(routes.DIARY);
 		} catch (error) {
-			addToast({ status: 'error', message: `Error with Editing` });
+			addToast(toastData.DIARY.EDIT.ERROR);
 			console.error(error);
 		}
 	};

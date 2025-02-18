@@ -13,6 +13,7 @@ import { filmRecipeFieldData, FILM_RECIPE_FORM, PLACEHOLDER_IMAGE_URL } from '..
 import { validateTitle } from '../../../utils/validateField';
 import { useQueryClient } from '@tanstack/react-query';
 import queryKey from '../../../constants/queryKey';
+import { toastData } from '../../../constants/toast';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -59,7 +60,7 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 		const titleValidationResult = validateTitle(currentFilmFeature.title);
 
 		if (titleValidationResult) {
-			return addToast({ status: 'error', message: titleValidationResult });
+			return addToast(toastData.FILM_RECIPE.EDIT.ERROR.TITLE_REQUIRED(titleValidationResult));
 		}
 
 		try {
@@ -78,11 +79,11 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 				}),
 			);
 
-			addToast({ status: 'info', message: `Successfully Updated` });
+			addToast(toastData.FILM_RECIPE.EDIT.SUCCESS);
 			onClose();
 		} catch (e) {
 			console.error(e);
-			addToast({ status: 'error', message: 'Error happens during update recipe' });
+			addToast(toastData.FILM_RECIPE.EDIT.ERROR.SUBMIT);
 		} finally {
 			queryClient.invalidateQueries({ queryKey: queryKey.FILM_RECIPE });
 		}

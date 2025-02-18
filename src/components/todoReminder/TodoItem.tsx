@@ -8,6 +8,7 @@ import { useClickOutside, useLoading } from '../../hooks';
 import useToastStore from '../../store/useToastStore';
 import { removeTodo, updatedTodoCompleted } from '../../supabase/todos';
 import queryKey from '../../constants/queryKey';
+import { toastData } from '../../constants/toast';
 
 interface TodoProps {
 	todo: Todo;
@@ -74,10 +75,10 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 	const handleTodoIsCompleted = async (completed: boolean) => {
 		try {
 			await startTransition(updatedTodoCompleted({ id: todo.id, completed, updated_at: new Date() }));
-			addToast({ status: 'success', message: 'Successfully change todo' });
+			addToast(toastData.TODO_REMINDER.EDIT.SUCCESS);
 		} catch (e) {
 			console.error(e);
-			addToast({ status: 'error', message: 'Error happens during changing todo' });
+			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
 		} finally {
 			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
 		}
@@ -87,10 +88,10 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 		try {
 			await startTransition(removeTodo({ id: todo.id }));
 
-			addToast({ status: 'success', message: 'Successfully remove todo' });
+			addToast(toastData.TODO_REMINDER.REMOVE.SUCCESS);
 		} catch (error) {
 			console.error(error);
-			addToast({ status: 'error', message: 'Error happens during removing todo' });
+			addToast(toastData.TODO_REMINDER.REMOVE.ERROR);
 		} finally {
 			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
 		}

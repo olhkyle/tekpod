@@ -7,6 +7,7 @@ import { Button } from '../components';
 import { useLoading } from '../hooks';
 import useToastStore from '../store/useToastStore';
 import { routes } from '../constants';
+import { toastData } from '../constants/toast';
 
 const ProfilePage = () => {
 	const queryClient = useQueryClient();
@@ -27,9 +28,9 @@ const ProfilePage = () => {
 			navigate(routes.HOME);
 			resetUser();
 
-			addToast({ status: 'success', message: 'Successfully Logout' });
+			addToast(toastData.PROFILE.LOGOUT.SUCCESS);
 		} catch (error) {
-			addToast({ status: 'error', message: 'Error with Logout' });
+			addToast(toastData.PROFILE.LOGOUT.ERROR);
 			console.error(error);
 		} finally {
 			queryClient.setQueryData(['auth'], null);

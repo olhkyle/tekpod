@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import { RestricedRecipeWithImage } from '../../../supabase/schema';
 import { ModalLayout, LoadingSpinner, Button } from '../..';
-import { ModalDataType } from '../modalType';
-import useToastStore from '../../../store/useToastStore';
 import useRemoveRecipeMutation from '../../../hooks/mutations/useRemoveFilmRecipeMutation';
+import { ModalDataType } from '../modalType';
 
 interface RemoveFilmRecipeConfirmModalProps {
 	id: string;
@@ -14,26 +13,9 @@ interface RemoveFilmRecipeConfirmModalProps {
 }
 
 const RemoveFilmRecipeConfirmModal = ({ id, type, data, onClose, onTopLevelModalClose }: RemoveFilmRecipeConfirmModalProps) => {
-	const { mutate: remove, isPending } = useRemoveRecipeMutation(data?.id);
-	const { addToast } = useToastStore();
+	const { mutate: remove, isPending } = useRemoveRecipeMutation({ id: data?.id, handlers: { onClose, onTopLevelModalClose } });
 
-	const handleRecipeDelete = () => {
-		remove(
-			{ id: data?.id, path: data?.imgSrc.replace(/^.*recipe\//, '') },
-			{
-				onSuccess: () => {
-					addToast({ status: 'success', message: 'Successfully delete recipe' });
-					onClose();
-				},
-				onError: () => {
-					addToast({ status: 'error', message: 'Error happens, deleting recipe' });
-				},
-				onSettled: () => {
-					onTopLevelModalClose();
-				},
-			},
-		);
-	};
+	const handleRecipeDelete = () => remove({ id: data?.id, path: data?.imgSrc.replace(/^.*recipe\//, '') });
 
 	return (
 		<ModalLayout id={id} type={type} title={'Delete Recipe'} onClose={onClose} bottomSheetType="doubleCheck">
