@@ -43,7 +43,10 @@ const Container = styled.div<{ position: 'top' | 'bottom' }>`
 	left: 0;
 	right: 0;
 	bottom: ${({ position }) => (position === 'bottom' ? '0' : 'auto')};
+	margin: 0 auto;
 	padding: var(--padding-container-mobile);
+	max-width: var(--max-app-width);
+	min-width: var(--min-app-width);
 	border-radius: ${({ position }) => (position === 'top' ? '0 0 var(--radius-l) var(--radius-l)' : 'var(--radius-l) var(--radius-l) 0 0')};
 	background-color: var(--white);
 	z-index: var(--drawer-index);
@@ -69,9 +72,9 @@ const AdditionalActions = styled.div<{ isShown: boolean }>`
 
 const Overlay = styled.div`
 	position: fixed;
+	margin: 0 auto;
 	max-width: var(--max-app-width);
 	min-width: var(--min-app-width);
-	margin: 0 auto;
 	height: 100dvh;
 	background-color: rgba(0, 0, 0, 30%);
 	inset: 0px;
