@@ -3,10 +3,10 @@ import { WorkInProgress } from '../components';
 
 const ExpenseTrackerUpcoming = () => {
 	return (
-		<div>
+		<section>
 			<Title>Upcoming</Title>
 			<WorkInProgress />
-		</div>
+		</section>
 	);
 };
 
