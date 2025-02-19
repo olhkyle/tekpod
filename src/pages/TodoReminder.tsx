@@ -103,6 +103,7 @@ const AddTodoButton = styled(Button)`
 const TodoList = styled.ul`
 	display: flex;
 	flex-direction: column;
+	gap: 24px;
 	padding: 16px 0;
 `;
 
