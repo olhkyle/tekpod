@@ -137,6 +137,7 @@ const TodoContent = styled.div<{ dragX: number }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 8px;
 	background-color: var(--white);
 	border-radius: ${({ dragX }) => (dragX < 0 ? 'var(--radius-s)' : 0)};
 	transform: ${({ dragX }) => `translateX(${dragX}px)`};
