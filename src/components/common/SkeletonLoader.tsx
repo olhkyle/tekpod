@@ -26,6 +26,7 @@ const SkeletonLoader = styled.div<{ width: `${number}px` | `${number}%`; height:
 		left: 0;
 		width: 32px;
 		height: 100%;
+		border-radius: var(--radius-s);
 		background: var(--linear-gradient);
 		animation: loading 3s infinite linear;
 	}
