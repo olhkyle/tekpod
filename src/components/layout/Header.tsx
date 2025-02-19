@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { IoIosArrowBack } from 'react-icons/io';
 import { routes } from '../../constants';
-import { GoBackButton, AddQuickMemoButton } from '..';
+import { GoBackButton, AddQuickDrawerMemoButton } from '..';
 
 const Header = () => {
 	const { pathname } = useLocation();
@@ -21,7 +21,7 @@ const Header = () => {
 					<Link to={routes.HOME}>TEKT</Link>
 				)}
 			</Logo>
-			<AddQuickMemoButton />
+			<AddQuickDrawerMemoButton />
 		</Container>
 	);
 };

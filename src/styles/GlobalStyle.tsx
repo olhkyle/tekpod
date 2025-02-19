@@ -118,6 +118,7 @@ const Global = css`
 		/* z-index */
 		--nav-index: 50;
 		--overlay-index: 999;
+		--drawer-index: 9991;
 		--modal-index: 9990;
 		--toast-index: 9999;
 	}
