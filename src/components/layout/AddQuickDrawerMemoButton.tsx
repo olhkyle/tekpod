@@ -8,13 +8,13 @@ const AddQuickDrawerMemoButton = () => {
 	const { isOpen, toggle } = useDrawerStore();
 
 	return (
-		<StyledButton type="button" onClick={toggle}>
+		<Container type="button" onClick={toggle}>
 			<RotatableSvg size={24} color="var(--black)" $isActive={isOpen} />
-		</StyledButton>
+		</Container>
 	);
 };
 
-const StyledButton = styled(Button)`
+const Container = styled(Button)`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
