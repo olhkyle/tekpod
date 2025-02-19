@@ -2,6 +2,7 @@ import supabase from './service';
 import { Diary } from './schema';
 
 const TABLE = 'diary';
+const PAGE_SIZE = 10;
 
 const getCommitStatus = async () => {
 	const { data, error } = await supabase.from(TABLE).select('*');
@@ -63,4 +64,4 @@ const removeDiary = async ({ id }: { id: string }) => {
 	return await supabase.from(TABLE).delete().eq('id', id);
 };
 
-export { getCommitStatus, getDiariesPageInfo, getDiariesByPage, getSingleDiary, addDiary, updateDiary, removeDiary };
+export { PAGE_SIZE, getCommitStatus, getDiariesPageInfo, getDiariesByPage, getSingleDiary, addDiary, updateDiary, removeDiary };

@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Header, BottomNav, LayoutLoadingSpinner, ErrorFallback } from '.';
-import { ModalContainer, Toast } from '..';
+import { ModalContainer, QuickMemoDrawer, Toast } from '..';
 import { useInitialScrollToTop } from '../../hooks';
 
 const layoutCss = {
@@ -44,6 +44,7 @@ const Layout = () => {
 					</main>
 					<BottomNav />
 					<ModalContainer />
+					<QuickMemoDrawer />
 				</div>
 			</Suspense>
 			<Toast />

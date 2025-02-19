@@ -3,10 +3,10 @@ import { WorkInProgress } from '../components';
 
 const ExpenseTrackerReportPage = () => {
 	return (
-		<div>
+		<section>
 			<Title>Report</Title>
 			<WorkInProgress />
-		</div>
+		</section>
 	);
 };
 

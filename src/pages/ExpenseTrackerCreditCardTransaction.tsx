@@ -3,10 +3,10 @@ import { WorkInProgress } from '../components';
 
 const ExpenseTrackerCreditCardTransaction = () => {
 	return (
-		<div>
+		<section>
 			<Title>Credit Card</Title>
 			<WorkInProgress />
-		</div>
+		</section>
 	);
 };
 

@@ -2,18 +2,21 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { IoIosArrowBack } from 'react-icons/io';
 import { routes } from '../../constants';
-import { GoBackButton, AddQuickMemoButton } from '..';
+import { GoBackButton, AddQuickDrawerMemoButton } from '..';
 
 const Header = () => {
 	const { pathname } = useLocation();
 
+	const isGoBackButtonActive =
+		pathname.includes(routes.EXPENSE_TRACKER) ||
+		pathname.includes(routes.TODO_REMINDER) ||
+		pathname.includes(routes.REFLECT) ||
+		[...pathname].filter(item => item === '/').length >= 2;
+
 	return (
 		<Container>
 			<Logo>
-				{pathname.includes(routes.EXPENSE_TRACKER) ||
-				pathname.includes(routes.TODO_REMINDER) ||
-				pathname.includes(routes.REFLECT) ||
-				[...pathname].filter(item => item === '/').length >= 2 ? (
+				{isGoBackButtonActive ? (
 					<GoBackButton>
 						<IoIosArrowBack size="24" color="var(--grey700)" />
 					</GoBackButton>
@@ -21,7 +24,7 @@ const Header = () => {
 					<Link to={routes.HOME}>TEKT</Link>
 				)}
 			</Logo>
-			<AddQuickMemoButton />
+			<AddQuickDrawerMemoButton />
 		</Container>
 	);
 };

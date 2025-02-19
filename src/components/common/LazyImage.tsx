@@ -20,7 +20,7 @@ const LazyImage = ({ src, alt, width, height, lazy = true }: LazyImageProps) => 
 				src={isLoaded ? src : PLACEHOLDER_IMAGE_URL}
 				alt={alt}
 				style={{ display: 'block', width, height }}
-				sizes="(max-width: 640px) 240px, 300px"
+				sizes="(max-width: 640px) 300px, 380px"
 			/>
 		</Container>
 	);

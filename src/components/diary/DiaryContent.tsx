@@ -1,7 +1,7 @@
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { getDiariesByPage, getDiariesPageInfo } from '../../supabase/diary';
+import { getDiariesByPage, getDiariesPageInfo, PAGE_SIZE } from '../../supabase/diary';
 import type { Diary } from '../../supabase/schema';
 import { LoadingSpinner } from '../layout';
 import { useInfinityScroll } from '../../hooks';
@@ -9,8 +9,6 @@ import { routes } from '../../constants';
 import getCalculatedTotalPage from '../../utils/getCalculatedTotalPage';
 import { EmptyMessage } from '../common';
 import queryKey from '../../constants/queryKey';
-
-const PAGE_SIZE = 10;
 
 const DiaryContent = () => {
 	const { data: pageInfo } = useSuspenseQuery({ queryKey: queryKey.PAGE_INFO, queryFn: getDiariesPageInfo });
