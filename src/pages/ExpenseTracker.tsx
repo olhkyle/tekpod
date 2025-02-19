@@ -6,7 +6,7 @@ import { MdUpcoming } from 'react-icons/md';
 import { IoCardOutline } from 'react-icons/io5';
 import { BsCalendar2MonthFill } from 'react-icons/bs';
 import { Button, Select, TotalExpensePrice, TotalExpensePriceLoader } from '../components';
-import { months, currentMonth } from '../utils/date';
+import { months, currentMonth, currentYear } from '../utils/date';
 import { routes } from '../constants';
 import useModalStore from '../store/useModalStore';
 import { MODAL_CONFIG } from '../components/modal/modalType';
@@ -50,14 +50,15 @@ const ExpenseTrackerPage = () => {
 			<TotalExpense>
 				<TotalExpenseContent>
 					<Flex direction={'row'} alignItems={'center'} gap="8px">
-						<div>How much I spend on</div>
+						<div>💳 How much I spend on</div>
 						<Select
-							data={months}
+							data={months.filter((_, idx) => idx <= currentMonth)}
 							placeholder="Select Month"
 							descriptionLabel="Month"
 							currentValue={targetMonth}
 							onSelect={option => setTargetMonth(months[months.findIndex(month => month === option)])}
 						/>
+						<span>in {currentYear}</span>
 					</Flex>
 					<Suspense fallback={<TotalExpensePriceLoader />}>
 						<TotalExpensePrice currentMonthIndex={currentMonthIndex} />
