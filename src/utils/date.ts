@@ -1,7 +1,6 @@
 const today = new Date();
-const currentYear = today.getFullYear();
-const currentMonth = today.getMonth();
-const currentDate = today.getDate();
+
+const [currentYear, currentMonth, currentDate] = [today.getFullYear(), today.getMonth(), today.getDate()];
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
 
