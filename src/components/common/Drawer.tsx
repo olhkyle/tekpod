@@ -47,30 +47,34 @@ const Container = styled.div<{ position: 'top' | 'bottom'; isOpen: boolean }>`
 	right: 0;
 	bottom: ${({ position }) => (position === 'bottom' ? '0' : 'auto')};
 	margin: 0 auto;
-	padding: var(--padding-container-mobile);
+	padding: 0 var(--padding-container-mobile) var(--padding-container-mobile);
 	max-width: var(--max-app-width);
 	min-width: var(--min-app-width);
 	border-radius: ${({ position }) => (position === 'top' ? '0 0 var(--radius-l) var(--radius-l)' : 'var(--radius-l) var(--radius-l) 0 0')};
 	background-color: var(--white);
 	z-index: var(--drawer-index);
-	animation: ${({ isOpen }) => (isOpen ? 'slideDown 0.3s ease forwards' : 'slideUp 0.2s ease forwards')};
-	-webkit-animation: ${({ isOpen }) => (isOpen ? 'slideDown 0.3s ease forwards' : 'slideUp 0.2s ease forwards')};
+	animation: ${({ isOpen }) => (isOpen ? 'slideDrawerDown 0.3s ease forwards' : 'slideDrawerUp 0.2s ease forwards')};
+	-webkit-animation: ${({ isOpen }) => (isOpen ? 'slideDrawerDown 0.3s ease forwards' : 'slideDrawerUp 0.2s ease forwards')};
 
-	@keyframes slideUp {
+	@keyframes slideDrawerUp {
 		from {
 			transform: translate3d(0, 0, 0);
+			/* opacity: 1; */
 		}
 		to {
 			transform: translate3d(0, -100%, 0);
+			/* opacity: 0; */
 		}
 	}
 
-	@keyframes slideDown {
+	@keyframes slideDrawerDown {
 		from {
 			transform: translate3d(0, -100%, 0);
+			/* opacity: 0; */
 		}
 		to {
 			transform: translate3d(0, 0, 0);
+			/* opacity: 1; */
 		}
 	}
 `;
@@ -79,6 +83,7 @@ const Header = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding: 7px 0;
 `;
 
 const Title = styled.h4`

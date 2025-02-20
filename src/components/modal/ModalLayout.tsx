@@ -60,10 +60,10 @@ const Container = styled.div<{ isVisible: boolean; bottomSheetType: 'plain' | 'd
 	border-top-right-radius: var(--radius-l);
 	transition: transform 0.3s ease;
 	z-index: var(--modal-index);
-	animation: ${({ isVisible }) => (isVisible ? 'slideUp 0.3s ease forwards' : 'slideDown 0.2s ease forwards')};
-	-webkit-animation: ${({ isVisible }) => (isVisible ? 'slideUp 0.3s ease forwards' : 'slideDown 0.2s ease forwards')};
+	animation: ${({ isVisible }) => (isVisible ? 'slideModalUp 0.3s ease forwards' : 'slideModalDown 0.2s ease forwards')};
+	-webkit-animation: ${({ isVisible }) => (isVisible ? 'slideModalUp 0.3s ease forwards' : 'slideModalDown 0.2s ease forwards')};
 
-	@keyframes slideUp {
+	@keyframes slideModalUp {
 		from {
 			transform: translate3d(0, 100%, 0);
 		}
@@ -72,7 +72,7 @@ const Container = styled.div<{ isVisible: boolean; bottomSheetType: 'plain' | 'd
 		}
 	}
 
-	@keyframes slideDown {
+	@keyframes slideModalDown {
 		from {
 			transform: translate3d(0, 0, 0);
 		}
