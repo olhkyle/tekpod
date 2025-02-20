@@ -65,19 +65,19 @@ const Container = styled.div<{ isVisible: boolean; bottomSheetType: 'plain' | 'd
 
 	@keyframes slideUp {
 		from {
-			transform: translateY(100%);
+			transform: translate3d(0, 100%, 0);
 		}
 		to {
-			transform: translateY(0);
+			transform: translate3d(0, 0, 0);
 		}
 	}
 
 	@keyframes slideDown {
 		from {
-			transform: translateY(0);
+			transform: translate3d(0, 0, 0);
 		}
 		to {
-			transform: translateY(100%);
+			transform: translateY(0, 100%, 0);
 		}
 	}
 `;

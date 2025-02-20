@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 const SkeletonLoader = styled.div<{ width: `${number}px` | `${number}%`; height: `${number}px` | `${number}%` }>`
 	--linear-gradient: linear-gradient(to right, var(--blue100), var(--grey100), var(--blue100));
+
 	position: relative;
 	width: ${({ width }) => width};
 	height: ${({ height }) => height};
@@ -11,11 +12,11 @@ const SkeletonLoader = styled.div<{ width: `${number}px` | `${number}%`; height:
 
 	@keyframes loading {
 		0% {
-			transform: translateX(0);
+			transform: translate3d(0, 0, 0);
 		}
 		50%,
 		100% {
-			transform: translateX(460px);
+			transform: translate3d(450px, 0, 0);
 		}
 	}
 
