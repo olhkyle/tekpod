@@ -1,8 +1,8 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { IoIosArrowBack } from 'react-icons/io';
 import { routes } from '../../constants';
-import { GoBackButton, AddQuickDrawerMemoButton } from '..';
+import { GoBackButton, AddQuickDrawerMemoButton, Logo } from '..';
 
 const Header = () => {
 	const { pathname } = useLocation();
@@ -15,15 +15,15 @@ const Header = () => {
 
 	return (
 		<Container>
-			<Logo>
+			<ReactiveLogo>
 				{isGoBackButtonActive ? (
 					<GoBackButton>
 						<IoIosArrowBack size="24" color="var(--grey700)" />
 					</GoBackButton>
 				) : (
-					<Link to={routes.HOME}>TEKT</Link>
+					<Logo />
 				)}
-			</Logo>
+			</ReactiveLogo>
 			<AddQuickDrawerMemoButton />
 		</Container>
 	);
@@ -46,7 +46,7 @@ const Container = styled.nav`
 	z-index: var(--nav-index);
 `;
 
-const Logo = styled.h1`
+const ReactiveLogo = styled.h1`
 	display: flex;
 	justify-content: center;
 	align-items: center;

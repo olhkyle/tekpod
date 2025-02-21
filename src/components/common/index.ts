@@ -13,3 +13,5 @@ export { default as SegmentedControl } from './SegmentedControl';
 export { default as Select } from './Select';
 export { default as WorkInProgress } from './WorkInProgress';
 export { default as Drawer } from './Drawer';
+export { default as Logo } from './Logo';
+export { default as AuthLogo } from './AuthLogo';
