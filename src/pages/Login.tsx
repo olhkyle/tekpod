@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import supabase from '../supabase/service';
-import { Button, LabelInput, Toast } from '../components';
+import { Button, LabelInput, AuthLogo, Toast } from '../components';
 import { loginSchema, type LoginSchema } from '../components/auth/schema';
 import { useLoading } from '../hooks';
 import useUserStore from '../store/userStore';
@@ -68,6 +68,7 @@ const LoginPage = () => {
 		try {
 			const { data, error } = await startTransition(supabase.auth.signInWithPassword(formData));
 
+			// TODO: 이메일 인증 안했으면 로그인 시키지 않도록 수정
 			if (error) {
 				addToast(toastData.PROFILE.LOGIN.ERROR);
 				throw new Error(error.message);
@@ -90,9 +91,7 @@ const LoginPage = () => {
 		<>
 			<div css={pageCss.container}>
 				<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
-					<Title>
-						<Link to={routes.HOME}>TEKT</Link>
-					</Title>
+					<AuthLogo />
 					<LabelInput label={'email'} errorMessage={errors?.email?.message}>
 						<LabelInput.TextField type={'email'} id={'email'} {...register('email')} placeholder={'Email'} />
 					</LabelInput>
@@ -115,12 +114,6 @@ const LoginPage = () => {
 		</>
 	);
 };
-
-const Title = styled.h2`
-	min-width: 270px;
-	font-size: var(--fz-h4);
-	font-weight: var(--fw-black);
-`;
 
 const SubmitButton = styled(Button)`
 	padding: var(--padding-container-mobile);
