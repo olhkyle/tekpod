@@ -8,15 +8,18 @@ interface UseFunnelTrigger<T> {
 }
 
 const useFunnel = <T>(trigger: UseFunnelTrigger<T>) => {
-	const [history, setHistory] = useState<{ step: keyof T; isDone: boolean }[]>([]);
-	const [currentStep, setCurrentStep] = useState(trigger.initial.step);
+	const [history, setHistory] = useState<(keyof T)[]>([]); // ['email']
+	const [currentStep, setCurrentStep] = useState(trigger.initial.step); // 'email' | 'password' | 'nickname'
+
+	const isStepValidated = (step: keyof T) => {
+		return trigger.steps?.[step]?.isDone ?? false;
+	};
 
 	const push = () => {
-		const step = trigger.steps?.[currentStep];
+		const step = trigger.steps?.[currentStep]; // { step : 'email' , isDone: false, next: 'password' }
 
-		console.log(step?.isDone, step?.next, step?.next !== 'done');
 		if (step?.isDone && step.next && step.next !== 'done') {
-			setHistory([...history, { step: currentStep, isDone: step.isDone }]);
+			setHistory([...history, currentStep]);
 			setCurrentStep(step.next);
 		}
 	};
@@ -25,23 +28,20 @@ const useFunnel = <T>(trigger: UseFunnelTrigger<T>) => {
 		if (history.length) {
 			const previousStep = history[history.length - 1];
 			setHistory(history.slice(0, -1));
-			setCurrentStep(previousStep.step);
-		}
-	};
-
-	const isStepValidated = (step: keyof T) => {
-		// 현재 단계의 유효성 상태 확인
-		const currentStepData = trigger.steps?.[step];
-		if (currentStepData) {
-			return currentStepData.isDone;
+			setCurrentStep(previousStep);
+			return previousStep;
 		}
 
-		// 히스토리에서 해당 단계의 유효성 상태 확인
-		const historyStep = history.find(h => h.step === step);
-		return historyStep ? historyStep.isDone : false;
+		return null;
 	};
 
-	return { step: currentStep, isLastStepDone: trigger.steps?.[currentStep].next === 'done', push, back, isStepValidated };
+	return {
+		step: currentStep,
+		isLastStep: trigger.steps?.[currentStep].next === 'done',
+		isStepValidated,
+		history,
+		historyActions: { push, back },
+	};
 };
 
 export default useFunnel;

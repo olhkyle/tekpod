@@ -106,6 +106,13 @@ const toastData = {
 			SUCCESS: { status: 'success', message: `Log out ${FIXED_SUCCESS_PHRASE}` },
 			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} logout` },
 		},
+		REGISTER: {
+			SUCCESS: { status: 'success', message: `Register ${FIXED_SUCCESS_PHRASE}` },
+			ERROR: {
+				status: 'error',
+				message: `${FIXED_ERROR_MESSAGE_PHRASE} registering`,
+			},
+		},
 	},
 } as const;
 

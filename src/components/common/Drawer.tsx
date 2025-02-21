@@ -23,7 +23,7 @@ interface DrawerProps {
 const Drawer = ({ position, isOpen, close, title, children }: DrawerProps) => {
 	return (
 		<Portal>
-			<Container role="dialog" position={position} isOpen={isOpen}>
+			<Container role="dialog" position={position} isOpen={isOpen} aria-hidden={isOpen ? true : false}>
 				<Header>
 					<Title>{title}</Title>
 					<AdditionalActions isShown={position === 'top'}>
@@ -35,7 +35,7 @@ const Drawer = ({ position, isOpen, close, title, children }: DrawerProps) => {
 				<GrabArea isShown={position === 'bottom'} />
 				<Body>{children}</Body>
 			</Container>
-			<Overlay id="drawer-overlay" isOpen={isOpen} onClick={close} aria-hidden={isOpen ? true : false} />
+			<Overlay id="dialog-overlay" isOpen={isOpen} onClick={close} aria-hidden={isOpen ? true : false} />
 		</Portal>
 	);
 };

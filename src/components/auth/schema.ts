@@ -3,10 +3,10 @@ import { z } from 'zod';
 type LoginSchema = z.infer<typeof loginSchema>;
 
 const loginSchema = z.object({
-	email: z.string({ required_error: 'Please, Write an email' }).email({ message: 'Incorrect email format' }),
+	email: z.string({ required_error: 'Email cannot be blank' }).email({ message: 'Email is invalid' }),
 	password: z
-		.string({ required_error: 'Please, Write a password' })
-		.min(1, { message: 'Write a password' })
+		.string({ required_error: 'Password cannot be blank' })
+		.min(1, { message: 'Password cannot be blank' })
 		.regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{7,15}$/, {
 			message: `Write correct password format`,
 		}),
@@ -14,23 +14,16 @@ const loginSchema = z.object({
 
 type RegisterSchema = z.infer<typeof registerSchema>;
 
-const registerSchema = z
-	.object({
-		email: z.string({ required_error: 'Please, Write an email' }).email({ message: 'Incorrect email format' }),
-		password: z
-			.string({ required_error: 'Please, Write a password' })
-			.min(1, { message: 'Please, Write a password' })
-			.regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{7,15}$/, {
-				message: `Write correct password format`,
-			}),
-		nickname: z.string().min(2, { message: 'Over 2 length of name' }),
-		// passwordConfirm: z.string(),
-	})
-	.partial();
-// .refine(data => data.password === data.passwordConfirm, {
-// 	message: "Passwords don't match",
-// 	path: ['passwordConfirm'],
-// });
+const registerSchema = z.object({
+	email: z.string({ required_error: 'Email cannot be blank' }).email({ message: 'Email is invalid' }),
+	password: z
+		.string({ required_error: 'Password cannot be blank' })
+		.min(1, { message: 'Password cannot be blank' })
+		.regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{7,15}$/, {
+			message: `Write correct password format`,
+		}),
+	nickname: z.string().min(2, { message: 'Over 2 length of name' }),
+});
 
 export type { LoginSchema, RegisterSchema };
 export { loginSchema, registerSchema };
