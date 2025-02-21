@@ -9,6 +9,8 @@ import GlobalStyle from './styles/GlobalStyle';
 import AuthenticationGuard from './guard/AuthenticationGuard';
 import { Layout, DiaryLayout, LoadLazy, RouteError, ExpenseTrackerLayout } from './components';
 import { routes } from './constants';
+import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
 
 const DiaryContentPage = lazy(() => import('./pages/DiaryContent'));
 const ExpenseTrackerByMonthPage = lazy(() => import('./pages/ExpenseTrackerByMonth'));
@@ -16,8 +18,7 @@ const ExpenseTrackerByMonthItemPage = lazy(() => import('./pages/ExpenseTrackerB
 const ExpenseTrackerUpcomingPage = lazy(() => import('./pages/ExpenseTrackerUpcoming'));
 const ExpenseTrackerReportPage = lazy(() => import('./pages/ExpenseTrackerReport'));
 const ExpenseTrackerCreditCardTransactionPage = lazy(() => import('./pages/ExpenseTrackerCreditCardTransaction'));
-const LoginPage = lazy(() => import('./pages/Login'));
-const RegisterPage = lazy(() => import('./pages/Register'));
+
 const NotFoundPage = lazy(() => import('./pages/NotFound'));
 
 const queryClient = new QueryClient({
