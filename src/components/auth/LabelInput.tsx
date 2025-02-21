@@ -37,16 +37,7 @@ LabelInput.TextField = forwardRef(
 		const type = initialType === 'password' ? (showPassword ? 'text' : 'password') : initialType;
 		return (
 			<InputWrapper>
-				<input
-					type={type}
-					id={id}
-					name={name}
-					ref={ref}
-					placeholder={placeholder}
-					disabled={disabled}
-					autoComplete={type === 'email' ? 'off' : 'on'}
-					{...props}
-				/>
+				<input type={type} id={id} name={name} ref={ref} placeholder={placeholder} disabled={disabled} autoComplete={'off'} {...props} />
 				{initialType === 'password' && (
 					<ToggleButton
 						type="button"
