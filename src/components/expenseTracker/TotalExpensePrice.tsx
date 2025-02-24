@@ -4,6 +4,7 @@ import { getAllPaymentsByMonth } from '../../supabase/expenseTracker';
 import queryKey from '../../constants/queryKey';
 import { MatchedPriceUnitWithSymbol, matchedPriceUnitWithSymbol } from '../../constants/expenseTracker';
 import { monetizeWithSeparator } from '../../utils/money';
+import { staleTime } from '../../constants/staleTime';
 
 interface TotalExpensePriceProps {
 	currentMonthIndex: number;
@@ -13,6 +14,7 @@ const TotalExpensePrice = ({ currentMonthIndex }: TotalExpensePriceProps) => {
 	const { data } = useSuspenseQuery({
 		queryKey: [...queryKey.EXPENSE_TRACKER, currentMonthIndex], // 0 ~ 11
 		queryFn: () => getAllPaymentsByMonth(currentMonthIndex), // 0 ~ 11
+		staleTime: staleTime.EXPENSE_TRACKER.TOTAL_EXPENSE_PRICE,
 	});
 
 	return (

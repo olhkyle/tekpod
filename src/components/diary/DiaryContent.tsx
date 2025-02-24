@@ -9,9 +9,14 @@ import { routes } from '../../constants';
 import getCalculatedTotalPage from '../../utils/getCalculatedTotalPage';
 import { EmptyMessage } from '../common';
 import queryKey from '../../constants/queryKey';
+import { staleTime } from '../../constants/staleTime';
 
 const DiaryContent = () => {
-	const { data: pageInfo } = useSuspenseQuery({ queryKey: queryKey.PAGE_INFO, queryFn: getDiariesPageInfo });
+	const { data: pageInfo } = useSuspenseQuery({
+		queryKey: queryKey.PAGE_INFO,
+		queryFn: getDiariesPageInfo,
+		staleTime: staleTime.DIARY.PAGE_INFO,
+	});
 
 	const calculatedTotalPage = getCalculatedTotalPage(pageInfo, PAGE_SIZE);
 
@@ -28,6 +33,7 @@ const DiaryContent = () => {
 
 			return undefined; // 명시적 반환
 		},
+		staleTime: staleTime.DIARY.ALL_WITH_PAGINATION,
 	});
 
 	const targetRef = useInfinityScroll(fetchNextPage);
