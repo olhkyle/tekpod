@@ -50,7 +50,10 @@ const DiaryContent = () => {
 							<Feeling>⚡️ {feeling}</Feeling>
 							<Tags>
 								{tags?.map(tag => (
-									<span key={tag}># {tag}</span>
+									<div key={tag}>
+										<span>#</span>
+										<span>{tag}</span>
+									</div>
 								))}
 							</Tags>
 						</DiaryLink>
@@ -104,13 +107,23 @@ const Feeling = styled.p`
 
 const Tags = styled.div`
 	display: flex;
-	justify-content: flex-end;
+	flex-wrap: nowrap;
 	align-items: center;
 	gap: 8px;
 	margin-top: 12px;
+	width: 100%;
+	overflow-x: scroll;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch; // iOS 스크롤 지원
+	&::-webkit-scrollbar {
+		display: none; // 스크롤바 숨기기 (선택사항)
+	}
+	-ms-overflow-style: none; // IE and Edge
+	scrollbar-width: none; // Firefox
 
-	span {
-		display: inline-block;
+	div {
+		display: inline-flex;
+		gap: 4px;
 		padding: calc(var(--padding-container-mobile) / 5) calc(var(--padding-container-mobile) / 2);
 		font-size: var(--fz-sm);
 		border: 1px solid var(--greyOpacity100);
