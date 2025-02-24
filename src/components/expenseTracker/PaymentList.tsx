@@ -8,6 +8,7 @@ import { getPaymentsByDate } from '../../supabase/expenseTracker';
 import { monetizeWithSeparator } from '../../utils/money';
 import { PriceUnitType } from '../../constants/expenseTracker';
 import { ExtendedPaymentMethodType } from '../../pages/ExpenseTrackerByMonth';
+import { staleTime } from '../../constants/staleTime';
 
 interface PaymentListProps {
 	selectedDate: Date;
@@ -16,11 +17,14 @@ interface PaymentListProps {
 }
 
 const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: PaymentListProps) => {
+	const normalizedDateString = selectedDate.toISOString().split('T')[0]; // prevent unnecessary fetch because of milliseconds difference because of changing ISO string itself (make regularize -'YYYY-MM-DD')
+
 	const {
 		data: { data, totalPrice },
 	} = useSuspenseQuery({
-		queryKey: [...queryKey.EXPENSE_TRACKER, selectedDate],
+		queryKey: [...queryKey.EXPENSE_TRACKER, normalizedDateString],
 		queryFn: () => getPaymentsByDate(selectedDate),
+		staleTime: staleTime.EXPENSE_TRACKER.BY_MONTH,
 	});
 
 	const navigate = useNavigate();
