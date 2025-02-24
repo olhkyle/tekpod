@@ -105,11 +105,13 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 					<Checkbox id={order} checked={isCompleted} onCheckedChange={setIsCompleted} onServerTodoCompletedChange={handleTodoIsCompleted} />
 					<Label htmlFor={`checkbox-${order + 1}`}>{todo.content}</Label>
 				</Flex>
-				{isCompleted && dragX >= 0 && (
-					<DeleteButton type="button" onClick={handleRemoveTodo}>
-						{isLoading ? Loading : <RiCloseFill size="24" color="var(--black)" />}
-					</DeleteButton>
-				)}
+				<DeleteButtonSafeBoundary>
+					{isCompleted && dragX >= 0 && (
+						<DeleteButton type="button" onClick={handleRemoveTodo}>
+							<RiCloseFill size="24" color="var(--black)" />
+						</DeleteButton>
+					)}
+				</DeleteButtonSafeBoundary>
 			</TodoContent>
 		</Container>
 	);
@@ -128,7 +130,7 @@ const DeleteBackground = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 60px;
+	width: 65px;
 	background-color: var(--orange800);
 `;
 
@@ -138,6 +140,7 @@ const TodoContent = styled.div<{ dragX: number }>`
 	justify-content: space-between;
 	align-items: center;
 	gap: 8px;
+	height: 100%;
 	background-color: var(--white);
 	border-radius: ${({ dragX }) => (dragX < 0 ? 'var(--radius-s)' : 0)};
 	transform: ${({ dragX }) => `translateX(${dragX}px)`};
@@ -154,6 +157,17 @@ const Flex = styled.div`
 
 const Label = styled.label`
 	font-size: var(--fz-h7);
+	word-break: break-all;
+	white-space: pre-wrap;
+`;
+
+const DeleteButtonSafeBoundary = styled.div`
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 42px;
+	height: 100%;
+	background-color: var(--white);
 `;
 
 const DeleteButton = styled(Button)`
