@@ -88,6 +88,7 @@ const PaymentListLayout = styled.div`
 `;
 
 const PaymentListTitle = styled.div`
+	margin-bottom: 8px;
 	font-size: var(--fz-h7);
 	font-weight: var(--fw-semibold);
 `;
@@ -97,7 +98,6 @@ const Flex = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	gap: 4px;
-	margin-top: 8px;
 `;
 
 export default ExpenseTrackerByMonthPage;
