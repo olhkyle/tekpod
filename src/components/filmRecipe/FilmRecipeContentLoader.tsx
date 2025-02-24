@@ -4,9 +4,9 @@ import { SkeletonLoader } from '../common';
 const FilmRecipeContentLoader = () => {
 	return (
 		<Container>
-			<SkeletonLoader width={'60%'} height={'32px'} />
-			<SkeletonLoader width={'60%'} height={'32px'} />
-			<SkeletonLoader width={'60%'} height={'32px'} />
+			{Array.from({ length: 3 }, (_, idx) => (
+				<SkeletonLoader key={idx} theme={'light'} width={'60%'} height={'32px'} />
+			))}
 		</Container>
 	);
 };
