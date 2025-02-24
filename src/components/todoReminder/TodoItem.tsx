@@ -120,6 +120,7 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 const Container = styled.li`
 	position: relative;
 	overflow: hidden;
+	cursor: pointer;
 `;
 
 const DeleteBackground = styled.div`
@@ -146,6 +147,7 @@ const TodoContent = styled.div<{ dragX: number }>`
 	transform: ${({ dragX }) => `translateX(${dragX}px)`};
 	transition: transform 0.1s ease-out;
 	z-index: 1;
+	cursor: pointer;
 `;
 
 const Flex = styled.div`
@@ -159,6 +161,7 @@ const Label = styled.label`
 	font-size: var(--fz-h7);
 	word-break: break-all;
 	white-space: pre-wrap;
+	cursor: pointer;
 `;
 
 const DeleteButtonSafeBoundary = styled.div`
