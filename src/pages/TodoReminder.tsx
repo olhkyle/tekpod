@@ -2,6 +2,7 @@ import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
+import { motion } from 'framer-motion';
 import { BsPlus } from 'react-icons/bs';
 import { Button, EmptyMessage, TextInput, TodoItem } from '../components';
 import { addTodo, getTodos } from '../supabase/todos';
@@ -22,6 +23,10 @@ const TodoReminderPage = () => {
 
 	const handleTodoAdd = async () => {
 		const currentKoreanTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+
+		if (value.length === 0) {
+			return addToast(toastData.TODO_REMINDER.CREATE.WARN);
+		}
 
 		try {
 			await startTransition(
@@ -57,9 +62,16 @@ const TodoReminderPage = () => {
 						onChange={e => setValue(e.target.value)}
 					/>
 				</TextInput>
-				<AddTodoButton type="button" onClick={handleTodoAdd}>
-					{isLoading ? Loading : <BsPlus size="24" color="var(--white)" />}
-				</AddTodoButton>
+				<motion.div
+					initial="rest"
+					whileTap={{
+						scale: 0.95,
+						transition: { duration: 0.2 },
+					}}>
+					<AddTodoButton type="button" onClick={handleTodoAdd}>
+						{isLoading ? Loading : <BsPlus size="24" color="var(--white)" />}
+					</AddTodoButton>
+				</motion.div>
 			</Flex>
 
 			<Suspense fallback={Loading}>
@@ -94,6 +106,8 @@ const Flex = styled.div`
 
 const AddTodoButton = styled(Button)`
 	padding: 16px;
+	min-width: 56px;
+	min-height: 56px;
 	font-weight: var(--fw-semibold);
 	color: var(--white);
 	background-color: var(--black);
@@ -104,7 +118,7 @@ const TodoList = styled.ul`
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-	padding: 16px 0;
+	padding: calc(var(--padding-container-mobile) * 1) 0 calc(var(--padding-container-mobile) * 3);
 `;
 
 export default TodoReminderPage;

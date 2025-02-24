@@ -25,6 +25,7 @@ const toastData = {
 	TODO_REMINDER: {
 		CREATE: {
 			SUCCESS: { status: 'success', message: `Add ${FIXED_SUCCESS_PHRASE}` },
+			WARN: { status: 'warn', message: `No value on field` },
 			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} adding` },
 		},
 		EDIT: {
