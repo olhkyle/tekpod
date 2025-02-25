@@ -178,7 +178,7 @@ const AddRecipeButton = styled(Button)`
 	}
 
 	&:disabled {
-		background-color: var(--greyOpacity400);
+		background-color: var(--greyOpacity300);
 	}
 `;
 

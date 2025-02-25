@@ -232,7 +232,7 @@ const CancelButton = styled(StyledButton)`
 
 	&:active,
 	&:focus {
-		background-color: var(--greyOpacity300);
+		background-color: var(--greyOpacity200);
 	}
 `;
 
@@ -245,7 +245,7 @@ const UpdateButton = styled(StyledButton)`
 	}
 
 	&:disabled {
-		background-color: var(--greyOpacity500);
+		background-color: var(--greyOpacity300);
 	}
 `;
 

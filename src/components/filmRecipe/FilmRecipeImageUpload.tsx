@@ -47,9 +47,8 @@ const ImageUploadInput = styled('div', customPropReceiver)<{ $isAttached: boolea
 	font-size: var(--fz-h7);
 	font-weight: var(--fw-semibold);
 	background: ${({ $isAttached }) =>
-		$isAttached ? 'var(--white)' : 'linear-gradient(90deg, var(--greyOpacity100), var(--greyOpacity200))'};
+		$isAttached ? 'var(--white)' : 'linear-gradient(135deg, var(--greyOpacity50), var(--greyOpacity200))'};
 	border: 1px solid var(--greyOpacity200);
-	cursor: pointer;
 
 	input {
 		display: none;
@@ -64,6 +63,7 @@ const ImageUploadInput = styled('div', customPropReceiver)<{ $isAttached: boolea
 		min-height: 300px;
 		text-align: center;
 		vertical-align: center;
+		cursor: pointer;
 	}
 `;
 
@@ -90,7 +90,7 @@ const CloseButton = styled(Button, customPropReceiver)<{ $isAttached: boolean }>
 	width: 24px;
 	height: 24px;
 	background-color: var(--white);
-	border: 1px solid var(--black);
+	border: 1px solid var(--grey500);
 `;
 
 export default FilmRecipeImageUpload;
