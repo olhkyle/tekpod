@@ -1,4 +1,4 @@
-import { Toast } from '../store/useToastStore';
+import type { Toast } from '../store/useToastStore';
 
 const FIXED_SUCCESS_PHRASE = 'successfully';
 const FIXED_ERROR_MESSAGE_PHRASE = 'Something wrong with';
@@ -102,6 +102,9 @@ const toastData = {
 				status: 'error',
 				message: `${FIXED_ERROR_MESSAGE_PHRASE} logging in`,
 			},
+			CUSTOM: (status: Toast['status'], message: string) => {
+				return { status, message };
+			},
 		},
 		LOGOUT: {
 			SUCCESS: { status: 'success', message: `Log out ${FIXED_SUCCESS_PHRASE}` },
@@ -109,6 +112,10 @@ const toastData = {
 		},
 		REGISTER: {
 			SUCCESS: { status: 'success', message: `Register ${FIXED_SUCCESS_PHRASE}` },
+			WARN: {
+				status: 'warn',
+				message: 'Email is already registered',
+			},
 			ERROR: {
 				status: 'error',
 				message: `${FIXED_ERROR_MESSAGE_PHRASE} registering`,
