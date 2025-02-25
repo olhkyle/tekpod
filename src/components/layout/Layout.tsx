@@ -37,9 +37,9 @@ const Layout = () => {
 	return (
 		<ErrorBoundary FallbackComponent={ErrorFallback}>
 			<Suspense fallback={<LayoutLoadingSpinner />}>
-				<div ref={layoutRef} css={layoutCss.wrapper}>
+				<div id="layoutContainer" ref={layoutRef} css={layoutCss.wrapper}>
 					<Header />
-					<main css={layoutCss.main}>
+					<main id="layoutContents" css={layoutCss.main}>
 						<Outlet />
 					</main>
 					<BottomNav />

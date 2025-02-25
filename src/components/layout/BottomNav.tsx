@@ -8,7 +8,7 @@ const BottomNav = () => {
 	const { data } = useAuthQuery();
 
 	return (
-		<Container>
+		<Container id="layoutGnb">
 			<Links>
 				<NavLink href={routes.HOME}>
 					<RiHome6Line size={24} />
@@ -28,7 +28,7 @@ const BottomNav = () => {
 	);
 };
 
-const Container = styled.header`
+const Container = styled.nav`
 	position: fixed;
 	bottom: 0;
 	max-width: var(--max-app-width);

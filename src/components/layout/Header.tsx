@@ -14,7 +14,7 @@ const Header = () => {
 		[...pathname].filter(item => item === '/').length >= 2;
 
 	return (
-		<Container>
+		<Container id="layoutHeader">
 			<ReactiveLogo>
 				{isGoBackButtonActive ? (
 					<GoBackButton>
@@ -29,7 +29,7 @@ const Header = () => {
 	);
 };
 
-const Container = styled.nav`
+const Container = styled.header`
 	position: fixed;
 	top: 0;
 	display: flex;
