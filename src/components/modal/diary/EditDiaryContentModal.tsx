@@ -65,9 +65,9 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditContentModalProp
 			onClose();
 			addToast(toastData.DIARY.EDIT.SUCCESS);
 			navigate(routes.DIARY);
-		} catch (error) {
+		} catch (e) {
+			console.error(e);
 			addToast(toastData.DIARY.EDIT.ERROR);
-			console.error(error);
 		}
 	};
 

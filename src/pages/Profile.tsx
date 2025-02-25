@@ -29,9 +29,9 @@ const ProfilePage = () => {
 			resetUser();
 
 			addToast(toastData.PROFILE.LOGOUT.SUCCESS);
-		} catch (error) {
+		} catch (e) {
+			console.error(e);
 			addToast(toastData.PROFILE.LOGOUT.ERROR);
-			console.error(error);
 		} finally {
 			queryClient.setQueryData(['auth'], null);
 			queryClient.clear();
@@ -40,7 +40,7 @@ const ProfilePage = () => {
 
 	return (
 		<Container>
-			<User>✹ {userInfo?.user?.email?.split('@').at(0)} ✹ </User>
+			<User>✹ {userInfo?.user?.user_metadata?.nickname ?? userInfo?.user?.email?.split('@').at(0)} ✹ </User>
 			<Bottom>
 				<Title>Keep Writing ? </Title>
 				<LogoutButton type="button" onClick={handleLogout}>

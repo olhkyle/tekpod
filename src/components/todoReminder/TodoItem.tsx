@@ -89,8 +89,8 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 			await startTransition(removeTodo({ id: todo.id }));
 
 			addToast(toastData.TODO_REMINDER.REMOVE.SUCCESS);
-		} catch (error) {
-			console.error(error);
+		} catch (e) {
+			console.error(e);
 			addToast(toastData.TODO_REMINDER.REMOVE.ERROR);
 		} finally {
 			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });

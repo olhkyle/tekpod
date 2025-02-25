@@ -47,9 +47,9 @@ const WritePage = () => {
 
 			addToast(toastData.DIARY.CREATE.SUCCESS);
 			navigate(routes.DIARY);
-		} catch (error) {
+		} catch (e) {
+			console.error(e);
 			addToast(toastData.DIARY.CREATE.ERROR);
-			console.error(error);
 		}
 	};
 
