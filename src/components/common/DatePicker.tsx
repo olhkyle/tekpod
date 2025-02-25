@@ -4,8 +4,8 @@ import { FieldError } from 'react-hook-form';
 import { DayPicker } from 'react-day-picker';
 import { IoMdCalendar } from 'react-icons/io';
 import { ko } from 'date-fns/locale';
+import { Button } from '..';
 import { customPropReceiver } from '../../constants';
-import Button from './Button';
 import { format } from '../../utils/date';
 import { useClickOutside } from '../../hooks';
 

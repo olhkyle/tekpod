@@ -2,8 +2,8 @@ import { useId, useState } from 'react';
 import styled from '@emotion/styled';
 import { BiSolidChevronRight } from 'react-icons/bi';
 import { FieldError } from 'react-hook-form';
+import { Button } from '..';
 import { customPropReceiver } from '../../constants';
-import Button from './Button';
 import { useClickOutside } from '../../hooks';
 
 interface SelectProps<T extends string> {
