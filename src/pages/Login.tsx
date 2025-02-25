@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AuthError } from '@supabase/supabase-js';
 import supabase from '../supabase/service';
 import { Button, LabelInput, AuthLogo, Toast } from '../components';
 import { loginSchema, type LoginSchema } from '../components/auth/schema';
@@ -68,9 +69,8 @@ const LoginPage = () => {
 		try {
 			const { data, error } = await startTransition(supabase.auth.signInWithPassword(formData));
 
-			// TODO: 이메일 인증 안했으면 로그인 시키지 않도록 수정
+			// check error including the status that user confirmed email on personal email
 			if (error) {
-				addToast(toastData.PROFILE.LOGIN.ERROR);
 				throw new Error(error.message);
 			}
 
@@ -84,6 +84,7 @@ const LoginPage = () => {
 			setValue('email', formData.email);
 			setValue('password', '');
 			console.error(error);
+			addToast(toastData.PROFILE.LOGIN.CUSTOM('error', (error as AuthError).message));
 		}
 	};
 
@@ -100,7 +101,7 @@ const LoginPage = () => {
 					</LabelInput>
 
 					<SubmitButton type="submit" aria-label="Login Button">
-						{isLoading ? Loading : 'LOGIN'}
+						{isLoading ? Loading : 'Login'}
 					</SubmitButton>
 					<ActionButtons>
 						<ResetPasswordButton type="button" aria-label="Reset Password Button">
