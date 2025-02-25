@@ -3,6 +3,28 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export interface Database {
 	public: {
 		Tables: {
+			users: {
+				Row: {
+					// the data expected from .select()
+					user_id: string;
+					email: string;
+					nickname: string;
+				};
+				Insert: {
+					user_id: string;
+					email: string;
+					nickname: string;
+				};
+				Update: {
+					user_id: string;
+					email: string;
+					nickname: string;
+				};
+				Delete: {
+					user_id: string;
+					email: string;
+				};
+			};
 			diary: {
 				Row: {
 					// the data expected from .select()
