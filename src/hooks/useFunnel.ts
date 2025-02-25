@@ -4,7 +4,7 @@ import { useState } from 'react';
 interface UseFunnelTrigger<T> {
 	id: string;
 	initial: { step: keyof T };
-	steps?: { [K in keyof T]: { step: K; isDone: boolean; next?: keyof T | 'done' } };
+	steps?: { [K in keyof T]: { step: K; isValidated: boolean; next?: keyof T | 'done' } };
 }
 
 const useFunnel = <T>(trigger: UseFunnelTrigger<T>) => {
@@ -12,13 +12,13 @@ const useFunnel = <T>(trigger: UseFunnelTrigger<T>) => {
 	const [currentStep, setCurrentStep] = useState(trigger.initial.step); // 'email' | 'password' | 'nickname'
 
 	const isStepValidated = (step: keyof T) => {
-		return trigger.steps?.[step]?.isDone ?? false;
+		return trigger.steps?.[step]?.isValidated ?? false;
 	};
 
 	const push = () => {
-		const step = trigger.steps?.[currentStep]; // { step : 'email' , isDone: false, next: 'password' }
+		const step = trigger.steps?.[currentStep]; // { step : 'email' , isValidated: false, next: 'password' }
 
-		if (step?.isDone && step.next && step.next !== 'done') {
+		if (step?.isValidated && step.next && step.next !== 'done') {
 			setHistory([...history, currentStep]);
 			setCurrentStep(step.next);
 		}
