@@ -58,22 +58,18 @@ const Container = styled.div<{ position: 'top' | 'bottom'; isOpen: boolean }>`
 	@keyframes slideDrawerUp {
 		from {
 			transform: translate3d(0, 0, 0);
-			/* opacity: 1; */
 		}
 		to {
 			transform: translate3d(0, -100%, 0);
-			/* opacity: 0; */
 		}
 	}
 
 	@keyframes slideDrawerDown {
 		from {
 			transform: translate3d(0, -100%, 0);
-			/* opacity: 0; */
 		}
 		to {
 			transform: translate3d(0, 0, 0);
-			/* opacity: 1; */
 		}
 	}
 `;
@@ -125,6 +121,7 @@ const Overlay = styled.div<{ isOpen: boolean }>`
 	opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
 	z-index: calc(var(--drawer-index) - 1);
 	transition: visibility 0.3s ease-in-out, opacity 0.3s ease-in-out;
+	cursor: pointer;
 `;
 
 export default Drawer;
