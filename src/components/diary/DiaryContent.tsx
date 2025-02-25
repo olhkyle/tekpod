@@ -121,11 +121,11 @@ const Tags = styled.div`
 	overflow-x: scroll;
 	white-space: nowrap;
 	-webkit-overflow-scrolling: touch; // iOS 스크롤 지원
+	-ms-overflow-style: none; // IE and Edge
+	scrollbar-width: none; // Firefox
 	&::-webkit-scrollbar {
 		display: none; // 스크롤바 숨기기 (선택사항)
 	}
-	-ms-overflow-style: none; // IE and Edge
-	scrollbar-width: none; // Firefox
 
 	div {
 		display: inline-flex;

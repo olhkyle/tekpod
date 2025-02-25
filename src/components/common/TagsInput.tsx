@@ -75,6 +75,12 @@ const Container = styled.div`
 	min-height: 65px;
 	border: 1px solid var(--greyOpacity200);
 	overflow-x: scroll;
+	-webkit-overflow-scrolling: touch; // iOS 스크롤 지원
+	-ms-overflow-style: none; // IE and Edge
+	scrollbar-width: none; // Firefox
+	&::-webkit-scrollbar {
+		display: none; // 스크롤바 숨기기 (선택사항)
+	}
 `;
 
 const Tag = styled.div`
