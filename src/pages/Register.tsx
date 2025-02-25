@@ -4,14 +4,15 @@ import { css } from '@emotion/react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { registerSchema, RegisterSchema } from '../components/auth/schema';
-import { Button, LabelInput, AuthLogo } from '../components';
-import { useFunnel } from '../hooks';
-import { customPropReceiver, routes } from '../constants';
 import { debounce } from 'es-toolkit';
+import { registerSchema, RegisterSchema } from '../components/auth/schema';
+import { Button, LabelInput, AuthLogo, Toast } from '../components';
+import { useFunnel, useLoading } from '../hooks';
+import { customPropReceiver, routes } from '../constants';
 import supabase from '../supabase/service';
 import useToastStore from '../store/useToastStore';
 import { toastData } from '../constants/toast';
+import { addNewUser, isUserExist } from '../supabase/user';
 
 const pageCss = {
 	container: css`
@@ -50,8 +51,9 @@ const RegisterPage = () => {
 	const {
 		register,
 		watch,
-		formState: { errors, isValid, isSubmitSuccessful },
+		formState: { errors, isValid },
 		trigger,
+		setValue,
 		setFocus,
 		getFieldState,
 		handleSubmit,
@@ -60,6 +62,12 @@ const RegisterPage = () => {
 		resolver: zodResolver(registerSchema),
 		defaultValues,
 	});
+
+	const [isEmailValidated, isPasswordValidated, isNicknameValidated] = [
+		!errors['email'] && (watch('email') ?? '').trim().length !== 0,
+		!errors['password'] && (watch('password') ?? '').trim().length !== 0,
+		!errors['nickname'] && (watch('nickname') ?? '').trim().length !== 0,
+	];
 
 	const {
 		step,
@@ -72,24 +80,24 @@ const RegisterPage = () => {
 		steps: {
 			email: {
 				step: 'email',
-				isDone: !errors['email'] && (watch('email') ?? '').trim().length !== 0,
+				isValidated: isEmailValidated,
 				next: 'password',
 			},
 			password: {
 				step: 'password',
-				isDone: !errors['password'] && (watch('password') ?? '').trim().length !== 0,
+				isValidated: isPasswordValidated,
 				next: 'nickname',
 			},
 			nickname: {
 				step: 'nickname',
-				isDone: !errors['nickname'] && (watch('nickname') ?? '').trim().length !== 0,
+				isValidated: isNicknameValidated,
 				next: 'done',
 			},
 		},
 	});
 
 	const navigate = useNavigate();
-
+	const { startTransition, isLoading, Loading } = useLoading();
 	const { addToast } = useToastStore();
 
 	useEffect(() => {
@@ -104,7 +112,25 @@ const RegisterPage = () => {
 
 	const continueNextStep = async (step: keyof RegisterSchema) => {
 		try {
-			//TODO: 이미 있는 이메일인지 USERS 테이블에서 검증하기 - 비동기 요청(이메일 단계만)
+			const isEmailFieldValidatedOnEmailStep = step === 'email' && isStepValidated(step);
+
+			// check if user exists based on email
+			if (isEmailFieldValidatedOnEmailStep) {
+				const { data, error } = await isUserExist(watch('email'));
+
+				if (error) {
+					throw new Error(error.message);
+				}
+
+				// if user exist based on email
+				if (data?.length !== 0) {
+					addToast(toastData.PROFILE.REGISTER.WARN);
+					setValue('email', '');
+					setFocus('email');
+					return;
+				}
+			}
+
 			const isCurrentStepValid = await trigger(step);
 
 			if (isCurrentStepValid && isStepValidated(step)) {
@@ -112,6 +138,7 @@ const RegisterPage = () => {
 			}
 		} catch (e) {
 			console.error(e);
+			addToast(toastData.PROFILE.REGISTER.ERROR);
 		}
 	};
 
@@ -125,100 +152,100 @@ const RegisterPage = () => {
 				},
 			});
 
-			console.log(data);
-			console.log(error);
-
 			if (error) {
-				// TODO: error 종류에 따라 다르게 핸들링
-				// TODO: 이미 있는 이메일일 경우. error로 체킹이 되지 않음 ??
-				addToast(toastData.PROFILE.REGISTER.ERROR);
 				throw new Error(error.message);
 			}
 
 			if (data) {
-				// users 테이블에 email, nickname, id (data.user.id) 기반으로 데이터 create하는 추가 비동기 요청
+				// insert new User on 'users' table
+				const { error: insertNewUserError } = await startTransition(addNewUser({ userId: data.user?.id, userData }));
+
+				if (insertNewUserError) {
+					throw new Error(insertNewUserError.message);
+				}
 
 				addToast(toastData.PROFILE.REGISTER.SUCCESS);
-
-				if (isSubmitSuccessful) {
-					navigate(routes.LOGIN);
-					reset(defaultValues);
-				}
+				reset(defaultValues);
+				navigate(routes.LOGIN);
 			}
-		} catch (error) {
-			console.error(error);
+		} catch (e) {
+			console.error(e);
+			addToast(toastData.PROFILE.REGISTER.ERROR);
 		}
 	};
 
 	return (
-		<div css={pageCss.container}>
-			<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
-				<AuthLogo />
-				<Description>Create your account</Description>
+		<>
+			<div css={pageCss.container}>
+				<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
+					<AuthLogo />
+					<Description>Create your account</Description>
 
-				{step === 'email' && (
-					<>
-						<LabelInput label={'email'} errorMessage={errors?.['email']?.message}>
+					{step === 'email' && (
+						<>
+							<LabelInput label={'email'} errorMessage={errors?.['email']?.message}>
+								<LabelInput.TextField
+									type={'email'}
+									id={'email'}
+									{...register('email', { onChange: () => debouncedTriggerCheck('email') })}
+									placeholder={'Email'}
+								/>
+							</LabelInput>
+							<ContinueButton type="button" disabled={getFieldState('email')?.invalid} onClick={() => continueNextStep(step)}>
+								Continue
+							</ContinueButton>
+						</>
+					)}
+
+					{step === 'password' && (
+						<>
+							<LabelInput label={'password'} errorMessage={errors?.['password']?.message}>
+								<LabelInput.TextField
+									type={'password'}
+									id={'password'}
+									{...register('password', { onChange: () => debouncedTriggerCheck('password') })}
+									placeholder={'Password'}
+								/>
+							</LabelInput>
+							<ContinueButton type="button" disabled={getFieldState('password')?.invalid} onClick={() => continueNextStep(step)}>
+								Continue
+							</ContinueButton>
+						</>
+					)}
+
+					{/* On last step, we don't need to show ContinueButon */}
+					{step === 'nickname' && (
+						<LabelInput label={'nickname'} errorMessage={errors?.nickname?.message}>
 							<LabelInput.TextField
-								type={'email'}
-								id={'email'}
-								{...register('email', { onChange: () => debouncedTriggerCheck('email') })}
-								placeholder={'Email'}
+								type={'text'}
+								id={'nickname'}
+								{...register('nickname', { onChange: () => debouncedTriggerCheck('nickname') })}
+								placeholder={'Nickname'}
 							/>
 						</LabelInput>
-						<ContinueButton type="button" disabled={getFieldState('email')?.invalid} onClick={() => continueNextStep(step)}>
-							Continue
-						</ContinueButton>
-					</>
-				)}
+					)}
 
-				{step === 'password' && (
-					<>
-						<LabelInput label={'password'} errorMessage={errors?.['password']?.message}>
-							<LabelInput.TextField
-								type={'password'}
-								id={'password'}
-								{...register('password', { onChange: () => debouncedTriggerCheck('password') })}
-								placeholder={'Password'}
-							/>
-						</LabelInput>
-						<ContinueButton type="button" disabled={getFieldState('password')?.invalid} onClick={() => continueNextStep(step)}>
-							Continue
-						</ContinueButton>
-					</>
-				)}
+					<SubmitButton
+						type="submit"
+						$isShown={isLastStep}
+						disabled={(watch('nickname') ?? '').trim().length === 0 || !!errors['nickname'] || !isValid}>
+						{isLoading ? Loading : 'Submit'}
+					</SubmitButton>
 
-				{/* On last step, we don't need to show ContinueButon */}
-				{step === 'nickname' && (
-					<LabelInput label={'nickname'} errorMessage={errors?.nickname?.message}>
-						<LabelInput.TextField
-							type={'text'}
-							id={'nickname'}
-							{...register('nickname', { onChange: () => debouncedTriggerCheck('nickname') })}
-							placeholder={'Nickname'}
-						/>
-					</LabelInput>
-				)}
-
-				<SubmitButton
-					type="submit"
-					$isShown={isLastStep}
-					disabled={(watch('nickname') ?? '').trim().length === 0 || !!errors['nickname'] || !isValid}>
-					{'Submit'}
-				</SubmitButton>
-
-				{step !== 'email' ? (
-					<GoBackButton type="button" onClick={back}>
-						Go Back
-					</GoBackButton>
-				) : (
-					<LoginCheckContainer>
-						<p>Already have an account?</p>
-						<Link to={routes.LOGIN}>Login</Link>
-					</LoginCheckContainer>
-				)}
-			</form>
-		</div>
+					{step !== 'email' ? (
+						<GoBackButton type="button" onClick={back}>
+							Go Back
+						</GoBackButton>
+					) : (
+						<LoginCheckContainer>
+							<p>Already have an account?</p>
+							<Link to={routes.LOGIN}>Login</Link>
+						</LoginCheckContainer>
+					)}
+				</form>
+			</div>
+			<Toast />
+		</>
 	);
 };
 
@@ -233,6 +260,7 @@ const ContinueButton = styled(Button)`
 	min-width: 270px;
 	background-color: var(--black);
 	color: var(--white);
+	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	border-radius: var(--radius-s);
 
@@ -247,6 +275,7 @@ const SubmitButton = styled(Button, customPropReceiver)<{ $isShown: boolean }>`
 	min-width: 270px;
 	background-color: var(--black);
 	color: var(--white);
+	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	border-radius: var(--radius-s);
 	transition: display 0.35s ease-out;
