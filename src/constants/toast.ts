@@ -121,6 +121,16 @@ const toastData = {
 				message: `${FIXED_ERROR_MESSAGE_PHRASE} registering`,
 			},
 		},
+		RESET_PASSWORD: {
+			SUCCESS: { status: 'success', message: `Check reset password link in your Email` },
+			ERROR: {
+				status: 'error',
+				message: `${FIXED_ERROR_MESSAGE_PHRASE} resetting password`,
+			},
+			CUSTOM: (status: Toast['status'], message: string) => {
+				return { status, message };
+			},
+		},
 	},
 } as const;
 

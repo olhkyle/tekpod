@@ -2,8 +2,9 @@ import { ElementType } from 'react';
 import { AddPaymentModal } from './expenseTracker';
 import { AddFilmRecipeModal, FilmRecipeModal, RemoveFilmRecipeConfirmModal } from './filmRecipe';
 import { EditDiaryContentModal } from './diary';
+import { ResetPasswordForEmailModal } from './users';
 
-type ModalDataType = 'diary' | 'filmRecipe' | 'financialLedger';
+type ModalDataType = 'diary' | 'filmRecipe' | 'financialLedger' | 'users';
 
 type ModalConfigItem = {
 	type: ModalDataType;
@@ -21,6 +22,9 @@ interface ModalActionConfig {
 	};
 	DIARY: {
 		EDIT: ModalConfigItem;
+	};
+	USERS: {
+		RESET_PASSWORD: ModalConfigItem;
 	};
 }
 
@@ -55,6 +59,12 @@ const MODAL_CONFIG: ModalConfig = {
 		EDIT: {
 			type: 'diary',
 			Component: EditDiaryContentModal,
+		},
+	},
+	USERS: {
+		RESET_PASSWORD: {
+			type: 'users',
+			Component: ResetPasswordForEmailModal,
 		},
 	},
 };

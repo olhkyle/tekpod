@@ -6,13 +6,15 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthError } from '@supabase/supabase-js';
 import supabase from '../supabase/service';
-import { Button, LabelInput, AuthLogo, Toast } from '../components';
+import { Button, LabelInput, AuthLogo, Toast, ModalContainer } from '../components';
 import { loginSchema, type LoginSchema } from '../components/auth/schema';
 import { useLoading } from '../hooks';
 import useUserStore from '../store/userStore';
 import useToastStore from '../store/useToastStore';
 import { routes } from '../constants';
 import { toastData } from '../constants/toast';
+import useModalStore from '../store/useModalStore';
+import { MODAL_CONFIG } from '../components/modal/modalType';
 
 const pageCss = {
 	container: css`
@@ -47,9 +49,20 @@ const LoginPage = () => {
 		defaultValues: { email: '', password: '' },
 	});
 
-	const { Loading, isLoading, startTransition } = useLoading();
+	const { startTransition, Loading, isLoading } = useLoading();
 	const { setUserData } = useUserStore();
 	const { addToast } = useToastStore();
+	const { setModal } = useModalStore();
+
+	const handleResetPasswordModal = () => {
+		setModal({
+			Component: MODAL_CONFIG.USERS.RESET_PASSWORD.Component,
+			props: {
+				type: MODAL_CONFIG.USERS.RESET_PASSWORD.type,
+				data: null,
+			},
+		});
+	};
 
 	/**
 	 * queryClient.setQueryData(['auth'], userData)
@@ -80,11 +93,11 @@ const LoginPage = () => {
 				navigate(routes.HOME);
 				addToast(toastData.PROFILE.LOGIN.SUCCESS);
 			}
-		} catch (error) {
+		} catch (e) {
+			console.error(e);
 			setValue('email', formData.email);
 			setValue('password', '');
-			console.error(error);
-			addToast(toastData.PROFILE.LOGIN.CUSTOM('error', (error as AuthError).message));
+			addToast(toastData.PROFILE.LOGIN.CUSTOM('error', (e as AuthError).message));
 		}
 	};
 
@@ -104,7 +117,7 @@ const LoginPage = () => {
 						{isLoading ? Loading : 'Login'}
 					</SubmitButton>
 					<ActionButtons>
-						<ResetPasswordButton type="button" aria-label="Reset Password Button">
+						<ResetPasswordButton type="button" onClick={handleResetPasswordModal} aria-label="Reset Password Button">
 							Reset Password
 						</ResetPasswordButton>
 						<RegisterLink to={routes.REGISTER}>SignUp</RegisterLink>
@@ -112,6 +125,7 @@ const LoginPage = () => {
 				</form>
 			</div>
 			<Toast />
+			<ModalContainer />
 		</>
 	);
 };
@@ -119,14 +133,14 @@ const LoginPage = () => {
 const SubmitButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	min-width: 270px;
-	color: var(--black);
-	background-color: var(--greyOpacity100);
+	color: var(--white);
+	background-color: var(--black);
 	border-radius: var(--radius-s);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 
 	&:hover {
-		background-color: var(--greyOpacity200);
+		background-color: var(--grey900);
 	}
 `;
 
@@ -142,12 +156,12 @@ const ResetPasswordButton = styled(Button)`
 	font-size: var(--fz-sm);
 	font-weight: var(--fw-medium);
 	color: var(--grey900);
-	background-color: var(--grey100);
+	background-color: var(--grey50);
 	border: 1px solid var(--grey200);
 	border-radius: var(--radius-xs);
 
 	&:hover {
-		background-color: var(--grey200);
+		background-color: var(--grey100);
 	}
 `;
 
