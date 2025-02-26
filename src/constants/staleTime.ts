@@ -7,7 +7,7 @@ const staleTime = {
 	},
 	EXPENSE_TRACKER: {
 		TOTAL_EXPENSE_PRICE: ONE_SECOND * 5,
-		BY_MONTH: ONE_SECOND * 10,
+		BY_MONTH: ONE_SECOND * 5,
 	},
 };
 
