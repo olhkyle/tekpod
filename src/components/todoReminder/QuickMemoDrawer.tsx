@@ -20,9 +20,6 @@ const QuickMemoDrawer = () => {
 
 	const { register, setValue, handleSubmit } = useForm<QuickMemoDrawerSchema>({
 		resolver: zodResolver(quickMemoDrawerSchema),
-		defaultValues: {
-			memo: '',
-		},
 	});
 
 	const navigate = useNavigate();
