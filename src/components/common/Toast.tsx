@@ -38,6 +38,7 @@ const Container = styled.div`
 	align-items: center;
 	gap: 8px;
 	padding: calc(var(--padding-container-mobile) * 0.6) var(--padding-container-mobile);
+	max-width: calc(100dvw - 2 * var(--padding-container-mobile));
 	min-width: calc(100dvw - 2 * var(--padding-container-mobile));
 	background-color: var(--grey100);
 	border: 1px solid var(--greyOpacity200);
