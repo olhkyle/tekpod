@@ -13,7 +13,7 @@ interface AuthenticationGuardProps {
 const AuthenticationGuard = ({ redirectTo, element }: AuthenticationGuardProps) => {
 	const { data, error } = useAuthQuery();
 
-	if (!data) {
+	if (!data || error) {
 		return <NotAuthenticated />;
 	}
 
