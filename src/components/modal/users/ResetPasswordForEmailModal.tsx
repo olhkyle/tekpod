@@ -41,7 +41,8 @@ const ResetPasswordForEmailModal = ({ id, type, onClose }: ResetPasswordForEmail
 
 	const onSubmit = async (data: ResetPasswordSchema) => {
 		try {
-			const baseUrl = import.meta.env.PROD ? window.location.origin : import.meta.env.VITE_APP_URL;
+			// TODO: window.location.origin이 과연 맞는지
+			const baseUrl = import.meta.env.VITE_APP_URL;
 
 			const { error } = await startTransition(
 				supabase.auth.resetPasswordForEmail(data.email, {
