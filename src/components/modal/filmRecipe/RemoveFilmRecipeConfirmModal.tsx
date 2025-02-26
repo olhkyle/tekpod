@@ -18,7 +18,7 @@ const RemoveFilmRecipeConfirmModal = ({ id, type, data, onClose, onTopLevelModal
 	const handleRecipeDelete = () => remove({ id: data?.id, path: data?.imgSrc.replace(/^.*recipe\//, '') });
 
 	return (
-		<ModalLayout id={id} type={type} title={'Delete Recipe'} onClose={onClose} bottomSheetType="doubleCheck">
+		<ModalLayout id={id} type={type} title={'Delete Recipe'} onClose={onClose}>
 			<ButtonGroup>
 				<YesButton type="button" onClick={handleRecipeDelete}>
 					{isPending ? <LoadingSpinner /> : 'YES'}

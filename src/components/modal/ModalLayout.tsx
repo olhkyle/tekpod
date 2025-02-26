@@ -10,18 +10,14 @@ interface ModalLayoutProps {
 	type: ModalDataType;
 	title: string | ReactNode;
 	onClose: () => void;
-	bottomSheetType?: 'plain' | 'doubleCheck';
 	children: ReactNode;
 }
 
-const ModalLayout = ({ id, type, title, onClose, bottomSheetType = 'plain', children }: ModalLayoutProps) => {
+const ModalLayout = ({ id, type, title, onClose, children }: ModalLayoutProps) => {
 	const [isClosing, setIsClosing] = useState(false);
-
 	useOverlayFixed(!isClosing);
 
-	const handleModalClose = () => {
-		setIsClosing(true);
-	};
+	const handleModalClose = () => setIsClosing(true);
 
 	const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
 		if (isClosing && e.target === e.currentTarget) {
@@ -32,29 +28,27 @@ const ModalLayout = ({ id, type, title, onClose, bottomSheetType = 'plain', chil
 	return (
 		<Container
 			isVisible={!isClosing}
-			bottomSheetType={bottomSheetType}
 			order={+id.split('-')[1]}
 			data-modal-type={type}
 			data-modal-id={id}
 			onAnimationEnd={handleAnimationEnd}>
-			<Header>
+			<Header id={`${id}-header`}>
 				<Title>{title}</Title>
 				<CloseButton type="button" onClick={handleModalClose}>
 					<CgClose size="24" color="var(--black)" />
 				</CloseButton>
 			</Header>
-			<Body>{children}</Body>
+			<Body id={`${id}-body`}>{children}</Body>
 		</Container>
 	);
 };
 
-const Container = styled.div<{ isVisible: boolean; bottomSheetType: 'plain' | 'doubleCheck'; order: number }>`
+const Container = styled.div<{ isVisible: boolean; order: number }>`
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
 	padding: var(--padding-container-mobile);
-	height: ${({ bottomSheetType }) => (bottomSheetType === 'plain' ? ' 85dvh' : 'auto')};
 	background-color: ${({ order }) => (order === 0 ? 'var(--white)' : `var(--grey50)`)};
 	border-top-left-radius: var(--radius-l);
 	border-top-right-radius: var(--radius-l);
@@ -106,7 +100,7 @@ const CloseButton = styled(Button)`
 `;
 
 const Body = styled.div`
-	height: calc(100% - var(--nav-height));
+	max-height: calc(100dvh - var(--nav-height) * 3);
 	overflow-y: scroll;
 `;
 
