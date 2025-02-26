@@ -295,7 +295,6 @@ const GoBackButton = styled(Button)`
 	min-width: 270px;
 	color: var(--black);
 	font-weight: var(--fw-semibold);
-	border: 1px solid var(--greyOpacity100);
 	border-radius: var(--radius-s);
 
 	&:hover,
