@@ -11,6 +11,7 @@ import { Layout, DiaryLayout, LoadLazy, RouteError, ExpenseTrackerLayout } from 
 import { routes } from './constants';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
+import UpdatePasswordPage from './pages/UpdatePassword';
 
 const DiaryContentPage = lazy(() => import('./pages/DiaryContent'));
 const ExpenseTrackerByMonthPage = lazy(() => import('./pages/ExpenseTrackerByMonth'));
@@ -18,7 +19,6 @@ const ExpenseTrackerByMonthItemPage = lazy(() => import('./pages/ExpenseTrackerB
 const ExpenseTrackerUpcomingPage = lazy(() => import('./pages/ExpenseTrackerUpcoming'));
 const ExpenseTrackerReportPage = lazy(() => import('./pages/ExpenseTrackerReport'));
 const ExpenseTrackerCreditCardTransactionPage = lazy(() => import('./pages/ExpenseTrackerCreditCardTransaction'));
-
 const NotFoundPage = lazy(() => import('./pages/NotFound'));
 
 const queryClient = new QueryClient({
@@ -89,6 +89,7 @@ const router = createBrowserRouter([
 	},
 	{ path: routes.LOGIN, element: <LoginPage /> },
 	{ path: routes.REGISTER, element: <RegisterPage /> },
+	{ path: routes.UPDATE_PASSWORD, element: <UpdatePasswordPage /> },
 	{
 		path: '/*',
 		element: <NotFoundPage />,

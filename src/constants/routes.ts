@@ -9,6 +9,7 @@ const routes = {
 	USER: '/mypage',
 	TODO_REMINDER: '/todo_reminder',
 	EXPENSE_TRACKER: '/expense',
+	UPDATE_PASSWORD: 'update-password',
 } as const;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
