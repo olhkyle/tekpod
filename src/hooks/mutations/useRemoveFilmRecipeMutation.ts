@@ -5,7 +5,7 @@ import queryKey from '../../constants/queryKey';
 import { toastData } from '../../constants/toast';
 import useToastStore from '../../store/useToastStore';
 
-interface UseRemoveRecipeMutation {
+interface UseRemoveFilmRecipeMutation {
 	id: string;
 	handlers: {
 		onClose: () => void;
@@ -19,7 +19,7 @@ const remove =
 		return oldData.filter(item => item.id !== id);
 	};
 
-const useRemoveRecipeMutation = ({ id, handlers }: UseRemoveRecipeMutation) => {
+const useRemoveRecipeMutation = ({ id, handlers }: UseRemoveFilmRecipeMutation) => {
 	const queryClient = useQueryClient();
 	const { addToast } = useToastStore();
 	const { onClose, onTopLevelModalClose } = handlers;
