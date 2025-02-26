@@ -42,7 +42,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 		formState: { errors, touchedFields },
 	} = useForm<AddPaymentFormSchema>({
 		resolver: zodResolver(addPaymentFormSchema),
-		defaultValues: { usage_date: new Date() },
+		defaultValues: { usage_date: new Date(), priceIntegerPart: '', priceDecimalPart: '' },
 	});
 
 	const { startTransition, Loading, isLoading } = useLoading();
@@ -82,9 +82,15 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 						target_id={'payment_method'}
 						placeholder={'Card / Cash'}
 						currentValue={watch('payment_method')}
-						isTriggered={touchedFields['payment_method']!}
+						isTriggered={!!touchedFields['payment_method']}
 						error={errors['payment_method']}
-						onSelect={data => setValue('payment_method', data, { shouldValidate: true, shouldTouch: true })}
+						onSelect={data => {
+							setValue('payment_method', data, { shouldValidate: true, shouldTouch: true });
+
+							if (data === 'Cash') {
+								setValue('bank', '해당없음', { shouldValidate: true });
+							}
+						}}
 					/>
 
 					<CustomSelect
@@ -92,12 +98,12 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 						target_id={'bank'}
 						placeholder={'Select Bank'}
 						currentValue={watch('payment_method') === 'Cash' ? '해당없음' : watch('bank')}
-						isTriggered={watch('payment_method') === 'Cash' ? true : touchedFields['bank']!}
+						isTriggered={watch('payment_method') === 'Cash' ? true : !!touchedFields['bank']!}
 						error={errors['bank']}
 						onSelect={data =>
-							setValue('bank', watch('payment_method') === 'Cash' ? '해당없음' : data, {
-								shouldValidate: watch('payment_method') === 'Cash' ? false : true,
-								shouldTouch: watch('payment_method') === 'Cash' ? false : true,
+							setValue('bank', data, {
+								shouldValidate: true,
+								shouldTouch: true,
 							})
 						}
 					/>
