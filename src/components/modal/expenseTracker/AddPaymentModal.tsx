@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ModalLayout from '../ModalLayout';
 import { ModalDataType } from '../modalType';
-import { AddPaymentFormSchema, addPaymentFormSchema } from './addPaymentFormSchema';
+import { AddPaymentFormSchema, addPaymentFormSchema } from './schema';
 import { Button, CustomSelect, DatePicker, TextInput } from '../../common';
 import { paymentData } from '../../../constants/expenseTracker';
 import { addPayment } from '../../../supabase/expenseTracker';

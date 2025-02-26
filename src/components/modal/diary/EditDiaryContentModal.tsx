@@ -8,7 +8,7 @@ import { Diary } from '../../../supabase/schema';
 import { isEqual } from 'es-toolkit';
 import { ModalLayout } from '..';
 import { Button, TagsInput, TextArea, TextInput } from '../..';
-import { editContentFormSchema, EditContentFormSchema } from './editContentSchema';
+import { editContentFormSchema, EditContentFormSchema } from './schema';
 import { useLoading } from '../../../hooks';
 import { updateDiary } from '../../../supabase/diary';
 import { routes } from '../../../constants';
