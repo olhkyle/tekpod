@@ -35,6 +35,7 @@ LabelInput.TextField = forwardRef(
 	({ type: initialType, id, name, placeholder, disabled, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
 		const [showPassword, setShowPassword] = useState(false);
 		const type = initialType === 'password' ? (showPassword ? 'text' : 'password') : initialType;
+
 		return (
 			<InputWrapper>
 				<input type={type} id={id} name={name} ref={ref} placeholder={placeholder} disabled={disabled} autoComplete={'off'} {...props} />
@@ -63,6 +64,7 @@ const Container = styled.div`
 	input {
 		padding: var(--padding-container-mobile);
 		min-width: 270px;
+		width: 100%;
 		border: 1px solid var(--greyOpacity100);
 		border-radius: var(--radius-s);
 		color: var(--black);
