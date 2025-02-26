@@ -14,7 +14,7 @@ const Header = () => {
 		[...pathname].filter(item => item === '/').length >= 2;
 
 	return (
-		<Container id="layoutHeader">
+		<Container id="layout-header">
 			<ReactiveLogo>
 				{isGoBackButtonActive ? (
 					<GoBackButton>

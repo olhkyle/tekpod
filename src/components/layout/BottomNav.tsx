@@ -8,7 +8,7 @@ const BottomNav = () => {
 	const { data } = useAuthQuery();
 
 	return (
-		<Container id="layoutGnb">
+		<Container id="layout-gnb">
 			<Links>
 				<NavLink href={routes.HOME}>
 					<RiHome6Line size={24} />
