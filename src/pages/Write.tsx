@@ -24,7 +24,7 @@ const WritePage = () => {
 		handleSubmit,
 	} = useForm<WriteSchema>({ resolver: zodResolver(writeSchema), defaultValues: { tags: [] } });
 
-	const { Loading, isLoading, startTransition } = useLoading();
+	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: WriteSchema) => {

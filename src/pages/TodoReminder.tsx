@@ -20,7 +20,7 @@ const TodoReminderPage = () => {
 
 	const [value, setValue] = useState('');
 	const { addToast } = useToastStore();
-	const { Loading, isLoading, startTransition } = useLoading();
+	const { startTransition, Loading, isLoading } = useLoading();
 
 	const handleTodoAdd = async () => {
 		if (value.length === 0) {

@@ -24,7 +24,7 @@ const QuickMemoDrawer = () => {
 
 	const navigate = useNavigate();
 	const { isOpen, close } = useDrawerStore();
-	const { Loading, isLoading, startTransition } = useLoading();
+	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: QuickMemoDrawerSchema) => {

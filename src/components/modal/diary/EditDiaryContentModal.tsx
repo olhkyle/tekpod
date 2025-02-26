@@ -37,7 +37,7 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditContentModalProp
 
 	const navigate = useNavigate();
 
-	const { isLoading, Loading, startTransition } = useLoading();
+	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (updatedData: EditContentFormSchema) => {

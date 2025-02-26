@@ -13,7 +13,7 @@ const ProfilePage = () => {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 
-	const { Loading, isLoading, startTransition } = useLoading();
+	const { startTransition, Loading, isLoading } = useLoading();
 	const { userInfo, resetUser } = useUserStore();
 	const { addToast } = useToastStore();
 

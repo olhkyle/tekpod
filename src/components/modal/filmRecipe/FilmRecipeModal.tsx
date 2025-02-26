@@ -37,7 +37,7 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 		handleImageRemove,
 	} = useFilmRecipeImage({ DEFAULT_IMAGE_SIZE: FILM_RECIPE_FORM.IMAGE.MAX_SIZE, isEditing });
 
-	const { isLoading, Loading, startTransition } = useLoading();
+	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 
 	const [currentFilmFeature, setCurrentFilmFeature] = useState<RestricedRecipeWithImage>(data);

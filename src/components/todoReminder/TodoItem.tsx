@@ -22,7 +22,7 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 	const [isCompleted, setIsCompleted] = useState(todo?.completed);
 
 	const { addToast } = useToastStore();
-	const { Loading, isLoading, startTransition } = useLoading();
+	const { startTransition, Loading, isLoading } = useLoading();
 
 	const [dragX, setDragX] = useState(0);
 	const [dragStartX, setDragStartX] = useState<number | null>(null);

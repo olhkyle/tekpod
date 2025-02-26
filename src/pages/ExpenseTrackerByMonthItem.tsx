@@ -19,7 +19,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 		state: { payment, currentDate },
 	} = useLocation();
 
-	const { Loading, isLoading, startTransition } = useLoading();
+	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 	const navigate = useNavigate();
 
