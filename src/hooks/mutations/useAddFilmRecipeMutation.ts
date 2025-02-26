@@ -2,6 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addRecipe } from '../../supabase/filmRecipe';
 import { RestrictedRecipe } from '../../supabase/schema';
 import queryKey from '../../constants/queryKey';
+import useToastStore from '../../store/useToastStore';
+import { toastData } from '../../constants/toast';
+
+interface UseAddFilmRecipeMutation {
+	handlers: {
+		onClose: () => void;
+	};
+}
 
 const add =
 	({ data }: { data: Omit<RestrictedRecipe, 'id' | 'imgSrc'> }) =>
@@ -9,8 +17,9 @@ const add =
 		return [...oldData, data];
 	};
 
-const useAddFilmRecipeMutation = () => {
+const useAddFilmRecipeMutation = ({ handlers: { onClose } }: UseAddFilmRecipeMutation) => {
 	const queryClient = useQueryClient();
+	const { addToast } = useToastStore();
 
 	const { mutate, isPending } = useMutation({
 		async mutationFn(variables: { data: Omit<RestrictedRecipe, 'id' | 'imgSrc'>; imageFile: File }) {
@@ -28,10 +37,16 @@ const useAddFilmRecipeMutation = () => {
 			return { previousData };
 		},
 
+		onSuccess() {
+			addToast(toastData.FILM_RECIPE.CREATE.SUBMIT.SUCCESS);
+			onClose();
+		},
+
 		onError(error, _, context) {
 			if (context?.previousData) {
 				console.error(error);
 				queryClient.setQueryData(queryKey.FILM_RECIPE, context?.previousData);
+				addToast(toastData.FILM_RECIPE.CREATE.SUBMIT.ERROR);
 			}
 		},
 		onSettled() {

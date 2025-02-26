@@ -56,7 +56,7 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 	const [currentFilmFeature, setCurrentFilmFeature] = useState<Omit<RestrictedRecipeForValidation, 'imgSrc'>>(initialFilmFieldValue);
 	const [isTriggered, setTriggered] = useState(initialValidationState);
 
-	const { mutate: addFilmRecipe, isPending } = useAddFilmRecipeMutation();
+	const { mutate: addFilmRecipe, isPending } = useAddFilmRecipeMutation({ handlers: { onClose } });
 	const { addToast } = useToastStore();
 
 	const {
@@ -84,27 +84,15 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 		}
 
 		if (currentRecipeImage) {
-			addFilmRecipe(
-				{
-					data: {
-						...currentFilmFeature,
-						user_id: session?.user?.id,
-						created_at: today,
-						updated_at: today,
-					},
-					imageFile: currentRecipeImage,
+			addFilmRecipe({
+				data: {
+					...currentFilmFeature,
+					user_id: session?.user?.id,
+					created_at: today,
+					updated_at: today,
 				},
-				{
-					onSuccess() {
-						addToast(toastData.FILM_RECIPE.CREATE.SUBMIT.SUCCESS);
-						onClose();
-					},
-					onError(error) {
-						console.error(error);
-						addToast(toastData.FILM_RECIPE.CREATE.SUBMIT.ERROR);
-					},
-				},
-			);
+				imageFile: currentRecipeImage,
+			});
 		}
 	};
 
@@ -149,7 +137,7 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 				})}
 
 				<AddRecipeButton type="submit" disabled={checkIsDisabled()}>
-					{isPending ? <LoadingSpinner /> : 'Add Recipe'}
+					{isPending ? <LoadingSpinner /> : 'Add'}
 				</AddRecipeButton>
 			</Form>
 		</ModalLayout>
