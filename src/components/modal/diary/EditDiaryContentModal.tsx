@@ -113,7 +113,7 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditContentModalProp
 					control={control}
 					render={({ field: { value, onChange } }) => <TagsInput tags={value} onChange={onChange} />}
 				/>
-				<UpdateButton type="submit">{isLoading ? Loading : '👆🏻 Upload'}</UpdateButton>
+				<UpdateButton type="submit">{isLoading ? Loading : 'Upload'}</UpdateButton>
 			</Group>
 		</ModalLayout>
 	);
@@ -127,8 +127,9 @@ const Group = styled.form`
 `;
 
 const UpdateButton = styled(Button)`
-	margin-top: auto;
+	margin-top: 32px;
 	padding: var(--padding-container-mobile);
+	min-height: 57px;
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);
