@@ -3,8 +3,8 @@ import supabase from '../supabase/service';
 import useUserStore from '../store/userStore';
 import queryKey from '../constants/queryKey';
 
-const STALE_TIME = 1000 * 60; // 1 min
-const GC_TIME = 1000 * 60 * 5; // 5 min
+const STALE_TIME = 1000 * 60 * 5; // 5 min
+const GC_TIME = 1000 * 60 * 15; // 15 min
 
 const useAuthQuery = () => {
 	const { setUserData } = useUserStore();
@@ -23,15 +23,15 @@ const useAuthQuery = () => {
 				throw new Error(error?.message ?? 'Not Validated Session');
 			}
 
-			if (!session) {
-				const {
-					data: { user },
-				} = await supabase.auth.getUser();
+			const {
+				data: { user },
+				error: getUserError,
+			} = await supabase.auth.getUser();
 
-				if (!user) {
-					return null;
-				}
+			if (!user || getUserError) {
+				return null;
 			}
+
 			setUserData(session);
 			return session;
 		},

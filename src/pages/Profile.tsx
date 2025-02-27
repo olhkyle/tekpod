@@ -25,10 +25,9 @@ const ProfilePage = () => {
 				throw new Error(error?.message);
 			}
 
-			navigate(routes.HOME);
 			resetUser();
-
 			addToast(toastData.PROFILE.LOGOUT.SUCCESS);
+			navigate(routes.HOME);
 		} catch (e) {
 			console.error(e);
 			addToast(toastData.PROFILE.LOGOUT.ERROR);
@@ -38,9 +37,17 @@ const ProfilePage = () => {
 		}
 	};
 
+	// TODO: setModal EditProfileModal
+	// TODO:  fix fadeout Modal Animation and Drawer Animation
+
 	return (
 		<Container>
-			<User>✹ {userInfo?.user?.user_metadata?.nickname ?? userInfo?.user?.email?.split('@').at(0)} ✹ </User>
+			<UserContainer>
+				<User>✹ {userInfo?.user?.user_metadata?.nickname ?? userInfo?.user?.email?.split('@').at(0)} ✹ </User>
+				<EditButton type="button" onClick={() => {}}>
+					Edit Profile
+				</EditButton>
+			</UserContainer>
 			<Bottom>
 				<Title>Keep Writing ? </Title>
 				<LogoutButton type="button" onClick={handleLogout}>
@@ -60,13 +67,33 @@ const Container = styled.section`
 	height: calc(100dvh - 3 * var(--nav-height));
 `;
 
+const UserContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+`;
+
 const User = styled.h2`
 	min-width: 270px;
-	font-size: var(--fz-h5);
+	font-size: var(--fz-h4);
 	font-weight: var(--fw-bold);
 	color: var(--white);
 	background: linear-gradient(135deg, var(--blue200), var(--grey200));
 	text-align: center;
+`;
+
+const EditButton = styled(Button)`
+	padding: calc(var(--padding-container-mobile) * 0.75) var(--padding-container-mobile);
+	font-size: var(--fz-p);
+	font-weight: var(--fw-medium);
+	border: 1px solid var(--grey100);
+	border-radius: var(--radius-s);
+
+	&:hover {
+		background-color: var(--greyOpacity50);
+	}
 `;
 
 const Bottom = styled.div`
