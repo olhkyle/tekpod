@@ -109,6 +109,9 @@ const toastData = {
 		LOGOUT: {
 			SUCCESS: { status: 'success', message: `Log out ${FIXED_SUCCESS_PHRASE}` },
 			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} logout` },
+			CUSTOM(status: Toast['status'], message: string) {
+				return { status, message };
+			},
 		},
 		REGISTER: {
 			SUCCESS: { status: 'success', message: `Register ${FIXED_SUCCESS_PHRASE}` },
@@ -127,7 +130,7 @@ const toastData = {
 				status: 'error',
 				message: `${FIXED_ERROR_MESSAGE_PHRASE} resetting password`,
 			},
-			CUSTOM: (status: Toast['status'], message: string) => {
+			CUSTOM(status: Toast['status'], message: string) {
 				return { status, message };
 			},
 		},
