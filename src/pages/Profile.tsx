@@ -27,7 +27,7 @@ const ProfilePage = () => {
 
 			resetUser();
 			addToast(toastData.PROFILE.LOGOUT.SUCCESS);
-			navigate(routes.HOME);
+			navigate(routes.HOME, { replace: true });
 		} catch (e) {
 			console.error(e);
 			addToast(toastData.PROFILE.LOGOUT.ERROR);

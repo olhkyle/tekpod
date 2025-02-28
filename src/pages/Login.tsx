@@ -90,8 +90,8 @@ const LoginPage = () => {
 			if (data) {
 				setUserData(data.session);
 				queryClient.setQueryData(['auth'], data.session);
-				navigate(routes.HOME);
 				addToast(toastData.PROFILE.LOGIN.SUCCESS);
+				navigate(routes.HOME, { replace: true });
 			}
 		} catch (e) {
 			console.error(e);
