@@ -113,11 +113,9 @@ const editRecipe = async ({
 
 const removeRecipe = async ({ id, path }: { id: string; path: string }) => {
 	const [removeFilmRecipeImage, removeFilmRecipe] = await Promise.all([
-		supabase.storage.from('recipe').remove([`${path}.webp`]),
+		supabase.storage.from('recipe').remove([path]),
 		supabase.from(TABLE).delete().eq('id', id),
 	]);
-
-	// TODO: recipe 데이터 베이스는 삭제되지만, storage에서 이미지가 삭제되지 않는 문제 해결 필요
 
 	if (removeFilmRecipeImage?.error) {
 		throw { error: removeFilmRecipeImage?.error, message: 'Error to delete this recipe image' };

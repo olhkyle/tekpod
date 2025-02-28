@@ -27,7 +27,12 @@ const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT
 
 		e.target.value = '';
 
-		if (currentImageFile?.type !== 'image/webp') {
+		if (
+			currentImageFile?.type !== 'image/webp' &&
+			currentImageFile?.type !== 'image/jpeg' &&
+			currentImageFile?.type !== 'image/heic' &&
+			currentImageFile?.type !== 'image/png'
+		) {
 			if (imageInputRef?.current) {
 				imageInputRef.current.value = '';
 			}

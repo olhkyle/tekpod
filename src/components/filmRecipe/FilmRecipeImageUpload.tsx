@@ -28,9 +28,10 @@ const FilmRecipeImageUpload = forwardRef<HTMLInputElement, FilmRecipeImageUpload
 					type="file"
 					id="image_upload_input"
 					name="image_upload_input"
-					accept=".webp,image/webp*"
+					accept="image/webp,image/jpeg,image/heic,image/png"
 					ref={ref}
 					onChange={onImageUpload}
+					capture="environment"
 				/>
 				<label htmlFor="image_upload_input">+ UPLOAD IMAGE</label>
 				<PreviewImage $isAttached={isAttached}>
