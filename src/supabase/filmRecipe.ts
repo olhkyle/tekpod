@@ -45,6 +45,7 @@ const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id
 		.upload(`film/${data?.user_id}/${uuid()}`, imageFile, {
 			cacheControl: '3600',
 			upsert: false,
+			metadata: { owner: data?.user_id }, // notify owner
 		});
 
 	const { error: addRecipeError } = await supabase
