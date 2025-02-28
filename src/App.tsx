@@ -29,78 +29,85 @@ const queryClient = new QueryClient({
 	},
 });
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+	[
+		{
+			path: routes.HOME,
+			errorElement: <RouteError />,
+			element: <Layout />,
+			children: [
+				{
+					index: true,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Home')} />,
+				},
+				{
+					path: routes.FILM_RECIPE,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('FilmRecipe')} />,
+				},
+				{
+					path: routes.DIARY,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<DiaryLayout />} />,
+					children: [
+						{
+							index: true,
+							element: LoadLazy('Diary'),
+						},
+						{ path: `:diaryId`, element: <DiaryContentPage /> },
+					],
+				},
+				{
+					path: routes.WRITE,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Write')} />,
+				},
+				{
+					path: routes.TODO_REMINDER,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('TodoReminder')} />,
+				},
+				{
+					path: routes.EXPENSE_TRACKER,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<ExpenseTrackerLayout />} />,
+					children: [
+						{
+							index: true,
+							element: LoadLazy('ExpenseTracker'),
+						},
+						{ path: `daily`, element: <ExpenseTrackerByMonthPage /> },
+						{ path: `daily/:id`, element: <ExpenseTrackerByMonthItemPage /> },
+						{ path: `upcoming`, element: <ExpenseTrackerUpcomingPage /> },
+						{ path: `report`, element: <ExpenseTrackerReportPage /> },
+						{ path: `credit_card`, element: <ExpenseTrackerCreditCardTransactionPage /> },
+					],
+				},
+				{
+					path: `${routes.REFLECT}`,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('ReflectAI')} />,
+				},
+				{
+					path: `${routes.USER}`,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Profile')} />,
+				},
+			],
+		},
+		{ path: routes.LOGIN, element: <LoginPage /> },
+		{ path: routes.REGISTER, element: <RegisterPage /> },
+		{ path: routes.UPDATE_PASSWORD, element: <UpdatePasswordPage /> },
+		{
+			path: '/*',
+			element: <NotFoundPage />,
+		},
+	],
 	{
-		path: routes.HOME,
-		errorElement: <RouteError />,
-		element: <Layout />,
-		children: [
-			{
-				index: true,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Home')} />,
-			},
-			{
-				path: routes.FILM_RECIPE,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('FilmRecipe')} />,
-			},
-			{
-				path: routes.DIARY,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<DiaryLayout />} />,
-				children: [
-					{
-						index: true,
-						element: LoadLazy('Diary'),
-					},
-					{ path: `:diaryId`, element: <DiaryContentPage /> },
-				],
-			},
-			{
-				path: routes.WRITE,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Write')} />,
-			},
-			{
-				path: routes.TODO_REMINDER,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('TodoReminder')} />,
-			},
-			{
-				path: routes.EXPENSE_TRACKER,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<ExpenseTrackerLayout />} />,
-				children: [
-					{
-						index: true,
-						element: LoadLazy('ExpenseTracker'),
-					},
-					{ path: `daily`, element: <ExpenseTrackerByMonthPage /> },
-					{ path: `daily/:id`, element: <ExpenseTrackerByMonthItemPage /> },
-					{ path: `upcoming`, element: <ExpenseTrackerUpcomingPage /> },
-					{ path: `report`, element: <ExpenseTrackerReportPage /> },
-					{ path: `credit_card`, element: <ExpenseTrackerCreditCardTransactionPage /> },
-				],
-			},
-			{
-				path: `${routes.REFLECT}`,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('ReflectAI')} />,
-			},
-			{
-				path: `${routes.USER}`,
-				element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Profile')} />,
-			},
-		],
+		future: {
+			v7_relativeSplatPath: true,
+		},
 	},
-	{ path: routes.LOGIN, element: <LoginPage /> },
-	{ path: routes.REGISTER, element: <RegisterPage /> },
-	{ path: routes.UPDATE_PASSWORD, element: <UpdatePasswordPage /> },
-	{
-		path: '/*',
-		element: <NotFoundPage />,
-	},
-]);
+);
 
 const App = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<Global styles={GlobalStyle} />
-			<RouterProvider router={router} />
+			<RouterProvider router={router} future={{ v7_startTransition: true }} />
 			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>
 	);
