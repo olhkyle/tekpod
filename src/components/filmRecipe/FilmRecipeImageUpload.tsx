@@ -24,15 +24,7 @@ const FilmRecipeImageUpload = forwardRef<HTMLInputElement, FilmRecipeImageUpload
 
 		return (
 			<ImageUploadInput $isAttached={isAttached}>
-				<input
-					type="file"
-					id="image_upload_input"
-					name="image_upload_input"
-					accept="image/*"
-					ref={ref}
-					onChange={onImageUpload}
-					capture="environment"
-				/>
+				<input type="file" id="image_upload_input" name="image_upload_input" accept="image/*" ref={ref} onChange={onImageUpload} />
 				<label htmlFor="image_upload_input">+ UPLOAD IMAGE</label>
 				<PreviewImage $isAttached={isAttached}>
 					<img src={imageUrl} alt="preview_image" />
