@@ -1,5 +1,6 @@
 import supabase from './service';
 import { ExpenseTracker } from './schema';
+import { currentYear } from '../utils/date';
 
 /**
  *
@@ -58,7 +59,6 @@ const getPaymentsByDate = async (date: Date): Promise<{ data: ExpenseTracker[]; 
 };
 
 const getAllPaymentsByMonth = async (month: number) => {
-	const currentYear = new Date().getFullYear();
 	const startDayOfMonth = new Date(currentYear, month, 1).toISOString();
 	const endDayOfMonth = new Date(currentYear, month + 1, 0).toISOString();
 
