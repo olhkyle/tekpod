@@ -6,7 +6,7 @@ import { IoMdCalendar } from 'react-icons/io';
 import { ko } from 'date-fns/locale';
 import { Button } from '..';
 import { customPropReceiver } from '../../constants';
-import { format } from '../../utils/date';
+import { format, today } from '../../utils/date';
 import { useClickOutside } from '../../hooks';
 
 interface DatePickerProps {
@@ -35,6 +35,7 @@ const DatePicker = ({ selected, setSelected, error, ...props }: DatePickerProps)
 					locale={ko}
 					required={true}
 					selected={selected}
+					disabled={{ after: today }}
 					onSelect={setSelected}
 					captionLayout="dropdown"
 					timeZone="Asia/Seoul"

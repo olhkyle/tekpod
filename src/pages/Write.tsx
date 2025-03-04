@@ -11,6 +11,7 @@ import { routes } from '../constants';
 import useLoading from '../hooks/useLoading';
 import useToastStore from '../store/useToastStore';
 import { toastData } from '../constants/toast';
+import { today } from '../utils/date';
 
 const WritePage = () => {
 	const queryClient = useQueryClient();
@@ -28,8 +29,6 @@ const WritePage = () => {
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: WriteSchema) => {
-		const today = new Date();
-
 		try {
 			const { error } = await startTransition(
 				addDiary({

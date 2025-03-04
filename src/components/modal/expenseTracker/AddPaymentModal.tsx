@@ -14,6 +14,7 @@ import useToastStore from '../../../store/useToastStore';
 import queryKey from '../../../constants/queryKey';
 import { monetizeWithSeparator } from '../../../utils/money';
 import { toastData } from '../../../constants/toast';
+import { today } from '../../../utils/date';
 
 interface AddPaymentModalProps {
 	id: string;
@@ -42,15 +43,13 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 		formState: { errors, touchedFields },
 	} = useForm<AddPaymentFormSchema>({
 		resolver: zodResolver(addPaymentFormSchema),
-		defaultValues: { usage_date: new Date(), priceIntegerPart: '', priceDecimalPart: '' },
+		defaultValues: { usage_date: today, priceIntegerPart: '', priceDecimalPart: '' },
 	});
 
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: AddPaymentFormSchema) => {
-		const today = new Date();
-
 		try {
 			await startTransition(addPayment({ ...data, user_id: session?.user?.id, created_at: today, updated_at: today }));
 			onClose();

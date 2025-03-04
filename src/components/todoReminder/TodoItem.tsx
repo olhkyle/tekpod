@@ -9,6 +9,7 @@ import useToastStore from '../../store/useToastStore';
 import { removeTodo, updatedTodoCompleted } from '../../supabase/todos';
 import queryKey from '../../constants/queryKey';
 import { toastData } from '../../constants/toast';
+import { today } from '../../utils/date';
 
 interface TodoProps {
 	todo: Todo;
@@ -74,7 +75,7 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 
 	const handleTodoIsCompleted = async (completed: boolean) => {
 		try {
-			await startTransition(updatedTodoCompleted({ id: todo.id, completed, updated_at: new Date() }));
+			await startTransition(updatedTodoCompleted({ id: todo.id, completed, updated_at: today }));
 			addToast(toastData.TODO_REMINDER.EDIT.SUCCESS);
 		} catch (e) {
 			console.error(e);

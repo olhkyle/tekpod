@@ -9,6 +9,7 @@ import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../../hooks';
 import { FILM_RECIPE_FORM } from '../../../constants/recipes';
 import type { RestrictedRecipeForValidation } from '../../../supabase/schema';
 import { toastData } from '../../../constants/toast';
+import { today } from '../../../utils/date';
 
 interface AddFilmRecipeModalProps {
 	id: string;
@@ -75,8 +76,6 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 
 	const handleAddFilmRecipe: FormEventHandler<HTMLFormElement> = e => {
 		e.preventDefault();
-
-		const today = new Date();
 
 		if (checkIsDisabled()) {
 			addToast(toastData.FILM_RECIPE.CREATE.SUBMIT.WARN);

@@ -5,13 +5,14 @@ import useModalStore from '../store/useModalStore';
 import { useLocation } from 'react-router-dom';
 import { MODAL_CONFIG } from '../components/modal/modalType';
 import { priceUnit, PriceUnitType } from '../constants/expenseTracker';
+import { today } from '../utils/date';
 
 export type ExtendedPaymentMethodType = (typeof segmentedControlOptions)[number];
 const segmentedControlOptions = ['All', 'Card', 'Cash'] as const;
 
 const ExpenseTrackerByMonthPage = () => {
 	const { state } = useLocation();
-	const [selected, setSelected] = useState<Date>(state?.currentDate ?? new Date());
+	const [selected, setSelected] = useState<Date>(state?.currentDate ?? today);
 	const { setModal } = useModalStore();
 
 	const [currentPaymentMethod, setCurrentPaymentMethod] = useState<ExtendedPaymentMethodType>(segmentedControlOptions[0]);

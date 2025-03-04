@@ -14,6 +14,7 @@ import { validateTitle } from '../../../utils/validateField';
 import { useQueryClient } from '@tanstack/react-query';
 import queryKey from '../../../constants/queryKey';
 import { toastData } from '../../../constants/toast';
+import { today } from '../../../utils/date';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -71,7 +72,7 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 					type: imageUrl === data?.imgSrc && !currentRecipeImage ? 'sameImage' : 'updatedImage',
 					data: {
 						...currentFilmFeature,
-						updated_at: new Date(),
+						updated_at: today,
 						imgSrc: imageUrl === data?.imgSrc && !currentRecipeImage ? data?.imgSrc : '',
 						primary: isPrimary,
 					},

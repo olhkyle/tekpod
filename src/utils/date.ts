@@ -1,7 +1,7 @@
 const today = new Date();
 const todayLocaleString = today.toLocaleString('en-US', { timeZone: 'Asia/Seoul' });
 
-const currentKoreanTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+const currentKoreanTime = new Date(today.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
 
 const [currentYear, currentMonth, currentDate] = [today.getFullYear(), today.getMonth(), today.getDate()];
 

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { paymentData } from '../../../constants/expenseTracker';
+import { today } from '../../../utils/date';
 
 type AddPaymentFormSchema = z.infer<typeof addPaymentFormSchema>;
 
@@ -21,7 +22,7 @@ const addPaymentFormSchema = z.object({
 			required_error: 'Select Date in essential',
 			invalid_type_error: 'Select the correct Date',
 		})
-		.refine(date => date <= new Date(), "Can't choose the future date"),
+		.refine(date => date <= today, "Can't choose the future date"),
 	payment_method: paymentMethodSchema,
 	bank: bankSchema.default('해당없음'),
 	priceIntegerPart: z.string().min(1, 'Please write the Price'),
