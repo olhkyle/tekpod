@@ -86,13 +86,15 @@ const User = styled.h2`
 
 const EditButton = styled(Button)`
 	padding: calc(var(--padding-container-mobile) * 0.75) var(--padding-container-mobile);
-	font-size: var(--fz-p);
+	font-size: var(--fz-sm);
 	font-weight: var(--fw-medium);
+	color: var(--black);
+	background-color: var(--grey50);
 	border: 1px solid var(--grey100);
 	border-radius: var(--radius-s);
 
 	&:hover {
-		background-color: var(--greyOpacity50);
+		background-color: var(--greyOpacity100);
 	}
 `;
 
