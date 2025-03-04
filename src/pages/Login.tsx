@@ -155,13 +155,12 @@ const ResetPasswordButton = styled(Button)`
 	padding: calc(var(--padding-container-mobile) / 4);
 	font-size: var(--fz-sm);
 	font-weight: var(--fw-medium);
-	color: var(--grey900);
-	background-color: var(--grey50);
-	border: 1px solid var(--grey200);
+	color: var(--grey700);
+	border: 1px solid var(--grey100);
 	border-radius: var(--radius-xs);
 
 	&:hover {
-		background-color: var(--grey100);
+		background-color: var(--grey50);
 	}
 `;
 
@@ -169,14 +168,14 @@ const RegisterLink = styled(Link)`
 	padding: calc(var(--padding-container-mobile) / 4);
 	font-size: var(--fz-sm);
 	font-weight: var(--fw-medium);
-	color: var(--white);
-	background-color: var(--black);
+	color: var(--grey800);
+	background-color: var(--grey200);
 	border: 1px solid var(--grey200);
 	border-radius: var(--radius-xs);
 	transition: background 0.15s ease-in-out;
 
 	&:hover {
-		background-color: var(--grey900);
+		background-color: var(--grey100);
 	}
 `;
 
