@@ -116,7 +116,7 @@ const RegisterPage = () => {
 
 			// check if user exists based on email
 			if (isEmailFieldValidatedOnEmailStep) {
-				const { data, error } = await isUserExist(watch('email'));
+				const { data, error } = await startTransition(isUserExist(watch('email')));
 
 				if (error) {
 					throw new Error(error.message);
@@ -192,7 +192,7 @@ const RegisterPage = () => {
 								/>
 							</LabelInput>
 							<ContinueButton type="button" disabled={getFieldState('email')?.invalid} onClick={() => continueNextStep(step)}>
-								Continue
+								{isLoading ? Loading : 'Continue'}
 							</ContinueButton>
 						</>
 					)}
