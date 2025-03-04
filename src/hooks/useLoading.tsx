@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useIsMountedRef } from '.';
 import { LoadingSpinner } from '../components';
 
 const useLoading = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const ref = useIsMountedRef();
+	const abortControllerRef = useRef<AbortController | null>(null);
 
-	//  TypeScript의 제네릭 함수에서 async와 제네릭 타입 <T>를 함께 사용할 때, 제네릭 타입의 위치가 JSX 태그로 인식할 수 있어, <T,> 이런식으로 적어준다.
+	//  "In TypeScript's generic functions, when using async and the generic type <T> together, the generic type's position might be recognized as a JSX tag, so you write it as <T,>
 	const startTransition = async <T,>(promise: Promise<T>): Promise<T> => {
+		abortControllerRef.current?.abort(); // cancel previous Request
+		abortControllerRef.current = new AbortController();
+
 		try {
 			setLoading(true);
 
@@ -17,10 +21,15 @@ const useLoading = () => {
 			if (ref.isMounted) {
 				setLoading(false);
 			}
+			abortControllerRef.current = null;
 		}
 	};
 
-	return { Loading: <LoadingSpinner />, isLoading: loading, startTransition };
+	const cancel = () => {
+		abortControllerRef.current?.abort();
+	};
+
+	return { Loading: <LoadingSpinner />, isLoading: loading, startTransition, cancel };
 };
 
 export default useLoading;
