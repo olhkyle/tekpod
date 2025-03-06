@@ -2,7 +2,7 @@ const ONE_SECOND = 1000;
 
 const staleTime = {
 	DIARY: {
-		PAGE_INFO: ONE_SECOND * 10,
+		PAGE_INFO: ONE_SECOND * 3,
 		ALL_WITH_PAGINATION: ONE_SECOND * 5,
 	},
 	EXPENSE_TRACKER: {

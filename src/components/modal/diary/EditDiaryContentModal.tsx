@@ -56,7 +56,14 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditContentModalProp
 		}
 
 		try {
-			const { error } = await startTransition(updateDiary({ ...data, ...updatedData, tags: updatedData.tags.map(({ tag }) => tag) }));
+			const { error } = await startTransition(
+				updateDiary({
+					...data,
+					...updatedData,
+					tags: updatedData.tags.map(({ tag }) => tag),
+					updated_at: new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' })),
+				}),
+			);
 
 			if (error) {
 				throw new Error(error.message);

@@ -10,7 +10,6 @@ import { useLoading } from '../hooks';
 import useToastStore from '../store/useToastStore';
 import queryKey from '../constants/queryKey';
 import { toastData } from '../constants/toast';
-import { currentKoreanTime } from '../utils/date';
 
 const TodoReminderPage = () => {
 	const queryClient = useQueryClient();
@@ -27,14 +26,16 @@ const TodoReminderPage = () => {
 			return addToast(toastData.TODO_REMINDER.CREATE.WARN);
 		}
 
+		const currentTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+
 		try {
 			await startTransition(
 				addTodo({
 					user_id: session?.user?.id,
 					completed: false,
 					content: value,
-					created_at: currentKoreanTime,
-					updated_at: currentKoreanTime,
+					created_at: currentTime,
+					updated_at: currentTime,
 				}),
 			);
 

@@ -11,7 +11,6 @@ import { routes } from '../constants';
 import useLoading from '../hooks/useLoading';
 import useToastStore from '../store/useToastStore';
 import { toastData } from '../constants/toast';
-import { today } from '../utils/date';
 
 const WritePage = () => {
 	const queryClient = useQueryClient();
@@ -29,13 +28,15 @@ const WritePage = () => {
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: WriteSchema) => {
+		const currentTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+
 		try {
 			const { error } = await startTransition(
 				addDiary({
 					...data,
 					user_id: session?.user?.id,
-					created_at: today,
-					updated_at: today,
+					created_at: currentTime,
+					updated_at: currentTime,
 					tags: data.tags.map(({ tag }) => tag),
 				}),
 			);

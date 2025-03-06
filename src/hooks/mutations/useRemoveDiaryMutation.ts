@@ -50,7 +50,7 @@ const useDeleteDiaryMutation = () => {
 		},
 		// Always refetch after error or success:
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey: queryKey.DIARY });
+			return queryClient.invalidateQueries({ queryKey: [...queryKey.DIARY, ...queryKey.DIARY_BY_PAGE] });
 		},
 	});
 	return { mutate, isPending };
