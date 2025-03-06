@@ -9,12 +9,16 @@ const Logo = () => {
 				display: 'inline-flex',
 				justifyContent: 'center',
 				alignItems: 'center',
-				marginLeft: '-4px',
+				marginLeft: '-2px',
 				height: 'calc(var(--nav-height) * 0.7)',
 				borderRadius: 'var(--radius-m)',
 			}}
 			onBlur={e => e.target.blur()}>
-			<img src="/tekpod.svg" alt="tekpod logo" css={{ display: 'block', width: '100%', height: '100%', borderRadius: 'var(--radius-m)' }} />
+			<img
+				src="/tekpod.webp"
+				alt="tekpod logo"
+				css={{ display: 'block', width: '100%', height: '100%', borderRadius: 'var(--radius-m)' }}
+			/>
 		</Link>
 	);
 };
