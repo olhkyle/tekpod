@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import type { Diary } from '../../supabase/schema';
 import { getSingleDiary } from '../../supabase/diary';
 import { LoadingSpinner, Button } from '..';
 import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
@@ -12,7 +11,7 @@ import { MODAL_CONFIG } from '../modal/modalType';
 const ContentBody = () => {
 	const { diaryId } = useParams();
 
-	const { data } = useSuspenseQuery<Diary>({ queryKey: [...queryKey.DIARY, diaryId], queryFn: () => getSingleDiary(diaryId!) });
+	const { data } = useSuspenseQuery({ queryKey: [...queryKey.DIARY, diaryId], queryFn: () => getSingleDiary(diaryId!) });
 	const { mutate: remove, isPending } = useRemoveDiaryMutation();
 
 	const { setModal } = useModalStore();
