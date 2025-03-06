@@ -79,10 +79,6 @@ const router = createBrowserRouter(
 					],
 				},
 				{
-					path: `${routes.REFLECT}`,
-					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('ReflectAI')} />,
-				},
-				{
 					path: `${routes.USER}`,
 					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Profile')} />,
 				},
