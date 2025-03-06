@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
 import { IoMdNotifications } from 'react-icons/io';
 import { FaCalculator } from 'react-icons/fa';
-import { RiOpenaiFill } from 'react-icons/ri';
 import { routes } from '../constants';
 
 const linkGroup = [
@@ -16,11 +15,6 @@ const linkGroup = [
 		to: routes.EXPENSE_TRACKER,
 		icon: <FaCalculator size="18" color="var(--blue100)" />,
 		title: 'Expense Tracker',
-	},
-	{
-		to: routes.REFLECT,
-		icon: <RiOpenaiFill size="24" color="var(--white)" />,
-		title: 'AI Agent(WIP)',
 	},
 ];
 
