@@ -25,5 +25,26 @@ const registerSchema = z.object({
 	nickname: z.string().min(2, { message: 'Over 2 length of name' }),
 });
 
-export type { LoginSchema, RegisterSchema };
-export { loginSchema, registerSchema };
+type UpdatePasswordSchema = z.infer<typeof updatePasswordSchema>;
+
+const updatePasswordSchema = z
+	.object({
+		password: z
+			.string({ required_error: 'Password cannot be blank' })
+			.min(1, { message: 'Password cannot be blank' })
+			.regex(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{7,15}$/, {
+				message: `Write correct password format`,
+			}),
+		confirmPassword: z
+			.string({
+				required_error: 'Confirm-Password cannot be blank',
+			})
+			.min(1, 'Check your password'),
+	})
+	.refine(data => data.password === data.confirmPassword, {
+		message: 'Password is not same each other',
+		path: ['confirmPassword'],
+	});
+
+export type { LoginSchema, RegisterSchema, UpdatePasswordSchema };
+export { loginSchema, registerSchema, updatePasswordSchema };

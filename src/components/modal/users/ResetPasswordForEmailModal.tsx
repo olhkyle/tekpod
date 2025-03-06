@@ -13,6 +13,7 @@ import useToastStore from '../../../store/useToastStore';
 import { routes } from '../../../constants';
 import { toastData } from '../../../constants/toast';
 import { useEffect } from 'react';
+import { isUserExist } from '../../../supabase/user';
 
 interface ResetPasswordForEmailModalProps {
 	id: string;
@@ -39,27 +40,33 @@ const ResetPasswordForEmailModal = ({ id, type, onClose }: ResetPasswordForEmail
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const onSubmit = async (data: ResetPasswordSchema) => {
+	const onSubmit = async (formData: ResetPasswordSchema) => {
 		try {
-			// TODO: window.location.origin이 과연 맞는지
+			const { data: isUserExistResult, error: isUserExistError } = await startTransition(isUserExist(formData.email));
+
+			if (!isUserExistResult || isUserExistError) {
+				throw new Error('This email is never registered');
+			}
+
 			const baseUrl = import.meta.env.VITE_APP_URL;
 
-			const { error } = await startTransition(
-				supabase.auth.resetPasswordForEmail(data.email, {
-					redirectTo: `${baseUrl}/${routes.UPDATE_PASSWORD}?email=${encodeURIComponent(data.email)}`,
+			const { error: resetPasswordForEmailError } = await startTransition(
+				supabase.auth.resetPasswordForEmail(formData.email, {
+					redirectTo: `${baseUrl}/${routes.UPDATE_PASSWORD}?email=${encodeURIComponent(formData.email)}`,
 				}),
 			);
 
-			if (error) {
-				throw new Error(error.message);
+			if (resetPasswordForEmailError) {
+				throw new Error(resetPasswordForEmailError.message);
 			}
 
 			addToast(toastData.PROFILE.RESET_PASSWORD.SUCCESS);
 			onClose();
-			setValue('email', '');
 		} catch (e) {
 			console.error(e);
 			addToast(toastData.PROFILE.RESET_PASSWORD.CUSTOM('error', (e as AuthError).message));
+		} finally {
+			setValue('email', '');
 		}
 	};
 

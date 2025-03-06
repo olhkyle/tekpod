@@ -1,8 +1,16 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AuthLogo, Button, LabelInput } from '../components';
-import { FormEvent } from 'react';
+import { useEffect } from 'react';
+import supabase from '../supabase/service';
+import { useLoading } from '../hooks';
+import { useForm } from 'react-hook-form';
+import { updatePasswordSchema, UpdatePasswordSchema } from '../components/auth/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import useToastStore from '../store/useToastStore';
+import { toastData } from '../constants/toast';
+import { routes } from '../constants';
 
 const pageCss = {
 	container: css`
@@ -25,30 +33,56 @@ const pageCss = {
 
 const UpdatePassword = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
+	const navigate = useNavigate();
+	const { isLoading, Loading, startTransition } = useLoading();
+	const { addToast } = useToastStore();
 
-	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
+	const { register, handleSubmit } = useForm<UpdatePasswordSchema>({ resolver: zodResolver(updatePasswordSchema) });
+
+	useEffect(() => {
 		searchParams.set('email', searchParams.get('email')!);
 		setSearchParams(searchParams);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const onSubmit = async (formData: UpdatePasswordSchema) => {
 		//TODO: supabase.auth.updateUser
+
+		try {
+			const { error } = await startTransition(
+				supabase.auth.updateUser({
+					password: formData.password,
+				}),
+			);
+
+			if (error) {
+				throw new Error(error.message);
+			}
+
+			addToast(toastData.PROFILE.RESET_PASSWORD.SUCCESS);
+			navigate(routes.LOGIN);
+		} catch (e) {
+			console.error(e);
+			addToast(toastData.PROFILE.RESET_PASSWORD.ERROR);
+		}
 	};
 
 	// TODO: searchParams.get('email') === null -> submit 후에 문제 있으면 setSearchParams를 통해 email 을 활용해 searchParam 재지정
 	return (
 		<div css={pageCss.container}>
-			<form css={pageCss.form} onSubmit={onSubmit}>
+			<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
 				<AuthLogo />
 				<Title>﹡ Update Password ﹡</Title>
 
 				<EmailInfo>{searchParams.get('email')}</EmailInfo>
 				<LabelInput label="Password">
-					<LabelInput.TextField type="password" name="password" placeholder="Password" />
+					<LabelInput.TextField type="password" {...register('password')} placeholder="Password" />
 				</LabelInput>
-				<LabelInput label="Password Confirm">
-					<LabelInput.TextField type="password" name="passwordConfirm" placeholder="Password Confirm" />
+				<LabelInput label="Confirm Password">
+					<LabelInput.TextField type="password" {...register('confirmPassword')} placeholder="Password Confirm" />
 				</LabelInput>
 				<SubmitButton type="submit" aria-label="Update Password Button">
-					Submit
+					{isLoading ? Loading : 'Submit'}
 				</SubmitButton>
 			</form>
 		</div>

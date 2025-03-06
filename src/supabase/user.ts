@@ -4,11 +4,17 @@ import { RegisterSchema } from '../components/auth/schema';
 const TABLE = 'users';
 
 const isUserExist = async (email: string) => {
-	return await supabase.from(TABLE).select('email').eq('email', email);
+	const { data, error } = await supabase.from(TABLE).select('email').eq('email', email);
+
+	return { data: data?.length !== 0, error };
 };
 
 const addNewUser = async ({ userId, userData }: { userId?: string; userData: RegisterSchema }) => {
 	return await supabase.from(TABLE).insert({ user_id: userId, email: userData.email, nickname: userData.nickname });
 };
 
-export { isUserExist, addNewUser };
+const updateUser = async ({ userId, userData }: { userId: string; userData: RegisterSchema }) => {
+	return await supabase.from(TABLE).update({ userData }).eq('id', userId);
+};
+
+export { isUserExist, addNewUser, updateUser };

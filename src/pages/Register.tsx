@@ -123,7 +123,7 @@ const RegisterPage = () => {
 				}
 
 				// if user exist based on email
-				if (data?.length !== 0) {
+				if (data) {
 					addToast(toastData.PROFILE.REGISTER.WARN);
 					setValue('email', '');
 					setFocus('email');
@@ -144,13 +144,15 @@ const RegisterPage = () => {
 
 	const onSubmit = async (userData: RegisterSchema) => {
 		try {
-			const { data, error } = await supabase.auth.signUp({
-				email: userData.email,
-				password: userData.password,
-				options: {
-					data: { nickname: userData.nickname },
-				},
-			});
+			const { data, error } = await startTransition(
+				supabase.auth.signUp({
+					email: userData.email,
+					password: userData.password,
+					options: {
+						data: { nickname: userData.nickname },
+					},
+				}),
+			);
 
 			if (error) {
 				throw new Error(error.message);
