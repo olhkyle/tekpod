@@ -214,15 +214,14 @@ const Left = styled.div`
 `;
 
 const RankActivateButton = styled(Button)`
-	padding: 8px 16px;
-	min-height: 57px;
+	padding: calc(var(--padding-container-mobile) * 0.5) var(--padding-container-mobile);
 	background-color: var(--blue100);
 `;
 
 const StyledButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
-	min-height: 57px;
+
 	color: var(--white);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);

@@ -204,7 +204,6 @@ const SubmitButton = styled(Button)`
 	margin-top: 16px;
 	padding: var(--padding-container-mobile);
 	width: 100%;
-	min-height: 57px;
 	color: var(--white);
 	background-color: var(--black);
 	font-size: var(--fz-p);

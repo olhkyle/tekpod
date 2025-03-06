@@ -120,7 +120,6 @@ const Wrapper = styled.div`
 
 const UploadButton = styled(Button)`
 	padding: var(--padding-container-mobile);
-	min-height: 57px;
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);

@@ -103,7 +103,6 @@ const DeleteButton = styled(Button)`
 	bottom: 0;
 	padding: var(--padding-container-mobile);
 	width: 100%;
-	min-height: 57px;
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);

@@ -136,7 +136,6 @@ const Group = styled.form`
 const UpdateButton = styled(Button)`
 	margin-top: 32px;
 	padding: var(--padding-container-mobile);
-	min-height: 57px;
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);

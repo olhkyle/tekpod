@@ -153,7 +153,6 @@ const AddRecipeButton = styled(Button)`
 	margin-top: 32px;
 	padding: var(--padding-container-mobile);
 	width: 100%;
-	min-height: 57px;
 	color: var(--white);
 	background-color: var(--black);
 	font-size: var(--fz-p);
