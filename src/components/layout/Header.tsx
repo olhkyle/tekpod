@@ -50,8 +50,6 @@ const ReactiveLogo = styled.h1`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: var(--fz-h6);
-	font-weight: var(--fw-black);
 `;
 
 export default Header;
