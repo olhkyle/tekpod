@@ -2,7 +2,7 @@ import { Logo } from '..';
 
 const AuthLogo = () => {
 	return (
-		<h1 css={{ minWidth: '270px', fontSize: 'var(--fz-h4)', fontWeight: 'var(--fw-black)' }}>
+		<h1 css={{ minWidth: '270px' }}>
 			<Logo />
 		</h1>
 	);
