@@ -10,7 +10,8 @@ const Logo = () => {
 				justifyContent: 'center',
 				alignItems: 'center',
 				marginLeft: '-2px',
-				height: 'calc(var(--nav-height) * 0.7)',
+				width: '35px',
+				height: '35px',
 				borderRadius: 'var(--radius-m)',
 			}}
 			onBlur={e => e.target.blur()}>
