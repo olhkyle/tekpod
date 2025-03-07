@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import { Button, ShrinkMotionBlock } from '../components';
 import { format } from '../utils/date';
@@ -12,12 +12,11 @@ import useUserStore from '../store/userStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { toastData } from '../constants/toast';
 import { routes } from '../constants';
+import { Session } from '@supabase/supabase-js';
 
 const UpdateProfile = () => {
 	const queryClient = useQueryClient();
-	const {
-		state: { user },
-	} = useLocation();
+	const { user } = queryClient.getQueryData(['auth']) as Session;
 	const navigate = useNavigate();
 
 	const { resetUser } = useUserStore();
@@ -46,11 +45,17 @@ const UpdateProfile = () => {
 	};
 
 	const handleUpdateProfileModal = () => {
+		const userData = {
+			user_id: user.id,
+			email: user?.user_metadata.email,
+			nickname: user?.user_metadata?.nickname,
+		};
+
 		setModal({
 			Component: MODAL_CONFIG.USER.PROFILE.Component,
 			props: {
 				type: MODAL_CONFIG.USER.PROFILE.type,
-				data: { user_id: user?.id, email: user?.email, nickname: user?.user_metadata?.nickname },
+				data: userData,
 			},
 		});
 	};
@@ -71,7 +76,7 @@ const UpdateProfile = () => {
 				</Email>
 				<JoinedDate>
 					<Label>Join in</Label>
-					<dd>{format(user?.created_at)}</dd>
+					<dd>{format(new Date(user?.created_at))}</dd>
 				</JoinedDate>
 			</UserInfo>
 
@@ -157,6 +162,7 @@ const ResetPasswordButton = styled(Button)`
 	width: 100%;
 	font-weight: var(--fw-medium);
 	border-radius: var(--radius-s);
+	color: var(--black);
 	background-color: var(--grey100);
 
 	&:hover {
@@ -169,6 +175,7 @@ const LogoutButton = styled(Button)`
 	width: 100%;
 	font-size: var(--fz-p);
 	font-weight: var(--fw-medium);
+	color: var(--black);
 	text-decoration: underline;
 
 	&:hover {
