@@ -67,7 +67,7 @@ const NotFound = () => {
 				<h1 css={layoutCss.title}>TEKT</h1>
 				<p css={layoutCss.description}>🌪️ Something went wrong</p>
 				<Button type="button" css={layoutCss.button} onClick={() => navigate(routes.HOME)}>
-					Go Back to 🏠
+					Go Back to HOME
 				</Button>
 			</div>
 		</div>

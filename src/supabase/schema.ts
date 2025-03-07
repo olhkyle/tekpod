@@ -1,11 +1,12 @@
 import { Database } from './database.types';
 
-type ServiceDataType = Diary | Recipe | null;
+type ServiceDataType = Diary | Recipe | User | null;
 
 type Diary = Database['public']['Tables']['diary']['Row'];
 type Recipe = Database['public']['Tables']['recipes']['Row'];
 type Todo = Database['public']['Tables']['todos']['Row'];
 type ExpenseTracker = Database['public']['Tables']['expense_tracker']['Row'];
+type User = Database['public']['Tables']['users']['Row'];
 
 interface RestrictedRecipe extends Recipe {
 	dynamic_range: 'DR-Auto' | `DR-${'number'}`;
@@ -31,4 +32,5 @@ export type {
 	RestrictedRecipeForValidatioWithImage,
 	Todo,
 	ExpenseTracker,
+	User,
 };

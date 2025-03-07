@@ -7,7 +7,7 @@ const ModalContainer = () => {
 
 	return (
 		<Portal>
-			<Container isVisible={modals.length > 0} id="modal-container">
+			<Container id="modal-container" isVisible={modals.length > 0}>
 				{modals.map(({ Component, props }, index) => {
 					const closeModal = () => removeModal(Component);
 

@@ -14,18 +14,22 @@ const Header = () => {
 		[...pathname].filter(item => item === '/').length >= 2;
 
 	return (
-		<Container id="layout-header">
-			<ReactiveLogo>
-				{isGoBackButtonActive ? (
-					<GoBackButton>
-						<IoIosArrowBack size="24" color="var(--grey700)" />
-					</GoBackButton>
-				) : (
-					<Logo />
-				)}
-			</ReactiveLogo>
-			<AddQuickDrawerMemoButton />
-		</Container>
+		<>
+			{!pathname.includes(routes.UPDATE_PASSWORD) && (
+				<Container id="layout-header">
+					<ReactiveLogo>
+						{isGoBackButtonActive ? (
+							<GoBackButton>
+								<IoIosArrowBack size="24" color="var(--grey700)" />
+							</GoBackButton>
+						) : (
+							<Logo />
+						)}
+					</ReactiveLogo>
+					<AddQuickDrawerMemoButton />
+				</Container>
+			)}
+		</>
 	);
 };
 

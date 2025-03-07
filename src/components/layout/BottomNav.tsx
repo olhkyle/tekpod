@@ -3,28 +3,34 @@ import { RiBook3Line, RiHome6Line, RiCamera3Line, RiUser3Line } from 'react-icon
 import { NavLink } from '.';
 import { useAuthQuery } from '../../hooks';
 import { routes } from '../../constants';
+import { useLocation } from 'react-router-dom';
 
 const BottomNav = () => {
 	const { data } = useAuthQuery();
+	const { pathname } = useLocation();
 
 	return (
-		<Container id="layout-gnb">
-			<Links>
-				<NavLink href={routes.HOME}>
-					<RiHome6Line size={24} />
-				</NavLink>
-				<NavLink href={routes.FILM_RECIPE}>
-					<RiCamera3Line size={26} />
-				</NavLink>
-				<NavLink href={routes.DIARY}>
-					<RiBook3Line size={24} />
-				</NavLink>
-				<NavLink href={data?.user ? `${routes.USER}` : routes.LOGIN}>
-					<RiUser3Line size={24} />
-				</NavLink>
-			</Links>
-			<Spacer />
-		</Container>
+		<>
+			{!pathname.includes(routes.UPDATE_PASSWORD) && (
+				<Container id="layout-gnb">
+					<Links>
+						<NavLink href={routes.HOME}>
+							<RiHome6Line size={24} />
+						</NavLink>
+						<NavLink href={routes.FILM_RECIPE}>
+							<RiCamera3Line size={26} />
+						</NavLink>
+						<NavLink href={routes.DIARY}>
+							<RiBook3Line size={24} />
+						</NavLink>
+						<NavLink href={data?.user ? `${routes.USER}` : routes.LOGIN}>
+							<RiUser3Line size={24} />
+						</NavLink>
+					</Links>
+					<Spacer />
+				</Container>
+			)}
+		</>
 	);
 };
 

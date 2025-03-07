@@ -12,6 +12,8 @@ import { routes } from './constants';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import UpdatePasswordPage from './pages/UpdatePassword';
+import UpdateProfilePage from './pages/UpdateProfile';
+import MyPageLayout from './components/layout/MyPageLayout';
 
 const DiaryContentPage = lazy(() => import('./pages/DiaryContent'));
 const ExpenseTrackerByMonthPage = lazy(() => import('./pages/ExpenseTrackerByMonth'));
@@ -80,13 +82,26 @@ const router = createBrowserRouter(
 				},
 				{
 					path: `${routes.USER}`,
-					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Profile')} />,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<MyPageLayout />} />,
+					children: [
+						{
+							index: true,
+							element: LoadLazy('MyPage'),
+						},
+						{
+							path: `${routes.PROFILE}`,
+							element: <UpdateProfilePage />,
+						},
+						{
+							path: `${routes.UPDATE_PASSWORD}`,
+							element: <UpdatePasswordPage />,
+						},
+					],
 				},
 			],
 		},
 		{ path: routes.LOGIN, element: <LoginPage /> },
 		{ path: routes.REGISTER, element: <RegisterPage /> },
-		{ path: routes.UPDATE_PASSWORD, element: <UpdatePasswordPage /> },
 		{
 			path: '/*',
 			element: <NotFoundPage />,

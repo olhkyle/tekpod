@@ -102,6 +102,10 @@ const CloseButton = styled(Button)`
 const Body = styled.div`
 	max-height: calc(100dvh - var(--nav-height) * 3);
 	overflow-y: scroll;
+	scrollbar-width: none; // Firefox
+	&::-webkit-scrollbar {
+		display: none; // 스크롤바 숨기기 (선택사항)
+	}
 `;
 
 export default ModalLayout;

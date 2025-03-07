@@ -16,14 +16,14 @@ import { toastData } from '../../../constants/toast';
 import useToastStore from '../../../store/useToastStore';
 import type { ModalDataType } from '../modalType';
 
-interface EditContentModalProps {
+interface EditDiaryContentModalProps {
 	id: string;
 	data: Diary;
 	type: ModalDataType;
 	onClose: () => void;
 }
 
-const EditDiaryContentModal = ({ id, type, data, onClose }: EditContentModalProps) => {
+const EditDiaryContentModal = ({ id, type, data, onClose }: EditDiaryContentModalProps) => {
 	const {
 		register,
 		control,

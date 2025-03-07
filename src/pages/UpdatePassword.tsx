@@ -1,14 +1,16 @@
+import { useEffect } from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthLogo, Button, LabelInput } from '../components';
-import { useEffect } from 'react';
 import supabase from '../supabase/service';
 import { useLoading } from '../hooks';
-import { useForm } from 'react-hook-form';
 import { updatePasswordSchema, UpdatePasswordSchema } from '../components/auth/schema';
-import { zodResolver } from '@hookform/resolvers/zod';
 import useToastStore from '../store/useToastStore';
+import useUserStore from '../store/userStore';
 import { toastData } from '../constants/toast';
 import { routes } from '../constants';
 
@@ -31,50 +33,72 @@ const pageCss = {
 	`,
 };
 
+/**
+ * <Layout/> 바깥에서 해당 페이지를 그릴 경우, 이메일에서 redirectUrl이 담긴 {{ .ConfirmationUrl }} 클릭 시 해당 URL에는 {{ .Token }}이 담겨있지만,
+ * supabase.auth.updateUser 사용 시 'Auth : session is missing'이라는 에러를 반환하게 된다.
+ *
+ * 따라서, <Layout/> 컴포넌트 내부에 그리도록 하여, <AuthentiationGuard/> 내부의 useAuthQuery()를 통해 url로부터 session(token)을 확보하고, supabase.auth.updateUser 사용 시 session이 있다고 supabase로부터 confirm을 받고 비밀번호를 업데이트 할 수 있게 된다.
+ */
 const UpdatePassword = () => {
+	const queryClient = useQueryClient();
+
 	const [searchParams, setSearchParams] = useSearchParams();
 	const navigate = useNavigate();
+	const { state } = useLocation();
+
 	const { isLoading, Loading, startTransition } = useLoading();
 	const { addToast } = useToastStore();
+	const { resetUser } = useUserStore();
 
 	const { register, handleSubmit } = useForm<UpdatePasswordSchema>({ resolver: zodResolver(updatePasswordSchema) });
 
 	useEffect(() => {
-		searchParams.set('email', searchParams.get('email')!);
-		setSearchParams(searchParams);
+		supabase.auth.onAuthStateChange(async event => {
+			if (event === 'SIGNED_IN') {
+				searchParams.set('email', searchParams.get('email')!);
+				setSearchParams(searchParams);
+			}
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const onSubmit = async (formData: UpdatePasswordSchema) => {
-		//TODO: supabase.auth.updateUser
-
 		try {
-			const { error } = await startTransition(
+			const { error: updateUserError } = await startTransition(
 				supabase.auth.updateUser({
 					password: formData.password,
 				}),
 			);
 
-			if (error) {
-				throw new Error(error.message);
+			if (updateUserError) {
+				throw new Error(updateUserError.message);
 			}
 
-			addToast(toastData.PROFILE.RESET_PASSWORD.SUCCESS);
-			navigate(routes.LOGIN);
+			const { error: signOutError } = await startTransition(supabase.auth.signOut({ scope: 'local' }));
+
+			if (signOutError) {
+				throw new Error(signOutError?.message);
+			}
+
+			resetUser();
+			addToast(toastData.PROFILE.UPDATE_PASSWORD.SUCCESS);
+			navigate(routes.LOGIN, { replace: true });
 		} catch (e) {
 			console.error(e);
-			addToast(toastData.PROFILE.RESET_PASSWORD.ERROR);
+			addToast(toastData.PROFILE.UPDATE_PASSWORD.ERROR);
+		} finally {
+			queryClient.setQueryData(['auth'], null);
+			queryClient.clear();
 		}
 	};
 
-	// TODO: searchParams.get('email') === null -> submit 후에 문제 있으면 setSearchParams를 통해 email 을 활용해 searchParam 재지정
 	return (
 		<div css={pageCss.container}>
 			<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
 				<AuthLogo />
 				<Title>﹡ Update Password ﹡</Title>
 
-				<EmailInfo>{searchParams.get('email')}</EmailInfo>
+				<EmailInfo>{searchParams.get('email') || state?.email}</EmailInfo>
 				<LabelInput label="Password">
 					<LabelInput.TextField type="password" {...register('password')} placeholder="Password" />
 				</LabelInput>

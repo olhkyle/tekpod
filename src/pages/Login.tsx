@@ -56,9 +56,9 @@ const LoginPage = () => {
 
 	const handleResetPasswordModal = () => {
 		setModal({
-			Component: MODAL_CONFIG.USERS.RESET_PASSWORD.Component,
+			Component: MODAL_CONFIG.USER.RESET_PASSWORD.Component,
 			props: {
-				type: MODAL_CONFIG.USERS.RESET_PASSWORD.type,
+				type: MODAL_CONFIG.USER.RESET_PASSWORD.type,
 				data: null,
 			},
 		});
@@ -94,10 +94,10 @@ const LoginPage = () => {
 				navigate(routes.HOME, { replace: true });
 			}
 		} catch (e) {
-			console.error(e);
+			console.error((e as AuthError).message);
 			setValue('email', formData.email);
 			setValue('password', '');
-			addToast(toastData.PROFILE.LOGIN.CUSTOM('error', (e as AuthError).message));
+			addToast(toastData.PROFILE.LOGIN.ERROR);
 		}
 	};
 

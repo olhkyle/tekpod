@@ -48,11 +48,9 @@ const ResetPasswordForEmailModal = ({ id, type, onClose }: ResetPasswordForEmail
 				throw new Error('This email is never registered');
 			}
 
-			const baseUrl = import.meta.env.VITE_APP_URL;
-
 			const { error: resetPasswordForEmailError } = await startTransition(
 				supabase.auth.resetPasswordForEmail(formData.email, {
-					redirectTo: `${baseUrl}/${routes.UPDATE_PASSWORD}?email=${encodeURIComponent(formData.email)}`,
+					redirectTo: `${window.location.origin}/mypage/${routes.UPDATE_PASSWORD}?email=${encodeURIComponent(formData.email)}`,
 				}),
 			);
 
@@ -91,7 +89,7 @@ const Form = styled.form`
 `;
 
 const SubmitButton = styled(Button)`
-	min-height: 57px;
+	padding: var(--padding-container-mobile);
 	color: var(--white);
 	background-color: var(--black);
 	font-size: var(--fz-p);

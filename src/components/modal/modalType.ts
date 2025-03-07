@@ -2,16 +2,17 @@ import { ElementType } from 'react';
 import { AddPaymentModal } from './expenseTracker';
 import { AddFilmRecipeModal, FilmRecipeModal, RemoveFilmRecipeConfirmModal } from './filmRecipe';
 import { EditDiaryContentModal } from './diary';
-import { ResetPasswordForEmailModal } from './users';
+import { ResetPasswordForEmailModal } from './user';
+import UpdateProfileModal from './user/UpdateProfileModal';
 
-type ModalDataType = 'diary' | 'filmRecipe' | 'financialLedger' | 'users';
+type ModalDataType = 'diary' | 'filmRecipe' | 'financialLedger' | 'user';
 
 type ModalConfigItem = {
 	type: ModalDataType;
 	Component: ElementType;
 };
 
-interface ModalActionConfig {
+type ModalConfig = {
 	FINANCIAL_LEDGER: {
 		ADD: ModalConfigItem;
 	};
@@ -23,48 +24,54 @@ interface ModalActionConfig {
 	DIARY: {
 		EDIT: ModalConfigItem;
 	};
-	USERS: {
+	USER: {
 		RESET_PASSWORD: ModalConfigItem;
-	};
-}
-
-type ModalConfig = {
-	[Category in keyof ModalActionConfig]: {
-		[Action in keyof ModalActionConfig[Category]]: ModalActionConfig[Category][Action];
+		PROFILE: ModalConfigItem;
 	};
 };
+
+const modalType = {
+	FINANCIAL_LEDGER: 'financialLedger',
+	FILM_RECIPE: 'filmRecipe',
+	DIARY: 'diary',
+	USER: 'user',
+} as const;
 
 const MODAL_CONFIG: ModalConfig = {
 	FINANCIAL_LEDGER: {
 		ADD: {
-			type: 'financialLedger',
+			type: modalType.FINANCIAL_LEDGER,
 			Component: AddPaymentModal,
 		},
 	},
 	FILM_RECIPE: {
 		READ: {
-			type: 'filmRecipe',
+			type: modalType.FILM_RECIPE,
 			Component: FilmRecipeModal,
 		},
 		ADD: {
-			type: 'filmRecipe',
+			type: modalType.FILM_RECIPE,
 			Component: AddFilmRecipeModal,
 		},
 		REMOVE: {
-			type: 'filmRecipe',
+			type: modalType.FILM_RECIPE,
 			Component: RemoveFilmRecipeConfirmModal,
 		},
 	},
 	DIARY: {
 		EDIT: {
-			type: 'diary',
+			type: modalType.DIARY,
 			Component: EditDiaryContentModal,
 		},
 	},
-	USERS: {
+	USER: {
 		RESET_PASSWORD: {
-			type: 'users',
+			type: modalType.USER,
 			Component: ResetPasswordForEmailModal,
+		},
+		PROFILE: {
+			type: modalType.USER,
+			Component: UpdateProfileModal,
 		},
 	},
 };

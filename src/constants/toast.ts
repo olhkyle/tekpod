@@ -134,6 +134,29 @@ const toastData = {
 				return { status, message };
 			},
 		},
+		UPDATE_PASSWORD: {
+			SUCCESS: { status: 'success', message: `Update password ${FIXED_SUCCESS_PHRASE}` },
+			ERROR: {
+				status: 'error',
+				message: `${FIXED_ERROR_MESSAGE_PHRASE} updating password`,
+			},
+			CUSTOM(status: Toast['status'], message: string) {
+				return { status, message };
+			},
+		},
+		UPDATE_PROFILE: {
+			SUCCESS: {
+				status: 'success',
+				message: `Update your profile ${FIXED_SUCCESS_PHRASE}`,
+			},
+			ERROR: {
+				status: 'error',
+				message: `${FIXED_ERROR_MESSAGE_PHRASE} updating profile`,
+			},
+			CUSTOM(status: Toast['status'], message: string) {
+				return { status, message };
+			},
+		},
 	},
 } as const;
 

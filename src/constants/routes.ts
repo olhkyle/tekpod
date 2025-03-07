@@ -7,6 +7,7 @@ const routes = {
 	DIARY: '/diary',
 	WRITE: '/write',
 	USER: '/mypage',
+	PROFILE: 'profile',
 	TODO_REMINDER: '/todo_reminder',
 	EXPENSE_TRACKER: '/expense',
 	UPDATE_PASSWORD: 'update-password',

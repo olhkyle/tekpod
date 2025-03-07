@@ -1,5 +1,6 @@
 import supabase from './service';
 import { RegisterSchema } from '../components/auth/schema';
+import { UpdateProfileSchema } from '../components/modal/user/schema';
 
 const TABLE = 'users';
 
@@ -13,8 +14,8 @@ const addNewUser = async ({ userId, userData }: { userId?: string; userData: Reg
 	return await supabase.from(TABLE).insert({ user_id: userId, email: userData.email, nickname: userData.nickname });
 };
 
-const updateUser = async ({ userId, userData }: { userId: string; userData: RegisterSchema }) => {
-	return await supabase.from(TABLE).update({ userData }).eq('id', userId);
+const updateUser = async ({ userId, userData }: { userId: string; userData: UpdateProfileSchema }) => {
+	return await supabase.from(TABLE).update(userData).eq('user_id', userId);
 };
 
 export { isUserExist, addNewUser, updateUser };
