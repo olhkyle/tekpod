@@ -2,9 +2,8 @@ import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
-import { motion } from 'framer-motion';
 import { BsPlus } from 'react-icons/bs';
-import { Button, EmptyMessage, TextInput, TodoItem } from '../components';
+import { Button, EmptyMessage, ShrinkMotionBlock, TextInput, TodoItem } from '../components';
 import { addTodo, getTodos } from '../supabase/todos';
 import { useLoading } from '../hooks';
 import useToastStore from '../store/useToastStore';
@@ -62,16 +61,11 @@ const TodoReminderPage = () => {
 						onChange={e => setValue(e.target.value)}
 					/>
 				</TextInput>
-				<motion.div
-					initial="rest"
-					whileTap={{
-						scale: 0.95,
-						transition: { duration: 0.2 },
-					}}>
+				<ShrinkMotionBlock>
 					<AddTodoButton type="button" onClick={handleTodoAdd}>
 						{isLoading ? Loading : <BsPlus size="24" color="var(--white)" />}
 					</AddTodoButton>
-				</motion.div>
+				</ShrinkMotionBlock>
 			</Flex>
 
 			<Suspense fallback={Loading}>

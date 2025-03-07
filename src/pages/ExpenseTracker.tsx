@@ -1,11 +1,10 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { MdUpcoming } from 'react-icons/md';
 import { IoCardOutline } from 'react-icons/io5';
 import { BsCalendar2MonthFill } from 'react-icons/bs';
-import { Button, Select, TotalExpensePrice, TotalExpensePriceLoader } from '../components';
+import { Button, Select, ShrinkMotionBlock, TotalExpensePrice, TotalExpensePriceLoader } from '../components';
 import { months, currentMonth, currentYear } from '../utils/date';
 import { routes } from '../constants';
 import useModalStore from '../store/useModalStore';
@@ -76,15 +75,10 @@ const ExpenseTrackerPage = () => {
 			<Flex direction={'column'} alignItems={'flex-start'} gap="8px">
 				{linkGroup.map(({ to, icon, title }) => (
 					<Link to={to} key={title}>
-						<StyledMotion
-							initial="rest"
-							whileTap={{
-								scale: 0.95,
-								transition: { duration: 0.2 },
-							}}>
+						<StyledShrinkMotionBlock>
 							<IconBackground>{icon}</IconBackground>
 							<span>{title}</span>
-						</StyledMotion>
+						</StyledShrinkMotionBlock>
 					</Link>
 				))}
 			</Flex>
@@ -140,7 +134,7 @@ const PersonalExpenseLink = styled(Button)`
 	text-align: center;
 `;
 
-const StyledMotion = styled(motion.div)`
+const StyledShrinkMotionBlock = styled(ShrinkMotionBlock)`
 	display: flex;
 	align-items: center;
 	gap: 12px;

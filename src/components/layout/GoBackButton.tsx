@@ -1,9 +1,8 @@
 import { ReactNode } from 'react';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { RiArrowLeftLine } from 'react-icons/ri';
-import { Button } from '../common';
+import { Button, ShrinkMotionBlock } from '../common';
 
 interface GoBackButtonProps {
 	children?: ReactNode;
@@ -13,20 +12,15 @@ const GoBackButton = ({ children = <RiArrowLeftLine size="24" color="var(--grey5
 	const navigate = useNavigate();
 
 	return (
-		<StyledMotion
-			initial="rest"
-			whileTap={{
-				scale: 0.95,
-				transition: { duration: 0.2 },
-			}}>
+		<StyledShrinkMotionBlock>
 			<StyledButton type="button" onClick={() => navigate(-1)}>
 				{children}
 			</StyledButton>
-		</StyledMotion>
+		</StyledShrinkMotionBlock>
 	);
 };
 
-const StyledMotion = styled(motion.div)`
+const StyledShrinkMotionBlock = styled(ShrinkMotionBlock)`
 	display: flex;
 	align-items: center;
 `;
