@@ -61,7 +61,7 @@ const WritePage = () => {
 			<Group onSubmit={handleSubmit(onSubmit)}>
 				<Wrapper>
 					<TextInput errorMessage={errors?.title?.message}>
-						<TextInput.TextField id="title" {...register('title')} placeholder="﹡ Title" />
+						<TextInput.TextField id="title" {...register('title')} placeholder="✨ Title" />
 					</TextInput>
 					<Controller
 						name="content"
@@ -109,7 +109,7 @@ const Group = styled.form`
 	flex-direction: column;
 	justify-content: space-between;
 	gap: 16px;
-	min-height: calc(100dvh - 4 * var(--nav-height) - var(--padding-container-mobile));
+	min-height: calc(100dvh - 4 * var(--nav-height));
 `;
 
 const Wrapper = styled.div`
@@ -127,7 +127,7 @@ const UploadButton = styled(Button)`
 
 	&:hover,
 	&:focus {
-		background-color: var(--blue300);
+		background-color: var(--blue400);
 	}
 `;
 
