@@ -10,7 +10,6 @@ const Header = () => {
 	const isGoBackButtonActive =
 		pathname.includes(routes.EXPENSE_TRACKER) ||
 		pathname.includes(routes.TODO_REMINDER) ||
-		pathname.includes(routes.REFLECT) ||
 		[...pathname].filter(item => item === '/').length >= 2;
 
 	return (
