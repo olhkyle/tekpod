@@ -33,7 +33,6 @@ const MyPage = () => {
 const Container = styled.section`
 	display: flex;
 	flex-direction: column;
-	/* justify-content: space-between; */
 	gap: 32px;
 	height: calc(100dvh - 3 * var(--nav-height));
 `;
@@ -55,7 +54,7 @@ const User = styled.h2`
 `;
 
 const EditButton = styled(Button)`
-	padding: calc(var(--padding-container-mobile) * 0.25) calc(var(--padding-container-mobile) * 0.5);
+	padding: calc(var(--padding-container-mobile) * 0.5) calc(var(--padding-container-mobile) * 0.75);
 	font-size: var(--fz-sm);
 	font-weight: var(--fw-medium);
 	color: var(--black);
