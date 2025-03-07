@@ -28,7 +28,7 @@ const pageCss = {
 		align-items: center;
 		gap: 16px;
 		padding: var(--padding-container-mobile);
-		height: 100dvh;
+		height: calc(100dvh - var(--nav-height) * 4);
 		background-color: var(--white);
 	`,
 };
@@ -50,7 +50,11 @@ const UpdatePassword = () => {
 	const { addToast } = useToastStore();
 	const { resetUser } = useUserStore();
 
-	const { register, handleSubmit } = useForm<UpdatePasswordSchema>({ resolver: zodResolver(updatePasswordSchema) });
+	const {
+		register,
+		formState: { errors },
+		handleSubmit,
+	} = useForm<UpdatePasswordSchema>({ resolver: zodResolver(updatePasswordSchema) });
 
 	useEffect(() => {
 		supabase.auth.onAuthStateChange(async event => {
@@ -99,10 +103,10 @@ const UpdatePassword = () => {
 				<Title>﹡ Update Password ﹡</Title>
 
 				<EmailInfo>{searchParams.get('email') || state?.email}</EmailInfo>
-				<LabelInput label="Password">
+				<LabelInput label="Password" errorMessage={errors['password']?.message}>
 					<LabelInput.TextField type="password" {...register('password')} placeholder="Password" />
 				</LabelInput>
-				<LabelInput label="Confirm Password">
+				<LabelInput label="Confirm Password" errorMessage={errors['confirmPassword']?.message}>
 					<LabelInput.TextField type="password" {...register('confirmPassword')} placeholder="Password Confirm" />
 				</LabelInput>
 				<SubmitButton type="submit" aria-label="Update Password Button">
