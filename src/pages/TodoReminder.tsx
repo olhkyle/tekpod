@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { FormEvent, Suspense, useState } from 'react';
 import styled from '@emotion/styled';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
@@ -20,7 +20,10 @@ const TodoReminderPage = () => {
 	const { addToast } = useToastStore();
 	const { startTransition, Loading, isLoading } = useLoading();
 
-	const handleTodoAdd = async () => {
+	// TODO: zodResolver & React Hook Form으로 관리하도록 변경
+	const handleTodoAdd = async (e: FormEvent) => {
+		e.preventDefault();
+
 		if (value.length === 0) {
 			return addToast(toastData.TODO_REMINDER.CREATE.WARN);
 		}
@@ -51,7 +54,7 @@ const TodoReminderPage = () => {
 	// TODO: 각 아이템을 길게 클릭 시 상단에서 전체 선택 등의 부가기능 선택할 수 있는 TopSheet 나오도록
 	return (
 		<Container>
-			<Flex>
+			<Form onSubmit={handleTodoAdd}>
 				<TextInput>
 					<TextInput.ControlledTextField
 						id="todo-input"
@@ -62,11 +65,9 @@ const TodoReminderPage = () => {
 					/>
 				</TextInput>
 				<ShrinkMotionBlock>
-					<AddTodoButton type="button" onClick={handleTodoAdd}>
-						{isLoading ? Loading : <BsPlus size="24" color="var(--white)" />}
-					</AddTodoButton>
+					<AddTodoButton type="submit">{isLoading ? Loading : <BsPlus size="24" color="var(--white)" />}</AddTodoButton>
 				</ShrinkMotionBlock>
-			</Flex>
+			</Form>
 
 			<Suspense fallback={Loading}>
 				{todoList.length === 0 ? (
@@ -87,14 +88,14 @@ const Container = styled.section`
 	width: 100%;
 `;
 
-const Flex = styled.div`
+const Form = styled.form`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 
 	& > div:first-of-type {
-		flex: 1; // TextInput이 남은 공간을 차지하되
-		min-width: 250px; // 최소 너비를 0으로 설정하여 축소 가능하게 함
+		flex: 1; // make remained space for TextInput
+		min-width: 250px; // make it shrinkable setting min-width: 0;
 	}
 `;
 
