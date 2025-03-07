@@ -183,6 +183,7 @@ const Global = css`
 	input,
 	select,
 	textarea {
+		font-size: var(--fz-p);
 		background-color: transparent;
 		border: 0;
 
