@@ -1,37 +1,18 @@
 import { useCallback, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { debounce } from 'es-toolkit';
 import supabase from '../supabase/service';
 import { registerSchema, RegisterSchema } from '../components/auth/schema';
-import { Button, LabelInput, AuthLogo, Toast } from '../components';
+import { Button, LabelInput, AuthLogo } from '../components';
 import { useFunnel, useLoading } from '../hooks';
 import { customPropReceiver, routes } from '../constants';
 import useToastStore from '../store/useToastStore';
 import { toastData } from '../constants/toast';
 import { addNewUser, isUserExist } from '../supabase/user';
-
-const pageCss = {
-	container: css`
-		max-width: var(--max-app-width);
-		min-width: var(--min-app-width);
-		margin: 0 auto;
-		overflow: hidden;
-	`,
-	form: css`
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 16px;
-		padding: var(--padding-container-mobile);
-		height: 100dvh;
-		background-color: var(--white);
-	`,
-};
+import AuthLayout from '../components/layout/AuthLayout';
 
 const TRIGGER_DEBOUNCED_DELAY = 200;
 
@@ -177,79 +158,87 @@ const RegisterPage = () => {
 	};
 
 	return (
-		<>
-			<div css={pageCss.container}>
-				<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
-					<AuthLogo />
-					<Description>Create your account</Description>
+		<AuthLayout>
+			<Form onSubmit={handleSubmit(onSubmit)}>
+				<AuthLogo />
+				<Description>Create your account</Description>
 
-					{step === 'email' && (
-						<>
-							<LabelInput label={'email'} errorMessage={errors?.['email']?.message}>
-								<LabelInput.TextField
-									type={'email'}
-									id={'email'}
-									{...register('email', { onChange: () => debouncedTriggerCheck('email') })}
-									placeholder={'Email'}
-								/>
-							</LabelInput>
-							<ContinueButton type="button" disabled={getFieldState('email')?.invalid} onClick={() => continueNextStep(step)}>
-								{isLoading ? Loading : 'Continue'}
-							</ContinueButton>
-						</>
-					)}
-
-					{step === 'password' && (
-						<>
-							<LabelInput label={'password'} errorMessage={errors?.['password']?.message}>
-								<LabelInput.TextField
-									type={'password'}
-									id={'password'}
-									{...register('password', { onChange: () => debouncedTriggerCheck('password') })}
-									placeholder={'Password'}
-								/>
-							</LabelInput>
-							<ContinueButton type="button" disabled={getFieldState('password')?.invalid} onClick={() => continueNextStep(step)}>
-								Continue
-							</ContinueButton>
-						</>
-					)}
-
-					{/* On last step, we don't need to show ContinueButon */}
-					{step === 'nickname' && (
-						<LabelInput label={'nickname'} errorMessage={errors?.nickname?.message}>
+				{step === 'email' && (
+					<>
+						<LabelInput label={'email'} errorMessage={errors?.['email']?.message}>
 							<LabelInput.TextField
-								type={'text'}
-								id={'nickname'}
-								{...register('nickname', { onChange: () => debouncedTriggerCheck('nickname') })}
-								placeholder={'Nickname'}
+								type={'email'}
+								id={'email'}
+								{...register('email', { onChange: () => debouncedTriggerCheck('email') })}
+								placeholder={'Email'}
 							/>
 						</LabelInput>
-					)}
+						<ContinueButton type="button" disabled={getFieldState('email')?.invalid} onClick={() => continueNextStep(step)}>
+							{isLoading ? Loading : 'Continue'}
+						</ContinueButton>
+					</>
+				)}
 
-					<SubmitButton
-						type="submit"
-						$isShown={isLastStep}
-						disabled={(watch('nickname') ?? '').trim().length === 0 || !!errors['nickname'] || !isValid}>
-						{isLoading ? Loading : 'Submit'}
-					</SubmitButton>
+				{step === 'password' && (
+					<>
+						<LabelInput label={'password'} errorMessage={errors?.['password']?.message}>
+							<LabelInput.TextField
+								type={'password'}
+								id={'password'}
+								{...register('password', { onChange: () => debouncedTriggerCheck('password') })}
+								placeholder={'Password'}
+							/>
+						</LabelInput>
+						<ContinueButton type="button" disabled={getFieldState('password')?.invalid} onClick={() => continueNextStep(step)}>
+							Continue
+						</ContinueButton>
+					</>
+				)}
 
-					{step !== 'email' ? (
-						<GoBackButton type="button" onClick={back}>
-							Go Back
-						</GoBackButton>
-					) : (
-						<LoginCheckContainer>
-							<p>Already have an account?</p>
-							<Link to={routes.LOGIN}>Login</Link>
-						</LoginCheckContainer>
-					)}
-				</form>
-			</div>
-			<Toast />
-		</>
+				{/* On last step, we don't need to show ContinueButon */}
+				{step === 'nickname' && (
+					<LabelInput label={'nickname'} errorMessage={errors?.nickname?.message}>
+						<LabelInput.TextField
+							type={'text'}
+							id={'nickname'}
+							{...register('nickname', { onChange: () => debouncedTriggerCheck('nickname') })}
+							placeholder={'Nickname'}
+						/>
+					</LabelInput>
+				)}
+
+				<SubmitButton
+					type="submit"
+					$isShown={isLastStep}
+					disabled={(watch('nickname') ?? '').trim().length === 0 || !!errors['nickname'] || !isValid}>
+					{isLoading ? Loading : 'Submit'}
+				</SubmitButton>
+
+				{step !== 'email' ? (
+					<GoBackButton type="button" onClick={back}>
+						Go Back
+					</GoBackButton>
+				) : (
+					<LoginCheckContainer>
+						<p>Already have an account?</p>
+						<Link to={routes.LOGIN}>Login</Link>
+					</LoginCheckContainer>
+				)}
+			</Form>
+		</AuthLayout>
 	);
 };
+
+const Form = styled.form`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 16px;
+	padding: var(--padding-container-mobile);
+	height: 100dvh;
+	background-color: var(--white);
+`;
 
 const Description = styled.div`
 	min-width: 270px;

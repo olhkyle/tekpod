@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthError } from '@supabase/supabase-js';
 import supabase from '../supabase/service';
-import { Button, LabelInput, AuthLogo, Toast, ModalContainer } from '../components';
+import { Button, LabelInput, AuthLogo } from '../components';
 import { loginSchema, type LoginSchema } from '../components/auth/schema';
 import { useLoading } from '../hooks';
 import useUserStore from '../store/userStore';
@@ -15,25 +14,7 @@ import { routes } from '../constants';
 import { toastData } from '../constants/toast';
 import useModalStore from '../store/useModalStore';
 import { MODAL_CONFIG } from '../components/modal/modalType';
-
-const pageCss = {
-	container: css`
-		max-width: var(--max-app-width);
-		min-width: var(--min-app-width);
-		margin: 0 auto;
-		overflow: hidden;
-	`,
-	form: css`
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 16px;
-		padding: var(--padding-container-mobile);
-		height: 100dvh;
-		background-color: var(--white);
-	`,
-};
+import AuthLayout from '../components/layout/AuthLayout';
 
 const LoginPage = () => {
 	const queryClient = useQueryClient();
@@ -102,33 +83,40 @@ const LoginPage = () => {
 	};
 
 	return (
-		<>
-			<div css={pageCss.container}>
-				<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
-					<AuthLogo />
-					<LabelInput label={'email'} errorMessage={errors?.email?.message}>
-						<LabelInput.TextField type={'email'} id={'email'} {...register('email')} placeholder={'Email'} />
-					</LabelInput>
-					<LabelInput label={'password'} errorMessage={errors?.password?.message}>
-						<LabelInput.TextField type={'password'} id={'password'} {...register('password')} placeholder={'Password'} />
-					</LabelInput>
+		<AuthLayout>
+			<Form onSubmit={handleSubmit(onSubmit)}>
+				<AuthLogo />
+				<LabelInput label={'email'} errorMessage={errors?.email?.message}>
+					<LabelInput.TextField type={'email'} id={'email'} {...register('email')} placeholder={'Email'} />
+				</LabelInput>
+				<LabelInput label={'password'} errorMessage={errors?.password?.message}>
+					<LabelInput.TextField type={'password'} id={'password'} {...register('password')} placeholder={'Password'} />
+				</LabelInput>
 
-					<SubmitButton type="submit" aria-label="Login Button">
-						{isLoading ? Loading : 'Login'}
-					</SubmitButton>
-					<ActionButtons>
-						<ResetPasswordButton type="button" onClick={handleResetPasswordModal} aria-label="Reset Password Button">
-							Reset Password
-						</ResetPasswordButton>
-						<RegisterLink to={routes.REGISTER}>SignUp</RegisterLink>
-					</ActionButtons>
-				</form>
-			</div>
-			<Toast />
-			<ModalContainer />
-		</>
+				<SubmitButton type="submit" aria-label="Login Button">
+					{isLoading ? Loading : 'Login'}
+				</SubmitButton>
+				<ActionButtons>
+					<ResetPasswordButton type="button" onClick={handleResetPasswordModal} aria-label="Reset Password Button">
+						Reset Password
+					</ResetPasswordButton>
+					<RegisterLink to={routes.REGISTER}>SignUp</RegisterLink>
+				</ActionButtons>
+			</Form>
+		</AuthLayout>
 	);
 };
+
+const Form = styled.form`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 16px;
+	padding: var(--padding-container-mobile);
+	height: 100dvh;
+	background-color: var(--white);
+`;
 
 const SubmitButton = styled(Button)`
 	padding: var(--padding-container-mobile);
