@@ -178,6 +178,7 @@ export interface Database {
 					price_unit: string;
 					payment_method: string;
 					bank: string;
+					isFixed: boolean;
 					usage_date: Date;
 					created_at: Date;
 					updated_at: Date;
@@ -192,6 +193,7 @@ export interface Database {
 					price_unit: string;
 					payment_method: string;
 					bank?: string;
+					isFixed?: boolean;
 					usage_date: Date;
 					created_at: Date;
 					updated_at: Date;
@@ -206,6 +208,7 @@ export interface Database {
 					price_unit?: string;
 					payment_method?: string;
 					bank?: string;
+					isFixed?: boolean;
 					usage_date?: Date;
 					created_at?: Date;
 					updated_at?: Date;

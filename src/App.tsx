@@ -62,7 +62,7 @@ const router = createBrowserRouter(
 						},
 						{ path: `daily`, element: LoadLazy('ExpenseTrackerByMonth') },
 						{ path: `daily/:id`, element: LoadLazy('ExpenseTrackerByMonthItem') },
-						{ path: `upcoming`, element: LoadLazy('ExpenseTrackerUpcoming') },
+						{ path: `upcoming`, element: LoadLazy('ExpenseTrackerFixedCost') },
 						{ path: `report`, element: LoadLazy('ExpenseTrackerReport') },
 						{ path: `credit_card`, element: LoadLazy('ExpenseTrackerCreditCardTransaction') },
 					],

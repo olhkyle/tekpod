@@ -18,6 +18,10 @@ const TABLE = 'expense_tracker';
 
 const ZERO_PRICE = 0;
 
+const getStartDayOfMonth = (month: number) => new Date(currentYear, month, 1).toISOString();
+
+const getEndDayOfMonth = (month: number) => new Date(currentYear, month + 1, 0).toISOString();
+
 const calculatePriceUnits = (data: ExpenseTracker[]) => {
 	const groupByUnit = data.reduce<Record<string, number[]>>((acc, item) => {
 		const { price_unit, priceIntegerPart, priceDecimalPart } = item;
@@ -59,16 +63,33 @@ const getPaymentsByDate = async (date: Date): Promise<{ data: ExpenseTracker[]; 
 };
 
 const getAllPaymentsByMonth = async (month: number) => {
-	const startDayOfMonth = new Date(currentYear, month, 1).toISOString();
-	const endDayOfMonth = new Date(currentYear, month + 1, 0).toISOString();
-
-	const { data, error } = await supabase.from(TABLE).select('*').gte('usage_date', startDayOfMonth).lte('usage_date', endDayOfMonth);
+	const { data, error } = await supabase
+		.from(TABLE)
+		.select('*')
+		.gte('usage_date', getStartDayOfMonth(month))
+		.lte('usage_date', getEndDayOfMonth(month));
 
 	if (error) {
 		throw new Error(error.message);
 	}
 
 	return Object.values(calculatePriceUnits(data)).length === 0 ? { price: 0 } : calculatePriceUnits(data);
+};
+
+const getFixedCostPaymentsByMonth = async (month: number) => {
+	const { data, error } = await supabase
+		.from(TABLE)
+		.select('*')
+		.eq('isFixed', true)
+		.gte('usage_date', getStartDayOfMonth(month))
+		.lte('usage_date', getEndDayOfMonth(month))
+		.order('usage_date', { ascending: false });
+
+	if (error) {
+		throw new Error(error.message);
+	}
+
+	return data;
 };
 
 const addPayment = async (data: Omit<ExpenseTracker, 'id'>) => {
@@ -83,4 +104,4 @@ const removePayment = async ({ id }: { id: string }) => {
 	await supabase.from(TABLE).delete().eq('id', id);
 };
 
-export { getPaymentsByDate, getAllPaymentsByMonth, addPayment, removePayment };
+export { getPaymentsByDate, getAllPaymentsByMonth, getFixedCostPaymentsByMonth, addPayment, removePayment };

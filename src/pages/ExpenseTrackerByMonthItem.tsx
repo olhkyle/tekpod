@@ -69,6 +69,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 					<dd>{format(currentDate)}</dd>
 				</div>
 			</Detail>
+			{payment.isFixed && <FixedCost>🗓️ Fixed Cost</FixedCost>}
 
 			<DeleteButton type="button" onClick={handlePaymentDelete}>
 				{isLoading ? Loading : 'Delete'}
@@ -136,6 +137,16 @@ const Detail = styled.dl`
 		font-size: var(--fz-h7);
 		font-weight: var(--fw-semibold);
 	}
+`;
+
+const FixedCost = styled.p`
+	padding: var(--padding-container-mobile);
+	font-size: var(--fz-p);
+	font-weight: var(--fw-bold);
+	color: var(--grey600);
+	background-color: var(--grey100);
+	border-radius: var(--radius-l);
+	text-align: center;
 `;
 
 const DeleteButton = styled(Button)`
