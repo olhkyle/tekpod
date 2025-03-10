@@ -17,18 +17,18 @@ const priceUnit = {
 	unitSymbol: ['₩', '$', '£', '€', '¥'] as const,
 } as const;
 
-const bankSvgs: Record<string, `/public/bank/${string}.svg`> = {
-	신한: '/public/bank/shinhan.svg',
-	하나: '/public/bank/hana.svg',
-	국민: '/public/bank/kookmin.svg',
-	우리: '/public/bank/woori.svg',
-	IBK기업: '/public/bank/ibk.svg',
-	농협: '/public/bank/nonghyeop.svg',
-	카카오뱅크: '/public/bank/kakaobank.svg',
-	토스뱅크: '/public/bank/tossbank.svg',
-	새마을: '/public/bank/saemaeul.svg',
-	SC제일: '/public/bank/sc.svg',
-	씨티: '/public/bank/citi.svg',
+const bankSvgs: Record<string, `/bank/${string}.svg`> = {
+	신한: '/bank/shinhan.svg',
+	하나: '/bank/hana.svg',
+	국민: '/bank/kookmin.svg',
+	우리: '/bank/woori.svg',
+	IBK기업: '/bank/ibk.svg',
+	농협: '/bank/nonghyeop.svg',
+	카카오뱅크: '/bank/kakaobank.svg',
+	토스뱅크: '/bank/tossbank.svg',
+	새마을: '/bank/saemaeul.svg',
+	SC제일: '/bank/sc.svg',
+	씨티: '/bank/citi.svg',
 };
 
 const matchedPriceUnitWithSymbol = priceUnit.unitType.reduce((acc, curr, idx) => {
