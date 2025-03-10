@@ -20,7 +20,6 @@ const TodoReminderPage = () => {
 	const { addToast } = useToastStore();
 	const { startTransition, Loading, isLoading } = useLoading();
 
-	// TODO: zodResolver & React Hook Form으로 관리하도록 변경
 	const handleTodoAdd = async (e: FormEvent) => {
 		e.preventDefault();
 
@@ -113,6 +112,7 @@ const TodoList = styled.ul`
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+	margin-top: 8px;
 	padding: calc(var(--padding-container-mobile) * 1) 0 calc(var(--padding-container-mobile) * 3);
 `;
 
