@@ -19,7 +19,7 @@ const ContentBody = () => {
 	const handleEditContentModalClick = () =>
 		setModal({
 			Component: MODAL_CONFIG.DIARY.EDIT?.Component,
-			props: { type: 'diary', data },
+			props: { type: MODAL_CONFIG.DIARY.EDIT.type, data },
 		});
 
 	const handleDeleteDiaryClick = () => remove({ id: diaryId! });
