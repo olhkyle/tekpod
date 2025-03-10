@@ -92,7 +92,7 @@ const getFixedCostPaymentsByMonth = async (month: number) => {
 	return data;
 };
 
-const addPayment = async (data: Omit<ExpenseTracker, 'id'>) => {
+const addPayment = async (data: Omit<ExpenseTracker, 'id' | 'isFixed'>) => {
 	const { error: addPaymentError } = await supabase.from(TABLE).insert(data).select();
 
 	if (addPaymentError) {
