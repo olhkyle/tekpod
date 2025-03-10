@@ -1,6 +1,6 @@
 # TektPod
 
-- Personal Util Application
+> Personal Util Application
 
 - Diary : Write 3 things what I did and 1 feeling for a day
 - Film Recipe : Add FujiFilm Custom Recipes for my own unique visual setting
@@ -8,4 +8,4 @@
 - TodoReminder : Write todos which are to be checked in need
 - Commute Tracker (WIP)
 
-`React` `TypeScript` `React Query` `Supabase` `Vite` `Emotion` `Zustand` `es-toolkit` `framer-motion` `eslint`
+`React` `TypeScript` `React Query` `Supabase` `Zustand` `Vite` `Emotion` `es-toolkit` `framer-motion` `eslint` `prettier`
