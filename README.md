@@ -1,4 +1,4 @@
-# TektPod
+# TekPod
 
 > Personal Util Application
 
