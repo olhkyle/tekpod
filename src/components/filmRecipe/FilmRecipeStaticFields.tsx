@@ -25,7 +25,7 @@ const FilmRecipeStaticFields = ({ data }: FilmRecipeStaticFieldsProps) => {
 				<dd>{data?.wb}</dd>
 			</div>
 			<div>
-				<dt>HIGHdivGHT</dt>
+				<dt>HIGHLIGHT</dt>
 				<dd>{data?.highlight}</dd>
 			</div>
 			<div>
