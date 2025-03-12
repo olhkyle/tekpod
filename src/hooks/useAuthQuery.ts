@@ -11,7 +11,7 @@ const useAuthQuery = () => {
 
 	// 1. fetching to check if it's authenticated
 	// 2. if it's authenticated, set Global State
-	const { data, isFetched, isLoading, error, refetch } = useSuspenseQuery({
+	const authQuery = useSuspenseQuery({
 		queryKey: queryKey.AUTH,
 		queryFn: async () => {
 			const {
@@ -39,7 +39,7 @@ const useAuthQuery = () => {
 		gcTime: GC_TIME,
 	});
 
-	return { data, isFetched, isLoading, error, refetch };
+	return authQuery;
 };
 
 export default useAuthQuery;
