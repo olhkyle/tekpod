@@ -28,8 +28,6 @@ const ExpenseTrackerFixedCost = () => {
 		queryFn: () => getFixedCostPaymentsByMonth(today.getMonth() - 1),
 	});
 
-	console.log(data);
-
 	const navigate = useNavigate();
 
 	return (
