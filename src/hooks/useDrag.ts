@@ -3,7 +3,7 @@ import useClickOutside from './useClickOutside';
 
 const DRAG_THRESHOLD = 10; // 픽셀 단위
 
-const useDragAndDrop = () => {
+const useDrag = () => {
 	const [dragX, setDragX] = useState(0);
 	const [dragStartX, setDragStartX] = useState<number | null>(null);
 	const dragRef = useRef<number>(0);
@@ -57,4 +57,4 @@ const useDragAndDrop = () => {
 	};
 };
 
-export default useDragAndDrop;
+export default useDrag;

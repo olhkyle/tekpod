@@ -5,7 +5,7 @@ import { RiCloseFill } from 'react-icons/ri';
 import { RiInformation2Line } from 'react-icons/ri';
 import type { Todo } from '../../supabase/schema';
 import { Button, Checkbox, TextInput } from '../common';
-import { useDragAndDrop, useLoading } from '../../hooks';
+import { useDrag, useLoading } from '../../hooks';
 import useToastStore from '../../store/useToastStore';
 import { removeTodo, updatedTodoCompleted } from '../../supabase/todos';
 import queryKey from '../../constants/queryKey';
@@ -29,7 +29,7 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 		dragX,
 		dragContainerRef,
 		handlers: { handleTouchStart, handleTouchMove, handleTouchEnd },
-	} = useDragAndDrop();
+	} = useDrag();
 
 	// TextInput 바깥 클릭 시 TextInput에서 Label로 다시 바뀌도록 변경
 	// TODO: web-socket 연결로 reminder 만들기
