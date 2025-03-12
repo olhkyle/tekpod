@@ -1,10 +1,11 @@
-import { TouchEvent, useRef, useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
 import { useQueryClient } from '@tanstack/react-query';
 import { RiCloseFill } from 'react-icons/ri';
+import { RiInformation2Line } from 'react-icons/ri';
 import type { Todo } from '../../supabase/schema';
-import { Button, Checkbox } from '../common';
-import { useClickOutside, useLoading } from '../../hooks';
+import { Button, Checkbox, TextInput } from '../common';
+import { useDragAndDrop, useLoading } from '../../hooks';
 import useToastStore from '../../store/useToastStore';
 import { removeTodo, updatedTodoCompleted } from '../../supabase/todos';
 import queryKey from '../../constants/queryKey';
@@ -16,61 +17,21 @@ interface TodoProps {
 	order: number;
 }
 
-const DRAG_THRESHOLD = 10; // 픽셀 단위
-
 const TodoItem = ({ todo, order }: TodoProps) => {
 	const queryClient = useQueryClient();
 	const [isCompleted, setIsCompleted] = useState(todo?.completed);
+	const [isContentEditing, setIsContentEditing] = useState(false);
 
 	const { addToast } = useToastStore();
 	const { startTransition, Loading, isLoading } = useLoading();
 
-	const [dragX, setDragX] = useState(0);
-	const [dragStartX, setDragStartX] = useState<number | null>(null);
-	const dragRef = useRef<number>(0);
+	const {
+		dragX,
+		dragContainerRef,
+		handlers: { handleTouchStart, handleTouchMove, handleTouchEnd },
+	} = useDragAndDrop();
 
-	const containerRef = useClickOutside<HTMLLIElement>({
-		eventHandler: () => {
-			setDragX(0);
-			dragRef.current = 0;
-		},
-	});
-
-	// TODO: 리팩토링 필요
-	const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
-		setDragStartX(event.touches[0].clientX);
-		dragRef.current = event.touches[0].clientX;
-	};
-
-	const handleTouchMove = (event: TouchEvent<HTMLDivElement>) => {
-		if (dragStartX === null) return;
-
-		const currentX = event.touches[0].clientX;
-		const diff = currentX - dragRef.current; // 현재 위치 - 첫 터치 드래그 시작 위치 (음수)
-
-		// 최소 이동 거리를 넘어선 경우에만 드래그 적용
-		if (Math.abs(diff) > DRAG_THRESHOLD) {
-			const dampingFactor = 0.8;
-			const dragAmount = currentX - dragRef.current;
-			if (dragAmount < 0) {
-				setDragX(Math.max(dampingFactor * dragAmount, -80));
-			}
-		}
-	};
-
-	const handleTouchEnd = () => {
-		const SNAP_THRESHOLD = -40;
-
-		if (dragX < SNAP_THRESHOLD) {
-			setDragX(-80);
-		} else {
-			setDragX(0);
-		}
-
-		setDragStartX(null);
-		dragRef.current = 0;
-	};
-
+	// TextInput 바깥 클릭 시 TextInput에서 Label로 다시 바뀌도록 변경
 	// TODO: web-socket 연결로 reminder 만들기
 
 	const handleTodoIsCompleted = async (completed: boolean) => {
@@ -99,12 +60,40 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 	};
 
 	return (
-		<Container ref={containerRef}>
+		<Container ref={dragContainerRef}>
 			<DeleteBackground onClick={handleRemoveTodo}>{isLoading ? Loading : <RiCloseFill size="24" color="white" />}</DeleteBackground>
 			<TodoContent dragX={dragX} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
 				<Flex>
 					<Checkbox id={order} checked={isCompleted} onCheckedChange={setIsCompleted} onServerTodoCompletedChange={handleTodoIsCompleted} />
-					<Label htmlFor={`checkbox-${order + 1}`}>{todo.content}</Label>
+					<ContentBoundary>
+						{isContentEditing ? (
+							<ContentEditingTextInputWithButton>
+								<TextInput>
+									<TextInput.TextField
+										id="content"
+										name="content"
+										placeholder="Change content"
+										variant="md"
+										onKeyDown={e => {
+											if (e.key === 'Escape') {
+												setIsContentEditing(false);
+											}
+										}}
+									/>
+								</TextInput>
+								<ContentEditingInfoButton type="button">
+									<RiInformation2Line size="24" color="var(--grey600)" />
+								</ContentEditingInfoButton>
+							</ContentEditingTextInputWithButton>
+						) : (
+							<Label
+								onClick={() => {
+									setIsContentEditing(!isContentEditing);
+								}}>
+								{todo.content}
+							</Label>
+						)}
+					</ContentBoundary>
 				</Flex>
 				<DeleteButtonSafeBoundary>
 					{isCompleted && dragX >= 0 && (
@@ -120,6 +109,7 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 
 const Container = styled.li`
 	position: relative;
+	min-height: 60px;
 	overflow: hidden;
 	cursor: pointer;
 `;
@@ -132,7 +122,7 @@ const DeleteBackground = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 65px;
+	width: 60px;
 	background-color: var(--orange800);
 `;
 
@@ -143,6 +133,7 @@ const TodoContent = styled.div<{ dragX: number }>`
 	align-items: center;
 	gap: 8px;
 	height: 100%;
+	min-height: 60px;
 	background-color: var(--white);
 	border-radius: ${({ dragX }) => (dragX < 0 ? 'var(--radius-s)' : 0)};
 	transform: ${({ dragX }) => `translateX(${dragX}px)`};
@@ -156,9 +147,25 @@ const Flex = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	gap: 8px;
+	width: 100%;
 `;
 
-const Label = styled.label`
+const ContentBoundary = styled.div`
+	width: 100%;
+`;
+
+const ContentEditingTextInputWithButton = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+`;
+
+const ContentEditingInfoButton = styled(Button)`
+	padding: var(--padding-container-mobile);
+`;
+
+const Label = styled.p`
 	font-size: var(--fz-h7);
 	word-break: break-all;
 	white-space: pre-wrap;
