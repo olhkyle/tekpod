@@ -34,11 +34,12 @@ interface TextFieldProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> 
 	onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
 	maxLength?: number;
 	disabled?: boolean;
+	variant?: 'sm' | 'md' | 'lg';
 }
 
 TextInput.TextField = forwardRef(
-	({ type = 'text', id, name, placeholder, ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
-		return <Input type={type} id={id} name={name} placeholder={placeholder} ref={ref} {...props} />;
+	({ type = 'text', id, name, placeholder, variant = 'lg', ...props }: TextFieldProps, ref: ForwardedRef<HTMLInputElement>) => {
+		return <Input type={type} id={id} name={name} placeholder={placeholder} ref={ref} variant={variant} {...props} />;
 	},
 );
 
@@ -52,6 +53,7 @@ TextInput.ControlledTextField = ({
 	onBlur,
 	maxLength,
 	disabled,
+	variant = 'lg',
 	...props
 }: TextFieldProps) => {
 	return (
@@ -65,6 +67,7 @@ TextInput.ControlledTextField = ({
 			onBlur={onBlur}
 			maxLength={maxLength ? maxLength : undefined}
 			disabled={disabled}
+			variant={variant}
 			{...props}
 		/>
 	);
@@ -87,10 +90,15 @@ const Message = styled.p`
 	color: var(--red200);
 `;
 
-const Input = styled.input<{ name: string }>`
-	padding: var(--padding-container-mobile);
+const Input = styled.input<{ name: string; variant: 'sm' | 'md' | 'lg' }>`
+	padding: ${({ variant }) =>
+		variant === 'lg'
+			? 'var(--padding-container-mobile)'
+			: variant === 'md'
+			? 'calc(var(--padding-container-mobile) * 0.75) calc(var(--padding-container-mobile) * 0.75)'
+			: 'calc(var(--padding-container-mobile) * 0.5)'};
 	width: 100%;
-	font-size: var(--fz-h5);
+	font-size: ${({ variant }) => (variant === 'lg' ? 'var(--fz-h5)' : variant === 'md' ? 'var(--fz-h7)' : 'var(--fz-p)')};
 	font-weight: ${({ name }) => (name === 'title' ? 'var(--fw-semibold)' : 'var(--fw-regular)')};
 	color: var(--black);
 	border-bottom: 1px solid var(--greyOpacity100);
