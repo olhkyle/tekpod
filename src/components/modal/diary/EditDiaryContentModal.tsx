@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -27,12 +26,16 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditDiaryContentModa
 	const {
 		register,
 		control,
-		setValue,
 		formState: { errors },
 		handleSubmit,
 	} = useForm<EditContentFormSchema>({
 		resolver: zodResolver(editContentFormSchema),
-		defaultValues: { tags: [] },
+		defaultValues: {
+			title: data?.title,
+			content: data?.content,
+			feeling: data?.feeling,
+			tags: data?.tags!.map((tag, idx) => ({ id: idx, tag })),
+		},
 	});
 
 	const navigate = useNavigate();
@@ -78,17 +81,6 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditDiaryContentModa
 		}
 	};
 
-	useEffect(() => {
-		setValue('title', data?.title);
-		setValue('content', data?.content);
-		setValue('feeling', data?.feeling);
-		setValue(
-			'tags',
-			data?.tags!.map((tag, idx) => ({ id: idx, tag })),
-		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [setValue]);
-
 	return (
 		<ModalLayout id={id} type={type} title={<BiMessageSquareEdit size="32" color="var(--black)" />} onClose={onClose}>
 			<Group onSubmit={handleSubmit(onSubmit)}>
@@ -118,7 +110,7 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditDiaryContentModa
 				<Controller
 					name="tags"
 					control={control}
-					render={({ field: { value, onChange } }) => <TagsInput tags={value} onChange={onChange} />}
+					render={({ field: { name, value, onChange } }) => <TagsInput inputId={name} tags={value} onChange={onChange} />}
 				/>
 				<UpdateButton type="submit">{isLoading ? Loading : 'Upload'}</UpdateButton>
 			</Group>

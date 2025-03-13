@@ -78,7 +78,7 @@ const WritePage = () => {
 					<Controller
 						name="tags"
 						control={control}
-						render={({ field: { value, onChange } }) => <TagsInput tags={value} onChange={onChange} />}
+						render={({ field: { name, value, onChange } }) => <TagsInput inputId={name} tags={value} onChange={onChange} />}
 					/>
 				</Wrapper>
 				<UploadButton type="submit">{isLoading ? Loading : 'Upload'}</UploadButton>
