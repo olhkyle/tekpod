@@ -10,11 +10,12 @@ export interface Tag {
 }
 
 interface TagsInputProps {
+	inputId: string;
 	tags: Tag[];
 	onChange: (tags: Tag[]) => void;
 }
 
-const TagsInput = ({ tags, onChange }: TagsInputProps) => {
+const TagsInput = ({ inputId, tags, onChange }: TagsInputProps) => {
 	const [value, setValue] = useState<string>('');
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -48,6 +49,7 @@ const TagsInput = ({ tags, onChange }: TagsInputProps) => {
 			))}
 			<Input
 				type="text"
+				id={inputId}
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				onKeyDown={e => {
@@ -115,6 +117,7 @@ const Input = styled.input`
 	flex-shrink: 0;
 	width: 100%;
 	font-size: var(--fz-p);
+	cursor: pointer;
 `;
 
 export default TagsInput;

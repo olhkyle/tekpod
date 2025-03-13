@@ -143,6 +143,9 @@ export interface Database {
 					content: string;
 					created_at: Date;
 					updated_at: Date;
+					notified: boolean;
+					reminder_time: Date;
+					tags: string[] | null;
 				};
 				Insert: {
 					// the data to be passed to .insert()
@@ -152,6 +155,8 @@ export interface Database {
 					content: string;
 					created_at: Date;
 					updated_at: Date;
+					reminder_time?: Date;
+					tags: string[] | null;
 				};
 				Update: {
 					// the data to be passed to .update()
@@ -161,6 +166,8 @@ export interface Database {
 					content?: string;
 					created_at?: Date;
 					updated_at: Date;
+					reminder_time?: Date;
+					tags: string[] | null;
 				};
 				Delete: {
 					// the data to be passed to .delete()

@@ -1,76 +1,56 @@
-import { TouchEvent, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useQueryClient } from '@tanstack/react-query';
 import { RiCloseFill } from 'react-icons/ri';
+import { RiInformation2Line } from 'react-icons/ri';
 import type { Todo } from '../../supabase/schema';
-import { Button, Checkbox } from '../common';
-import { useClickOutside, useLoading } from '../../hooks';
+import { Button, Checkbox, TextInput } from '../common';
+import { useDrag, useLoading } from '../../hooks';
 import useToastStore from '../../store/useToastStore';
-import { removeTodo, updatedTodoCompleted } from '../../supabase/todos';
+import { editTodoContent, removeTodo, updatedTodoCompleted } from '../../supabase/todos';
 import queryKey from '../../constants/queryKey';
 import { toastData } from '../../constants/toast';
 import { today } from '../../utils/date';
+import useModalStore from '../../store/useModalStore';
+import { MODAL_CONFIG } from '../modal/modalType';
+import { Controller, useForm } from 'react-hook-form';
+import { todoItemSchema, TodoItemSchema } from './schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface TodoProps {
 	todo: Todo;
 	order: number;
 }
 
-const DRAG_THRESHOLD = 10; // 픽셀 단위
-
 const TodoItem = ({ todo, order }: TodoProps) => {
 	const queryClient = useQueryClient();
+	const { control, setFocus, handleSubmit } = useForm<TodoItemSchema>({
+		resolver: zodResolver(todoItemSchema),
+		defaultValues: { content: todo?.content },
+	});
+
 	const [isCompleted, setIsCompleted] = useState(todo?.completed);
+	const [isContentEditing, setIsContentEditing] = useState(false);
 
 	const { addToast } = useToastStore();
 	const { startTransition, Loading, isLoading } = useLoading();
+	const { setModal } = useModalStore();
 
-	const [dragX, setDragX] = useState(0);
-	const [dragStartX, setDragStartX] = useState<number | null>(null);
-	const dragRef = useRef<number>(0);
+	const {
+		dragX,
+		dragContainerRef,
+		handlers: { handleTouchStart, handleTouchMove, handleTouchEnd },
+	} = useDrag();
 
-	const containerRef = useClickOutside<HTMLLIElement>({
-		eventHandler: () => {
-			setDragX(0);
-			dragRef.current = 0;
-		},
-	});
-
-	// TODO: 리팩토링 필요
-	const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
-		setDragStartX(event.touches[0].clientX);
-		dragRef.current = event.touches[0].clientX;
-	};
-
-	const handleTouchMove = (event: TouchEvent<HTMLDivElement>) => {
-		if (dragStartX === null) return;
-
-		const currentX = event.touches[0].clientX;
-		const diff = currentX - dragRef.current; // 현재 위치 - 첫 터치 드래그 시작 위치 (음수)
-
-		// 최소 이동 거리를 넘어선 경우에만 드래그 적용
-		if (Math.abs(diff) > DRAG_THRESHOLD) {
-			const dampingFactor = 0.8;
-			const dragAmount = currentX - dragRef.current;
-			if (dragAmount < 0) {
-				setDragX(Math.max(dampingFactor * dragAmount, -80));
-			}
+	// TODO:
+	useEffect(() => {
+		if (isContentEditing) {
+			setFocus('content');
 		}
-	};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isContentEditing]);
 
-	const handleTouchEnd = () => {
-		const SNAP_THRESHOLD = -40;
-
-		if (dragX < SNAP_THRESHOLD) {
-			setDragX(-80);
-		} else {
-			setDragX(0);
-		}
-
-		setDragStartX(null);
-		dragRef.current = 0;
-	};
-
+	// TextInput 바깥 클릭 시 TextInput에서 Label로 다시 바뀌도록 변경
 	// TODO: web-socket 연결로 reminder 만들기
 
 	const handleTodoIsCompleted = async (completed: boolean) => {
@@ -88,7 +68,6 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 	const handleRemoveTodo = async () => {
 		try {
 			await startTransition(removeTodo({ id: todo.id }));
-
 			addToast(toastData.TODO_REMINDER.REMOVE.SUCCESS);
 		} catch (e) {
 			console.error(e);
@@ -98,21 +77,81 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 		}
 	};
 
+	const handleTodoItemEditModal = () => {
+		setModal({
+			Component: MODAL_CONFIG.TODO_REMINDER.EDIT.Component,
+			props: {
+				type: MODAL_CONFIG.TODO_REMINDER.EDIT.type,
+				data: todo,
+			},
+		});
+	};
+
+	// TODO: 깜빡임 현상 해결
+	const onSubmit = async (formData: TodoItemSchema) => {
+		try {
+			const { error } = await editTodoContent({ id: todo?.id, content: formData.content });
+
+			if (error) {
+				throw new Error(error.message);
+			}
+
+			setIsContentEditing(false);
+			addToast(toastData.TODO_REMINDER.EDIT.SUCCESS);
+
+			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
+		} catch (e) {
+			console.error(e);
+			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
+		}
+	};
+
 	return (
-		<Container ref={containerRef}>
+		<Container ref={dragContainerRef}>
 			<DeleteBackground onClick={handleRemoveTodo}>{isLoading ? Loading : <RiCloseFill size="24" color="white" />}</DeleteBackground>
 			<TodoContent dragX={dragX} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
 				<Flex>
 					<Checkbox id={order} checked={isCompleted} onCheckedChange={setIsCompleted} onServerTodoCompletedChange={handleTodoIsCompleted} />
-					<Label htmlFor={`checkbox-${order + 1}`}>{todo.content}</Label>
+					<ContentBoundary>
+						{isContentEditing ? (
+							<ContentEditingForm onSubmit={handleSubmit(onSubmit)}>
+								<Controller
+									name="content"
+									control={control}
+									render={({ field: { name, value, onChange, onBlur }, fieldState: { error } }) => (
+										<TextInput errorMessage={error?.message}>
+											<TextInput.ControlledTextField
+												id="todoItem_content"
+												name={name}
+												value={value}
+												placeholder="Change content"
+												variant="md"
+												onChange={onChange}
+												onBlur={onBlur}
+												onKeyDown={e => {
+													if (e.key === 'Escape') {
+														setIsContentEditing(false);
+													}
+												}}
+											/>
+										</TextInput>
+									)}
+								/>
+								<ContentEditingInfoButton type="button" onClick={handleTodoItemEditModal}>
+									<RiInformation2Line size="22" color="var(--grey600)" />
+								</ContentEditingInfoButton>
+								<TodoItemContentSubmitButton type="submit">Submit</TodoItemContentSubmitButton>
+							</ContentEditingForm>
+						) : (
+							<Label
+								onClick={() => {
+									setIsContentEditing(!isContentEditing);
+								}}>
+								{todo.content}
+							</Label>
+						)}
+					</ContentBoundary>
 				</Flex>
-				<DeleteButtonSafeBoundary>
-					{isCompleted && dragX >= 0 && (
-						<DeleteButton type="button" onClick={handleRemoveTodo}>
-							<RiCloseFill size="24" color="var(--black)" />
-						</DeleteButton>
-					)}
-				</DeleteButtonSafeBoundary>
 			</TodoContent>
 		</Container>
 	);
@@ -120,6 +159,7 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 
 const Container = styled.li`
 	position: relative;
+	min-height: 60px;
 	overflow: hidden;
 	cursor: pointer;
 `;
@@ -132,7 +172,7 @@ const DeleteBackground = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 65px;
+	width: 60px;
 	background-color: var(--orange800);
 `;
 
@@ -143,6 +183,7 @@ const TodoContent = styled.div<{ dragX: number }>`
 	align-items: center;
 	gap: 8px;
 	height: 100%;
+	min-height: 60px;
 	background-color: var(--white);
 	border-radius: ${({ dragX }) => (dragX < 0 ? 'var(--radius-s)' : 0)};
 	transform: ${({ dragX }) => `translateX(${dragX}px)`};
@@ -156,37 +197,41 @@ const Flex = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	gap: 8px;
+	width: 100%;
 `;
 
-const Label = styled.label`
+const ContentBoundary = styled.div`
+	width: 100%;
+`;
+
+const ContentEditingForm = styled.form`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+`;
+
+const ContentEditingInfoButton = styled(Button)`
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: calc(var(--padding-container-mobile) * 0.75);
+
+	&:hover {
+		background-color: var(--grey50);
+	}
+`;
+
+const TodoItemContentSubmitButton = styled(Button)`
+	display: none;
+`;
+
+const Label = styled.p`
+	padding: calc(var(--padding-container-mobile) * 0.75);
 	font-size: var(--fz-h7);
 	word-break: break-all;
 	white-space: pre-wrap;
 	cursor: pointer;
-`;
-
-const DeleteButtonSafeBoundary = styled.div`
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	min-width: 42px;
-	height: 100%;
-	background-color: var(--white);
-`;
-
-const DeleteButton = styled(Button)`
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	padding: 8px;
-	background-color: var(--greyOpacity50);
-	border: 1px solid var(--greyOpacity100);
-	border-radius: var(--radius-s);
-
-	&:hover,
-	&:active {
-		background-color: var(--greyOpacity100);
-	}
 `;
 
 export default TodoItem;

@@ -1,11 +1,16 @@
 import { ElementType } from 'react';
-import { AddPaymentModal } from './expenseTracker';
-import { AddFilmRecipeModal, FilmRecipeModal, RemoveFilmRecipeConfirmModal } from './filmRecipe';
-import { EditDiaryContentModal } from './diary';
-import { ResetPasswordForEmailModal } from './user';
-import UpdateProfileModal from './user/UpdateProfileModal';
+import {
+	AddPaymentModal,
+	AddFilmRecipeModal,
+	FilmRecipeModal,
+	RemoveFilmRecipeConfirmModal,
+	EditDiaryContentModal,
+	ResetPasswordForEmailModal,
+	UpdateProfileModal,
+	TodoItemEditModal,
+} from '.';
 
-type ModalDataType = 'diary' | 'filmRecipe' | 'financialLedger' | 'user';
+type ModalDataType = 'diary' | 'filmRecipe' | 'financialLedger' | 'user' | 'todoReminder';
 
 type ModalConfigItem = {
 	type: ModalDataType;
@@ -28,6 +33,9 @@ type ModalConfig = {
 		RESET_PASSWORD: ModalConfigItem;
 		PROFILE: ModalConfigItem;
 	};
+	TODO_REMINDER: {
+		EDIT: ModalConfigItem;
+	};
 };
 
 const modalType = {
@@ -35,6 +43,7 @@ const modalType = {
 	FILM_RECIPE: 'filmRecipe',
 	DIARY: 'diary',
 	USER: 'user',
+	TODO_REMINDER: 'todoReminder',
 } as const;
 
 const MODAL_CONFIG: ModalConfig = {
@@ -72,6 +81,12 @@ const MODAL_CONFIG: ModalConfig = {
 		PROFILE: {
 			type: modalType.USER,
 			Component: UpdateProfileModal,
+		},
+	},
+	TODO_REMINDER: {
+		EDIT: {
+			type: modalType.TODO_REMINDER,
+			Component: TodoItemEditModal,
 		},
 	},
 };

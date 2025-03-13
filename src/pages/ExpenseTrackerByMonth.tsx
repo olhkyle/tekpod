@@ -36,7 +36,7 @@ const ExpenseTrackerByMonthPage = () => {
 					NEW
 				</AddPaymentButton>
 			</Header>
-			<DatePicker selected={selected} setSelected={setSelected} />
+			<DatePicker selected={selected} setSelected={setSelected} disabled={{ after: today }} isFloated={true} />
 			<PaymentListLayout>
 				<PaymentListTitle>List</PaymentListTitle>
 				<Flex>
@@ -61,6 +61,7 @@ const Header = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 16px;
 `;
 
 const Title = styled.h2`

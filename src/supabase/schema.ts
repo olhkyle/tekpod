@@ -1,6 +1,6 @@
 import { Database } from './database.types';
 
-type ServiceDataType = Diary | Recipe | User | null;
+type ServiceDataType = Diary | Recipe | Todo | User | null;
 
 type Diary = Database['public']['Tables']['diary']['Row'];
 type Recipe = Database['public']['Tables']['recipes']['Row'];

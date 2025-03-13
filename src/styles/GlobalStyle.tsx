@@ -219,18 +219,26 @@ const Global = css`
 	}
 
 	.rdp-root {
-		position: absolute;
-		top: 60px;
-		background-color: none;
+		margin-top: 8px;
+		background: none;
 		z-index: var(--modal-index);
 		--rdp-accent-color: var(--grey600); /* Change the accent color to indigo. */
 		--rdp-accent-background-color: var(--blue300); /* Change the accent background color. */
 		--rdp-today-color: var(--blue200);
 		--rdp-selected-border: 1px solid var(--blue200);
+
+		@media screen and (min-width: 480px) {
+			--rdp-day-width: calc((var(--max-app-width)- 4 * var(--padding-container-mobile)) / 7);
+			--rdp-day-height: calc((var(--max-app-width)- 4 * var(--padding-container-mobile)) / 7);
+			--rdp-day_button-width: calc((var(--max-app-width) - 4 * var(--padding-container-mobile)) / 7);
+			--rdp-day_button-height: calc((var(--max-app-width) - 4 * var(--padding-container-mobile)) / 7);
+		}
 	}
 
 	.rdp-months {
-		padding: 6px 12px;
+		padding: 8px 16px;
+		min-width: var(--min-app-width);
+		max-width: var(--max-app-width);
 		background-color: var(--white);
 		border: 1px solid var(--grey100);
 		border-radius: var(--radius-m);

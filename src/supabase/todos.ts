@@ -13,12 +13,16 @@ const getTodos = async (): Promise<Todo[]> => {
 	return data;
 };
 
-const addTodo = async (data: Omit<Todo, 'id'>) => {
+const addTodo = async (data: Omit<Todo, 'id' | 'reminder_time' | 'notified' | 'tags'>) => {
 	const { error: addTodoError } = await supabase.from(TABLE).insert(data).select();
 
 	if (addTodoError) {
 		throw new Error(addTodoError.message);
 	}
+};
+
+const editTodoContent = async ({ id, content }: { id: string; content: string }) => {
+	return await supabase.from(TABLE).update({ content }).eq('id', id);
 };
 
 const updatedTodoCompleted = async ({ id, completed, updated_at }: { id: string; completed: boolean; updated_at: Date }) => {
@@ -37,4 +41,4 @@ const removeTodo = async ({ id }: { id: string }) => {
 	}
 };
 
-export { getTodos, addTodo, updatedTodoCompleted, removeTodo };
+export { getTodos, addTodo, editTodoContent, updatedTodoCompleted, removeTodo };
