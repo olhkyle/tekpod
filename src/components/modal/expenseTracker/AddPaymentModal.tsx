@@ -70,6 +70,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 						selected={watch('usage_date')}
 						setSelected={(date: Date) => setValue('usage_date', date, { shouldValidate: true })}
 						error={errors['usage_date']}
+						disabled={{ after: today }}
 					/>
 
 					<TextInput errorMessage={errors['place']?.message}>
