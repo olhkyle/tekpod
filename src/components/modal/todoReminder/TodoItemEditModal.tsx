@@ -4,6 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ModalLayout, ModalDataType } from '..';
 import { Button, DatePicker, TagsInput, TextInput, editTodoItemFormSchema, EditTodoItemFormSchema } from '../..';
 import type { Todo } from '../../../supabase';
+import { today } from '../../../utils';
+import { isEqual } from 'es-toolkit';
+import { useToastStore } from '../../../store';
+import { toastData } from '../../../constants';
 
 interface TodoItemEditModal {
 	id: string;
@@ -25,11 +29,24 @@ const TodoItemEditModal = ({ id, type, onClose, data: { content, tags, reminder_
 		defaultValues: {
 			content: content,
 			tags: tags?.length ? tags!.map((tag, idx) => ({ id: idx, tag })) : [],
-			reminderTime: reminder_time,
+			reminderTime: reminder_time ?? today,
 		},
 	});
 
-	const onSubmit = () => {};
+	const { addToast } = useToastStore();
+
+	const onSubmit = async (formData: EditTodoItemFormSchema) => {
+		if (isEqual({ ...formData, tags: formData.tags.map(tag => tag) }, { content, tags, reminderTime: reminder_time ?? today })) {
+			addToast(toastData.TODO_REMINDER.EDIT.WARN);
+			return;
+		}
+
+		try {
+			await (() => {})();
+		} catch (e) {
+			console.error(e);
+		}
+	};
 
 	return (
 		<ModalLayout id={id} type={type} title={'Detail'} onClose={onClose}>
