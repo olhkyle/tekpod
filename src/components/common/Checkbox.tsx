@@ -6,7 +6,7 @@ interface CheckboxProps {
 	id: string;
 	checked: boolean;
 	onCheckedChange: Dispatch<SetStateAction<boolean>>;
-	onServerTodoCompletedChange?: (completed: boolean) => Promise<void>;
+	onServerTodoCompletedChange?: (completed: boolean) => void;
 }
 
 const Checkbox = ({ id, checked, onCheckedChange: onClientCheckedChange, onServerTodoCompletedChange, ...props }: CheckboxProps) => {
