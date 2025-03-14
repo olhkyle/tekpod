@@ -4,9 +4,9 @@ import { SkeletonLoader } from '../../common';
 const PaymentItemLoader = () => {
 	return (
 		<Container>
-			<SkeletonLoader theme={'light'} width={'70%'} height={'72px'} />
-			<SkeletonLoader theme={'light'} width={'70%'} height={'72px'} />
-			<SkeletonLoader theme={'light'} width={'70%'} height={'72px'} />
+			<SkeletonLoader theme={'light'} width={'100%'} height={'72px'} />
+			<SkeletonLoader theme={'light'} width={'100%'} height={'72px'} />
+			<SkeletonLoader theme={'light'} width={'100%'} height={'72px'} />
 		</Container>
 	);
 };
