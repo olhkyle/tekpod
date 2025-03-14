@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { FieldError } from 'react-hook-form';
 import { BiSolidChevronRight } from 'react-icons/bi';
 import { Button } from '.';
-import type { ExpenseTracker, RestrictedRecipeForValidation } from '../../supabase/schema';
+import type { ExpenseTracker, RestrictedRecipeForValidation } from '../../supabase';
 import { customPropReceiver, PaymentDataType, FilmRecipeFieldDataType } from '../../constants';
 
 export type CustomSelectDataType = PaymentDataType | FilmRecipeFieldDataType[number] | string | number;

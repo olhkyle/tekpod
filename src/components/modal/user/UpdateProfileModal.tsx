@@ -4,15 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { User } from '../../../supabase/schema';
-import supabase from '../../../supabase/service';
 import { Button, ModalLayout, LabelInput } from '../..';
-import { updateUser } from '../../../supabase/user';
-import { ModalDataType } from '../modalType';
-import { updateProfileSchema, UpdateProfileSchema } from './schema';
+import { updateProfileSchema, UpdateProfileSchema, ModalDataType } from '..';
+import { useLoading } from '../../../hooks';
+import { supabase, User, updateUser } from '../../../supabase';
 import { useToastStore } from '../../../store';
 import { toastData, routes, queryKey } from '../../../constants';
-import { useLoading } from '../../../hooks';
 
 interface UpdateProfileModalProps {
 	id: string;

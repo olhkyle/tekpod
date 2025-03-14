@@ -1,13 +1,11 @@
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { getDiariesByPage, getDiariesPageInfo, PAGE_SIZE } from '../../supabase/diary';
-import type { Diary } from '../../supabase/schema';
-import { LoadingSpinner } from '../layout';
+import { getDiariesByPage, getDiariesPageInfo, PAGE_SIZE, type Diary } from '../../supabase';
+import { EmptyMessage, LoadingSpinner } from '..';
 import { useInfinityScroll } from '../../hooks';
 import { routes, staleTime, queryKey } from '../../constants';
-import getCalculatedTotalPage from '../../utils/getCalculatedTotalPage';
-import { EmptyMessage } from '../common';
+import { getCalculatedTotalPage } from '../../utils';
 
 const DiaryContent = () => {
 	const { data: pageInfo } = useSuspenseQuery({

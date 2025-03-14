@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { SkeletonLoader } from '../common';
+import { SkeletonLoader } from '..';
 
 const TodoListLoader = () => {
 	return (

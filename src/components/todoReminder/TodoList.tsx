@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { EmptyMessage, TodoItem } from '..';
+import { getTodos } from '../../supabase';
 import { queryKey } from '../../constants';
-import { getTodos } from '../../supabase/todos';
-import { EmptyMessage } from '../common';
-import TodoItem from './TodoItem';
 
 const TodoList = () => {
 	const { data: todoList } = useSuspenseQuery({ queryKey: queryKey.TODOS, queryFn: getTodos });

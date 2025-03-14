@@ -1,6 +1,6 @@
+import { Suspense } from 'react';
 import styled from '@emotion/styled';
 import { ContentBody, ContentBodyLoader } from '../components';
-import { Suspense } from 'react';
 
 const DiaryContentPage = () => {
 	return (

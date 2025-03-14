@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
 import { BsPlus } from 'react-icons/bs';
 import { Button, ShrinkMotionBlock, TextInput, TodoList, TodoListLoader } from '../components';
-import { addTodo } from '../supabase/todos';
+import { addTodo } from '../supabase';
 import { useLoading } from '../hooks';
 import { useToastStore } from '../store';
 import { queryKey, toastData } from '../constants';

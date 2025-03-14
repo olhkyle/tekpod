@@ -5,9 +5,8 @@ import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
 import { Button } from '../components';
 import { useLoading } from '../hooks';
-import { format } from '../utils/date';
-import { monetizeWithSeparator } from '../utils/money';
-import { removePayment } from '../supabase/expenseTracker';
+import { removePayment } from '../supabase';
+import { monetizeWithSeparator, format } from '../utils';
 import { useToastStore } from '../store';
 import { routes, queryKey, toastData } from '../constants';
 

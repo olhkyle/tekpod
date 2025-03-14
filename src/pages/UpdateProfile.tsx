@@ -3,13 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import { Session } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, ShrinkMotionBlock } from '../components';
-import { format } from '../utils/date';
+import { Button, ShrinkMotionBlock, MODAL_CONFIG } from '../components';
+import { supabase } from '../supabase';
 import { useLoading } from '../hooks';
-import { useToastStore, useModalStore } from '../store';
-import { MODAL_CONFIG } from '../components/modal/modalType';
-import supabase from '../supabase/service';
-import { useUserStore } from '../store';
+import { useToastStore, useModalStore, useUserStore } from '../store';
+import { format } from '../utils';
 import { toastData, routes } from '../constants';
 
 const UpdateProfile = () => {

@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
-import { quickMemoDrawerSchema, QuickMemoDrawerSchema } from './quickMemoDrawerSchema';
-import { Button, Drawer, TextInput } from '../common';
+import { quickMemoDrawerSchema, QuickMemoDrawerSchema } from '.';
+import { Button, Drawer, TextInput } from '..';
 import { useDrawerStore, useToastStore } from '../../store';
 import { useLoading } from '../../hooks';
-import { addTodo } from '../../supabase/todos';
+import { addTodo } from '../../supabase';
 import { currentKoreanTime } from '../../utils/date';
 import { toastData, routes } from '../../constants';
 

@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { removeRecipe } from '../../supabase/filmRecipe';
-import { RestrictedRecipe } from '../../supabase/schema';
+import { removeRecipe, RestrictedRecipe } from '../../supabase';
 import { toastData, queryKey } from '../../constants';
 import { useToastStore } from '../../store';
 

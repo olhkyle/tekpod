@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { Session } from '@supabase/supabase-js';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, TagsInput, TextArea, TextInput } from '../components';
-import { WriteSchema, writeSchema } from '../components/write/schema';
-import { addDiary } from '../supabase/diary';
-import { routes, toastData } from '../constants';
-import useLoading from '../hooks/useLoading';
+import { Button, TagsInput, TextArea, TextInput, WriteSchema, writeSchema } from '../components';
+import { addDiary } from '../supabase';
+import { useLoading } from '../hooks';
 import { useToastStore } from '../store';
+import { routes, toastData } from '../constants';
 
 const WritePage = () => {
 	const queryClient = useQueryClient();

@@ -13,4 +13,4 @@ const getCalculatedTotalPage = (pagination: unknown, pageSize: number) => {
 	return calculatedTotalPage;
 };
 
-export default getCalculatedTotalPage;
+export { getCalculatedTotalPage };

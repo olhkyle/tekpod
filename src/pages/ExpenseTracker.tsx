@@ -4,11 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { MdUpcoming } from 'react-icons/md';
 import { IoCardOutline } from 'react-icons/io5';
 import { BsCalendar2MonthFill } from 'react-icons/bs';
-import { Button, Select, ShrinkMotionBlock, TotalExpensePrice, TotalExpensePriceLoader } from '../components';
-import { months, currentMonth, currentYear } from '../utils/date';
-import { routes } from '../constants';
+import { Button, Select, ShrinkMotionBlock, TotalExpensePrice, TotalExpensePriceLoader, MODAL_CONFIG } from '../components';
 import { useModalStore } from '../store';
-import { MODAL_CONFIG } from '../components/modal/modalType';
+import { routes } from '../constants';
+import { months, currentMonth, currentYear } from '../utils';
 
 const linkGroup = [
 	{

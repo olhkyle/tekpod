@@ -5,15 +5,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RiCloseFill } from 'react-icons/ri';
 import { RiInformation2Line } from 'react-icons/ri';
-import type { Todo } from '../../supabase/schema';
-import { Button, Checkbox, TextInput } from '../common';
+import { MODAL_CONFIG, Button, Checkbox, TextInput } from '..';
+import { todoItemSchema, TodoItemSchema } from '.';
+import { type Todo, editTodoContent, removeTodo, updatedTodoCompleted } from '../../supabase';
 import { useDrag, useLoading } from '../../hooks';
 import { useToastStore, useModalStore } from '../../store';
-import { editTodoContent, removeTodo, updatedTodoCompleted } from '../../supabase/todos';
 import { toastData, queryKey } from '../../constants';
-import { today } from '../../utils/date';
-import { MODAL_CONFIG } from '../modal/modalType';
-import { todoItemSchema, TodoItemSchema } from './schema';
+import { today } from '../../utils';
 
 interface TodoProps {
 	todo: Todo;

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Portal } from '../layout';
+import { Portal } from '..';
 import { useModalStore } from '../../store';
 
 const ModalContainer = () => {

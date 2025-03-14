@@ -1,8 +1,8 @@
 import { ElementType } from 'react';
 import { UseQueryResult } from '@tanstack/react-query';
 import { create } from 'zustand';
-import { ServiceDataType } from '../supabase/schema';
-import { ModalDataType } from '../components/modal/modalType';
+import { ServiceDataType } from '../supabase';
+import { ModalDataType } from '../components';
 
 export type QueryRefetch = (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<UseQueryResult>;
 

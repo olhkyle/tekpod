@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useIsElementInViewport from './useIsElementInViewport';
+import { useIsElementInViewport } from '.';
 
 const ROOT_MARGIN = '0px 0px 150px 0px';
 

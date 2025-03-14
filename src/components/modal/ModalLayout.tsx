@@ -1,8 +1,8 @@
 import { AnimationEvent, ReactNode, useState } from 'react';
 import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
-import { Button } from '../common';
-import type { ModalDataType } from './modalType';
+import { Button } from '..';
+import { type ModalDataType } from '.';
 import { useOverlayFixed } from '../../hooks';
 
 interface ModalLayoutProps {

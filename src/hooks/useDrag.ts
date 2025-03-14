@@ -1,5 +1,5 @@
 import { TouchEvent, useRef, useState } from 'react';
-import useClickOutside from './useClickOutside';
+import { useClickOutside } from '.';
 
 const DRAG_THRESHOLD = 10; // 픽셀 단위
 

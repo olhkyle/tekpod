@@ -4,14 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthError } from '@supabase/supabase-js';
-import supabase from '../supabase/service';
-import { Button, LabelInput, AuthLogo } from '../components';
-import { loginSchema, type LoginSchema } from '../components/auth/schema';
+import { Button, LabelInput, AuthLogo, loginSchema, type LoginSchema, MODAL_CONFIG, AuthLayout } from '../components';
+import { supabase } from '../supabase';
 import { useLoading } from '../hooks';
 import { useUserStore, useToastStore, useModalStore } from '../store';
 import { routes, toastData } from '../constants';
-import { MODAL_CONFIG } from '../components/modal/modalType';
-import AuthLayout from '../components/layout/AuthLayout';
 
 const LoginPage = () => {
 	const queryClient = useQueryClient();

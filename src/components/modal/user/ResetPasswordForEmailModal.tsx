@@ -4,15 +4,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthError } from '@supabase/supabase-js';
 import supabase from '../../../supabase/service';
-import { LabelInput } from '../../auth';
-import { useToastStore } from '../../../store';
-import { ModalLayout } from '..';
-import { ModalDataType } from '../modalType';
-import { Button } from '../../common';
-import { resetPasswordSchema, ResetPasswordSchema } from './schema';
+import { ModalLayout, ModalDataType, resetPasswordSchema, ResetPasswordSchema } from '..';
+import { Button, LabelInput } from '../..';
 import { useLoading } from '../../../hooks';
+import { isUserExist } from '../../../supabase';
+import { useToastStore } from '../../../store';
 import { routes, toastData } from '../../../constants';
-import { isUserExist } from '../../../supabase/user';
 
 interface ResetPasswordForEmailModalProps {
 	id: string;

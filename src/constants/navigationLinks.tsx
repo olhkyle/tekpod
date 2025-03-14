@@ -1,7 +1,7 @@
 import { IoMdNotifications } from 'react-icons/io';
 import { FaCalculator } from 'react-icons/fa';
 import { RiBook3Line, RiCamera3Line } from 'react-icons/ri';
-import routes from './routes';
+import { routes } from '.';
 
 const navigationLinks = [
 	{

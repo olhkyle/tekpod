@@ -3,16 +3,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
-import ModalLayout from '../ModalLayout';
-import { ModalDataType } from '../modalType';
-import { AddPaymentFormSchema, addPaymentFormSchema } from './schema';
-import { Button, CustomSelect, DatePicker, TextInput } from '../../common';
-import { paymentData, toastData, queryKey } from '../../../constants';
-import { addPayment } from '../../../supabase/expenseTracker';
+import { ModalLayout, ModalDataType } from '..';
+import { AddPaymentFormSchema, addPaymentFormSchema } from '.';
+import { Button, CustomSelect, DatePicker, TextInput } from '../..';
+import { addPayment } from '../../../supabase';
 import { useLoading } from '../../../hooks';
+import { paymentData, toastData, queryKey } from '../../../constants';
 import { useToastStore } from '../../../store';
-import { monetizeWithSeparator } from '../../../utils/money';
-import { today } from '../../../utils/date';
+import { monetizeWithSeparator, today } from '../../../utils';
 
 interface AddPaymentModalProps {
 	id: string;

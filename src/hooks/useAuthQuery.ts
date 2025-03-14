@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import supabase from '../supabase/service';
+import { supabase } from '../supabase';
 import { useUserStore } from '../store';
 import { queryKey } from '../constants';
 

@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Button, FilmRecipeContent } from '../components';
-import { MODAL_CONFIG } from '../components/modal/modalType';
-import { getRecipes } from '../supabase/filmRecipe';
+import { Button, FilmRecipeContent, MODAL_CONFIG } from '../components';
+import { getRecipes } from '../supabase';
 import { useModalStore } from '../store';
 import { queryKey } from '../constants';
 
