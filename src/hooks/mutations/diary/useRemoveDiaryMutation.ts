@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { removeDiary, Diary } from '../../supabase';
-import { useToastStore } from '../../store';
-import { toastData, routes, queryKey } from '../../constants';
+import { removeDiary, Diary } from '../../../supabase';
+import { useToastStore } from '../../../store';
+import { toastData, routes, queryKey } from '../../../constants';
 
 const remove =
 	({ id }: { id: string }) =>
