@@ -104,7 +104,7 @@ const Input = styled.input<{ name: string; variant: 'sm' | 'md' | 'lg' }>`
 	color: var(--black);
 	border-bottom: 1px solid var(--greyOpacity100);
 	border-radius: none;
-	transition: border 0.15s ease-in-out;
+	transition: border 0.15s ease-out;
 	cursor: pointer;
 
 	&::placeholder {
