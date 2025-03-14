@@ -5,14 +5,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthLogo, Button, LabelInput } from '../components';
-import supabase from '../supabase/service';
+import { AuthLogo, Button, LabelInput, updatePasswordSchema, UpdatePasswordSchema } from '../components';
+import { supabase } from '../supabase';
 import { useLoading } from '../hooks';
-import { updatePasswordSchema, UpdatePasswordSchema } from '../components/auth/schema';
-import useToastStore from '../store/useToastStore';
-import useUserStore from '../store/userStore';
-import { toastData } from '../constants/toast';
-import { routes } from '../constants';
+import { useUserStore, useToastStore } from '../store';
+import { toastData, routes } from '../constants';
 
 const pageCss = {
 	container: css`

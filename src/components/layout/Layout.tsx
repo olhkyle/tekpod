@@ -1,9 +1,8 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { Outlet } from 'react-router-dom';
 import { css } from '@emotion/react';
+import { Outlet } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Header, BottomNav, LayoutLoadingSpinner, ErrorFallback } from '.';
-import { ModalContainer, QuickMemoDrawer, Toast } from '..';
+import { Header, BottomNav, LayoutLoadingSpinner, ErrorFallback, ModalContainer, QuickMemoDrawer, Toast } from '..';
 import { useInitialScrollToTop } from '../../hooks';
 
 const layoutCss = {

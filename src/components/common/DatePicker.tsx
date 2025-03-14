@@ -5,9 +5,9 @@ import { DayPicker } from 'react-day-picker';
 import { IoMdCalendar } from 'react-icons/io';
 import { ko } from 'date-fns/locale';
 import { Button } from '..';
-import { customPropReceiver } from '../../constants';
-import { format } from '../../utils/date';
 import { useClickOutside } from '../../hooks';
+import { customPropReceiver } from '../../constants';
+import { format } from '../../utils';
 
 interface DatePickerProps {
 	selected: Date | undefined;

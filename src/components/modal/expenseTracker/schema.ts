@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { paymentData } from '../../../constants/expenseTracker';
-import { today } from '../../../utils/date';
+import { paymentData } from '../../../constants';
+import { today } from '../../../utils';
 
 type AddPaymentFormSchema = z.infer<typeof addPaymentFormSchema>;
 

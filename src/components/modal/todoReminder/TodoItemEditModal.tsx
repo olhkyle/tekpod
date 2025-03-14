@@ -1,11 +1,9 @@
 import styled from '@emotion/styled';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, DatePicker, TagsInput, TextInput } from '../../common';
-import { ModalLayout } from '..';
-import type { Todo } from '../../../supabase/schema';
-import { ModalDataType } from '../modalType';
-import { editTodoItemFormSchema, EditTodoItemFormSchema } from './schema';
+import { ModalLayout, ModalDataType } from '..';
+import { Button, DatePicker, TagsInput, TextInput, editTodoItemFormSchema, EditTodoItemFormSchema } from '../..';
+import type { Todo } from '../../../supabase';
 
 interface TodoItemEditModal {
 	id: string;

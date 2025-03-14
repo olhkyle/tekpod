@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
 
 interface UseFunnelTrigger<T> {

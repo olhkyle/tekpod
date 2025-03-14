@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FallbackProps } from 'react-error-boundary';
-import { Button } from '../common';
+import { Button } from '..';
 
 const layoutCss = {
 	wrapper: css`

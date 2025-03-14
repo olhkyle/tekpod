@@ -3,18 +3,13 @@ import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User } from '../../../supabase/schema';
-import supabase from '../../../supabase/service';
-import { Button, ModalLayout, LabelInput } from '../..';
-import { updateUser } from '../../../supabase/user';
-import { ModalDataType } from '../modalType';
-import { updateProfileSchema, UpdateProfileSchema } from './schema';
-import useToastStore from '../../../store/useToastStore';
-import { toastData } from '../../../constants/toast';
-import { useLoading } from '../../../hooks';
-import { routes } from '../../../constants';
 import { useQueryClient } from '@tanstack/react-query';
-import queryKey from '../../../constants/queryKey';
+import { Button, ModalLayout, LabelInput } from '../..';
+import { updateProfileSchema, UpdateProfileSchema, ModalDataType } from '..';
+import { useLoading } from '../../../hooks';
+import { supabase, User, updateUser } from '../../../supabase';
+import { useToastStore } from '../../../store';
+import { toastData, routes, queryKey } from '../../../constants';
 
 interface UpdateProfileModalProps {
 	id: string;

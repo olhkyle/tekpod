@@ -3,17 +3,13 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BiMessageSquareEdit } from 'react-icons/bi';
-import { Diary } from '../../../supabase/schema';
 import { isEqual } from 'es-toolkit';
-import { ModalLayout } from '..';
+import { ModalLayout, type ModalDataType, editContentFormSchema, EditContentFormSchema } from '..';
 import { Button, TagsInput, TextArea, TextInput } from '../..';
-import { editContentFormSchema, EditContentFormSchema } from './schema';
 import { useLoading } from '../../../hooks';
-import { updateDiary } from '../../../supabase/diary';
-import { routes } from '../../../constants';
-import { toastData } from '../../../constants/toast';
-import useToastStore from '../../../store/useToastStore';
-import type { ModalDataType } from '../modalType';
+import { Diary, updateDiary } from '../../../supabase';
+import { routes, toastData } from '../../../constants';
+import { useToastStore } from '../../../store';
 
 interface EditDiaryContentModalProps {
 	id: string;

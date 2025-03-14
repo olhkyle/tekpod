@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import { Portal } from '../layout';
-import useModalStore from '../../store/useModalStore';
+import { Portal } from '..';
+import { useModalStore } from '../../store';
 
 const ModalContainer = () => {
 	const { modals, removeModal } = useModalStore();

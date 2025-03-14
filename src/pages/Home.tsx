@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-
 import styled from '@emotion/styled';
 import { navigationLinks } from '../constants';
 import { ShrinkMotionBlock } from '../components';

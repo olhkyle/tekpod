@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { MdOutlineAdd } from 'react-icons/md';
-import useDrawerStore from '../../store/useDrawerStore';
-import { Button } from '../common';
+import { Button } from '..';
+import { useDrawerStore } from '../../store';
 import { customPropReceiver } from '../../constants';
 
 const AddQuickDrawerMemoButton = () => {

@@ -1,6 +1,5 @@
 import supabase from './service';
-import { RegisterSchema } from '../components/auth/schema';
-import { UpdateProfileSchema } from '../components/modal/user/schema';
+import { RegisterSchema, UpdateProfileSchema } from '../components';
 
 const TABLE = 'users';
 

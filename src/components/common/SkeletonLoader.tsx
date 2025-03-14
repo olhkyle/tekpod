@@ -12,7 +12,7 @@ const SkeletonLoader = styled.div<{
 	height: ${({ height }) => height};
 	background-color: ${({ theme }) =>
 		theme === 'light' ? 'var(--greyOpacity50)' : theme === 'dark' ? 'var(--grey800)' : 'var(--greyOpactiy50)'};
-	border-radius: var(--radius-m);
+	border-radius: var(--radius-s);
 	overflow: hidden;
 
 	@keyframes loading {

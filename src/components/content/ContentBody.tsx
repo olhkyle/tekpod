@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { getSingleDiary } from '../../supabase/diary';
-import { LoadingSpinner, Button } from '..';
-import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
-import useModalStore from '../../store/useModalStore';
-import queryKey from '../../constants/queryKey';
-import { MODAL_CONFIG } from '../modal/modalType';
+import { getSingleDiary } from '../../supabase';
+import { LoadingSpinner, Button, MODAL_CONFIG } from '..';
+import { useRemoveDiaryMutation } from '../../hooks';
+import { useModalStore } from '../../store';
+import { queryKey } from '../../constants';
 
 const ContentBody = () => {
 	const { diaryId } = useParams();

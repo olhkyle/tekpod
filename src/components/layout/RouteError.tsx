@@ -1,5 +1,5 @@
 import { Navigate, isRouteErrorResponse, useRouteError } from 'react-router-dom';
-import routes from '../../constants/routes';
+import { routes } from '../../constants';
 
 const RouteError = () => {
 	const error = useRouteError();

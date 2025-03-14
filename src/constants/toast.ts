@@ -160,4 +160,4 @@ const toastData = {
 	},
 } as const;
 
-export { toastData };
+export default toastData;

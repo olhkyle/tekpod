@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { RiArrowLeftLine } from 'react-icons/ri';
-import { Button, ShrinkMotionBlock } from '../common';
+import { Button, ShrinkMotionBlock } from '..';
 
 interface GoBackButtonProps {
 	children?: ReactNode;

@@ -1,20 +1,17 @@
 import { FormEvent, Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
 import { BsPlus } from 'react-icons/bs';
-import { Button, EmptyMessage, ShrinkMotionBlock, TextInput, TodoItem } from '../components';
-import { addTodo, getTodos } from '../supabase/todos';
+import { Button, ShrinkMotionBlock, TextInput, TodoList, TodoListLoader } from '../components';
+import { addTodo } from '../supabase';
 import { useLoading } from '../hooks';
-import useToastStore from '../store/useToastStore';
-import queryKey from '../constants/queryKey';
-import { toastData } from '../constants/toast';
+import { useToastStore } from '../store';
+import { queryKey, toastData } from '../constants';
 
 const TodoReminderPage = () => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
-
-	const { data: todoList } = useSuspenseQuery({ queryKey: queryKey.TODOS, queryFn: getTodos });
 
 	const [value, setValue] = useState('');
 	const { addToast } = useToastStore();
@@ -68,16 +65,8 @@ const TodoReminderPage = () => {
 				</ShrinkMotionBlock>
 			</Form>
 
-			<Suspense fallback={Loading}>
-				{todoList.length === 0 ? (
-					<EmptyMessage emoji={'🔄'}>Add New Reminder</EmptyMessage>
-				) : (
-					<TodoList>
-						{todoList.map((todo, idx) => (
-							<TodoItem key={todo.id} todo={todo} order={idx} />
-						))}
-					</TodoList>
-				)}
+			<Suspense fallback={<TodoListLoader />}>
+				<TodoList />
 			</Suspense>
 		</Container>
 	);
@@ -106,14 +95,6 @@ const AddTodoButton = styled(Button)`
 	color: var(--white);
 	background-color: var(--black);
 	border-radius: var(--radius-xs);
-`;
-
-const TodoList = styled.ul`
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-	margin-top: 8px;
-	padding: calc(var(--padding-container-mobile) * 1) 0 calc(var(--padding-container-mobile) * 3);
 `;
 
 export default TodoReminderPage;

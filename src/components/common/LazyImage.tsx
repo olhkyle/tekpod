@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useIsImageLoaded } from '../../hooks';
-import { PLACEHOLDER_IMAGE_URL } from '../../constants/recipes';
+import { PLACEHOLDER_IMAGE_URL } from '../../constants';
 
 interface LazyImageProps {
 	src: string;

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
-import useToastStore from '../../store/useToastStore';
+import { useToastStore } from '../../store';
 import { useToastUnsubscribe } from '../../hooks';
 
 const Toast = () => {

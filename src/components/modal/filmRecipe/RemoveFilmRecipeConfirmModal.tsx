@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { RestricedRecipeWithImage } from '../../../supabase/schema';
+import { ModalDataType } from '..';
 import { ModalLayout, LoadingSpinner, Button } from '../..';
-import useRemoveRecipeMutation from '../../../hooks/mutations/useRemoveFilmRecipeMutation';
-import { ModalDataType } from '../modalType';
+import { RestricedRecipeWithImage } from '../../../supabase/schema';
+import { useRemoveFilmRecipeMutation } from '../../../hooks';
 
 interface RemoveFilmRecipeConfirmModalProps {
 	id: string;
@@ -13,7 +13,7 @@ interface RemoveFilmRecipeConfirmModalProps {
 }
 
 const RemoveFilmRecipeConfirmModal = ({ id, type, data, onClose, onTopLevelModalClose }: RemoveFilmRecipeConfirmModalProps) => {
-	const { mutate: remove, isPending } = useRemoveRecipeMutation({ id: data?.id, handlers: { onClose, onTopLevelModalClose } });
+	const { mutate: remove, isPending } = useRemoveFilmRecipeMutation({ id: data?.id, handlers: { onClose, onTopLevelModalClose } });
 
 	const handleRecipeDelete = () => remove({ id: data?.id, path: data?.imgSrc.replace(/^.*recipe\//, '') });
 

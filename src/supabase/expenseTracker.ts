@@ -1,6 +1,6 @@
 import supabase from './service';
 import { ExpenseTracker } from './schema';
-import { currentYear } from '../utils/date';
+import { currentYear } from '../utils';
 
 /**
  *

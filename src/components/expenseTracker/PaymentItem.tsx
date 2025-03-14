@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
-import { ExpenseTracker } from '../../supabase/schema';
-import { monetizeWithSeparator } from '../../utils/money';
+import { ExpenseTracker } from '../../supabase';
+import { monetizeWithSeparator } from '../../utils';
 
 interface PaymentItemProps {
 	data: ExpenseTracker;

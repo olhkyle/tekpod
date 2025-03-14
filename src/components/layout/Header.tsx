@@ -1,8 +1,8 @@
 import { useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { IoIosArrowBack } from 'react-icons/io';
-import { routes } from '../../constants';
 import { GoBackButton, AddQuickDrawerMemoButton, Logo } from '..';
+import { routes } from '../../constants';
 
 const Header = () => {
 	const { pathname } = useLocation();

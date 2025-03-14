@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import useToastStore from '../store/useToastStore';
+import { useToastStore } from '../store';
 
 const useToastUnsubscribe = () => {
 	const { removeToast } = useToastStore();

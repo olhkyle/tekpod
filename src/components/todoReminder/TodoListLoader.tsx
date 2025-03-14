@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { SkeletonLoader } from '..';
 
-const DiaryContentLoader = () => {
+const TodoListLoader = () => {
 	return (
 		<Container>
 			{Array.from({ length: 3 }, (_, idx) => (
@@ -18,4 +18,4 @@ const Container = styled.div`
 	margin-top: 32px;
 `;
 
-export default DiaryContentLoader;
+export default TodoListLoader;

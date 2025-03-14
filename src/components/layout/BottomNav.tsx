@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
+import { useLocation } from 'react-router-dom';
 import { RiBook3Line, RiHome6Line, RiCamera3Line, RiUser3Line } from 'react-icons/ri';
 import { NavLink } from '.';
 import { useAuthQuery } from '../../hooks';
 import { routes } from '../../constants';
-import { useLocation } from 'react-router-dom';
 
 const BottomNav = () => {
 	const { data } = useAuthQuery();

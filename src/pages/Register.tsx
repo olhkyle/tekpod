@@ -4,15 +4,11 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { debounce } from 'es-toolkit';
-import supabase from '../supabase/service';
-import { registerSchema, RegisterSchema } from '../components/auth/schema';
-import { Button, LabelInput, AuthLogo } from '../components';
+import { useToastStore } from '../store';
+import { Button, LabelInput, AuthLogo, registerSchema, RegisterSchema, AuthLayout } from '../components';
 import { useFunnel, useLoading } from '../hooks';
-import { customPropReceiver, routes } from '../constants';
-import useToastStore from '../store/useToastStore';
-import { toastData } from '../constants/toast';
-import { addNewUser, isUserExist } from '../supabase/user';
-import AuthLayout from '../components/layout/AuthLayout';
+import { supabase, addNewUser, isUserExist } from '../supabase';
+import { customPropReceiver, routes, toastData } from '../constants';
 
 const TRIGGER_DEBOUNCED_DELAY = 200;
 

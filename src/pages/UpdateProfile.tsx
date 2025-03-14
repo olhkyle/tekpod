@@ -1,18 +1,14 @@
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import { Button, ShrinkMotionBlock } from '../components';
-import { format } from '../utils/date';
-import { useLoading } from '../hooks';
-import useToastStore from '../store/useToastStore';
-import useModalStore from '../store/useModalStore';
-import { MODAL_CONFIG } from '../components/modal/modalType';
-import supabase from '../supabase/service';
-import useUserStore from '../store/userStore';
-import { useQueryClient } from '@tanstack/react-query';
-import { toastData } from '../constants/toast';
-import { routes } from '../constants';
 import { Session } from '@supabase/supabase-js';
+import { useQueryClient } from '@tanstack/react-query';
+import { Button, ShrinkMotionBlock, MODAL_CONFIG } from '../components';
+import { supabase } from '../supabase';
+import { useLoading } from '../hooks';
+import { useToastStore, useModalStore, useUserStore } from '../store';
+import { format } from '../utils';
+import { toastData, routes } from '../constants';
 
 const UpdateProfile = () => {
 	const queryClient = useQueryClient();

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { LayoutLoadingSpinner } from './spinner';
+import { LayoutLoadingSpinner } from '.';
 
 const LoadLazy = (element: string) => {
 	const LazyComponent = lazy(() => import(`../../pages/${element}.tsx`));
