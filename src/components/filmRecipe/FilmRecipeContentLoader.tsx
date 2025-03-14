@@ -5,7 +5,7 @@ const FilmRecipeContentLoader = () => {
 	return (
 		<Container>
 			{Array.from({ length: 3 }, (_, idx) => (
-				<SkeletonLoader key={idx} theme={'light'} width={'60%'} height={'32px'} />
+				<SkeletonLoader key={idx} theme={'light'} width={'100%'} height={'32px'} />
 			))}
 		</Container>
 	);
