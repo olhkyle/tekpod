@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addDiary, type Diary } from '../../supabase';
-import { queryKey } from '../../constants';
+import { addDiary, type Diary } from '../../../supabase';
+import { queryKey } from '../../../constants';
 
 const add = (data: Diary) => (oldData: Diary[]) => {
 	return [...oldData, data];

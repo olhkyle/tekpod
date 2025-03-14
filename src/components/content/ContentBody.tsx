@@ -17,7 +17,7 @@ const ContentBody = () => {
 
 	const handleEditContentModalClick = () =>
 		setModal({
-			Component: MODAL_CONFIG.DIARY.EDIT?.Component,
+			Component: MODAL_CONFIG.DIARY.EDIT.Component,
 			props: { type: MODAL_CONFIG.DIARY.EDIT.type, data },
 		});
 

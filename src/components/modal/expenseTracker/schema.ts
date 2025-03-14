@@ -4,14 +4,23 @@ import { today } from '../../../utils';
 
 type AddPaymentFormSchema = z.infer<typeof addPaymentFormSchema>;
 
-// z.enum() 대신 z.union()과 z.literal() 사용
-const paymentMethodSchema = z.union([
-	z.literal(paymentData.paymentMethod[0]), // '카드'
-	z.literal(paymentData.paymentMethod[1]), // '현금'
-]);
+const paymentMethodSchema = z.enum(paymentData.paymentMethod, {
+	errorMap: () => {
+		return { message: 'Please select a valid payment method ' };
+	},
+});
 
-const bankSchema = z.enum(paymentData.banks);
-const priceUnitSchema = z.enum(paymentData.priceUnits);
+const bankSchema = z.enum(paymentData.banks, {
+	errorMap: () => {
+		return { message: 'Please select the bank ' };
+	},
+});
+
+const priceUnitSchema = z.enum(paymentData.priceUnits, {
+	errorMap: () => {
+		return { message: 'Please select the price unit ' };
+	},
+});
 
 const addPaymentFormSchema = z.object({
 	place: z

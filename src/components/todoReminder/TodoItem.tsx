@@ -1,77 +1,58 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { useQueryClient } from '@tanstack/react-query';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RiCloseFill } from 'react-icons/ri';
 import { RiInformation2Line } from 'react-icons/ri';
-import { MODAL_CONFIG, Button, Checkbox, TextInput } from '..';
 import { todoItemSchema, TodoItemSchema } from '.';
-import { type Todo, editTodoContent, removeTodo, updatedTodoCompleted } from '../../supabase';
-import { useDrag, useLoading } from '../../hooks';
-import { useToastStore, useModalStore } from '../../store';
-import { toastData, queryKey } from '../../constants';
+import { MODAL_CONFIG, Button, Checkbox, TextInput, SkeletonLoader, LoadingSpinner } from '..';
+import { type Todo } from '../../supabase';
+import { useDrag, useEditTodoItemContentMutation, useRemoveTodoItemMutation, useUpdateTodoItemCompletedMutation } from '../../hooks';
+import { useModalStore } from '../../store';
 import { today } from '../../utils';
 
 interface TodoProps {
+	id: string;
 	todo: Todo;
-	order: number;
+	isContentEditing: boolean;
+	isDragging: boolean;
+	onEditingIdChange: (isEditing: boolean) => void;
+	onDraggingIdChange: (isDragging: boolean) => void;
 }
 
-const TodoItem = ({ todo, order }: TodoProps) => {
-	const queryClient = useQueryClient();
-	const { control, setFocus, handleSubmit } = useForm<TodoItemSchema>({
+// TODO: when individual TodoItem starts to drag, stop the other dragged TodoItem to drag
+// TODO: web-socket connection in need
+
+const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, onDraggingIdChange }: TodoProps) => {
+	const {
+		register,
+		formState: { errors },
+		setFocus,
+		handleSubmit,
+	} = useForm<TodoItemSchema>({
 		resolver: zodResolver(todoItemSchema),
 		defaultValues: { content: todo?.content },
 	});
 
 	const [isCompleted, setIsCompleted] = useState(todo?.completed);
-	const [isContentEditing, setIsContentEditing] = useState(false);
 
-	const { addToast } = useToastStore();
-	const { startTransition, Loading, isLoading } = useLoading();
+	const { mutate: editContent, isPending: isEditContentPending } = useEditTodoItemContentMutation(() => onEditingIdChange(false));
+	const { mutate: updateTodoCompleted } = useUpdateTodoItemCompletedMutation();
+	const { mutate: removeTodo, isPending: isRemovePending } = useRemoveTodoItemMutation();
+
 	const { setModal } = useModalStore();
-
 	const {
 		dragX,
 		dragContainerRef,
 		handlers: { handleTouchStart, handleTouchMove, handleTouchEnd },
 	} = useDrag();
 
-	// TODO:
 	useEffect(() => {
-		if (isContentEditing) {
+		if (!isDragging && isContentEditing) {
 			setFocus('content');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isContentEditing]);
-
-	// TextInput 바깥 클릭 시 TextInput에서 Label로 다시 바뀌도록 변경
-	// TODO: web-socket 연결로 reminder 만들기
-
-	const handleTodoIsCompleted = async (completed: boolean) => {
-		try {
-			await startTransition(updatedTodoCompleted({ id: todo.id, completed, updated_at: today }));
-			addToast(toastData.TODO_REMINDER.EDIT.SUCCESS);
-		} catch (e) {
-			console.error(e);
-			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
-		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
-		}
-	};
-
-	const handleRemoveTodo = async () => {
-		try {
-			await startTransition(removeTodo({ id: todo.id }));
-			addToast(toastData.TODO_REMINDER.REMOVE.SUCCESS);
-		} catch (e) {
-			console.error(e);
-			addToast(toastData.TODO_REMINDER.REMOVE.ERROR);
-		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
-		}
-	};
 
 	const handleTodoItemEditModal = () => {
 		setModal({
@@ -83,68 +64,75 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 		});
 	};
 
-	// TODO: 깜빡임 현상 해결
-	const onSubmit = async (formData: TodoItemSchema) => {
-		try {
-			const { error } = await editTodoContent({ id: todo?.id, content: formData.content });
+	const handleUpdateTodoCompleted = (completed: boolean) => {
+		updateTodoCompleted({ id: todo.id, completed, updated_at: today });
+	};
 
-			if (error) {
-				throw new Error(error.message);
-			}
+	const handleRemoveTodo = () => {
+		removeTodo({ id: todo.id });
+	};
 
-			setIsContentEditing(false);
-			addToast(toastData.TODO_REMINDER.EDIT.SUCCESS);
-
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
-		} catch (e) {
-			console.error(e);
-			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
-		}
+	const onSubmit = ({ content }: TodoItemSchema) => {
+		editContent({ id: todo?.id, content });
 	};
 
 	return (
 		<Container ref={dragContainerRef}>
-			<DeleteBackground onClick={handleRemoveTodo}>{isLoading ? Loading : <RiCloseFill size="24" color="white" />}</DeleteBackground>
-			<TodoContent dragX={dragX} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+			<DeleteBackground onClick={handleRemoveTodo}>
+				{isRemovePending ? <LoadingSpinner /> : <RiCloseFill size="24" color="white" />}
+			</DeleteBackground>
+			<TodoContent
+				dragX={dragX}
+				onTouchStart={e => {
+					if (!isContentEditing) {
+						handleTouchStart(e);
+						onEditingIdChange(false);
+					}
+				}}
+				onTouchMove={handleTouchMove}
+				onTouchEnd={handleTouchEnd}>
 				<Flex>
-					<Checkbox id={order} checked={isCompleted} onCheckedChange={setIsCompleted} onServerTodoCompletedChange={handleTodoIsCompleted} />
+					<Checkbox
+						id={id}
+						checked={isCompleted}
+						onCheckedChange={setIsCompleted}
+						onServerTodoCompletedChange={handleUpdateTodoCompleted}
+					/>
 					<ContentBoundary>
-						{isContentEditing ? (
-							<ContentEditingForm onSubmit={handleSubmit(onSubmit)}>
-								<Controller
-									name="content"
-									control={control}
-									render={({ field: { name, value, onChange, onBlur }, fieldState: { error } }) => (
-										<TextInput errorMessage={error?.message}>
-											<TextInput.ControlledTextField
+						{isEditContentPending ? (
+							<SkeletonLoader theme="light" width={'100%'} height={'50px'} />
+						) : (
+							<>
+								{isContentEditing ? (
+									<ContentEditingForm onSubmit={handleSubmit(onSubmit)}>
+										<TextInput errorMessage={errors?.content?.message}>
+											<TextInput.TextField
 												id="todoItem_content"
-												name={name}
-												value={value}
+												{...register('content')}
 												placeholder="Change content"
 												variant="md"
-												onChange={onChange}
-												onBlur={onBlur}
 												onKeyDown={e => {
 													if (e.key === 'Escape') {
-														setIsContentEditing(false);
+														onEditingIdChange(false);
 													}
 												}}
 											/>
 										</TextInput>
-									)}
-								/>
-								<ContentEditingInfoButton type="button" onClick={handleTodoItemEditModal}>
-									<RiInformation2Line size="22" color="var(--grey600)" />
-								</ContentEditingInfoButton>
-								<TodoItemContentSubmitButton type="submit">Submit</TodoItemContentSubmitButton>
-							</ContentEditingForm>
-						) : (
-							<Label
-								onClick={() => {
-									setIsContentEditing(!isContentEditing);
-								}}>
-								{todo.content}
-							</Label>
+										<ContentEditingInfoButton type="button" onClick={handleTodoItemEditModal}>
+											<RiInformation2Line size="22" color="var(--grey600)" />
+										</ContentEditingInfoButton>
+										<TodoItemContentSubmitButton type="submit">Submit</TodoItemContentSubmitButton>
+									</ContentEditingForm>
+								) : (
+									<Label
+										onClick={() => {
+											onEditingIdChange(true);
+											onDraggingIdChange(false);
+										}}>
+										{todo.content}
+									</Label>
+								)}
+							</>
 						)}
 					</ContentBoundary>
 				</Flex>

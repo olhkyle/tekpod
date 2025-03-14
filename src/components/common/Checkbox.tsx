@@ -3,10 +3,10 @@ import styled from '@emotion/styled';
 import { debounce } from 'es-toolkit';
 
 interface CheckboxProps {
-	id: number;
+	id: string;
 	checked: boolean;
 	onCheckedChange: Dispatch<SetStateAction<boolean>>;
-	onServerTodoCompletedChange?: (completed: boolean) => Promise<void>;
+	onServerTodoCompletedChange?: (completed: boolean) => void;
 }
 
 const Checkbox = ({ id, checked, onCheckedChange: onClientCheckedChange, onServerTodoCompletedChange, ...props }: CheckboxProps) => {

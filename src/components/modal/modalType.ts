@@ -10,7 +10,8 @@ import {
 	TodoItemEditModal,
 } from '.';
 
-type ModalDataType = 'diary' | 'filmRecipe' | 'financialLedger' | 'user' | 'todoReminder';
+type ModalDataType = 'diary' | 'film_recipe' | 'financial_ledger' | 'user' | 'todo_reminder';
+type ModalAction = 'ADD' | 'READ' | 'EDIT' | 'REMOVE' | 'RESET_PASSWORD' | 'PROFILE' | string; // TODO: string & NonNullable<unknown>
 
 type ModalConfigItem = {
 	type: ModalDataType;
@@ -18,32 +19,17 @@ type ModalConfigItem = {
 };
 
 type ModalConfig = {
-	FINANCIAL_LEDGER: {
-		ADD: ModalConfigItem;
-	};
-	FILM_RECIPE: {
-		READ: ModalConfigItem;
-		ADD: ModalConfigItem;
-		REMOVE: ModalConfigItem;
-	};
-	DIARY: {
-		EDIT: ModalConfigItem;
-	};
-	USER: {
-		RESET_PASSWORD: ModalConfigItem;
-		PROFILE: ModalConfigItem;
-	};
-	TODO_REMINDER: {
-		EDIT: ModalConfigItem;
+	[DATA_TYPE in Uppercase<ModalDataType>]: {
+		[ACTION in ModalAction]: ModalConfigItem;
 	};
 };
 
 const modalType = {
-	FINANCIAL_LEDGER: 'financialLedger',
-	FILM_RECIPE: 'filmRecipe',
+	FINANCIAL_LEDGER: 'financial_ledger',
+	FILM_RECIPE: 'film_recipe',
 	DIARY: 'diary',
 	USER: 'user',
-	TODO_REMINDER: 'todoReminder',
+	TODO_REMINDER: 'todo_reminder',
 } as const;
 
 const MODAL_CONFIG: ModalConfig = {

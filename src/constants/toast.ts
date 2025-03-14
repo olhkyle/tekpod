@@ -30,6 +30,7 @@ const toastData = {
 		},
 		EDIT: {
 			SUCCESS: { status: 'success', message: `Change todo ${FIXED_SUCCESS_PHRASE}` },
+			WARN: { status: 'warn', message: `Not Edited at all` },
 			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} changing todo` },
 		},
 		REMOVE: {
