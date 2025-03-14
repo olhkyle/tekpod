@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useQueryClient } from '@tanstack/react-query';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RiCloseFill } from 'react-icons/ri';
 import { RiInformation2Line } from 'react-icons/ri';
-import { MODAL_CONFIG, Button, Checkbox, TextInput } from '..';
 import { todoItemSchema, TodoItemSchema } from '.';
+import { MODAL_CONFIG, Button, Checkbox, TextInput } from '..';
 import { type Todo, editTodoContent, removeTodo, updatedTodoCompleted } from '../../supabase';
 import { useDrag, useLoading } from '../../hooks';
 import { useToastStore, useModalStore } from '../../store';
@@ -14,19 +14,28 @@ import { toastData, queryKey } from '../../constants';
 import { today } from '../../utils';
 
 interface TodoProps {
+	id: string;
 	todo: Todo;
-	order: number;
+	isContentEditing: boolean;
+	isDragging: boolean;
+	onEditingIdChange: (isEditing: boolean) => void;
+	onDraggingIdChange: (isDragging: boolean) => void;
 }
 
-const TodoItem = ({ todo, order }: TodoProps) => {
+// TODO: when individual TodoItem starts to drag, stop the other dragged TodoItem to drag
+const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, onDraggingIdChange }: TodoProps) => {
 	const queryClient = useQueryClient();
-	const { control, setFocus, handleSubmit } = useForm<TodoItemSchema>({
+	const {
+		register,
+		formState: { errors },
+		setFocus,
+		handleSubmit,
+	} = useForm<TodoItemSchema>({
 		resolver: zodResolver(todoItemSchema),
 		defaultValues: { content: todo?.content },
 	});
 
 	const [isCompleted, setIsCompleted] = useState(todo?.completed);
-	const [isContentEditing, setIsContentEditing] = useState(false);
 
 	const { addToast } = useToastStore();
 	const { startTransition, Loading, isLoading } = useLoading();
@@ -38,15 +47,13 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 		handlers: { handleTouchStart, handleTouchMove, handleTouchEnd },
 	} = useDrag();
 
-	// TODO:
 	useEffect(() => {
-		if (isContentEditing) {
+		if (!isDragging && isContentEditing) {
 			setFocus('content');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isContentEditing]);
 
-	// TextInput 바깥 클릭 시 TextInput에서 Label로 다시 바뀌도록 변경
 	// TODO: web-socket 연결로 reminder 만들기
 
 	const handleTodoIsCompleted = async (completed: boolean) => {
@@ -92,7 +99,7 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 				throw new Error(error.message);
 			}
 
-			setIsContentEditing(false);
+			onEditingIdChange(false);
 			addToast(toastData.TODO_REMINDER.EDIT.SUCCESS);
 
 			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
@@ -105,34 +112,34 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 	return (
 		<Container ref={dragContainerRef}>
 			<DeleteBackground onClick={handleRemoveTodo}>{isLoading ? Loading : <RiCloseFill size="24" color="white" />}</DeleteBackground>
-			<TodoContent dragX={dragX} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+			<TodoContent
+				dragX={dragX}
+				onTouchStart={e => {
+					if (!isContentEditing) {
+						handleTouchStart(e);
+						onEditingIdChange(false);
+					}
+				}}
+				onTouchMove={handleTouchMove}
+				onTouchEnd={handleTouchEnd}>
 				<Flex>
-					<Checkbox id={order} checked={isCompleted} onCheckedChange={setIsCompleted} onServerTodoCompletedChange={handleTodoIsCompleted} />
+					<Checkbox id={id} checked={isCompleted} onCheckedChange={setIsCompleted} onServerTodoCompletedChange={handleTodoIsCompleted} />
 					<ContentBoundary>
 						{isContentEditing ? (
 							<ContentEditingForm onSubmit={handleSubmit(onSubmit)}>
-								<Controller
-									name="content"
-									control={control}
-									render={({ field: { name, value, onChange, onBlur }, fieldState: { error } }) => (
-										<TextInput errorMessage={error?.message}>
-											<TextInput.ControlledTextField
-												id="todoItem_content"
-												name={name}
-												value={value}
-												placeholder="Change content"
-												variant="md"
-												onChange={onChange}
-												onBlur={onBlur}
-												onKeyDown={e => {
-													if (e.key === 'Escape') {
-														setIsContentEditing(false);
-													}
-												}}
-											/>
-										</TextInput>
-									)}
-								/>
+								<TextInput errorMessage={errors?.content?.message}>
+									<TextInput.TextField
+										id="todoItem_content"
+										{...register('content')}
+										placeholder="Change content"
+										variant="md"
+										onKeyDown={e => {
+											if (e.key === 'Escape') {
+												onEditingIdChange(false);
+											}
+										}}
+									/>
+								</TextInput>
 								<ContentEditingInfoButton type="button" onClick={handleTodoItemEditModal}>
 									<RiInformation2Line size="22" color="var(--grey600)" />
 								</ContentEditingInfoButton>
@@ -141,7 +148,8 @@ const TodoItem = ({ todo, order }: TodoProps) => {
 						) : (
 							<Label
 								onClick={() => {
-									setIsContentEditing(!isContentEditing);
+									onEditingIdChange(true);
+									onDraggingIdChange(false);
 								}}>
 								{todo.content}
 							</Label>

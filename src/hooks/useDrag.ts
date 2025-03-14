@@ -15,7 +15,6 @@ const useDrag = () => {
 		},
 	});
 
-	// TODO: 리팩토링 필요
 	const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
 		setDragStartX(event.touches[0].clientX);
 		dragRef.current = event.touches[0].clientX;
