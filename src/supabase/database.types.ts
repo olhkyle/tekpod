@@ -144,7 +144,7 @@ export interface Database {
 					created_at: Date;
 					updated_at: Date;
 					notified: boolean;
-					reminder_time: Date;
+					reminder_time: Date | null;
 					tags: string[] | null;
 				};
 				Insert: {
