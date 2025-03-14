@@ -12,7 +12,7 @@ interface TodoItemEditModal {
 	data: Todo;
 }
 
-const TodoItemEditModal = ({ id, type, onClose, data }: TodoItemEditModal) => {
+const TodoItemEditModal = ({ id, type, onClose, data: { content, tags, reminder_time } }: TodoItemEditModal) => {
 	const {
 		register,
 		control,
@@ -22,7 +22,11 @@ const TodoItemEditModal = ({ id, type, onClose, data }: TodoItemEditModal) => {
 		handleSubmit,
 	} = useForm<EditTodoItemFormSchema>({
 		resolver: zodResolver(editTodoItemFormSchema),
-		defaultValues: { content: data?.content, tags: data?.tags!.map((tag, idx) => ({ id: idx, tag })), reminderTime: data?.reminder_time },
+		defaultValues: {
+			content: content,
+			tags: tags?.length ? tags!.map((tag, idx) => ({ id: idx, tag })) : [],
+			reminderTime: reminder_time,
+		},
 	});
 
 	const onSubmit = () => {};
