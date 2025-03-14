@@ -37,7 +37,12 @@ const TagsInput = ({ inputId, tags, onChange }: TagsInputProps) => {
 	};
 
 	return (
-		<Container>
+		<Container
+			onClick={() => {
+				if (inputRef?.current) {
+					inputRef.current.focus();
+				}
+			}}>
 			{tags.map(({ id, tag }) => (
 				<Tag key={`${tag}_${id}`}>
 					<FiHash size="16" />
@@ -49,13 +54,13 @@ const TagsInput = ({ inputId, tags, onChange }: TagsInputProps) => {
 			))}
 			<Input
 				type="text"
+				ref={inputRef}
 				id={inputId}
 				value={value}
 				onChange={e => setValue(e.target.value)}
 				onKeyDown={e => {
-					if (e.nativeEvent.isComposing) return;
 					if (e.key !== 'Enter') return;
-
+					if (e.nativeEvent.isComposing) return;
 					e.preventDefault();
 
 					handleAddTag(value);
@@ -77,6 +82,7 @@ const Container = styled.div`
 	min-height: 65px;
 	border: 1px solid var(--greyOpacity200);
 	overflow-x: scroll;
+	cursor: pointer;
 	-webkit-overflow-scrolling: touch; // iOS 스크롤 지원
 	-ms-overflow-style: none; // IE and Edge
 	scrollbar-width: none; // Firefox
