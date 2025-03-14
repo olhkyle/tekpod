@@ -4,7 +4,7 @@ import { Session } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import type { ModalDataType } from '../modalType';
 import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLayout, Button } from '../..';
-import useToastStore from '../../../store/useToastStore';
+import { useToastStore } from '../../../store';
 import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../../hooks';
 import { FILM_RECIPE_FORM } from '../../../constants/recipes';
 import type { RestrictedRecipeForValidation } from '../../../supabase/schema';

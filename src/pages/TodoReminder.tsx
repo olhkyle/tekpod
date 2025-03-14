@@ -6,7 +6,7 @@ import { BsPlus } from 'react-icons/bs';
 import { Button, ShrinkMotionBlock, TextInput, TodoList, TodoListLoader } from '../components';
 import { addTodo } from '../supabase/todos';
 import { useLoading } from '../hooks';
-import useToastStore from '../store/useToastStore';
+import { useToastStore } from '../store';
 import queryKey from '../constants/queryKey';
 import { toastData } from '../constants/toast';
 

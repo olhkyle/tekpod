@@ -9,8 +9,7 @@ import { AuthLogo, Button, LabelInput } from '../components';
 import supabase from '../supabase/service';
 import { useLoading } from '../hooks';
 import { updatePasswordSchema, UpdatePasswordSchema } from '../components/auth/schema';
-import useToastStore from '../store/useToastStore';
-import useUserStore from '../store/userStore';
+import { useUserStore, useToastStore } from '../store';
 import { toastData } from '../constants/toast';
 import { routes } from '../constants';
 

@@ -12,7 +12,7 @@ import { useLoading } from '../../../hooks';
 import { updateDiary } from '../../../supabase/diary';
 import { routes } from '../../../constants';
 import { toastData } from '../../../constants/toast';
-import useToastStore from '../../../store/useToastStore';
+import { useToastStore } from '../../../store';
 import type { ModalDataType } from '../modalType';
 
 interface EditDiaryContentModalProps {

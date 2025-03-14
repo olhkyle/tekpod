@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import useModalStore, { QueryRefetch } from '../../store/useModalStore';
+import { useModalStore } from '../../store';
+import { QueryRefetch } from '../../store/useModalStore';
 import { EmptyMessage } from '../common';
 import { RestrictedRecipe } from '../../supabase/schema';
 import { MODAL_CONFIG } from '../modal/modalType';

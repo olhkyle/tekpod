@@ -8,11 +8,9 @@ import supabase from '../supabase/service';
 import { Button, LabelInput, AuthLogo } from '../components';
 import { loginSchema, type LoginSchema } from '../components/auth/schema';
 import { useLoading } from '../hooks';
-import useUserStore from '../store/userStore';
-import useToastStore from '../store/useToastStore';
+import { useUserStore, useToastStore, useModalStore } from '../store';
 import { routes } from '../constants';
 import { toastData } from '../constants/toast';
-import useModalStore from '../store/useModalStore';
 import { MODAL_CONFIG } from '../components/modal/modalType';
 import AuthLayout from '../components/layout/AuthLayout';
 

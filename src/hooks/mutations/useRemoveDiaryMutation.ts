@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { removeDiary } from '../../supabase/diary';
 import { Diary } from '../../supabase/schema';
+import { useToastStore } from '../../store';
 import queryKey from '../../constants/queryKey';
-import useToastStore from '../../store/useToastStore';
-import { useNavigate } from 'react-router-dom';
 import { routes } from '../../constants';
 import { toastData } from '../../constants/toast';
 

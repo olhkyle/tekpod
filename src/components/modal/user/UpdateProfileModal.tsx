@@ -3,17 +3,17 @@ import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { User } from '../../../supabase/schema';
 import supabase from '../../../supabase/service';
 import { Button, ModalLayout, LabelInput } from '../..';
 import { updateUser } from '../../../supabase/user';
 import { ModalDataType } from '../modalType';
 import { updateProfileSchema, UpdateProfileSchema } from './schema';
-import useToastStore from '../../../store/useToastStore';
+import { useToastStore } from '../../../store';
 import { toastData } from '../../../constants/toast';
 import { useLoading } from '../../../hooks';
 import { routes } from '../../../constants';
-import { useQueryClient } from '@tanstack/react-query';
 import queryKey from '../../../constants/queryKey';
 
 interface UpdateProfileModalProps {

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { getSingleDiary } from '../../supabase/diary';
 import { LoadingSpinner, Button } from '..';
 import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
-import useModalStore from '../../store/useModalStore';
+import { useModalStore } from '../../store';
 import queryKey from '../../constants/queryKey';
 import { MODAL_CONFIG } from '../modal/modalType';
 

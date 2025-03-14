@@ -7,7 +7,7 @@ import { BsCalendar2MonthFill } from 'react-icons/bs';
 import { Button, Select, ShrinkMotionBlock, TotalExpensePrice, TotalExpensePriceLoader } from '../components';
 import { months, currentMonth, currentYear } from '../utils/date';
 import { routes } from '../constants';
-import useModalStore from '../store/useModalStore';
+import { useModalStore } from '../store';
 import { MODAL_CONFIG } from '../components/modal/modalType';
 
 const linkGroup = [

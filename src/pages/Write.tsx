@@ -9,7 +9,7 @@ import { WriteSchema, writeSchema } from '../components/write/schema';
 import { addDiary } from '../supabase/diary';
 import { routes } from '../constants';
 import useLoading from '../hooks/useLoading';
-import useToastStore from '../store/useToastStore';
+import { useToastStore } from '../store';
 import { toastData } from '../constants/toast';
 
 const WritePage = () => {

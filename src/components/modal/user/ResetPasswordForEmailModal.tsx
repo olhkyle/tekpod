@@ -1,18 +1,18 @@
+import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthError } from '@supabase/supabase-js';
 import supabase from '../../../supabase/service';
 import { LabelInput } from '../../auth';
+import { useToastStore } from '../../../store';
 import { ModalLayout } from '..';
 import { ModalDataType } from '../modalType';
 import { Button } from '../../common';
 import { resetPasswordSchema, ResetPasswordSchema } from './schema';
 import { useLoading } from '../../../hooks';
-import useToastStore from '../../../store/useToastStore';
 import { routes } from '../../../constants';
 import { toastData } from '../../../constants/toast';
-import { useEffect } from 'react';
 import { isUserExist } from '../../../supabase/user';
 
 interface ResetPasswordForEmailModalProps {

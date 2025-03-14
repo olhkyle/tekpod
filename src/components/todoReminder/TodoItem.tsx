@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useQueryClient } from '@tanstack/react-query';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { RiCloseFill } from 'react-icons/ri';
 import { RiInformation2Line } from 'react-icons/ri';
 import type { Todo } from '../../supabase/schema';
 import { Button, Checkbox, TextInput } from '../common';
 import { useDrag, useLoading } from '../../hooks';
-import useToastStore from '../../store/useToastStore';
+import { useToastStore, useModalStore } from '../../store';
 import { editTodoContent, removeTodo, updatedTodoCompleted } from '../../supabase/todos';
 import queryKey from '../../constants/queryKey';
 import { toastData } from '../../constants/toast';
 import { today } from '../../utils/date';
-import useModalStore from '../../store/useModalStore';
 import { MODAL_CONFIG } from '../modal/modalType';
-import { Controller, useForm } from 'react-hook-form';
 import { todoItemSchema, TodoItemSchema } from './schema';
-import { zodResolver } from '@hookform/resolvers/zod';
 
 interface TodoProps {
 	todo: Todo;

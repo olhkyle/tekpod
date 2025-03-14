@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { Button, FilmRecipeContent } from '../components';
-import useModalStore from '../store/useModalStore';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getRecipes } from '../supabase/filmRecipe';
-import queryKey from '../constants/queryKey';
+import { Button, FilmRecipeContent } from '../components';
 import { MODAL_CONFIG } from '../components/modal/modalType';
+import { getRecipes } from '../supabase/filmRecipe';
+import { useModalStore } from '../store';
+import queryKey from '../constants/queryKey';
 
 const FilmRecipePage = () => {
 	const { data: recipes, refetch } = useSuspenseQuery({ queryKey: queryKey.FILM_RECIPE, queryFn: getRecipes });

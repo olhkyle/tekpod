@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { MdOutlineAdd } from 'react-icons/md';
-import useDrawerStore from '../../store/useDrawerStore';
+import { useDrawerStore } from '../../store';
 import { Button } from '../common';
 import { customPropReceiver } from '../../constants';
 

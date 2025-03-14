@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import supabase from '../supabase/service';
-import useUserStore from '../store/userStore';
+import { useUserStore } from '../store';
 import queryKey from '../constants/queryKey';
 
 const STALE_TIME = 1000 * 60 * 5; // 5 min
