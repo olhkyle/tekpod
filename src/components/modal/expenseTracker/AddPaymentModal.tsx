@@ -7,13 +7,11 @@ import ModalLayout from '../ModalLayout';
 import { ModalDataType } from '../modalType';
 import { AddPaymentFormSchema, addPaymentFormSchema } from './schema';
 import { Button, CustomSelect, DatePicker, TextInput } from '../../common';
-import { paymentData } from '../../../constants/expenseTracker';
+import { paymentData, toastData, queryKey } from '../../../constants';
 import { addPayment } from '../../../supabase/expenseTracker';
 import { useLoading } from '../../../hooks';
 import { useToastStore } from '../../../store';
-import queryKey from '../../../constants/queryKey';
 import { monetizeWithSeparator } from '../../../utils/money';
-import { toastData } from '../../../constants/toast';
 import { today } from '../../../utils/date';
 
 interface AddPaymentModalProps {

@@ -7,10 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, TagsInput, TextArea, TextInput } from '../components';
 import { WriteSchema, writeSchema } from '../components/write/schema';
 import { addDiary } from '../supabase/diary';
-import { routes } from '../constants';
+import { routes, toastData } from '../constants';
 import useLoading from '../hooks/useLoading';
 import { useToastStore } from '../store';
-import { toastData } from '../constants/toast';
 
 const WritePage = () => {
 	const queryClient = useQueryClient();

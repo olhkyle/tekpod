@@ -10,8 +10,7 @@ import { useToastStore, useModalStore } from '../store';
 import { MODAL_CONFIG } from '../components/modal/modalType';
 import supabase from '../supabase/service';
 import { useUserStore } from '../store';
-import { toastData } from '../constants/toast';
-import { routes } from '../constants';
+import { toastData, routes } from '../constants';
 
 const UpdateProfile = () => {
 	const queryClient = useQueryClient();

@@ -11,8 +11,7 @@ import { ModalDataType } from '../modalType';
 import { Button } from '../../common';
 import { resetPasswordSchema, ResetPasswordSchema } from './schema';
 import { useLoading } from '../../../hooks';
-import { routes } from '../../../constants';
-import { toastData } from '../../../constants/toast';
+import { routes, toastData } from '../../../constants';
 import { isUserExist } from '../../../supabase/user';
 
 interface ResetPasswordForEmailModalProps {

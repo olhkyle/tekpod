@@ -1,8 +1,7 @@
 import { ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { routes, customPropReceiver } from '../../constants';
-import { type Route } from '../../constants/routes';
+import { Link, useLocation } from 'react-router-dom';
+import { routes, customPropReceiver, type Route } from '../../constants';
 
 interface NavLinkProps {
 	href: Route<typeof routes>;

@@ -10,8 +10,7 @@ import supabase from '../supabase/service';
 import { useLoading } from '../hooks';
 import { updatePasswordSchema, UpdatePasswordSchema } from '../components/auth/schema';
 import { useUserStore, useToastStore } from '../store';
-import { toastData } from '../constants/toast';
-import { routes } from '../constants';
+import { toastData, routes } from '../constants';
 
 const pageCss = {
 	container: css`

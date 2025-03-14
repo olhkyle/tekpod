@@ -6,9 +6,8 @@ import type { ModalDataType } from '../modalType';
 import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLayout, Button } from '../..';
 import { useToastStore } from '../../../store';
 import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../../hooks';
-import { FILM_RECIPE_FORM } from '../../../constants/recipes';
+import { FILM_RECIPE_FORM, toastData } from '../../../constants';
 import type { RestrictedRecipeForValidation } from '../../../supabase/schema';
-import { toastData } from '../../../constants/toast';
 import { today } from '../../../utils/date';
 
 interface AddFilmRecipeModalProps {

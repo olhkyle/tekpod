@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import queryKey from '../../constants/queryKey';
+import { queryKey } from '../../constants';
 import { getTodos } from '../../supabase/todos';
 import { EmptyMessage } from '../common';
 import TodoItem from './TodoItem';

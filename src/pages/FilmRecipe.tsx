@@ -4,7 +4,7 @@ import { Button, FilmRecipeContent } from '../components';
 import { MODAL_CONFIG } from '../components/modal/modalType';
 import { getRecipes } from '../supabase/filmRecipe';
 import { useModalStore } from '../store';
-import queryKey from '../constants/queryKey';
+import { queryKey } from '../constants';
 
 const FilmRecipePage = () => {
 	const { data: recipes, refetch } = useSuspenseQuery({ queryKey: queryKey.FILM_RECIPE, queryFn: getRecipes });

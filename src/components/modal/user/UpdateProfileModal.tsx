@@ -11,10 +11,8 @@ import { updateUser } from '../../../supabase/user';
 import { ModalDataType } from '../modalType';
 import { updateProfileSchema, UpdateProfileSchema } from './schema';
 import { useToastStore } from '../../../store';
-import { toastData } from '../../../constants/toast';
+import { toastData, routes, queryKey } from '../../../constants';
 import { useLoading } from '../../../hooks';
-import { routes } from '../../../constants';
-import queryKey from '../../../constants/queryKey';
 
 interface UpdateProfileModalProps {
 	id: string;

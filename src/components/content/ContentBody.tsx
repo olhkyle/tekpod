@@ -5,7 +5,7 @@ import { getSingleDiary } from '../../supabase/diary';
 import { LoadingSpinner, Button } from '..';
 import useRemoveDiaryMutation from '../../hooks/mutations/useRemoveDiaryMutation';
 import { useModalStore } from '../../store';
-import queryKey from '../../constants/queryKey';
+import { queryKey } from '../../constants';
 import { MODAL_CONFIG } from '../modal/modalType';
 
 const ContentBody = () => {

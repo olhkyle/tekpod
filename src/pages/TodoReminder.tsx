@@ -7,8 +7,7 @@ import { Button, ShrinkMotionBlock, TextInput, TodoList, TodoListLoader } from '
 import { addTodo } from '../supabase/todos';
 import { useLoading } from '../hooks';
 import { useToastStore } from '../store';
-import queryKey from '../constants/queryKey';
-import { toastData } from '../constants/toast';
+import { queryKey, toastData } from '../constants';
 
 const TodoReminderPage = () => {
 	const queryClient = useQueryClient();

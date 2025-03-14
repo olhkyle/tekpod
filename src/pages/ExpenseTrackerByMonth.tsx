@@ -1,10 +1,10 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
+import { useLocation } from 'react-router-dom';
 import { DatePicker, PaymentItemLoader, PaymentList, SegmentedControl, Select } from '../components';
 import { useModalStore } from '../store';
-import { useLocation } from 'react-router-dom';
 import { MODAL_CONFIG } from '../components/modal/modalType';
-import { priceUnit, PriceUnitType } from '../constants/expenseTracker';
+import { priceUnit, PriceUnitType } from '../constants';
 import { today } from '../utils/date';
 
 export type ExtendedPaymentMethodType = (typeof segmentedControlOptions)[number];

@@ -9,8 +9,7 @@ import { useToastStore } from '../store';
 import { registerSchema, RegisterSchema } from '../components/auth/schema';
 import { Button, LabelInput, AuthLogo } from '../components';
 import { useFunnel, useLoading } from '../hooks';
-import { customPropReceiver, routes } from '../constants';
-import { toastData } from '../constants/toast';
+import { customPropReceiver, routes, toastData } from '../constants';
 import { addNewUser, isUserExist } from '../supabase/user';
 import AuthLayout from '../components/layout/AuthLayout';
 

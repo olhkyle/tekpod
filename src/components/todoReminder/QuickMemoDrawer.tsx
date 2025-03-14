@@ -10,8 +10,7 @@ import { useDrawerStore, useToastStore } from '../../store';
 import { useLoading } from '../../hooks';
 import { addTodo } from '../../supabase/todos';
 import { currentKoreanTime } from '../../utils/date';
-import { toastData } from '../../constants/toast';
-import { routes } from '../../constants';
+import { toastData, routes } from '../../constants';
 
 const QuickMemoDrawer = () => {
 	const queryClient = useQueryClient();

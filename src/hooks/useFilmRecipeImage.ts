@@ -1,6 +1,6 @@
 import { ChangeEvent, useRef, useState } from 'react';
 import { useToastStore } from '../store';
-import { toastData } from '../constants/toast';
+import { toastData } from '../constants';
 
 const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT_IMAGE_SIZE: number; isEditing: boolean }) => {
 	const [imageDataUrl, setImageDataUrl] = useState<string>('');

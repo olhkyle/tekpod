@@ -5,11 +5,9 @@ import { getDiariesByPage, getDiariesPageInfo, PAGE_SIZE } from '../../supabase/
 import type { Diary } from '../../supabase/schema';
 import { LoadingSpinner } from '../layout';
 import { useInfinityScroll } from '../../hooks';
-import { routes } from '../../constants';
+import { routes, staleTime, queryKey } from '../../constants';
 import getCalculatedTotalPage from '../../utils/getCalculatedTotalPage';
 import { EmptyMessage } from '../common';
-import queryKey from '../../constants/queryKey';
-import { staleTime } from '../../constants/staleTime';
 
 const DiaryContent = () => {
 	const { data: pageInfo } = useSuspenseQuery({

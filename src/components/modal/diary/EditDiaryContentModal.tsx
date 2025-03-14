@@ -10,8 +10,7 @@ import { Button, TagsInput, TextArea, TextInput } from '../..';
 import { editContentFormSchema, EditContentFormSchema } from './schema';
 import { useLoading } from '../../../hooks';
 import { updateDiary } from '../../../supabase/diary';
-import { routes } from '../../../constants';
-import { toastData } from '../../../constants/toast';
+import { routes, toastData } from '../../../constants';
 import { useToastStore } from '../../../store';
 import type { ModalDataType } from '../modalType';
 

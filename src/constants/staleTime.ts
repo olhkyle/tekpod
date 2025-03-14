@@ -11,4 +11,4 @@ const staleTime = {
 	},
 };
 
-export { staleTime };
+export default staleTime;

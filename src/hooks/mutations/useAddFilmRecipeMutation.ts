@@ -3,7 +3,7 @@ import { addRecipe } from '../../supabase/filmRecipe';
 import { RestrictedRecipe } from '../../supabase/schema';
 import queryKey from '../../constants/queryKey';
 import { useToastStore } from '../../store';
-import { toastData } from '../../constants/toast';
+import { toastData } from '../../constants';
 
 interface UseAddFilmRecipeMutation {
 	handlers: {

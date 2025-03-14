@@ -3,12 +3,10 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { PaymentItem } from '.';
 import { EmptyMessage } from '../common';
-import queryKey from '../../constants/queryKey';
 import { getPaymentsByDate } from '../../supabase/expenseTracker';
 import { monetizeWithSeparator } from '../../utils/money';
-import { PriceUnitType } from '../../constants/expenseTracker';
+import { PriceUnitType, staleTime, queryKey } from '../../constants';
 import { ExtendedPaymentMethodType } from '../../pages/ExpenseTrackerByMonth';
-import { staleTime } from '../../constants/staleTime';
 
 interface PaymentListProps {
 	selectedDate: Date;

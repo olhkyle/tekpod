@@ -9,8 +9,7 @@ import { Button, LabelInput, AuthLogo } from '../components';
 import { loginSchema, type LoginSchema } from '../components/auth/schema';
 import { useLoading } from '../hooks';
 import { useUserStore, useToastStore, useModalStore } from '../store';
-import { routes } from '../constants';
-import { toastData } from '../constants/toast';
+import { routes, toastData } from '../constants';
 import { MODAL_CONFIG } from '../components/modal/modalType';
 import AuthLayout from '../components/layout/AuthLayout';
 
