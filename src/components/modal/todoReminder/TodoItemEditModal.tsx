@@ -1,13 +1,16 @@
+import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Controller, useForm } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ModalLayout, ModalDataType } from '..';
-import { Button, DatePicker, TagsInput, TextInput, editTodoItemFormSchema, EditTodoItemFormSchema } from '../..';
-import type { Todo } from '../../../supabase';
-import { today } from '../../../utils';
 import { isEqual } from 'es-toolkit';
+import { ModalLayout, ModalDataType } from '..';
+import { Button, DatePicker, TagsInput, TextInput, editTodoItemFormSchema, EditTodoItemFormSchema, LoadingSpinner } from '../..';
+import { editTodoDetail, type Todo } from '../../../supabase';
+import { format, today } from '../../../utils';
 import { useToastStore } from '../../../store';
-import { toastData } from '../../../constants';
+import { useLoading, useRemoveTodoItemMutation } from '../../../hooks';
+import { queryKey, toastData } from '../../../constants';
 
 interface TodoItemEditModal {
 	id: string;
@@ -16,40 +19,74 @@ interface TodoItemEditModal {
 	data: Todo;
 }
 
-const TodoItemEditModal = ({ id, type, onClose, data: { content, tags, reminder_time } }: TodoItemEditModal) => {
+const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, tags, reminder_time } }: TodoItemEditModal) => {
+	const queryClient = useQueryClient();
 	const {
 		register,
 		control,
 		watch,
 		setValue,
+		setFocus,
 		formState: { errors },
 		handleSubmit,
 	} = useForm<EditTodoItemFormSchema>({
 		resolver: zodResolver(editTodoItemFormSchema),
 		defaultValues: {
 			content: content,
-			tags: tags?.length ? tags!.map((tag, idx) => ({ id: idx, tag })) : [],
-			reminderTime: reminder_time ?? today,
+			tags: tags?.length ? tags?.map((tag, idx) => ({ id: idx, tag })) : [],
+			reminder_time: reminder_time ?? today,
 		},
 	});
 
+	const { mutate: removeTodo, isPending } = useRemoveTodoItemMutation(onClose);
+	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 
+	useEffect(() => {
+		setFocus('content');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const handleDeleteTodoItem = () => {
+		removeTodo({ id });
+	};
+
 	const onSubmit = async (formData: EditTodoItemFormSchema) => {
-		if (isEqual({ ...formData, tags: formData.tags.map(tag => tag) }, { content, tags, reminderTime: reminder_time ?? today })) {
+		if (
+			reminder_time
+				? isEqual(
+						{ content: formData.content, reminder_time: format(formData.reminder_time) },
+						{ content, reminder_time: format(reminder_time) },
+						// eslint-disable-next-line no-mixed-spaces-and-tabs
+				  )
+				: false
+		) {
 			addToast(toastData.TODO_REMINDER.EDIT.WARN);
 			return;
 		}
 
 		try {
-			await (() => {})();
+			await startTransition(
+				editTodoDetail({
+					...formData,
+					id,
+					tags: formData?.tags.length > 0 ? formData.tags.map(({ tag }) => tag) : [],
+					updated_at: new Date(),
+				}),
+			);
+
+			onClose();
+			addToast(toastData.TODO_REMINDER.EDIT.SUCCESS);
 		} catch (e) {
 			console.error(e);
+			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
+		} finally {
+			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
 		}
 	};
 
 	return (
-		<ModalLayout id={id} type={type} title={'Detail'} onClose={onClose}>
+		<ModalLayout id={modalId} type={type} title={'Detail'} onClose={onClose}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<TextInput errorMessage={errors?.content?.message}>
 					<TextInput.TextField id="todoItem_editModal_content" {...register('content')} placeholder="Change content" variant="lg" />
@@ -60,13 +97,15 @@ const TodoItemEditModal = ({ id, type, onClose, data: { content, tags, reminder_
 					render={({ field: { name, value, onChange } }) => <TagsInput inputId={name} tags={value} onChange={onChange} />}
 				/>
 				<DatePicker
-					selected={watch('reminderTime')}
-					setSelected={(date: Date) => setValue('reminderTime', date, { shouldValidate: true })}
-					error={errors['reminderTime']}
+					selected={watch('reminder_time')}
+					setSelected={(date: Date) => setValue('reminder_time', date, { shouldValidate: true })}
+					error={errors['reminder_time']}
 				/>
 				<ButtonGroup>
-					<DeleteButton type="button">Delete</DeleteButton>
-					<SubmitButton type="submit">Edit</SubmitButton>
+					<DeleteButton type="button" onClick={handleDeleteTodoItem}>
+						{isPending ? <LoadingSpinner /> : 'Delete'}
+					</DeleteButton>
+					<SubmitButton type="submit">{isLoading ? Loading : 'Edit'}</SubmitButton>
 				</ButtonGroup>
 			</Form>
 		</ModalLayout>
@@ -91,12 +130,16 @@ const DeleteButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	color: var(--white);
-	background-color: var(--grey300);
+	background-color: var(--grey400);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 
+	@media screen and (max-width: 640px) {
+		display: none;
+	}
+
 	&:hover {
-		background-color: var(--grey200);
+		background-color: var(--grey300);
 	}
 `;
 
