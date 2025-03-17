@@ -13,7 +13,7 @@ const remove =
 		return oldData.filter(item => item.id !== id);
 	};
 
-const useRemoveTodoItemMutation = () => {
+const useRemoveTodoItemMutation = (handler?: () => void) => {
 	const queryClient = useQueryClient();
 	const { addToast } = useToastStore();
 
@@ -41,6 +41,7 @@ const useRemoveTodoItemMutation = () => {
 		},
 		onSuccess() {
 			addToast(toastData.TODO_REMINDER.REMOVE.SUCCESS);
+			handler?.();
 		},
 		onSettled() {
 			return queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
