@@ -10,10 +10,15 @@ const getTodos = async (): Promise<Todo[]> => {
 		throw new Error(error.message);
 	}
 
-	return data;
+	return data.map(item => ({
+		...item,
+		created_at: new Date(item.created_at),
+		updated_at: new Date(item.updated_at),
+		reminder_time: item.reminder_time ? new Date(item.reminder_time) : null,
+	}));
 };
 
-const addTodo = async (data: Omit<Todo, 'id' | 'reminder_time' | 'notified' | 'tags'>) => {
+const addTodo = async (data: Omit<Todo, 'id' | 'reminder_time' | 'notified'>) => {
 	const { error: addTodoError } = await supabase.from(TABLE).insert(data).select();
 
 	if (addTodoError) {
@@ -21,15 +26,33 @@ const addTodo = async (data: Omit<Todo, 'id' | 'reminder_time' | 'notified' | 't
 	}
 };
 
-const editTodoContent = async ({ id, content }: { id: string; content: string }) => {
-	const { error } = await supabase.from(TABLE).update({ content }).eq('id', id);
+const editTodoContent = async ({ id, content, updated_at }: { id: string; content: string; updated_at: Date }) => {
+	const { error } = await supabase.from(TABLE).update({ content, updated_at }).eq('id', id);
 
 	if (error) {
 		throw new Error(error.message);
 	}
 };
 
-const editTodoDetail = async () => {};
+const editTodoDetail = async ({
+	id,
+	content,
+	tags,
+	reminder_time,
+	updated_at,
+}: {
+	id: string;
+	content: string;
+	tags: string[];
+	reminder_time: Date;
+	updated_at: Date;
+}) => {
+	const { error } = await supabase.from(TABLE).update({ content, tags, reminder_time, updated_at }).eq('id', id);
+
+	if (error) {
+		throw new Error(error.message);
+	}
+};
 
 const updatedTodoCompleted = async ({ id, completed, updated_at }: { id: string; completed: boolean; updated_at: Date }) => {
 	const { error: updateTodoCompletedError } = await supabase.from(TABLE).update({ completed, updated_at }).eq('id', id);
