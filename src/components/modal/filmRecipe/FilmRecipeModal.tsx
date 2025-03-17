@@ -10,7 +10,7 @@ import { useModalStore, useToastStore } from '../../../store';
 import { QueryRefetch } from '../../../store/useModalStore';
 import { useFilmRecipeImage, useLoading } from '../../../hooks';
 import { filmRecipeFieldData, FILM_RECIPE_FORM, PLACEHOLDER_IMAGE_URL, toastData, queryKey } from '../../../constants';
-import { validateTitle, today } from '../../../utils';
+import { validateTitle } from '../../../utils';
 
 interface FilmRecipeModalProps {
 	id: string;
@@ -68,7 +68,7 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 					type: imageUrl === data?.imgSrc && !currentRecipeImage ? 'sameImage' : 'updatedImage',
 					data: {
 						...currentFilmFeature,
-						updated_at: today,
+						updated_at: new Date(),
 						imgSrc: imageUrl === data?.imgSrc && !currentRecipeImage ? data?.imgSrc : '',
 						primary: isPrimary,
 					},

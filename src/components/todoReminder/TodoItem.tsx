@@ -9,7 +9,6 @@ import { MODAL_CONFIG, Button, Checkbox, TextInput, SkeletonLoader, LoadingSpinn
 import { type Todo } from '../../supabase';
 import { useDrag, useEditTodoItemContentMutation, useRemoveTodoItemMutation, useUpdateTodoItemCompletedMutation } from '../../hooks';
 import { useModalStore } from '../../store';
-import { today } from '../../utils';
 
 interface TodoProps {
 	id: string;
@@ -62,10 +61,12 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 				data: todo,
 			},
 		});
+
+		onEditingIdChange(false);
 	};
 
 	const handleUpdateTodoCompleted = (completed: boolean) => {
-		updateTodoCompleted({ id: todo.id, completed, updated_at: today });
+		updateTodoCompleted({ id: todo.id, completed, updated_at: new Date() });
 	};
 
 	const handleRemoveTodo = () => {
@@ -73,7 +74,7 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 	};
 
 	const onSubmit = ({ content }: TodoItemSchema) => {
-		editContent({ id: todo?.id, content });
+		editContent({ id: todo?.id, content, updated_at: new Date() });
 	};
 
 	return (

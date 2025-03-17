@@ -24,7 +24,7 @@ const TodoReminderPage = () => {
 			return addToast(toastData.TODO_REMINDER.CREATE.WARN);
 		}
 
-		const currentTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+		const currentTime = new Date();
 
 		try {
 			await startTransition(
@@ -34,6 +34,7 @@ const TodoReminderPage = () => {
 					content: value,
 					created_at: currentTime,
 					updated_at: currentTime,
+					tags: [],
 				}),
 			);
 

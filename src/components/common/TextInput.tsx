@@ -96,7 +96,7 @@ const Input = styled.input<{ name: string; variant: 'sm' | 'md' | 'lg' }>`
 		variant === 'lg'
 			? 'var(--padding-container-mobile)'
 			: variant === 'md'
-			? 'calc(var(--padding-container-mobile) * 0.75) calc(var(--padding-container-mobile) * 0.75)'
+			? 'calc(var(--padding-container-mobile) * 0.75)'
 			: 'calc(var(--padding-container-mobile) * 0.5)'};
 	width: 100%;
 	font-size: ${({ variant }) => (variant === 'lg' ? 'var(--fz-h5)' : variant === 'md' ? 'var(--fz-h7)' : 'var(--fz-p)')};

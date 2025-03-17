@@ -3,10 +3,16 @@ import { editTodoContent, Todo } from '../../../supabase';
 import { queryKey, toastData } from '../../../constants';
 import { useToastStore } from '../../../store';
 
+interface Variables {
+	id: string;
+	content: string;
+	updated_at: Date;
+}
+
 const edit =
-	({ id, content }: { id: string; content: string }) =>
+	({ id, content, updated_at }: Variables) =>
 	(oldData: Todo[]) => {
-		return oldData.map(item => (item.id === id ? { ...item, content } : item));
+		return oldData.map(item => (item.id === id ? { ...item, content, updated_at } : item));
 	};
 
 const useEditTodoItemContentMutation = (handler: () => void) => {
@@ -14,7 +20,7 @@ const useEditTodoItemContentMutation = (handler: () => void) => {
 	const { addToast } = useToastStore();
 
 	return useMutation({
-		async mutationFn(variables: { id: string; content: string }) {
+		async mutationFn(variables: Variables) {
 			await editTodoContent(variables);
 		},
 		async onMutate(variables) {

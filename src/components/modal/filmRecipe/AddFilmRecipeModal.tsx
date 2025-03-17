@@ -8,7 +8,6 @@ import { type RestrictedRecipeForValidation } from '../../../supabase/schema';
 import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../../hooks';
 import { useToastStore } from '../../../store';
 import { FILM_RECIPE_FORM, toastData } from '../../../constants';
-import { today } from '../../../utils';
 
 interface AddFilmRecipeModalProps {
 	id: string;
@@ -82,12 +81,14 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 		}
 
 		if (currentRecipeImage) {
+			const currentTime = new Date();
+
 			addFilmRecipe({
 				data: {
 					...currentFilmFeature,
 					user_id: session?.user?.id,
-					created_at: today,
-					updated_at: today,
+					created_at: currentTime,
+					updated_at: currentTime,
 				},
 				imageFile: currentRecipeImage,
 			});

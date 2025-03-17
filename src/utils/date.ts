@@ -1,7 +1,7 @@
 const today = new Date();
 const todayLocaleString = today.toLocaleString('en-US', { timeZone: 'Asia/Seoul' });
 
-const currentKoreanTime = new Date(today.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+const currentKoreanTimeWithLocaleString = new Date(todayLocaleString);
 
 const [currentYear, currentMonth, currentDate] = [today.getFullYear(), today.getMonth(), today.getDate()];
 
@@ -30,7 +30,7 @@ const getNextMonthFormatDate = (usageDate: Date) => {
 export {
 	today,
 	todayLocaleString,
-	currentKoreanTime,
+	currentKoreanTimeWithLocaleString,
 	currentYear,
 	currentMonth,
 	currentDate,
