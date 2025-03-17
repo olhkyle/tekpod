@@ -9,8 +9,7 @@ import { Button, Drawer, TextInput } from '..';
 import { useDrawerStore, useToastStore } from '../../store';
 import { useLoading } from '../../hooks';
 import { addTodo } from '../../supabase';
-import { currentKoreanTime } from '../../utils/date';
-import { toastData, routes } from '../../constants';
+import { toastData, routes, queryKey } from '../../constants';
 
 const QuickMemoDrawer = () => {
 	const queryClient = useQueryClient();
@@ -26,14 +25,17 @@ const QuickMemoDrawer = () => {
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: QuickMemoDrawerSchema) => {
+		const currentTime = new Date();
+
 		try {
 			await startTransition(
 				addTodo({
 					user_id: session?.user?.id,
 					completed: false,
 					content: data.memo,
-					created_at: currentKoreanTime,
-					updated_at: currentKoreanTime,
+					created_at: currentTime,
+					updated_at: currentTime,
+					tags: [],
 				}),
 			);
 
@@ -45,6 +47,8 @@ const QuickMemoDrawer = () => {
 		} catch (e) {
 			console.error(e);
 			addToast(toastData.TODO_REMINDER.CREATE.ERROR);
+		} finally {
+			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
 		}
 	};
 

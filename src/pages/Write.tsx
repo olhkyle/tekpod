@@ -26,7 +26,7 @@ const WritePage = () => {
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: WriteSchema) => {
-		const currentTime = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+		const currentTime = new Date();
 
 		try {
 			const { error } = await startTransition(

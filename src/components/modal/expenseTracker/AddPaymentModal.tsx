@@ -46,8 +46,10 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: AddPaymentFormSchema) => {
+		const currentTime = new Date();
+
 		try {
-			await startTransition(addPayment({ ...data, user_id: session?.user?.id, created_at: today, updated_at: today }));
+			await startTransition(addPayment({ ...data, user_id: session?.user?.id, created_at: currentTime, updated_at: currentTime }));
 			onClose();
 			addToast(toastData.EXPENSE_TRACKER.CREATE.SUCCESS);
 		} catch (e) {

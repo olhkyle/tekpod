@@ -166,7 +166,7 @@ export interface Database {
 					content?: string;
 					created_at?: Date;
 					updated_at: Date;
-					reminder_time?: Date;
+					reminder_time?: Date | null;
 					tags: string[] | null;
 				};
 				Delete: {
