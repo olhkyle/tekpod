@@ -10,7 +10,7 @@ import { queryKey } from '../../constants';
 const ContentBody = () => {
 	const { diaryId } = useParams();
 
-	const { data } = useSuspenseQuery({ queryKey: [...queryKey.DIARY, diaryId], queryFn: () => getSingleDiary(diaryId!) });
+	const { data } = useSuspenseQuery({ queryKey: [...queryKey.DIARY, diaryId], queryFn: () => getSingleDiary(diaryId as string) });
 	const { mutate: remove, isPending } = useRemoveDiaryMutation();
 
 	const { setModal } = useModalStore();
