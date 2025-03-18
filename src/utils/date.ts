@@ -20,6 +20,10 @@ const getDateFromString = (dateString: string): Date => {
 	return new Date(dateString);
 };
 
+const getNormalizedDateString = (date: Date) => {
+	return date.toISOString().split('T')[0];
+};
+
 const getNextMonthFormatDate = (usageDate: Date) => {
 	const _date = new Date(usageDate);
 	const [month, date] = [_date.getMonth(), _date.getDate()];
@@ -38,5 +42,6 @@ export {
 	format,
 	translateNumberIntoMonth,
 	getDateFromString,
+	getNormalizedDateString,
 	getNextMonthFormatDate,
 };
