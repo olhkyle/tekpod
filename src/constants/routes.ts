@@ -9,6 +9,7 @@ const routes = {
 	PROFILE: 'profile',
 	TODO_REMINDER: '/todo_reminder',
 	EXPENSE_TRACKER: '/expense',
+	EXPENSE_TRACKER_BY_MONTH: '/expense/daily',
 	UPDATE_PASSWORD: 'update-password',
 } as const;
 
