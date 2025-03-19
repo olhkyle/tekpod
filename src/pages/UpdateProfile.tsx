@@ -77,7 +77,7 @@ const UpdateProfile = () => {
 			</UserInfo>
 
 			<Bottom>
-				<ResetPasswordButton type="button" onClick={() => navigate(`/mypage/${routes.UPDATE_PASSWORD}`, { state: { email: user?.email } })}>
+				<ResetPasswordButton type="button" onClick={() => navigate(routes.UPDATE_PASSWORD, { state: { email: user?.email } })}>
 					Update Password
 				</ResetPasswordButton>
 				<LogoutButton type="button" onClick={handleLogout}>

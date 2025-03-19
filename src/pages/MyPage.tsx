@@ -12,7 +12,7 @@ const MyPage = () => {
 		<Container>
 			<UserInfo>
 				<User>✹ {userInfo?.user?.user_metadata?.nickname || userInfo?.user?.email?.split('@').at(0)} </User>
-				<EditButton type="button" onClick={() => navigate(`${routes.USER}/profile`, { state: { user: userInfo?.user } })}>
+				<EditButton type="button" onClick={() => navigate(routes.PROFILE, { state: { user: userInfo?.user } })}>
 					Edit
 				</EditButton>
 			</UserInfo>

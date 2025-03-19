@@ -76,11 +76,11 @@ const router = createBrowserRouter(
 							element: LoadLazy('MyPage'),
 						},
 						{
-							path: `${routes.PROFILE}`,
+							path: `profile`,
 							element: LoadLazy('UpdateProfile'),
 						},
 						{
-							path: `${routes.UPDATE_PASSWORD}`,
+							path: `update-password`,
 							element: LoadLazy('UpdatePassword'),
 						},
 					],

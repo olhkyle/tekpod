@@ -77,7 +77,7 @@ const Container = styled.div<{ isVisible: boolean; order: number }>`
 			transform: translate3d(0, 0, 0);
 		}
 		to {
-			transform: translateY(0, 100%, 0);
+			transform: translate3d(0, 100%, 0);
 		}
 	}
 `;

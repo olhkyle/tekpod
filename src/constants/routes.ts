@@ -6,11 +6,12 @@ const routes = {
 	DIARY: '/diary',
 	WRITE: '/write',
 	USER: '/mypage',
-	PROFILE: 'profile',
+	PROFILE: '/mypage/profile',
+	UPDATE_PASSWORD: '/mypage/update-password',
 	TODO_REMINDER: '/todo_reminder',
 	EXPENSE_TRACKER: '/expense',
 	EXPENSE_TRACKER_BY_MONTH: '/expense/daily',
-	UPDATE_PASSWORD: 'update-password',
+	EXPENSE_TRACKER_REPORT: '/expense/report',
 } as const;
 
 // eslint-disable-next-line @typescript-eslint/ban-types

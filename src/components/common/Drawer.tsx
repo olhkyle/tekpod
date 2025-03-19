@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { AnimationEvent, ReactNode, useState } from 'react';
 import styled from '@emotion/styled';
 import { MdOutlineAdd } from 'react-icons/md';
 import { Button, Portal } from '..';
@@ -11,22 +11,30 @@ import { customPropReceiver } from '../../constants';
 interface DrawerProps {
 	position: 'top' | 'bottom';
 	isOpen: boolean;
+	title: string | ReactNode;
 	open?: () => void;
 	close: () => void;
-	title: string | ReactNode;
-	toggle?: () => void;
 	children: ReactNode;
 }
 
 // TODO: GrabArea - touch event를 활용한 애니메이션 움직임
-const Drawer = ({ position, isOpen, close, title, children }: DrawerProps) => {
+const Drawer = ({ position, title, isOpen, close, children }: DrawerProps) => {
+	const [isClosing, setIsClosing] = useState(false);
+	const handleModalClose = () => setIsClosing(true);
+
+	const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
+		if (isClosing && e.target === e.currentTarget) {
+			close();
+		}
+	};
+
 	return (
 		<Portal>
-			<Container role="dialog" position={position} isOpen={isOpen} aria-label="dialog">
+			<Container role="dialog" position={position} isOpen={!isClosing} aria-label="dialog" onAnimationEnd={handleAnimationEnd}>
 				<Header>
 					<Title>{title}</Title>
 					<AdditionalActions isShown={position === 'top'}>
-						<Button type="button" onClick={close}>
+						<Button type="button" onClick={handleModalClose}>
 							<RotatableSvg size={24} color="var(--black)" $isActive={isOpen} />
 						</Button>
 					</AdditionalActions>
@@ -34,7 +42,7 @@ const Drawer = ({ position, isOpen, close, title, children }: DrawerProps) => {
 				<GrabArea isShown={position === 'bottom'} />
 				<Body>{children}</Body>
 			</Container>
-			<Overlay id="dialog-overlay" isOpen={isOpen} onClick={close} aria-label="dialog-overlay" />
+			<Overlay id="dialog-overlay" isOpen={isOpen} onClick={handleModalClose} aria-label="dialog-overlay" />
 		</Portal>
 	);
 };
