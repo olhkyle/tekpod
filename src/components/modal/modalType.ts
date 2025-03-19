@@ -10,7 +10,7 @@ import {
 	TodoItemEditModal,
 } from '.';
 
-type ModalDataType = 'diary' | 'film_recipe' | 'financial_ledger' | 'user' | 'todo_reminder';
+type ModalDataType = 'diary' | 'film_recipe' | 'expense_tracker' | 'user' | 'todo_reminder';
 type ModalAction = 'ADD' | 'READ' | 'EDIT' | 'REMOVE' | 'RESET_PASSWORD' | 'PROFILE' | string; // TODO: string & NonNullable<unknown>
 
 type ModalConfigItem = {
@@ -25,7 +25,7 @@ type ModalConfig = {
 };
 
 const modalType = {
-	FINANCIAL_LEDGER: 'financial_ledger',
+	EXPENSE_TRACKER: 'expense_tracker',
 	FILM_RECIPE: 'film_recipe',
 	DIARY: 'diary',
 	USER: 'user',
@@ -33,9 +33,9 @@ const modalType = {
 } as const;
 
 const MODAL_CONFIG: ModalConfig = {
-	FINANCIAL_LEDGER: {
+	EXPENSE_TRACKER: {
 		ADD: {
-			type: modalType.FINANCIAL_LEDGER,
+			type: modalType.EXPENSE_TRACKER,
 			Component: AddPaymentModal,
 		},
 	},

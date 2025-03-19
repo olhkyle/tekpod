@@ -36,9 +36,9 @@ const ExpenseTrackerPage = () => {
 
 	const handleAddPaymentModal = () => {
 		setModal({
-			Component: MODAL_CONFIG.FINANCIAL_LEDGER.ADD.Component,
+			Component: MODAL_CONFIG.EXPENSE_TRACKER.ADD.Component,
 			props: {
-				type: MODAL_CONFIG.FINANCIAL_LEDGER.ADD.type,
+				type: MODAL_CONFIG.EXPENSE_TRACKER.ADD.type,
 				data: null,
 			},
 		});
