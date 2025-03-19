@@ -6,7 +6,7 @@ import { BsFillCreditCardFill } from 'react-icons/bs';
 import { Button } from '../components';
 import { useLoading } from '../hooks';
 import { removePayment } from '../supabase';
-import { monetizeWithSeparator, format } from '../utils';
+import { monetizeWithSeparator, format, getNormalizedDateString } from '../utils';
 import { useToastStore } from '../store';
 import { routes, queryKey, toastData } from '../constants';
 
@@ -25,12 +25,12 @@ const ExpenseTrackerByMonthItemPage = () => {
 			await startTransition(removePayment({ id: payment.id }));
 
 			addToast(toastData.EXPENSE_TRACKER.REMOVE.SUCCESS);
-			navigate(routes.EXPENSE_TRACKER, { state: { currentDate } });
+			navigate(routes.EXPENSE_TRACKER_BY_MONTH, { state: { currentDate }, replace: true });
 		} catch (e) {
 			console.error(e);
 			addToast(toastData.EXPENSE_TRACKER.REMOVE.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: [...queryKey.EXPENSE_TRACKER, currentDate] });
+			queryClient.invalidateQueries({ queryKey: [...queryKey.EXPENSE_TRACKER, getNormalizedDateString(currentDate)] });
 		}
 	};
 
