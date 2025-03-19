@@ -47,8 +47,8 @@ const ExpenseTrackerPage = () => {
 		<section>
 			<TotalExpense>
 				<TotalExpenseContent>
-					<Flex direction={'row'} alignItems={'center'} gap="8px">
-						<div>💳 Total Expenses on</div>
+					<Flex direction={'row'} alignItems={'center'} gap={8}>
+						<h2>💳 Total Expenses</h2>
 						<Select
 							data={months.filter((_, idx) => idx <= currentMonth)}
 							placeholder="Select Month"
@@ -62,16 +62,16 @@ const ExpenseTrackerPage = () => {
 						<TotalExpensePrice currentMonthIndex={currentMonthIndex} />
 					</Suspense>
 				</TotalExpenseContent>
-				<Flex direction="row" alignItems="center" gap="0px">
+				<Flex direction={'row'} alignItems={'center'} gap={0}>
 					<AddNewExpenseButton type="button" onClick={handleAddPaymentModal}>
 						Add Expense
 					</AddNewExpenseButton>
-					<PersonalExpenseLink type="button" onClick={() => navigate(`${routes.EXPENSE_TRACKER}/report`)}>
+					<PersonalExpenseLink type="button" onClick={() => navigate(routes.EXPENSE_TRACKER_REPORT)}>
 						Expense Report
 					</PersonalExpenseLink>
 				</Flex>
 			</TotalExpense>
-			<Flex direction={'column'} alignItems={'flex-start'} gap="8px">
+			<Flex direction={'column'} alignItems={'flex-start'} gap={8}>
 				{linkGroup.map(({ to, icon, title }) => (
 					<Link to={to} key={title}>
 						<StyledShrinkMotionBlock>
@@ -100,12 +100,12 @@ const TotalExpenseContent = styled.div`
 const Flex = styled.div<{
 	direction: 'row' | 'column';
 	alignItems: 'flex-start' | 'center' | 'flex-end';
-	gap: `${number}px`;
+	gap: number;
 }>`
 	display: flex;
 	flex-direction: ${({ direction }) => direction};
 	align-items: ${({ alignItems }) => alignItems};
-	gap: ${({ gap }) => gap};
+	gap: ${({ gap }) => `${gap}px`};
 
 	a {
 		width: 100%;
