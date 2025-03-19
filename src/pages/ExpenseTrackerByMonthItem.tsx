@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
-import { Button } from '../components';
+import { Button, Switch } from '../components';
 import { useLoading } from '../hooks';
 import { removePayment } from '../supabase';
 import { monetizeWithSeparator, format, getNormalizedDateString } from '../utils';
@@ -34,6 +34,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 		}
 	};
 
+	// TODO: edit Switch to toggle Upcoming Next Month with `payment.isFixed`
 	return (
 		<Container>
 			<MainContent>
@@ -53,20 +54,25 @@ const ExpenseTrackerByMonthItemPage = () => {
 			</MainContent>
 
 			<Detail>
-				<div>
+				<DetailGroup>
 					<dt>Place</dt>
 					<dd>{payment.place}</dd>
-				</div>
-				<div>
+				</DetailGroup>
+				<DetailGroup>
 					<dt>Bank</dt>
 					<dd>{payment.bank}</dd>
-				</div>
-				<div>
+				</DetailGroup>
+				<DetailGroup>
 					<dt>Transaction Date</dt>
 					<dd>{format(currentDate)}</dd>
-				</div>
+				</DetailGroup>
+				<DetailGroup>
+					<dt>Make Upcoming Next Month</dt>
+					<dd>
+						<Switch initialValue={payment.isFixed} />
+					</dd>
+				</DetailGroup>
 			</Detail>
-			{payment.isFixed && <FixedCost>🗓️ Fixed Cost</FixedCost>}
 
 			<DeleteButton type="button" onClick={handlePaymentDelete}>
 				{isLoading ? Loading : 'Delete'}
@@ -118,12 +124,12 @@ const Detail = styled.dl`
 	flex-direction: column;
 	gap: 16px;
 	padding: calc(var(--padding-container-mobile) * 3) 0;
+`;
 
-	div {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
+const DetailGroup = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 
 	dt {
 		font-weight: var(--fw-medium);
@@ -134,16 +140,6 @@ const Detail = styled.dl`
 		font-size: var(--fz-h7);
 		font-weight: var(--fw-semibold);
 	}
-`;
-
-const FixedCost = styled.p`
-	padding: var(--padding-container-mobile);
-	font-size: var(--fz-p);
-	font-weight: var(--fw-bold);
-	color: var(--grey600);
-	background-color: var(--grey100);
-	border-radius: var(--radius-l);
-	text-align: center;
 `;
 
 const DeleteButton = styled(Button)`
