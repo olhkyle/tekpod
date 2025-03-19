@@ -46,7 +46,7 @@ const ResetPasswordForEmailModal = ({ id, type, onClose }: ResetPasswordForEmail
 
 			const { error: resetPasswordForEmailError } = await startTransition(
 				supabase.auth.resetPasswordForEmail(formData.email, {
-					redirectTo: `${window.location.origin}/mypage/${routes.UPDATE_PASSWORD}?email=${encodeURIComponent(formData.email)}`,
+					redirectTo: `${window.location.origin}${routes.UPDATE_PASSWORD}?email=${encodeURIComponent(formData.email)}`,
 				}),
 			);
 

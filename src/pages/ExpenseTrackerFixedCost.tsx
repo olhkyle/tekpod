@@ -43,7 +43,7 @@ const ExpenseTrackerFixedCost = () => {
 					<Payment
 						key={payment.id}
 						onClick={() =>
-							navigate(`${routes.EXPENSE_TRACKER}/daily/${payment.id}`, { state: { payment, currentDate: payment.usage_date } })
+							navigate(`${routes.EXPENSE_TRACKER_BY_MONTH}/${payment.id}`, { state: { payment, currentDate: payment.usage_date } })
 						}>
 						<Date>
 							<Passed isPassed={getDateFromString(payment.usage_date).getDate() < today.getDate()} />
