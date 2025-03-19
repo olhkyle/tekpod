@@ -67,6 +67,7 @@ const SelectTrigger = styled(Button)`
 	padding: calc(var(--padding-container-mobile) * 0.5) calc(var(--padding-container-mobile) * 0.75);
 	background-color: var(--grey50);
 	font-size: var(--fz-p);
+	font-weight: var(--fw-medium);
 	border: 1px solid var(--grey100);
 	border-radius: var(--radius-s);
 
