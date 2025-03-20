@@ -42,7 +42,9 @@ const calculatePriceUnits = (data: ExpenseTracker[]) => {
 	return priceUnits;
 };
 
-const getPaymentsByDate = async (date: Date): Promise<{ data: ExpenseTracker[]; totalPrice: number | Record<string, number> }> => {
+type PaymentsByDate = { expense: ExpenseTracker[]; totalPrice: number | Record<string, number> };
+
+const getPaymentsByDate = async (date: Date): Promise<PaymentsByDate> => {
 	const startOfDay = new Date(date);
 	startOfDay.setHours(0, 0, 0, 0);
 
@@ -59,7 +61,7 @@ const getPaymentsByDate = async (date: Date): Promise<{ data: ExpenseTracker[]; 
 		throw new Error(error.message);
 	}
 
-	return { data, totalPrice: data.length ? calculatePriceUnits(data) : ZERO_PRICE };
+	return { expense: data, totalPrice: data.length ? calculatePriceUnits(data) : ZERO_PRICE };
 };
 
 const getAllPaymentsByMonth = async (month: number) => {
@@ -100,8 +102,17 @@ const addPayment = async (data: Omit<ExpenseTracker, 'id' | 'isFixed'>) => {
 	}
 };
 
+const togglePaymentIsFixed = async ({ id, isFixed }: { id: string; isFixed: boolean }) => {
+	const { error } = await supabase.from(TABLE).update({ isFixed }).eq('id', id);
+
+	if (error) {
+		throw new Error(error.message);
+	}
+};
+
 const removePayment = async ({ id }: { id: string }) => {
 	await supabase.from(TABLE).delete().eq('id', id);
 };
 
-export { getPaymentsByDate, getAllPaymentsByMonth, getFixedCostPaymentsByMonth, addPayment, removePayment };
+export type { PaymentsByDate };
+export { getPaymentsByDate, getAllPaymentsByMonth, getFixedCostPaymentsByMonth, addPayment, togglePaymentIsFixed, removePayment };

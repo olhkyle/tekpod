@@ -2,15 +2,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addRecipe, RestrictedRecipe } from '../../../supabase';
 import { useToastStore } from '../../../store';
 import { toastData, queryKey } from '../../../constants';
+import { Handlers } from '../../../types';
 
 interface UseAddFilmRecipeMutation {
-	handlers: {
-		onClose: () => void;
-	};
+	handlers: Handlers;
 }
 
+type Variables = { data: Omit<RestrictedRecipe, 'id' | 'imgSrc'>; imageFile: File };
+
 const add =
-	({ data }: { data: Omit<RestrictedRecipe, 'id' | 'imgSrc'> }) =>
+	({ data }: Variables) =>
 	(oldData: RestrictedRecipe[]) => {
 		return [...oldData, data];
 	};
@@ -18,18 +19,19 @@ const add =
 const useAddFilmRecipeMutation = ({ handlers: { onClose } }: UseAddFilmRecipeMutation) => {
 	const queryClient = useQueryClient();
 	const { addToast } = useToastStore();
+	const QUERY_KEY = queryKey.FILM_RECIPE;
 
-	const { mutate, isPending } = useMutation({
-		async mutationFn(variables: { data: Omit<RestrictedRecipe, 'id' | 'imgSrc'>; imageFile: File }) {
+	return useMutation({
+		async mutationFn(variables: Variables) {
 			await addRecipe(variables);
 		},
 		async onMutate(variables) {
-			await queryClient.cancelQueries({ queryKey: queryKey.FILM_RECIPE });
+			await queryClient.cancelQueries({ queryKey: QUERY_KEY });
 
-			const previousData = queryClient.getQueryData(queryKey.FILM_RECIPE);
+			const previousData = queryClient.getQueryData(QUERY_KEY);
 
 			if (previousData) {
-				queryClient.setQueryData(queryKey.FILM_RECIPE, add(variables));
+				queryClient.setQueryData(QUERY_KEY, add(variables));
 			}
 
 			return { previousData };
@@ -43,16 +45,14 @@ const useAddFilmRecipeMutation = ({ handlers: { onClose } }: UseAddFilmRecipeMut
 		onError(error, _, context) {
 			if (context?.previousData) {
 				console.error(error);
-				queryClient.setQueryData(queryKey.FILM_RECIPE, context?.previousData);
+				queryClient.setQueryData(QUERY_KEY, context?.previousData);
 				addToast(toastData.FILM_RECIPE.CREATE.SUBMIT.ERROR);
 			}
 		},
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey: queryKey.FILM_RECIPE });
+			return queryClient.invalidateQueries({ queryKey: QUERY_KEY });
 		},
 	});
-
-	return { mutate, isPending };
 };
 
 export default useAddFilmRecipeMutation;

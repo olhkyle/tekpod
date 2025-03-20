@@ -3,9 +3,7 @@ import { useToastStore } from '../../../store';
 import { removeTodo, Todo } from '../../../supabase';
 import { queryKey, toastData } from '../../../constants';
 
-interface Variables {
-	id: string;
-}
+type Variables = Pick<Todo, 'id'>;
 
 const remove =
 	({ id }: Variables) =>
@@ -16,17 +14,18 @@ const remove =
 const useRemoveTodoItemMutation = (handler?: () => void) => {
 	const queryClient = useQueryClient();
 	const { addToast } = useToastStore();
+	const QUERY_KEY = queryKey.TODOS;
 
 	return useMutation({
 		async mutationFn(variables: Variables) {
 			await removeTodo(variables);
 		},
 		async onMutate(variables) {
-			await queryClient.cancelQueries({ queryKey: queryKey.TODOS });
-			const previousData = queryClient.getQueryData(queryKey.TODOS);
+			await queryClient.cancelQueries({ queryKey: QUERY_KEY });
+			const previousData = queryClient.getQueryData(QUERY_KEY);
 
 			if (previousData) {
-				queryClient.setQueryData(queryKey.TODOS, remove(variables));
+				queryClient.setQueryData(QUERY_KEY, remove(variables));
 			}
 
 			return { previousData };
@@ -36,7 +35,7 @@ const useRemoveTodoItemMutation = (handler?: () => void) => {
 				console.error(error);
 
 				addToast(toastData.TODO_REMINDER.REMOVE.ERROR);
-				queryClient.setQueryData(queryKey.TODOS, context?.previousData);
+				queryClient.setQueryData(QUERY_KEY, context?.previousData);
 			}
 		},
 		onSuccess() {
@@ -44,7 +43,7 @@ const useRemoveTodoItemMutation = (handler?: () => void) => {
 			handler?.();
 		},
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
+			return queryClient.invalidateQueries({ queryKey: QUERY_KEY });
 		},
 	});
 };

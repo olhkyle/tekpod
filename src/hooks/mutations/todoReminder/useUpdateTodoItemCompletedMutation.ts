@@ -3,11 +3,7 @@ import { Todo, updatedTodoCompleted } from '../../../supabase';
 import { queryKey, toastData } from '../../../constants';
 import { useToastStore } from '../../../store';
 
-interface Variables {
-	id: string;
-	completed: boolean;
-	updated_at: Date;
-}
+type Variables = Pick<Todo, 'id' | 'completed' | 'updated_at'>;
 
 const update =
 	({ id, completed, updated_at }: Variables) =>
@@ -18,17 +14,18 @@ const update =
 const useUpdateTodoItemCompletedMutation = () => {
 	const queryClient = useQueryClient();
 	const { addToast } = useToastStore();
+	const QUERY_KEY = queryKey.TODOS;
 
 	return useMutation({
 		async mutationFn(variables: Variables) {
 			await updatedTodoCompleted(variables);
 		},
 		async onMutate(variables) {
-			await queryClient.cancelQueries({ queryKey: queryKey.TODOS });
-			const previousData = queryClient.getQueryData(queryKey.TODOS);
+			await queryClient.cancelQueries({ queryKey: QUERY_KEY });
+			const previousData = queryClient.getQueryData(QUERY_KEY);
 
 			if (previousData) {
-				queryClient.setQueryData(queryKey.TODOS, update(variables));
+				queryClient.setQueryData(QUERY_KEY, update(variables));
 			}
 
 			return { previousData };
@@ -38,14 +35,14 @@ const useUpdateTodoItemCompletedMutation = () => {
 				console.error(error);
 
 				addToast(toastData.TODO_REMINDER.EDIT.ERROR);
-				queryClient.setQueryData(queryKey.TODOS, context?.previousData);
+				queryClient.setQueryData(QUERY_KEY, context?.previousData);
 			}
 		},
 		onSuccess() {
 			addToast(toastData.TODO_REMINDER.EDIT.SUCCESS);
 		},
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
+			return queryClient.invalidateQueries({ queryKey: QUERY_KEY });
 		},
 	});
 };

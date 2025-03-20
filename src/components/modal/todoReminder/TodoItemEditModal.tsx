@@ -7,7 +7,7 @@ import { isEqual } from 'es-toolkit';
 import { ModalLayout, ModalDataType } from '..';
 import { Button, DatePicker, TagsInput, TextInput, editTodoItemFormSchema, EditTodoItemFormSchema, LoadingSpinner } from '../..';
 import { editTodoDetail, type Todo } from '../../../supabase';
-import { format, today } from '../../../utils';
+import { formatByKoreanTime, today } from '../../../utils';
 import { useToastStore } from '../../../store';
 import { useLoading, useRemoveTodoItemMutation } from '../../../hooks';
 import { queryKey, toastData } from '../../../constants';
@@ -55,8 +55,8 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 		if (
 			reminder_time
 				? isEqual(
-						{ content: formData.content, reminder_time: format(formData.reminder_time) },
-						{ content, reminder_time: format(reminder_time) },
+						{ content: formData.content, reminder_time: formatByKoreanTime(formData.reminder_time) },
+						{ content, reminder_time: formatByKoreanTime(reminder_time) },
 						// eslint-disable-next-line no-mixed-spaces-and-tabs
 				  )
 				: false

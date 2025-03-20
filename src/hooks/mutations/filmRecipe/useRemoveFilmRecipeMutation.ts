@@ -2,30 +2,28 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { removeRecipe, RestrictedRecipe } from '../../../supabase';
 import { toastData, queryKey } from '../../../constants';
 import { useToastStore } from '../../../store';
+import { Handlers } from '../../../types';
 
 interface UseRemoveFilmRecipeMutation {
 	id: string;
-	handlers: {
-		onClose: () => void;
-		onTopLevelModalClose: () => void;
-	};
+	handlers: Handlers;
 }
 
+type Variables = Pick<RestrictedRecipe, 'id'> & { path: string };
+
 const remove =
-	({ id }: { id: string }) =>
+	({ id }: Variables) =>
 	(oldData: RestrictedRecipe[]) => {
 		return oldData.filter(item => item.id !== id);
 	};
 
-const useRemoveRecipeMutation = ({ id, handlers }: UseRemoveFilmRecipeMutation) => {
+const useRemoveRecipeMutation = ({ id, handlers: { onClose, onTopLevelModalClose } }: UseRemoveFilmRecipeMutation) => {
 	const queryClient = useQueryClient();
 	const { addToast } = useToastStore();
-	const { onClose, onTopLevelModalClose } = handlers;
-
 	const QUERY_KEY = [...queryKey.FILM_RECIPE, id];
 
-	const { mutate, isPending } = useMutation({
-		async mutationFn(variables: { id: string; path: string }) {
+	return useMutation({
+		async mutationFn(variables: Variables) {
 			await removeRecipe(variables);
 		},
 		async onMutate(variables) {
@@ -59,8 +57,6 @@ const useRemoveRecipeMutation = ({ id, handlers }: UseRemoveFilmRecipeMutation) 
 			return queryClient.invalidateQueries({ queryKey: queryKey.FILM_RECIPE });
 		},
 	});
-
-	return { mutate, isPending };
 };
 
 export default useRemoveRecipeMutation;

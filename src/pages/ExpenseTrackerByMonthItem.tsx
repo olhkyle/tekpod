@@ -4,9 +4,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
 import { Button, Switch } from '../components';
-import { useLoading } from '../hooks';
+import { useLoading, useTogglePaymentIsFixedMutation } from '../hooks';
 import { removePayment } from '../supabase';
-import { monetizeWithSeparator, format, getNormalizedDateString } from '../utils';
+import { monetizeWithSeparator, formatByKoreanTime } from '../utils';
 import { useToastStore } from '../store';
 import { routes, queryKey, toastData } from '../constants';
 
@@ -16,9 +16,14 @@ const ExpenseTrackerByMonthItemPage = () => {
 		state: { payment, currentDate },
 	} = useLocation();
 
+	const navigate = useNavigate();
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
-	const navigate = useNavigate();
+
+	const { mutate: toggleIsFixed } = useTogglePaymentIsFixedMutation({
+		currentDate,
+		handlers: { goBack: () => navigate(routes.EXPENSE_TRACKER_BY_MONTH, { replace: true, state: { currentDate: new Date(currentDate) } }) },
+	});
 
 	const handlePaymentDelete = async () => {
 		try {
@@ -30,11 +35,10 @@ const ExpenseTrackerByMonthItemPage = () => {
 			console.error(e);
 			addToast(toastData.EXPENSE_TRACKER.REMOVE.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: [...queryKey.EXPENSE_TRACKER, getNormalizedDateString(currentDate)] });
+			queryClient.invalidateQueries({ queryKey: [...queryKey.EXPENSE_TRACKER, formatByKoreanTime(currentDate)] });
 		}
 	};
 
-	// TODO: edit Switch to toggle Upcoming Next Month with `payment.isFixed`
 	return (
 		<Container>
 			<MainContent>
@@ -64,12 +68,15 @@ const ExpenseTrackerByMonthItemPage = () => {
 				</DetailGroup>
 				<DetailGroup>
 					<dt>Transaction Date</dt>
-					<dd>{format(currentDate)}</dd>
+					<dd>{formatByKoreanTime(currentDate)}</dd>
 				</DetailGroup>
 				<DetailGroup>
 					<dt>Make Upcoming Next Month</dt>
 					<dd>
-						<Switch initialValue={payment.isFixed} />
+						<Switch
+							initialValue={payment.isFixed}
+							toggle={(newState: boolean) => toggleIsFixed({ id: payment.id, isFixed: newState, updated_at: new Date() })}
+						/>
 					</dd>
 				</DetailGroup>
 			</Detail>

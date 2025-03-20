@@ -7,7 +7,7 @@ import { Button, ShrinkMotionBlock, MODAL_CONFIG } from '../components';
 import { supabase } from '../supabase';
 import { useLoading } from '../hooks';
 import { useToastStore, useModalStore, useUserStore } from '../store';
-import { format } from '../utils';
+import { formatByKoreanTime } from '../utils';
 import { toastData, routes } from '../constants';
 
 const UpdateProfile = () => {
@@ -72,7 +72,7 @@ const UpdateProfile = () => {
 				</Email>
 				<JoinedDate>
 					<Label>Join in</Label>
-					<dd>{format(new Date(user?.created_at))}</dd>
+					<dd>{formatByKoreanTime(user?.created_at)}</dd>
 				</JoinedDate>
 			</UserInfo>
 
