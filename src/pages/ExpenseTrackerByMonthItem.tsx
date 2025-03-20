@@ -39,7 +39,6 @@ const ExpenseTrackerByMonthItemPage = () => {
 		}
 	};
 
-	// TODO: edit Switch to toggle Upcoming Next Month with `payment.isFixed`
 	return (
 		<Container>
 			<MainContent>
