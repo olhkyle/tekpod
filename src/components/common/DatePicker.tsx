@@ -7,7 +7,7 @@ import { ko } from 'date-fns/locale';
 import { Button } from '..';
 import { useClickOutside } from '../../hooks';
 import { customPropReceiver } from '../../constants';
-import { format } from '../../utils';
+import { formatByKoreanTime } from '../../utils';
 
 interface DatePickerProps {
 	selected: Date | undefined;
@@ -28,7 +28,7 @@ const DatePicker = ({ selected, setSelected, error, disabled, isFloated = false,
 				<IconBackground>
 					<IoMdCalendar size="24" color="var(--grey800)" />
 				</IconBackground>
-				<span>{selected ? format(selected) : 'Select Date'}</span>
+				<span>{selected ? formatByKoreanTime(selected) : 'Select Date'}</span>
 			</TriggerButton>
 			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
 			<DayPickerWrapper isFloated={isFloated}>

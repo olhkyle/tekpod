@@ -1,3 +1,4 @@
+import { format, toZonedTime } from 'date-fns-tz';
 const today = new Date();
 const todayLocaleString = today.toLocaleString('en-US', { timeZone: 'Asia/Seoul' });
 
@@ -7,11 +8,16 @@ const [currentYear, currentMonth, currentDate] = [today.getFullYear(), today.get
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
 
-const format = (targetDate: Date): string => {
-	const _date = new Date(targetDate);
-	const [year, month, date] = [_date.getFullYear(), _date.getMonth() + 1, _date.getDate()];
+const formatByKoreanTime = (targetDate: Date | string): string => {
+	// 현재 시간을 가져옵니다
+	const _date = typeof targetDate === 'string' ? new Date(targetDate) : targetDate;
 
-	return `${year + ''}.${(month + '').padStart(2, '0')}.${(date + '').padStart(2, '0')}`;
+	const koreaTimeZone = 'Asia/Seoul';
+	const koreaDate = toZonedTime(_date, koreaTimeZone);
+
+	const formattedDate = format(koreaDate, 'yyyy/MM/dd', { timeZone: koreaTimeZone });
+
+	return formattedDate;
 };
 
 const translateNumberIntoMonth = (month: number) => months[month]; // ['Jan', 'Feb', 'Mar'][number]
@@ -39,7 +45,7 @@ export {
 	currentMonth,
 	currentDate,
 	months,
-	format,
+	formatByKoreanTime,
 	translateNumberIntoMonth,
 	getDateFromString,
 	getNormalizedDateString,

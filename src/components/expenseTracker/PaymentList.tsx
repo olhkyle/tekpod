@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { EmptyMessage, PaymentItem } from '..';
 import { ExtendedPaymentMethodType } from '../../pages/ExpenseTrackerByMonth';
 import { getPaymentsByDate } from '../../supabase';
-import { monetizeWithSeparator } from '../../utils';
+import { formatByKoreanTime, monetizeWithSeparator } from '../../utils';
 import { PriceUnitType, staleTime, queryKey } from '../../constants';
 
 interface PaymentListProps {
@@ -14,19 +14,17 @@ interface PaymentListProps {
 }
 
 const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: PaymentListProps) => {
-	const normalizedDateString = selectedDate.toISOString().split('T')[0]; // prevent unnecessary fetch because of milliseconds difference because of changing ISO string itself (make regularize -'YYYY-MM-DD')
-
 	const {
-		data: { data, totalPrice },
+		data: { expense, totalPrice },
 	} = useSuspenseQuery({
-		queryKey: [...queryKey.EXPENSE_TRACKER, normalizedDateString],
+		queryKey: [...queryKey.EXPENSE_TRACKER, formatByKoreanTime(selectedDate)],
 		queryFn: () => getPaymentsByDate(selectedDate),
 		staleTime: staleTime.EXPENSE_TRACKER.BY_MONTH,
 	});
 
 	const navigate = useNavigate();
 
-	const filteredData = data.filter(
+	const filteredData = expense?.filter(
 		({ payment_method, price_unit }) =>
 			(currentPaymentMethod === 'All' || payment_method === currentPaymentMethod) && price_unit === currentPriceUnit,
 	);
