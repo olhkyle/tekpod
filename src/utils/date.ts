@@ -9,7 +9,6 @@ const [currentYear, currentMonth, currentDate] = [today.getFullYear(), today.get
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
 
 const formatByKoreanTime = (targetDate: Date | string): string => {
-	// 현재 시간을 가져옵니다
 	const _date = typeof targetDate === 'string' ? new Date(targetDate) : targetDate;
 
 	const koreaTimeZone = 'Asia/Seoul';
