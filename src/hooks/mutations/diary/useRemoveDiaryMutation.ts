@@ -4,29 +4,32 @@ import { removeDiary, Diary } from '../../../supabase';
 import { useToastStore } from '../../../store';
 import { toastData, routes, queryKey } from '../../../constants';
 
+type Variables = Pick<Diary, 'id'>;
+
 const remove =
-	({ id }: { id: string }) =>
+	({ id }: Variables) =>
 	(oldData: Diary[]) => {
 		return oldData.filter(item => item.id !== id);
 	};
 
-const useDeleteDiaryMutation = () => {
+const useRemoveDiaryMutation = () => {
 	const queryClient = useQueryClient();
-	const { addToast } = useToastStore();
 	const navigate = useNavigate();
+	const { addToast } = useToastStore();
+	const DIARY_QUERY_KEY = queryKey.DIARY;
 
-	const { mutate, isPending } = useMutation({
-		async mutationFn(variables: { id: string }) {
+	return useMutation({
+		async mutationFn(variables: Variables) {
 			await removeDiary(variables);
 		},
 		async onMutate(variables) {
 			// Cancel any outgoing refetch
 			// (so they don't overwrite our optimistic update)
-			await queryClient.cancelQueries({ queryKey: queryKey.DIARY });
-			const previousData = queryClient.getQueryData(queryKey.DIARY);
+			await queryClient.cancelQueries({ queryKey: DIARY_QUERY_KEY });
+			const previousData = queryClient.getQueryData(DIARY_QUERY_KEY);
 
 			if (previousData) {
-				queryClient.setQueryData(queryKey.DIARY, remove(variables));
+				queryClient.setQueryData(DIARY_QUERY_KEY, remove(variables));
 			}
 
 			return { previousData };
@@ -38,7 +41,7 @@ const useDeleteDiaryMutation = () => {
 				console.error(error);
 
 				addToast(toastData.DIARY.REMOVE.ERROR);
-				queryClient.setQueryData(queryKey.DIARY, context?.previousData);
+				queryClient.setQueryData(DIARY_QUERY_KEY, context?.previousData);
 			}
 		},
 		onSuccess() {
@@ -47,10 +50,9 @@ const useDeleteDiaryMutation = () => {
 		},
 		// Always refetch after error or success:
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey: [...queryKey.DIARY, ...queryKey.DIARY_BY_PAGE] });
+			return queryClient.invalidateQueries({ queryKey: [...DIARY_QUERY_KEY, ...queryKey.DIARY_BY_PAGE] });
 		},
 	});
-	return { mutate, isPending };
 };
 
-export default useDeleteDiaryMutation;
+export default useRemoveDiaryMutation;

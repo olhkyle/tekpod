@@ -1,13 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { editTodoContent, Todo } from '../../../supabase';
+import { editTodoContent, type Todo } from '../../../supabase';
 import { queryKey, toastData } from '../../../constants';
 import { useToastStore } from '../../../store';
 
-interface Variables {
-	id: string;
-	content: string;
-	updated_at: Date;
-}
+type Variables = Pick<Todo, 'id' | 'content' | 'updated_at'>;
 
 const edit =
 	({ id, content, updated_at }: Variables) =>
@@ -18,17 +14,18 @@ const edit =
 const useEditTodoItemContentMutation = (handler: () => void) => {
 	const queryClient = useQueryClient();
 	const { addToast } = useToastStore();
+	const QUERY_KEY = queryKey.TODOS;
 
 	return useMutation({
 		async mutationFn(variables: Variables) {
 			await editTodoContent(variables);
 		},
 		async onMutate(variables) {
-			await queryClient.cancelQueries({ queryKey: queryKey.TODOS });
-			const previousData = queryClient.getQueryData(queryKey.TODOS);
+			await queryClient.cancelQueries({ queryKey: QUERY_KEY });
+			const previousData = queryClient.getQueryData(QUERY_KEY);
 
 			if (previousData) {
-				queryClient.setQueryData(queryKey.TODOS, edit(variables));
+				queryClient.setQueryData(QUERY_KEY, edit(variables));
 			}
 
 			return { previousData };
@@ -38,7 +35,7 @@ const useEditTodoItemContentMutation = (handler: () => void) => {
 				console.error(error);
 
 				addToast(toastData.TODO_REMINDER.EDIT.ERROR);
-				queryClient.setQueryData(queryKey.TODOS, context?.previousData);
+				queryClient.setQueryData(QUERY_KEY, context?.previousData);
 			}
 		},
 		onSuccess() {
@@ -46,7 +43,7 @@ const useEditTodoItemContentMutation = (handler: () => void) => {
 			handler();
 		},
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
+			return queryClient.invalidateQueries({ queryKey: QUERY_KEY });
 		},
 	});
 };
