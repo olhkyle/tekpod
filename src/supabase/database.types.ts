@@ -186,7 +186,8 @@ export interface Database {
 					payment_method: string;
 					bank: string;
 					isFixed: boolean;
-					installmentPlanMonths: number | null;
+					installment_plan_months: number | null;
+					card_type: string;
 					usage_date: string;
 					created_at: string;
 					updated_at: string;
@@ -202,7 +203,8 @@ export interface Database {
 					payment_method: string;
 					bank?: string;
 					isFixed?: boolean;
-					installmentPlanMonths: number | null;
+					installment_plan_months: number | null;
+					card_type: string;
 					usage_date: string;
 					created_at: string;
 					updated_at: string;
@@ -218,7 +220,8 @@ export interface Database {
 					payment_method?: string;
 					bank?: string;
 					isFixed?: boolean;
-					installmentPlanMonths?: number | null;
+					installment_plan_months?: number | null;
+					card_type?: string;
 					usage_date?: string;
 					created_at?: string;
 					updated_at?: string;

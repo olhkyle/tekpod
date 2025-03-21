@@ -8,7 +8,7 @@ import { AddPaymentFormSchema, addPaymentFormSchema } from '.';
 import { Button, CustomSelect, DatePicker, TextInput } from '../..';
 import { addPayment } from '../../../supabase';
 import { useLoading } from '../../../hooks';
-import { paymentData, toastData, queryKey } from '../../../constants';
+import { paymentData, toastData, queryKey, installmentPlanMonths, cardType } from '../../../constants';
 import { useToastStore } from '../../../store';
 import { monetizeWithSeparator, today } from '../../../utils';
 
@@ -39,7 +39,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 		formState: { errors, touchedFields },
 	} = useForm<AddPaymentFormSchema>({
 		resolver: zodResolver(addPaymentFormSchema),
-		defaultValues: { usage_date: today, priceIntegerPart: '', priceDecimalPart: '' },
+		defaultValues: { usage_date: today, priceIntegerPart: '', priceDecimalPart: '', installment_plan_months: null },
 	});
 
 	const { startTransition, Loading, isLoading } = useLoading();
@@ -53,7 +53,8 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 				addPayment({
 					...data,
 					user_id: session?.user?.id,
-					installmentPlanMonths: null,
+					installment_plan_months: null, // TODO: update
+					card_type: 'debit', // payment_method가 cash 이면 'none'로
 					usage_date: data?.usage_date.toISOString(),
 					created_at: currentTime,
 					updated_at: currentTime,
@@ -93,19 +94,40 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 						error={errors['payment_method']}
 						onSelect={data => {
 							setValue('payment_method', data, { shouldValidate: true, shouldTouch: true });
-
-							if (data === 'Cash') {
-								setValue('bank', '해당없음', { shouldValidate: true });
-							}
 						}}
 					/>
+
+					{watch('payment_method') === 'Card' && (
+						<>
+							<CustomSelect
+								data={Object.values(cardType)}
+								target_id={'card_type'}
+								placeholder={'Select Card Type'}
+								currentValue={watch('card_type')}
+								isTriggered={!!touchedFields['card_type']}
+								error={errors['card_type']}
+								onSelect={data => setValue('card_type', data)}
+							/>
+							{watch('card_type') === 'credit' && (
+								<CustomSelect
+									data={installmentPlanMonths}
+									target_id={'installment_plan_months'}
+									placeholder={'Select Installment Month'}
+									currentValue={watch('installment_plan_months')}
+									isTriggered={!!touchedFields['installment_plan_months']}
+									error={errors['installment_plan_months']}
+									onSelect={data => setValue('installment_plan_months', data)}
+								/>
+							)}
+						</>
+					)}
 
 					<CustomSelect
 						data={paymentData.banks}
 						target_id={'bank'}
 						placeholder={'Select Bank'}
-						currentValue={watch('payment_method') === 'Cash' ? '해당없음' : watch('bank')}
-						isTriggered={watch('payment_method') === 'Cash' ? true : !!touchedFields['bank']!}
+						currentValue={watch('bank')}
+						isTriggered={!!touchedFields['bank']!}
 						error={errors['bank']}
 						onSelect={data =>
 							setValue('bank', data, {

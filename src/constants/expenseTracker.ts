@@ -1,6 +1,8 @@
 type PaymentDataType = (typeof paymentData)[keyof typeof paymentData][number];
 type PaymentMethodType = (typeof paymentData)['paymentMethod'][number];
 
+type InstallmentType = (typeof installmentPlanMonths)[number];
+
 type PriceUnitType = (typeof priceUnit)['unitType'][number];
 type PriceUnitSymbolType = (typeof priceUnit)['unitSymbol'][number];
 
@@ -10,6 +12,14 @@ const paymentData = {
 	paymentMethod: ['Card', 'Cash'] as const,
 	banks: ['신한', '하나', '국민', '우리', 'IBK기업', '농협', '카카오뱅크', '토스뱅크', '새마을', 'SC제일', '씨티', '해당없음'] as const,
 	priceUnits: ['WON', 'USD', 'GBP', 'EUR', 'JPY'],
+} as const;
+
+const installmentPlanMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 24, 36] as const;
+
+const cardType = {
+	신용: 'credit',
+	체크: 'debit',
+	미확인: 'unconfirmed',
 } as const;
 
 const priceUnit = {
@@ -37,5 +47,5 @@ const matchedPriceUnitWithSymbol = priceUnit.unitType.reduce((acc, curr, idx) =>
 	return acc;
 }, {} as MatchedPriceUnitWithSymbol);
 
-export type { PaymentDataType, PaymentMethodType, PriceUnitType, PriceUnitSymbolType, MatchedPriceUnitWithSymbol };
-export { paymentData, priceUnit, bankSvgs, matchedPriceUnitWithSymbol };
+export type { PaymentDataType, PaymentMethodType, InstallmentType, PriceUnitType, PriceUnitSymbolType, MatchedPriceUnitWithSymbol };
+export { paymentData, installmentPlanMonths, cardType, priceUnit, bankSvgs, matchedPriceUnitWithSymbol };
