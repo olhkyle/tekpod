@@ -81,7 +81,7 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 		}
 
 		if (currentRecipeImage) {
-			const currentTime = new Date();
+			const currentTime = new Date().toISOString();
 
 			addFilmRecipe({
 				data: {

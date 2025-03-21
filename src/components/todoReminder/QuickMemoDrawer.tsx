@@ -25,7 +25,7 @@ const QuickMemoDrawer = () => {
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: QuickMemoDrawerSchema) => {
-		const currentTime = new Date();
+		const currentTime = new Date().toISOString();
 
 		try {
 			await startTransition(

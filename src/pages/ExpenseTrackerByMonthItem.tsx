@@ -22,7 +22,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 
 	const { mutate: toggleIsFixed } = useTogglePaymentIsFixedMutation({
 		currentDate,
-		handlers: { goBack: () => navigate(routes.EXPENSE_TRACKER_BY_MONTH, { replace: true, state: { currentDate: new Date(currentDate) } }) },
+		handlers: { goBack: () => navigate(routes.EXPENSE_TRACKER_BY_MONTH, { replace: true, state: { currentDate } }) },
 	});
 
 	const handlePaymentDelete = async () => {
@@ -75,7 +75,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 					<dd>
 						<Switch
 							initialValue={payment.isFixed}
-							toggle={(newState: boolean) => toggleIsFixed({ id: payment.id, isFixed: newState, updated_at: new Date() })}
+							toggle={(newState: boolean) => toggleIsFixed({ id: payment.id, isFixed: newState, updated_at: new Date().toISOString() })}
 						/>
 					</dd>
 				</DetailGroup>

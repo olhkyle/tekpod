@@ -32,7 +32,7 @@ const ExpenseTrackerFixedCost = () => {
 			<Title>
 				<TotalPrice>
 					<span aria-label="total price to pay">Total Price to pay</span>
-					<p aria-label="total price">{monetizeWithSeparator(data.reduce((acc, curr) => acc + +curr.priceIntegerPart, 0) + '')}</p>
+					<p aria-label="total price">{monetizeWithSeparator(data.reduce((acc, curr) => acc + +curr.priceIntegerPart, 0))}</p>
 				</TotalPrice>
 				<CurrentMonth>{months[today.getMonth()]}</CurrentMonth>
 			</Title>
@@ -60,7 +60,7 @@ const ExpenseTrackerFixedCost = () => {
 							</PlaceAndPrice>
 							{bankSvgs[payment.bank] ? (
 								<BankImage>
-									<img src={bankSvgs[payment.bank]} alt={payment.bank} />{' '}
+									<img src={bankSvgs[payment.bank]} alt={payment.bank} />
 								</BankImage>
 							) : (
 								<BankText>{payment.bank}</BankText>
@@ -108,7 +108,6 @@ const TotalPrice = styled.div`
 		font-size: var(--fz-h5);
 		font-weight: var(--fw-bold);
 	}
-	/* background-color: var(-); */
 `;
 
 const Description = styled.p`
@@ -195,7 +194,7 @@ const BankImage = styled.div`
 const BankText = styled.span`
 	padding: calc(var(--padding-container-mobile) * 0.5) var(--padding-container-mobile);
 	color: var(--grey700);
-	background-color: var(--grey200);
+	background-color: var(--grey100);
 	font-weight: var(--fw-medium);
 	border-radius: var(--radius-s);
 `;

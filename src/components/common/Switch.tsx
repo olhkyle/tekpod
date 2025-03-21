@@ -7,13 +7,15 @@ interface SwitchProps {
 	toggle: (newState: boolean) => void;
 }
 
+const DEBOUNCED_TIME = 300;
+
 const Switch = ({ initialValue, toggle }: SwitchProps) => {
 	const [isActive, setIsActive] = useState(initialValue);
 
 	const handleSwitchToggle = (newState: boolean) => {
 		setIsActive(newState);
 
-		const debouncedServerUpdate = debounce(isActive => toggle(isActive), 200);
+		const debouncedServerUpdate = debounce(isActive => toggle(isActive), DEBOUNCED_TIME);
 
 		debouncedServerUpdate(newState);
 	};

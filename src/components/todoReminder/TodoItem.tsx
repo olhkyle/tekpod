@@ -66,7 +66,7 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 	};
 
 	const handleUpdateTodoCompleted = (completed: boolean) => {
-		updateTodoCompleted({ id: todo.id, completed, updated_at: new Date() });
+		updateTodoCompleted({ id: todo.id, completed, updated_at: new Date().toISOString() });
 	};
 
 	const handleRemoveTodo = () => {
@@ -74,7 +74,7 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 	};
 
 	const onSubmit = ({ content }: TodoItemSchema) => {
-		editContent({ id: todo?.id, content, updated_at: new Date() });
+		editContent({ id: todo?.id, content, updated_at: new Date().toISOString() });
 	};
 
 	return (

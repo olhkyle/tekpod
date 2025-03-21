@@ -20,14 +20,14 @@ const TotalExpensePrice = ({ currentMonthIndex }: TotalExpensePriceProps) => {
 			{data.price === 0 ? (
 				<Price>
 					<span>₩</span>
-					<span>{monetizeWithSeparator(data.price + '')}</span>
+					<span>{monetizeWithSeparator(data.price)}</span>
 				</Price>
 			) : (
 				<PriceList>
 					{Object.entries(data).map(([priceUnit, price], idx) => (
 						<Price key={`${price}_${priceUnit}_${idx}`}>
 							<span>{matchedPriceUnitWithSymbol[priceUnit as keyof MatchedPriceUnitWithSymbol]}</span>
-							<span>{monetizeWithSeparator(price + '')}</span>
+							<span>{monetizeWithSeparator(price)}</span>
 						</Price>
 					))}
 				</PriceList>

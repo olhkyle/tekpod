@@ -26,7 +26,7 @@ const addTodo = async (data: Omit<Todo, 'id' | 'reminder_time' | 'notified'>) =>
 	}
 };
 
-const editTodoContent = async ({ id, content, updated_at }: { id: string; content: string; updated_at: Date }) => {
+const editTodoContent = async ({ id, content, updated_at }: { id: string; content: string; updated_at: string }) => {
 	const { error } = await supabase.from(TABLE).update({ content, updated_at }).eq('id', id);
 
 	if (error) {
@@ -44,8 +44,8 @@ const editTodoDetail = async ({
 	id: string;
 	content: string;
 	tags: string[];
-	reminder_time: Date;
-	updated_at: Date;
+	reminder_time: string;
+	updated_at: string;
 }) => {
 	const { error } = await supabase.from(TABLE).update({ content, tags, reminder_time, updated_at }).eq('id', id);
 
@@ -54,7 +54,7 @@ const editTodoDetail = async ({
 	}
 };
 
-const updatedTodoCompleted = async ({ id, completed, updated_at }: { id: string; completed: boolean; updated_at: Date }) => {
+const updatedTodoCompleted = async ({ id, completed, updated_at }: { id: string; completed: boolean; updated_at: string }) => {
 	const { error: updateTodoCompletedError } = await supabase.from(TABLE).update({ completed, updated_at }).eq('id', id);
 
 	if (updateTodoCompletedError) {
