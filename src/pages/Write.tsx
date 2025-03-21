@@ -26,7 +26,7 @@ const WritePage = () => {
 	const { addToast } = useToastStore();
 
 	const onSubmit = async (data: WriteSchema) => {
-		const currentTime = new Date();
+		const currentTime = new Date().toISOString();
 
 		try {
 			const { error } = await startTransition(

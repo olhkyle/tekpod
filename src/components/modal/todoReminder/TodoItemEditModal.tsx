@@ -34,7 +34,7 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 		defaultValues: {
 			content: content,
 			tags: tags?.length ? tags?.map((tag, idx) => ({ id: idx, tag })) : [],
-			reminder_time: reminder_time ?? today,
+			reminder_time: new Date(reminder_time ?? today),
 		},
 	});
 
@@ -71,7 +71,8 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 					...formData,
 					id,
 					tags: formData?.tags.length > 0 ? formData.tags.map(({ tag }) => tag) : [],
-					updated_at: new Date(),
+					updated_at: new Date().toISOString(),
+					reminder_time: formData.reminder_time.toISOString(),
 				}),
 			);
 

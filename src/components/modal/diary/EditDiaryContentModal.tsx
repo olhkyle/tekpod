@@ -60,7 +60,7 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditDiaryContentModa
 					...data,
 					...updatedData,
 					tags: updatedData.tags.map(({ tag }) => tag),
-					updated_at: new Date(),
+					updated_at: new Date().toISOString(),
 				}),
 			);
 

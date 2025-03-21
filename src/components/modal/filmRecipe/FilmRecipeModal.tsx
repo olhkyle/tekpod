@@ -68,7 +68,7 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 					type: imageUrl === data?.imgSrc && !currentRecipeImage ? 'sameImage' : 'updatedImage',
 					data: {
 						...currentFilmFeature,
-						updated_at: new Date(),
+						updated_at: new Date().toISOString(),
 						imgSrc: imageUrl === data?.imgSrc && !currentRecipeImage ? data?.imgSrc : '',
 						primary: isPrimary,
 					},

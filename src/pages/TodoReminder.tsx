@@ -24,7 +24,7 @@ const TodoReminderPage = () => {
 			return addToast(toastData.TODO_REMINDER.CREATE.WARN);
 		}
 
-		const currentTime = new Date();
+		const currentTime = new Date().toISOString();
 
 		try {
 			await startTransition(

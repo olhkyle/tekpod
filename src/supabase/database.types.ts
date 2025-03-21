@@ -33,8 +33,8 @@ export interface Database {
 					title: string;
 					content: string;
 					feeling: string;
-					created_at: Date;
-					updated_at: Date;
+					created_at: string;
+					updated_at: string;
 					tags: string[] | null;
 				};
 				Insert: {
@@ -44,8 +44,8 @@ export interface Database {
 					title: string; // `not null` columns with no default must be supplied
 					content: string; // nullable columns can be omitted
 					feeling: string;
-					created_at: Date;
-					updated_at: Date;
+					created_at: string;
+					updated_at: string;
 					tags: string[] | null;
 				};
 				Update: {
@@ -55,7 +55,7 @@ export interface Database {
 					title?: string; // `not null` columns with no default must be supplied
 					content?: string; // nullable columns can be omitted
 					feeling?: string;
-					updated_at: Date;
+					updated_at: string;
 					tags?: string[] | null;
 				};
 				Delete: {
@@ -82,8 +82,8 @@ export interface Database {
 					exposure_compensation: string;
 					sensors: string;
 					primary: boolean;
-					created_at: Date;
-					updated_at: Date;
+					created_at: string;
+					updated_at: string;
 					imgSrc: string;
 				};
 				Insert: {
@@ -104,8 +104,8 @@ export interface Database {
 					exposure_compensation: string;
 					sensors: string;
 					primary: boolean;
-					created_at: Date;
-					updated_at: Date;
+					created_at: string;
+					updated_at: string;
 					imgSrc: string;
 				};
 				Update: {
@@ -126,7 +126,7 @@ export interface Database {
 					exposure_compensation?: string;
 					sensors?: string;
 					primary?: boolean;
-					updated_at: Date;
+					updated_at: string;
 					imgSrc: string;
 				};
 				Delete: {
@@ -141,10 +141,10 @@ export interface Database {
 					user_id: string;
 					completed: boolean;
 					content: string;
-					created_at: Date;
-					updated_at: Date;
+					created_at: string;
+					updated_at: string;
 					notified: boolean;
-					reminder_time: Date | null;
+					reminder_time: string | null;
 					tags: string[] | null;
 				};
 				Insert: {
@@ -153,9 +153,9 @@ export interface Database {
 					user_id: string;
 					completed: boolean;
 					content: string;
-					created_at: Date;
-					updated_at: Date;
-					reminder_time?: Date;
+					created_at: string;
+					updated_at: string;
+					reminder_time?: string;
 					tags: string[] | null;
 				};
 				Update: {
@@ -164,9 +164,9 @@ export interface Database {
 					user_id: string;
 					completed?: boolean;
 					content?: string;
-					created_at?: Date;
-					updated_at: Date;
-					reminder_time?: Date | null;
+					created_at?: string;
+					updated_at: string;
+					reminder_time?: string | null;
 					tags: string[] | null;
 				};
 				Delete: {
@@ -186,9 +186,10 @@ export interface Database {
 					payment_method: string;
 					bank: string;
 					isFixed: boolean;
-					usage_date: Date;
-					created_at: Date;
-					updated_at: Date;
+					installmentPlanMonths: number | null;
+					usage_date: string;
+					created_at: string;
+					updated_at: string;
 				};
 				Insert: {
 					// the data to be passed to .insert()
@@ -201,9 +202,10 @@ export interface Database {
 					payment_method: string;
 					bank?: string;
 					isFixed?: boolean;
-					usage_date: Date;
-					created_at: Date;
-					updated_at: Date;
+					installmentPlanMonths: number | null;
+					usage_date: string;
+					created_at: string;
+					updated_at: string;
 				};
 				Update: {
 					// the data to be passed to .update()
@@ -216,9 +218,10 @@ export interface Database {
 					payment_method?: string;
 					bank?: string;
 					isFixed?: boolean;
-					usage_date?: Date;
-					created_at?: Date;
-					updated_at?: Date;
+					installmentPlanMonths?: number | null;
+					usage_date?: string;
+					created_at?: string;
+					updated_at?: string;
 				};
 				Delete: {
 					// the data to be passed to .delete()
