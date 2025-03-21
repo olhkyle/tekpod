@@ -6,7 +6,7 @@ import { Button } from '.';
 import type { ExpenseTracker, RestrictedRecipeForValidation } from '../../supabase';
 import { customPropReceiver, PaymentDataType, FilmRecipeFieldDataType } from '../../constants';
 
-export type CustomSelectDataType = PaymentDataType | FilmRecipeFieldDataType[number] | string | number;
+export type CustomSelectDataType = PaymentDataType | FilmRecipeFieldDataType[number] | string | number | null;
 
 interface CustomSelectProps<T extends CustomSelectDataType> {
 	data: readonly T[];
@@ -46,20 +46,22 @@ const CustomSelect = <T extends CustomSelectDataType>({
 
 			<SelectContent isOpen={isOpen} aria-labelledby={`custom-select-${generatedId}-content`}>
 				<Label>{target_id.toUpperCase()}</Label>
-				{options.map((option, idx) => (
-					<SelectItem
-						key={`${option}_${idx}`}
-						isCurrent={option === currentValue}
-						tabIndex={0}
-						onClick={() => {
-							onSelect(option);
-							setOpen(false);
-						}}
-						data-selected={option === currentValue}>
-						<SelectItemCheckIndicator isCurrent={option === currentValue} />
-						<span>{option}</span>
-					</SelectItem>
-				))}
+				<SelectItemGrid column={options.length > 10 ? 2 : 1}>
+					{options.map((option, idx) => (
+						<SelectItem
+							key={`${option}_${idx}`}
+							isCurrent={option === currentValue}
+							tabIndex={0}
+							onClick={() => {
+								onSelect(option);
+								setOpen(false);
+							}}
+							data-selected={option === currentValue}>
+							<SelectItemCheckIndicator isCurrent={option === currentValue} />
+							<span>{option}</span>
+						</SelectItem>
+					))}
+				</SelectItemGrid>
 			</SelectContent>
 		</SelectRoot>
 	);
@@ -117,6 +119,12 @@ const Label = styled.p`
 	margin-bottom: 8px;
 	font-weight: var(--fw-bold);
 	color: var(--grey900);
+`;
+
+const SelectItemGrid = styled.div<{ column: 2 | 1 }>`
+	display: grid;
+	grid-template-columns: ${({ column }) => (column === 2 ? '1fr 1fr' : '1fr')};
+	gap: 2px;
 `;
 
 const SelectItem = styled.div<{ isCurrent: boolean }>`

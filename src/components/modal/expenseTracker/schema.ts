@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { paymentData } from '../../../constants';
+import { cardType, installmentPlanMonths, InstallmentType, paymentData } from '../../../constants';
 import { today } from '../../../utils';
 
 type AddPaymentFormSchema = z.infer<typeof addPaymentFormSchema>;
@@ -9,6 +9,19 @@ const paymentMethodSchema = z.enum(paymentData.paymentMethod, {
 		return { message: 'Please select a valid payment method ' };
 	},
 });
+
+const cardTypeSchema = z.enum(Object.values(cardType) as [string, ...string[]], {
+	errorMap: () => {
+		return { message: 'Please select a valid card type' };
+	},
+});
+
+const installment = z
+	.number()
+	.refine((val): val is InstallmentType => installmentPlanMonths.includes(val as InstallmentType), {
+		message: 'Invalid installment plan',
+	})
+	.nullable();
 
 const bankSchema = z.enum(paymentData.banks, {
 	errorMap: () => {
@@ -33,7 +46,9 @@ const addPaymentFormSchema = z.object({
 		})
 		.refine(date => date <= today, "Can't choose the future date"),
 	payment_method: paymentMethodSchema,
-	bank: bankSchema.default('해당없음'),
+	card_type: cardTypeSchema,
+	installment_plan_months: installment,
+	bank: bankSchema,
 	priceIntegerPart: z.string().min(1, 'Please write the Price'),
 	priceDecimalPart: z.string().max(2, 'Please write up to 2 decimal points').default(''),
 	price_unit: priceUnitSchema,
