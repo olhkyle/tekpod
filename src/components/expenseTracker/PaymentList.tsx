@@ -34,20 +34,18 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 	return (
 		<Container>
 			{totalPrice !== 0 && (
-				<TotalPrice>
+				<TotalPriceHover>
 					{Object.entries(totalPrice).map(([priceUnit, price], idx) => (
-						<div key={`payment_${idx}`} css={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+						<TotalPriceContent key={`payment_${idx}`}>
 							<dt>{priceUnit}</dt>
 							<dd>{monetizeWithSeparator(price)}</dd>
-						</div>
+						</TotalPriceContent>
 					))}
-				</TotalPrice>
+				</TotalPriceHover>
 			)}
 
-			{filteredData?.length === 0 ? (
-				<EmptyMessage emoji={'💳'}>
-					{currentPaymentMethod === 'All' ? '사용한 금액이 없습니다' : `${currentPaymentMethod}로 사용한 금액이 없습니다`}
-				</EmptyMessage>
+			{totalPrice === 0 ? (
+				<EmptyMessage emoji={'💳'}>{`No ${currentPaymentMethod === 'All' ? '' : currentPaymentMethod} expenses recorded`}</EmptyMessage>
 			) : (
 				<PaymentListContent>
 					{filteredData.map((payment, idx) => (
@@ -69,7 +67,7 @@ const Container = styled.div`
 	margin: 0 0 16px 0;
 `;
 
-const TotalPrice = styled.dl`
+const TotalPriceHover = styled.dl`
 	position: fixed;
 	bottom: calc(var(--nav-height) + 32px);
 	right: 16px;
@@ -81,6 +79,13 @@ const TotalPrice = styled.dl`
 	background-color: var(--black);
 	border: 1px solid var(--grey300);
 	border-radius: var(--radius-s);
+`;
+
+const TotalPriceContent = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
 
 	dt {
 		font-weight: var(--fw-medium);
