@@ -9,6 +9,8 @@ interface CheckboxProps {
 	onServerTodoCompletedChange?: (completed: boolean) => void;
 }
 
+const DEBOUNCED_TIME = 500;
+
 const Checkbox = ({ id, checked, onCheckedChange: onClientCheckedChange, onServerTodoCompletedChange, ...props }: CheckboxProps) => {
 	const handleCheckedChange = (newChecked: boolean) => {
 		onClientCheckedChange(newChecked);
@@ -17,7 +19,7 @@ const Checkbox = ({ id, checked, onCheckedChange: onClientCheckedChange, onServe
 			if (onServerTodoCompletedChange) {
 				onServerTodoCompletedChange(isChecked);
 			}
-		}, 500);
+		}, DEBOUNCED_TIME);
 
 		debouncedUpdate(newChecked);
 	};
