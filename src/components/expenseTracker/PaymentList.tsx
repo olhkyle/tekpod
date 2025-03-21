@@ -38,7 +38,7 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 					{Object.entries(totalPrice).map(([priceUnit, price], idx) => (
 						<div key={`payment_${idx}`} css={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
 							<dt>{priceUnit}</dt>
-							<dd>{monetizeWithSeparator(price.toString())}</dd>
+							<dd>{monetizeWithSeparator(price)}</dd>
 						</div>
 					))}
 				</TotalPrice>

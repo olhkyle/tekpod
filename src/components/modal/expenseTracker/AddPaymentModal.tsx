@@ -127,7 +127,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 										inputMode="numeric" // 모바일에서 숫자 키패드 표시
 										id="priceIntegerPart"
 										name={name}
-										value={value ? monetizeWithSeparator(value.toString()) : ''}
+										value={value ? monetizeWithSeparator(value) : ''}
 										onChange={e => {
 											const numericValue = e.target.value.replace(/[^0-9]/g, '');
 											onChange(numericValue);
