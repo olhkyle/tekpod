@@ -27,7 +27,7 @@ const DiaryContent = () => {
 				return lastPageParam + 1;
 			}
 
-			return undefined; // 명시적 반환
+			return undefined; // explicit return
 		},
 		staleTime: staleTime.DIARY.ALL_WITH_PAGINATION,
 	});
@@ -116,11 +116,12 @@ const Tags = styled.div`
 	width: 100%;
 	overflow-x: scroll;
 	white-space: nowrap;
-	-webkit-overflow-scrolling: touch; // iOS 스크롤 지원
-	-ms-overflow-style: none; // IE and Edge
 	scrollbar-width: none; // Firefox
+	-webkit-overflow-scrolling: touch; // support ios scroll
+	-ms-overflow-style: none; // IE and Edge
+
 	&::-webkit-scrollbar {
-		display: none; // 스크롤바 숨기기 (선택사항)
+		display: none; // hidden scrollbar
 	}
 
 	div {

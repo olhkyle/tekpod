@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
+import eclipseHalfSvg from '../../../assets/eclipse-half.svg';
 
 const LayoutLoadingSpinner = () => {
 	return (
 		<Container>
-			<img src="/eclipse-half.svg" alt="spinner" />
+			<img src={eclipseHalfSvg} alt="spinner" />
 		</Container>
 	);
 };

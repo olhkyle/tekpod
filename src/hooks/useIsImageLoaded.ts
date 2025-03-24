@@ -8,7 +8,8 @@ const useIsImageLoaded = (lazy: boolean) => {
 		rootMargin: ROOT_MARGIN,
 	});
 
-	const [isLoaded, setIsLoaded] = useState(!lazy); // lazy하게 이미지를 loading하기 위한 상태, loaded = true인 경우 보여줘야 할 이미지를 보여주도록 함
+	const [isLoaded, setIsLoaded] = useState(!lazy); // the state to make image loading to being lazy
+	// loaded = true =>  show all images to be shown
 
 	useEffect(() => {
 		if (isLoaded && !isVisible) return;

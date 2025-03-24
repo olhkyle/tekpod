@@ -6,7 +6,7 @@ const add = (data: Diary) => (oldData: Diary[]) => {
 	return [...oldData, data];
 };
 
-// 현재 상황에서는 별도의 페이지에서 작성하고 있기 때문에, mutation이 필요 없을 수 있음
+// mutation could be not in need, because some actions redirect to different page, not settling same page
 const useAddDiaryMutation = () => {
 	const queryClient = useQueryClient();
 	const QUERY_KEY = queryKey.DIARY_BY_PAGE;

@@ -35,7 +35,6 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditDiaryContentModa
 	});
 
 	const navigate = useNavigate();
-
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 

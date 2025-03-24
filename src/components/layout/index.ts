@@ -6,7 +6,6 @@ export { default as BottomNav } from './BottomNav';
 export { default as DiaryLayout } from './DiaryLayout';
 export { default as ErrorFallback } from './ErrorFallback';
 export { default as ExpenseTrackerLayout } from './ExpenseTrackerLayout';
-export { default as Footer } from './Footer';
 export { default as GoBackButton } from './GoBackButton';
 export { default as Header } from './Header';
 export { default as Layout } from './Layout';

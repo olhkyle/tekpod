@@ -2,18 +2,6 @@ import supabase from './service';
 import { ExpenseTracker } from './schema';
 import { currentYear } from '../utils';
 
-/**
- *
- * user_id: string;
- * place: boolean;
- * price: string;
- * payment_method: string;
- * bank: string;
- * usage_date: Date;
- * created_at: Date;
- * updated_at: Date;
- */
-
 const TABLE = 'expense_tracker';
 
 const ZERO_PRICE = 0;

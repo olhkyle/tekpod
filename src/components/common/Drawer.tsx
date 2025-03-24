@@ -4,9 +4,12 @@ import { MdOutlineAdd } from 'react-icons/md';
 import { Button, Portal } from '..';
 import { customPropReceiver } from '../../constants';
 
-// TODO:
-// 1 - top | bottom 위치에 따른 변화
-// 2 - mobile 환경에 맞는 애니메이션
+/**
+ * TODO:
+ * 1 - change itself depending on position like 'top' or 'bottom'
+ * 2 - use animation for mobile
+ * 3 - GrabArea - develop animated movement using touch event
+ */
 
 interface DrawerProps {
 	position: 'top' | 'bottom';
@@ -17,7 +20,6 @@ interface DrawerProps {
 	children: ReactNode;
 }
 
-// TODO: GrabArea - touch event를 활용한 애니메이션 움직임
 const Drawer = ({ position, title, isOpen, close, children }: DrawerProps) => {
 	const [isClosing, setIsClosing] = useState(false);
 	const handleModalClose = () => setIsClosing(true);

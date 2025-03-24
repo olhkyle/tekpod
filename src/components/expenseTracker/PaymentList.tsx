@@ -13,6 +13,11 @@ interface PaymentListProps {
 	currentPriceUnit: PriceUnitType;
 }
 
+/**
+ * TODO:
+ * - 1 : use pagination
+ */
+
 const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: PaymentListProps) => {
 	const {
 		data: { expense, totalPrice },
@@ -28,8 +33,6 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 		({ payment_method, price_unit }) =>
 			(currentPaymentMethod === 'All' || payment_method === currentPaymentMethod) && price_unit === currentPriceUnit,
 	);
-
-	// TODO: - Pagination 구현
 
 	return (
 		<Container>

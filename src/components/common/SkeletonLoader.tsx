@@ -44,18 +44,6 @@ const SkeletonLoader = styled.div<{
 		background-size: 200% 100%;
 		animation: shimmer 2s infinite;
 	}
-
-	/* &::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 32px;
-		height: 100%;
-		border-radius: var(--radius-s);
-		background: var(--linear-gradient);
-		animation: loading 3s infinite linear;
-	} */
 `;
 
 export default SkeletonLoader;

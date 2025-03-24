@@ -1,3 +1,15 @@
+import shinhanSvg from '../assets/bank/shinhan.svg';
+import hanaSvg from '../assets/bank/hana.svg';
+import kookminSvg from '../assets/bank/kookmin.svg';
+import wooriSvg from '../assets/bank/woori.svg';
+import ibkSvg from '../assets/bank/ibk.svg';
+import nonghyeopSvg from '../assets/bank/nonghyeop.svg';
+import kakaoBankSvg from '../assets/bank/kakaobank.svg';
+import tossBankSvg from '../assets/bank/tossbank.svg';
+import saemaeulSvg from '../assets/bank/saemaeul.svg';
+import scSvg from '../assets/bank/sc.svg';
+import citiSvg from '../assets/bank/citi.svg';
+
 type PaymentDataType = (typeof paymentData)[keyof typeof paymentData][number];
 type PaymentMethodType = (typeof paymentData)['paymentMethod'][number];
 
@@ -27,18 +39,18 @@ const priceUnit = {
 	unitSymbol: ['₩', '$', '£', '€', '¥'] as const,
 } as const;
 
-const bankSvgs: Record<string, `/bank/${string}.svg`> = {
-	신한: '/bank/shinhan.svg',
-	하나: '/bank/hana.svg',
-	국민: '/bank/kookmin.svg',
-	우리: '/bank/woori.svg',
-	IBK기업: '/bank/ibk.svg',
-	농협: '/bank/nonghyeop.svg',
-	카카오뱅크: '/bank/kakaobank.svg',
-	토스뱅크: '/bank/tossbank.svg',
-	새마을: '/bank/saemaeul.svg',
-	SC제일: '/bank/sc.svg',
-	씨티: '/bank/citi.svg',
+const bankSvgs: Record<string, string> = {
+	신한: shinhanSvg,
+	하나: hanaSvg,
+	국민: kookminSvg,
+	우리: wooriSvg,
+	IBK기업: ibkSvg,
+	농협: nonghyeopSvg,
+	카카오뱅크: kakaoBankSvg,
+	토스뱅크: tossBankSvg,
+	새마을: saemaeulSvg,
+	SC제일: scSvg,
+	씨티: citiSvg,
 };
 
 const matchedPriceUnitWithSymbol = priceUnit.unitType.reduce((acc, curr, idx) => {

@@ -1,26 +1,12 @@
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getFixedCostPaymentsByMonth } from '../supabase';
+import { ExpenseTracker, getFixedCostPaymentsByMonth } from '../supabase';
 import { queryKey, bankSvgs, routes } from '../constants';
 import { getDateFromString, getNextMonthFormatDate, months, today, monetizeWithSeparator } from '../utils';
 
-/**
- * 고정 지출 내역
- * icloud - 3,300 (21일)
- *
- * id
- * user_id
- * title
- * price
- * card
- * paymentDate
- * description
- *
- */
-
 const ExpenseTrackerFixedCost = () => {
-	const { data } = useSuspenseQuery({
+	const { data } = useSuspenseQuery<ExpenseTracker[]>({
 		queryKey: [...queryKey.EXPENSE_TRACKER, 'fixedCost'],
 		queryFn: () => getFixedCostPaymentsByMonth(today.getMonth() - 1),
 	});

@@ -19,6 +19,7 @@ const layoutCss = {
 
 const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 	console.log(error.message);
+
 	return (
 		<div css={layoutCss.wrapper}>
 			<div css={layoutCss.main}>

@@ -1,7 +1,7 @@
 import { TouchEvent, useRef, useState } from 'react';
 import { useClickOutside } from '.';
 
-const DRAG_THRESHOLD = 10; // 픽셀 단위
+const DRAG_THRESHOLD = 10; // pixel
 
 const useDrag = () => {
 	const [dragX, setDragX] = useState(0);
@@ -24,9 +24,9 @@ const useDrag = () => {
 		if (dragStartX === null) return;
 
 		const currentX = event.touches[0].clientX;
-		const diff = currentX - dragRef.current; // 현재 위치 - 첫 터치 드래그 시작 위치 (음수)
+		const diff = currentX - dragRef.current; // current position - the first touch-drag starting position(negative)
 
-		// 최소 이동 거리를 넘어선 경우에만 드래그 적용
+		// Apply drag only when the minimum movement distance is exceeded
 		if (Math.abs(diff) > DRAG_THRESHOLD) {
 			const dampingFactor = 0.8;
 			const dragAmount = currentX - dragRef.current;

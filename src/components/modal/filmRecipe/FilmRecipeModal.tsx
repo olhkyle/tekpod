@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
+import placeholderImage from '../../../assets/placeholder-gray.webp';
 import { FaStar } from 'react-icons/fa';
 import { FaRegStar } from 'react-icons/fa6';
 import { useQueryClient } from '@tanstack/react-query';
@@ -9,7 +10,7 @@ import { editRecipe, type RestricedRecipeWithImage } from '../../../supabase';
 import { useModalStore, useToastStore } from '../../../store';
 import { QueryRefetch } from '../../../store/useModalStore';
 import { useFilmRecipeImage, useLoading } from '../../../hooks';
-import { filmRecipeFieldData, FILM_RECIPE_FORM, PLACEHOLDER_IMAGE_URL, toastData, queryKey } from '../../../constants';
+import { filmRecipeFieldData, FILM_RECIPE_FORM, toastData, queryKey } from '../../../constants';
 import { validateTitle } from '../../../utils';
 
 interface FilmRecipeModalProps {
@@ -40,11 +41,11 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 	const [currentFilmFeature, setCurrentFilmFeature] = useState<RestricedRecipeWithImage>(data);
 
 	const hasChanges = () => {
-		// 이미지가 변경되었는지 확인
+		// check if image is changed
 		const isFilmRecipePrimaryChanged = isPrimary !== data?.primary;
 		const isImageChanged = imageUrl !== data?.imgSrc || currentRecipeImage !== null;
 
-		// 다른 필드들이 변경되었는지 확인
+		// check if the other fields are changed
 		const isFieldsChanged = Object.keys(filmRecipeFieldData).some(key => {
 			const fieldKey = key.toLowerCase().replace(/([A-Z])/g, '_$1') as keyof typeof data;
 			return currentFilmFeature[fieldKey]?.toString() !== data[fieldKey]?.toString();
@@ -61,8 +62,8 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 		}
 
 		try {
-			// edit 할 때 이미지 변경이 없는 경우, storage에 업로드하는 로직 없이, database에 data?.imgSrc만 업로드 하는 형태
-			// edit 할 때 이미지 변경이 있는 경우, addRecipe와 같이 storage에 업로드 후, database에 uploadImage.path를 추가
+			// case 1 (sameImage - image modification doesn't exist): only upload data?.imgSrc on db(table = recipe), without the logic uploading on storage
+			// case 2 (updatedImage - image modification exists): upload image on storage like `addRecipe(supabase request)` and then, add uploadImage.path on db(recipe)
 			await startTransition(
 				editRecipe({
 					type: imageUrl === data?.imgSrc && !currentRecipeImage ? 'sameImage' : 'updatedImage',
@@ -114,7 +115,7 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 						src={
 							data?.imgSrc?.includes(`${import.meta.env.VITE_SUPABASE_PROJECT_URL}/${import.meta.env.VITE_SUPABASE_FILMRECIPE_URL}`)
 								? data?.imgSrc
-								: PLACEHOLDER_IMAGE_URL
+								: placeholderImage
 						}
 						alt="recipe sample image"
 						width={'100%'}

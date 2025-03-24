@@ -31,11 +31,13 @@ const pageCss = {
 };
 
 /**
- * <Layout/> 바깥에서 해당 페이지를 그릴 경우, 이메일에서 redirectUrl이 담긴 {{ .ConfirmationUrl }} 클릭 시 해당 URL에는 {{ .Token }}이 담겨있지만,
- * supabase.auth.updateUser 사용 시 'Auth : session is missing'이라는 에러를 반환하게 된다.
+ * If the page is rendered outside of <Layout/>, clicking the `{{ .ConfirmationUrl }}` link in the email will include `{{ .Token }}` in the URL.
+ * However, when using `supabase.auth.updateUser`, it returns an error: 'Auth: session is missing'.
  *
- * 따라서, <Layout/> 컴포넌트 내부에 그리도록 하여, <AuthentiationGuard/> 내부의 useAuthQuery()를 통해 url로부터 session(token)을 확보하고, supabase.auth.updateUser 사용 시 session이 있다고 supabase로부터 confirm을 받고 비밀번호를 업데이트 할 수 있게 된다.
+ * Therefore, rendering the page inside the <Layout/> component ensures that useAuthQuery() inside <AuthenticationGuard/> retrieves the session (token) from the URL.
+ * As a result, supabase confirms the presence of a session when calling `supabase.auth.updateUser`, allowing the password to be updated successfully.
  */
+
 const UpdatePassword = () => {
 	const queryClient = useQueryClient();
 

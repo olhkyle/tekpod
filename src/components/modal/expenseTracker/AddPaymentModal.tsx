@@ -18,14 +18,6 @@ interface AddPaymentModalProps {
 	onClose: () => void;
 }
 
-/**
- *
- * 날짜 - DatePicker
- * 사용처 - TextInput
- * 은행(카드 or 현금) - Select + Select
- * 금액 - TextInput
- */
-
 const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
@@ -54,7 +46,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 					...data,
 					user_id: session?.user?.id,
 					installment_plan_months: null, // TODO: update
-					card_type: 'debit', // payment_method가 cash 이면 'none'로
+					card_type: 'debit', // if payment_method is cash, set 'none'로
 					usage_date: data?.usage_date.toISOString(),
 					created_at: currentTime,
 					updated_at: currentTime,

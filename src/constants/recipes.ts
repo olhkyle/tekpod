@@ -1,8 +1,6 @@
 type FilmRecipeFieldDataType = Extract<(typeof FILM_RECIPE_FORM.FIELDS)[number], { type: 'select' }>['data'];
 type RecipeValueRange = (typeof valueRange)[number];
 
-const PLACEHOLDER_IMAGE_URL = '/placeholder-gray.webp';
-
 const DEFAULT_IMAGE_SIZE = 10 * 1024 * 1024;
 
 const valueRange = [-4, -3, -2, -1, 0, 1, 2, 3, 4] as const;
@@ -51,4 +49,4 @@ const FILM_RECIPE_FORM = {
 } as const;
 
 export type { FilmRecipeFieldDataType, RecipeValueRange };
-export { PLACEHOLDER_IMAGE_URL, filmRecipeFieldData, FILM_RECIPE_FORM };
+export { filmRecipeFieldData, FILM_RECIPE_FORM };

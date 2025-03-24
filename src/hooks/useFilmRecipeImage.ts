@@ -13,10 +13,10 @@ const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT
 	const hasValidImage = () => {
 		const defaultValidation = typeof imageDataUrl === 'string' && imageDataUrl.trim().length > 0;
 		if (isEditing) {
-			// 편집 모드: 데이터 URL이 존재하면 유효
+			// Edit Mode : it's valid if Data URL exists
 			return defaultValidation;
 		} else {
-			// 새로운 이미지 업로드 모드: 데이터 URL과 현재 이미지 파일 모두 존재
+			// New Image upload mode : Data URL and current Image file exists simultaneously
 			return defaultValidation && currentRecipeImage !== null;
 		}
 	};
@@ -67,8 +67,7 @@ const useFilmRecipeImage = ({ DEFAULT_IMAGE_SIZE, isEditing = false }: { DEFAULT
 					fileReader.onerror = reject;
 					fileReader.readAsDataURL(file);
 					/**
-					 * readAsDataUrl 메서드의 경우 base64로 인코딩된 문자열을 반환하여, 아래 typeof 조건문은 사실 상 필요 없으나,
-					 * 이후 한 가지 사진이 아닌 다수의 사진을 업로드할 경우, FileReader의 result가 ArrayBuffer 타입을 반환하도록 readAsArrayBuffer을 사용할 것이므로, 아래의 조건문을 추가
+					 * The `readAsDataURL` method returns a Base64-encoded string, so the `typeof` condition below is technically unnecessary. However, if multiple photos are uploaded instead of a single one in the future, `readAsArrayBuffer` will be used to make the FileReader result return an ArrayBuffer type. Therefore, the condition is added for future compatibility.
 					 */
 				}
 			});
