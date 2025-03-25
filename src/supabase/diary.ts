@@ -1,7 +1,8 @@
 import supabase from './service';
 import { Diary } from './schema';
 
-const TABLE = import.meta.env.VITE_SUPABASE_TABLE_DIARY;
+const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_DIARY;
+console.log('Table Name:', TABLE);
 const PAGE_SIZE = 10;
 
 const getCommitStatus = async () => {
@@ -16,6 +17,7 @@ const getCommitStatus = async () => {
 
 const getDiariesPageInfo = async () => {
 	const { data, error } = await supabase.from(TABLE).select('*').explain({ format: 'json', analyze: true });
+	console.log(error);
 
 	if (error) {
 		throw new Error(error.message);
