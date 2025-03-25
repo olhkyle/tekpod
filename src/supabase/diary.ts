@@ -1,7 +1,7 @@
 import supabase from './service';
 import { Diary } from './schema';
 
-const TABLE = 'diary';
+const TABLE = import.meta.env.VITE_SUPABASE_TABLE_DIARY;
 const PAGE_SIZE = 10;
 
 const getCommitStatus = async () => {

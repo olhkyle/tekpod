@@ -20,7 +20,6 @@ interface RestricedRecipeWithImage extends RestrictedRecipe {
 }
 
 type RestrictedRecipeForValidation = Omit<RestrictedRecipe, 'id' | 'user_id' | 'created_at' | 'updated_at'>;
-type RestrictedRecipeForValidatioWithImage = Omit<RestricedRecipeWithImage, 'id' | 'user_id' | 'created_at' | 'updated_at'>;
 
 export type {
 	ServiceDataType,
@@ -29,7 +28,6 @@ export type {
 	RestrictedRecipe,
 	RestricedRecipeWithImage,
 	RestrictedRecipeForValidation,
-	RestrictedRecipeForValidatioWithImage,
 	Todo,
 	ExpenseTracker,
 	User,

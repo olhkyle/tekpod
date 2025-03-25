@@ -1,7 +1,7 @@
 import supabase from './service';
 import { RegisterSchema, UpdateProfileSchema } from '../components';
 
-const TABLE = 'users';
+const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_USERS;
 
 const isUserExist = async (email: string) => {
 	const { data, error } = await supabase.from(TABLE).select('email').eq('email', email);

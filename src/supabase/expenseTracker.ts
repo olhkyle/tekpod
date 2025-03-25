@@ -2,7 +2,7 @@ import supabase from './service';
 import { ExpenseTracker } from './schema';
 import { currentYear } from '../utils';
 
-const TABLE = 'expense_tracker';
+const TABLE = import.meta.env.VITE_SUPABASE_TABLE_EXPENSE_TRACKER;
 
 const ZERO_PRICE = 0;
 

@@ -26,7 +26,8 @@ import { v4 as uuid } from 'uuid';
 import { RestrictedRecipe } from './schema';
 import supabase from './service';
 
-const TABLE = 'recipes';
+const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_FILM_RECIPE;
+const STORAGE_BUCKET = import.meta.env.VITE_SUPABASE_STORAGE_BUCKET_FILM_RECIPE;
 
 const getRecipes = async (): Promise<RestrictedRecipe[]> => {
 	const { data, error } = await supabase.from(TABLE).select('*').order('updated_at', { ascending: true });
@@ -41,7 +42,7 @@ const getRecipes = async (): Promise<RestrictedRecipe[]> => {
 const addRecipe = async ({ data, imageFile }: { data: Omit<RestrictedRecipe, 'id' | 'imgSrc'>; imageFile: File }) => {
 	// 'id' field will be generated in auto
 	const { data: uploadImage, error: uploadError } = await supabase.storage
-		.from('recipe')
+		.from(STORAGE_BUCKET)
 		.upload(`film/${data?.user_id}/${uuid()}`, imageFile, {
 			cacheControl: '3600',
 			upsert: false,
@@ -86,7 +87,7 @@ const editRecipe = async ({
 
 	if (type === 'updatedImage' && imageFile) {
 		const { data: uploadImage, error: uploadError } = await supabase.storage
-			.from('recipe')
+			.from(STORAGE_BUCKET)
 			.upload(`film/${data?.user_id}/${uuid()}`, imageFile, {
 				cacheControl: '3600',
 				upsert: false,
@@ -112,9 +113,10 @@ const editRecipe = async ({
 	}
 };
 
+// TODO: remove image from storage bucket
 const removeRecipe = async ({ id, path }: { id: string; path: string }) => {
 	const [removeFilmRecipeImage, removeFilmRecipe] = await Promise.all([
-		supabase.storage.from('recipe').remove([path]),
+		supabase.storage.from(STORAGE_BUCKET).remove([path]),
 		supabase.from(TABLE).delete().eq('id', id),
 	]);
 

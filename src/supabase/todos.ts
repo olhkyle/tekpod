@@ -1,7 +1,7 @@
 import supabase from './service';
 import { Todo } from './schema';
 
-const TABLE = 'todos';
+const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_TODOS;
 
 const getTodos = async (): Promise<Todo[]> => {
 	const { data, error } = await supabase.from(TABLE).select('*').order('created_at', { ascending: false });
