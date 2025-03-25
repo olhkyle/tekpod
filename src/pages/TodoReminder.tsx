@@ -48,7 +48,6 @@ const TodoReminderPage = () => {
 		}
 	};
 
-	// TODO: 각 아이템을 길게 클릭 시 상단에서 전체 선택 등의 부가기능 선택할 수 있는 TopSheet 나오도록
 	return (
 		<Container>
 			<Form onSubmit={handleTodoAdd}>
