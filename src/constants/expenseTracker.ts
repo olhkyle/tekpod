@@ -26,12 +26,12 @@ const paymentData = {
 	priceUnits: ['WON', 'USD', 'GBP', 'EUR', 'JPY'],
 } as const;
 
-const installmentPlanMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 24, 36] as const;
+const installmentPlanMonths = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 24, 36] as const;
 
 const cardType = {
-	신용: 'credit',
-	체크: 'debit',
-	미확인: 'unconfirmed',
+	신용: 'Credit',
+	체크: 'Debit',
+	미확인: 'Unconfirmed',
 } as const;
 
 const priceUnit = {
