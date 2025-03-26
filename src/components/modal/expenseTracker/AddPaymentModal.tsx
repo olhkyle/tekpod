@@ -45,8 +45,6 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 				addPayment({
 					...data,
 					user_id: session?.user?.id,
-					installment_plan_months: null, // TODO: update
-					card_type: 'debit', // if payment_method is cash, set 'none'로
 					usage_date: data?.usage_date.toISOString(),
 					created_at: currentTime,
 					updated_at: currentTime,
@@ -66,11 +64,19 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 		<ModalLayout id={id} type={type} title={'Add Payment'} onClose={onClose}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<Flex direction="column">
-					<DatePicker
-						selected={watch('usage_date')}
-						setSelected={(date: Date) => setValue('usage_date', date, { shouldValidate: true })}
-						error={errors['usage_date']}
-						disabled={{ after: today }}
+					<Controller
+						name="usage_date"
+						control={control}
+						render={({ field: { value, onChange } }) => (
+							<DatePicker
+								selected={value}
+								setSelected={(date: Date) => {
+									onChange(date);
+								}}
+								error={errors['usage_date']}
+								disabled={{ after: today }}
+							/>
+						)}
 					/>
 
 					<TextInput errorMessage={errors['place']?.message}>
@@ -97,18 +103,22 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 								placeholder={'Select Card Type'}
 								currentValue={watch('card_type')}
 								isTriggered={!!touchedFields['card_type']}
+								suffixWord={'(Card)'}
 								error={errors['card_type']}
-								onSelect={data => setValue('card_type', data)}
+								onSelect={data => {
+									setValue('card_type', data, { shouldValidate: true, shouldTouch: true });
+								}}
 							/>
-							{watch('card_type') === 'credit' && (
+							{watch('card_type') === cardType['신용'] && (
 								<CustomSelect
 									data={installmentPlanMonths}
 									target_id={'installment_plan_months'}
 									placeholder={'Select Installment Month'}
 									currentValue={watch('installment_plan_months')}
 									isTriggered={!!touchedFields['installment_plan_months']}
+									suffixWord={watch('installment_plan_months') === 0 ? '➡️ one-time payment' : '- month'}
 									error={errors['installment_plan_months']}
-									onSelect={data => setValue('installment_plan_months', data)}
+									onSelect={data => setValue('installment_plan_months', data, { shouldValidate: true, shouldTouch: true })}
 								/>
 							)}
 						</>

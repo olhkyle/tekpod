@@ -14,6 +14,7 @@ interface CustomSelectProps<T extends CustomSelectDataType> {
 	placeholder: string;
 	currentValue: T;
 	isTriggered: boolean;
+	suffixWord?: string | null;
 	error?: FieldError;
 	onSelect: (option: T) => void;
 }
@@ -24,6 +25,7 @@ const CustomSelect = <T extends CustomSelectDataType>({
 	placeholder,
 	currentValue,
 	isTriggered,
+	suffixWord = '',
 	error,
 	onSelect,
 }: CustomSelectProps<T>) => {
@@ -39,7 +41,9 @@ const CustomSelect = <T extends CustomSelectDataType>({
 				tabIndex={0}
 				aria-controls={`custom-select-${generatedId}`}
 				aria-expanded={isOpen}>
-				<SelectValue isTriggered={isTriggered}>{isTriggered ? options.find(option => option === currentValue) : placeholder}</SelectValue>
+				<SelectValue isTriggered={isTriggered}>
+					{isTriggered ? `${options.find(option => option === currentValue)} ${suffixWord}` : placeholder}
+				</SelectValue>
 				<Chevron size="21" color="var(--black)" $isOpen={isOpen} />
 			</SelectTrigger>
 			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
