@@ -52,6 +52,7 @@ const Container = styled.div<{ isVisible: boolean; order: number }>`
 	background-color: ${({ order }) => (order === 0 ? 'var(--white)' : `var(--grey50)`)};
 	border-top-left-radius: var(--radius-l);
 	border-top-right-radius: var(--radius-l);
+	border-top: ${({ order }) => (order === 0 ? 'none' : '1px solid var(--grey100)')};
 	transition: transform 0.3s ease;
 	z-index: var(--modal-index);
 	animation: ${({ isVisible }) => (isVisible ? 'slideModalUp 0.3s ease forwards' : 'slideModalDown 0.2s ease forwards')};

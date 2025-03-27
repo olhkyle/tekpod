@@ -130,8 +130,9 @@ const ButtonGroup = styled.div`
 const DeleteButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
-	color: var(--white);
-	background-color: var(--grey400);
+	color: var(--black);
+	background-color: var(--white);
+	border: 1px solid var(--grey200);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 
@@ -139,13 +140,14 @@ const DeleteButton = styled(Button)`
 		display: none;
 	}
 
+	&:active,
+	&:focus,
 	&:hover {
-		background-color: var(--grey300);
+		background-color: var(--grey100);
 	}
 `;
 
 const SubmitButton = styled(Button)`
-	/* margin-top: auto; */
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	color: var(--white);
@@ -153,6 +155,8 @@ const SubmitButton = styled(Button)`
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 
+	&:active,
+	&:focus,
 	&:hover {
 		background-color: var(--grey900);
 	}

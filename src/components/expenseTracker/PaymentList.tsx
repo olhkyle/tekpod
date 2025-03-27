@@ -67,7 +67,6 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 const Container = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin: 0 0 16px 0;
 `;
 
 const TotalPriceHover = styled.dl`

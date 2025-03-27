@@ -14,10 +14,16 @@ const layoutCss = {
 		overflow: hidden;
 	`,
 	main: css`
-		min-height: calc(100dvh - 2 * var(--nav-height));
-		margin: var(--nav-height) 0;
+		position: relative;
+		min-height: calc(100dvh - 2 * var(--nav-height) - 16px);
+		margin: var(--nav-height) 0 calc(var(--nav-height) + 16px);
 		padding: var(--padding-container-mobile);
 		background-color: var(--white);
+
+		@media screen and (min-width: 640px) {
+			min-height: calc(100dvh - 2 * var(--nav-height));
+			margin: var(--nav-height) 0;
+		}
 	`,
 };
 

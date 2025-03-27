@@ -85,7 +85,7 @@ const AddPaymentButton = styled.button`
 `;
 
 const PaymentListLayout = styled.div`
-	margin-top: 32px;
+	margin: 32px 0 48px;
 `;
 
 const PaymentListTitle = styled.div`

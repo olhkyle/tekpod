@@ -225,11 +225,14 @@ const StyledButton = styled(Button)`
 `;
 
 const CancelButton = styled(StyledButton)`
-	background-color: var(--grey300);
+	color: var(--black);
+	background-color: var(--white);
+	border: 1px solid var(--grey200);
 
 	&:active,
-	&:focus {
-		background-color: var(--greyOpacity200);
+	&:focus,
+	&:hover {
+		background-color: var(--grey100);
 	}
 `;
 
@@ -237,8 +240,9 @@ const UpdateButton = styled(StyledButton)`
 	background-color: var(--blue200);
 
 	&:active,
-	&:focus {
-		background-color: var(--blue300);
+	&:focus,
+	&:hover {
+		background-color: var(--blue400);
 	}
 
 	&:disabled {
@@ -251,19 +255,21 @@ const EditRecipeButton = styled(StyledButton)`
 	background-color: var(--black);
 
 	&:active,
-	&:focus {
-		background-color: var(--greyOpacity900);
+	&:focus,
+	&:hover {
+		background-color: var(--grey900);
 	}
 `;
 
 const DeleteRecipeButton = styled(StyledButton)`
 	width: 30%;
-	background-color: var(--grey200);
-	color: var(--grey700);
+	color: var(--grey800);
+	background-color: var(--grey100);
 
 	&:active,
-	&:focus {
-		background-color: var(--greyOpacity300);
+	&:focus,
+	&:hover {
+		background-color: var(--grey200);
 	}
 `;
 

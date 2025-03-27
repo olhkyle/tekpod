@@ -20,17 +20,17 @@ const RemoveFilmRecipeConfirmModal = ({ id, type, data, onClose, onTopLevelModal
 	return (
 		<ModalLayout id={id} type={type} title={'Delete Recipe'} onClose={onClose}>
 			<ButtonGroup>
-				<YesButton type="button" onClick={handleRecipeDelete}>
-					{isPending ? <LoadingSpinner /> : 'YES'}
-				</YesButton>
-				<StyledButton
+				<NoButton
 					type="button"
 					onClick={() => {
 						onClose();
 						onTopLevelModalClose();
 					}}>
 					NO
-				</StyledButton>
+				</NoButton>
+				<YesButton type="button" onClick={handleRecipeDelete}>
+					{isPending ? <LoadingSpinner /> : 'YES'}
+				</YesButton>
 			</ButtonGroup>
 		</ModalLayout>
 	);
@@ -48,16 +48,32 @@ const StyledButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	min-height: 40px;
-	color: var(--white);
-	background-color: var(--black);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-bold);
 	border-radius: var(--radius-s);
 `;
 
+const NoButton = styled(StyledButton)`
+	color: var(--black);
+	background-color: var(--white);
+	border: 1px solid var(--grey200);
+
+	&:active,
+	&:focus,
+	&:hover {
+		background-color: var(--grey100);
+	}
+`;
+
 const YesButton = styled(StyledButton)`
-	background-color: var(--grey300);
-	color: var(--grey700);
+	color: var(--white);
+	background-color: var(--black);
+
+	&:active,
+	&:focus,
+	&:hover {
+		background-color: var(--grey900);
+	}
 `;
 
 export default RemoveFilmRecipeConfirmModal;

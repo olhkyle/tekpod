@@ -17,7 +17,11 @@ const Container = styled.section`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	height: calc(100dvh - (3 * var(--nav-height)));
+	height: calc(100dvh - 2 * var(--nav-height) - 2 * var(--padding-container-mobile) - 16px);
+
+	@media screen and (min-width: 640px) {
+		height: calc(100dvh - 2 * var(--nav-height) - 2 * var(--padding-container-mobile));
+	}
 `;
 
 export default DiaryContentPage;

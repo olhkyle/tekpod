@@ -41,7 +41,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 
 	return (
 		<Container>
-			<MainContent>
+			<div>
 				<PaymentMethod>
 					<WonIconWrapper>
 						{payment.payment_method === 'Card' ? <BsFillCreditCardFill size="14" /> : <FaWonSign size="14" />}
@@ -55,7 +55,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 					</span>
 					<span>{payment.price_unit}</span>
 				</Price>
-			</MainContent>
+			</div>
 
 			<Detail>
 				<DetailGroup>
@@ -64,8 +64,18 @@ const ExpenseTrackerByMonthItemPage = () => {
 				</DetailGroup>
 				<DetailGroup>
 					<dt>Bank</dt>
-					<dd>{payment.bank}</dd>
+					<dd>{payment.bank} bank</dd>
 				</DetailGroup>
+				<DetailGroup>
+					<dt>Card Type</dt>
+					<dd>{payment.card_type}</dd>
+				</DetailGroup>
+				{payment.installment_plan_months && (
+					<DetailGroup>
+						<dt>Installment</dt>
+						<dd>{payment.installment_plan_months} month</dd>
+					</DetailGroup>
+				)}
 				<DetailGroup>
 					<dt>Transaction Date</dt>
 					<dd>{formatByKoreanTime(currentDate)}</dd>
@@ -89,19 +99,15 @@ const ExpenseTrackerByMonthItemPage = () => {
 };
 
 const Container = styled.section`
-	position: relative;
 	display: flex;
 	flex-direction: column;
-	height: calc(100dvh - 3 * var(--nav-height));
 `;
-
-const MainContent = styled.div``;
 
 const PaymentMethod = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 6px;
-	margin-top: 32px;
+	margin-top: 16px;
 
 	span {
 		font-weight: var(--fw-semibold);
@@ -137,6 +143,7 @@ const DetailGroup = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding: 8px 0;
 
 	dt {
 		font-weight: var(--fw-medium);
@@ -146,20 +153,22 @@ const DetailGroup = styled.div`
 	dd {
 		font-size: var(--fz-h7);
 		font-weight: var(--fw-semibold);
+		text-align: right;
 	}
 `;
 
 const DeleteButton = styled(Button)`
-	position: absolute;
-	bottom: 0;
+	margin-top: auto;
 	padding: var(--padding-container-mobile);
-	width: 100%;
+
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);
 	background-color: var(--black);
 
-	&:focus {
+	&:focus,
+	&:active,
+	&:hover {
 		background-color: var(--grey900);
 	}
 `;
