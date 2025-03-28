@@ -1,10 +1,13 @@
 import supabase from './service';
 import { ExpenseTracker } from './schema';
-import { currentYear } from '../utils';
+import { currentMonth, currentYear, formatByKoreanTime } from '../utils';
+import { cardType } from '../constants';
 
 const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_EXPENSE_TRACKER;
 
 const ZERO_PRICE = 0;
+
+const FIXED_PAYMENT_DATE = 8;
 
 const getStartDayOfMonth = (month: number) => new Date(currentYear, month, 1).toISOString();
 
@@ -29,6 +32,79 @@ const calculatePriceUnits = (data: ExpenseTracker[]) => {
 
 	return priceUnits;
 };
+
+/**
+ * @description
+ * Example 1
+ * > 2월 21일 결제 -> 2개월 할부
+ *
+ * > 2월 8일 전에 결제 시 -> 2월 결제 예정 => 2 ~ 3월 동안 21일에 결제
+ *
+ * > 2월 8일 이후 결제 시 -> 3월 결제 예정 => 3 ~ 4월 동안 21일에 결제
+ *
+ * Example 2
+ * > 2월 21일 결제 -> 1개월 할부(일시불)
+ *
+ * > 2월 8일 전에 결제 시 -> 2월 결제 예정 => 2월 21일에 결제
+ *
+ * > 2월 8일 이후 결제 시 -> 3월 결제 예정 => 3월 21일에 결제
+ *
+ * 1. `month > new Date(usage_date).getMonth()`
+ * > e.g. - if. month = 2(March) | new Date(usage_date).getMonth() = 1(February)
+ *
+ * 			1-1-1. 일시불이고 8일보다 전에 결제한 경우 (installment_plan_months === 0 && newDate(usage_date).getDate() <= FIXED_PAYMENT_DATE) | e.g 2월 7일에 결제 (현재는 3월) => 2월 21일 결제 예정이므로 보여줄 필요 없음
+ * 					- not shown (return false | completedMonth : null)
+ *
+ * 			1-1-2.일시불이고 8일보다 이후에 결제한 경우 (installment_plan_months === 0 && newDate(usage_date).getDate() > FIXED_PAYMENT_DATE)
+ * 					- shown (return true | completedMonth : months[installment_plan_months + new Date(usage_date).getMonth() + 1])
+ *
+ * 			1-2-1. 일시불이 아니고, 8일보다 전에 결제한 경우 (installment_plan_months > 0 && newDate(usage_date).getDate() <= FIXED_PAYMENT_DATE)
+ * 					- shown (return true | completedMonth : months[installment_plan_months + new Date(usage_date).getMonth() - 1])
+ *
+ * 			1-2-2. 일시불이 아니고, 8일보다 이후 결제한 경우 (installment_plan_months > 0 && newDate(usage_date).getDate() > FIXED_PAYMENT_DATE)  e.g. 2월 21일 결제 (현재는 3월) =>  3 - 4월 (2개월 할부)
+ * 					- shown (return true | completedMonth : installment_plan_months + new Date(usage_date).getMonth())
+ *
+ * >
+ *
+ * 2. `month === newDate(usage_date).getMonth()`
+ * > e.g. - if. month = 2(March) | new Date(usage_date).getMonth() = 2(March)
+ *
+ * 			2-1-1. 일시불이고 8일보다 전에 결제한 경우(installment_plan_months === 0 && newDate(usage_date).getDate() <= FIXED_PAYMENT_DATE)
+ * 					- shown (return true | completedMonth : months[new Date(usage_date).getMonth()])
+ *
+ * 			2-1-2. 일시불이고 8일보다 이후에 결제한 경우(installment_plan_months === 0 && newDate(usage_date).getDate() > FIXED_PAYMENT_DATE)
+ * 					- shown (return true | completedMonth : months[new Date(usage_date).getMonth() + 1])
+ *
+ * 			2-2-1. 일시불이 아니고, 8일보다 전에 결제한 경우 (installment_plan_months > 0 && newDate(usage_date).getDate() <= FIXED_PAYMENT_DATE) | e.g. 3월 7일 결제 (현재는 3월) => 3월 21일 결제 완료 (1개월 할부)
+ * 					- shown (return true | completedMonth : months[installment_plan_months + new Date(usage_date).getMonth()])
+ *
+ * 			2-2-2. 일시불이 아니고, 8일보다 이후에 결제한 경우 |(installment_plan_months > 0 && newDate(usage_date).getDate() > FIXED_PAYMENT_DATE) | e.g 3월 21일 결제 (현재는 3월) =>  4 - 5월 (2개월 할부)
+ * 					- shown (return true | completedMonth : months[installment_plan_months + new Date(usage_date).getMonth() + 1])
+ */
+
+const getCreditCardTransactionData = (data: ExpenseTracker[]) =>
+	data?.filter(item => {
+		const _date = new Date(formatByKoreanTime(item.usage_date));
+		const [usage_month, usage_date] = [_date.getMonth(), _date.getDate()];
+
+		if (usage_month < currentMonth) {
+			if (item.installment_plan_months === 0) {
+				return usage_date > FIXED_PAYMENT_DATE;
+			}
+
+			return true;
+		}
+
+		if (usage_month === currentMonth) {
+			if (item.installment_plan_months === 0) {
+				return usage_date > FIXED_PAYMENT_DATE;
+			}
+
+			return true;
+		}
+
+		return false;
+	});
 
 type PaymentsByDate = { expense: ExpenseTracker[]; totalPrice: number | Record<string, number> };
 
@@ -82,6 +158,20 @@ const getFixedCostPaymentsByMonth = async (month: number) => {
 	return data;
 };
 
+const getCreditCardPaymentsByMonth = async () => {
+	const { data, error } = await supabase
+		.from(TABLE)
+		.select('*')
+		.eq('card_type', cardType['신용'])
+		.order('usage_date', { ascending: false });
+
+	if (error) {
+		throw new Error(error.message);
+	}
+
+	return getCreditCardTransactionData(data);
+};
+
 const addPayment = async (data: Omit<ExpenseTracker, 'id' | 'isFixed'>) => {
 	const { error: addPaymentError } = await supabase.from(TABLE).insert(data).select();
 
@@ -103,4 +193,13 @@ const removePayment = async ({ id }: { id: string }) => {
 };
 
 export type { PaymentsByDate };
-export { getPaymentsByDate, getAllPaymentsByMonth, getFixedCostPaymentsByMonth, addPayment, togglePaymentIsFixed, removePayment };
+export {
+	FIXED_PAYMENT_DATE,
+	getPaymentsByDate,
+	getAllPaymentsByMonth,
+	getFixedCostPaymentsByMonth,
+	getCreditCardPaymentsByMonth,
+	addPayment,
+	togglePaymentIsFixed,
+	removePayment,
+};
