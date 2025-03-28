@@ -1,11 +1,15 @@
+import { Suspense } from 'react';
 import styled from '@emotion/styled';
-import { WorkInProgress } from '../components';
+import { CreditCardTransactionList, CreditCardTransactionListLoader, Description } from '../components';
 
 const ExpenseTrackerCreditCardTransaction = () => {
 	return (
 		<section>
-			<Title>Credit Card</Title>
-			<WorkInProgress />
+			<Title>Scheduled Charge</Title>
+			<Description>This page will show all scheduled credit card transaction based on Current Month</Description>
+			<Suspense fallback={<CreditCardTransactionListLoader />}>
+				<CreditCardTransactionList />
+			</Suspense>
 		</section>
 	);
 };

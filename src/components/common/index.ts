@@ -3,6 +3,7 @@ export { default as Button } from './Button';
 export { default as Checkbox } from './Checkbox';
 export { default as CustomSelect } from './CustomSelect';
 export { default as DatePicker } from './DatePicker';
+export { default as Description } from './Description';
 export { default as Drawer } from './Drawer';
 export { default as EmptyMessage } from './EmptyMessage';
 export { default as LazyImage } from './LazyImage';
