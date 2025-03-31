@@ -139,6 +139,12 @@ const getAllPaymentsByMonth = async (month: number) => {
 		throw new Error(error.message);
 	}
 
+	return data;
+};
+
+const getAllPaymentsPriceByMonth = async (month: number) => {
+	const data = await getAllPaymentsByMonth(month);
+
 	return Object.values(calculatePriceUnits(data)).length === 0 ? { price: 0 } : calculatePriceUnits(data);
 };
 
@@ -197,6 +203,7 @@ export {
 	FIXED_PAYMENT_DATE,
 	getPaymentsByDate,
 	getAllPaymentsByMonth,
+	getAllPaymentsPriceByMonth,
 	getFixedCostPaymentsByMonth,
 	getCreditCardPaymentsByMonth,
 	addPayment,
