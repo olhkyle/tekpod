@@ -32,10 +32,10 @@ const CreditCardTransactionList = () => {
 							</div>
 						</PlaceAndPrice>
 
-						<CompletedMonthSummary>
+						<CompletedMonthInfo>
 							<span>complete payment on </span>
 							<CompletedMonth>{payment.completedMonth}</CompletedMonth>
-						</CompletedMonthSummary>
+						</CompletedMonthInfo>
 					</Info>
 					<Content>
 						<InstallmentPlan>
@@ -81,8 +81,9 @@ const Info = styled.div`
 const UsageDate = styled.div`
 	display: inline-flex;
 	align-items: center;
-	font-size: var(--fz-p);
+	font-size: var(--fz-sm);
 	font-weight: var(--fw-medium);
+	color: var(--grey700);
 	border-radius: var(--radius-l);
 `;
 
@@ -99,7 +100,7 @@ const PlaceAndPrice = styled.div`
 	}
 `;
 
-const CompletedMonthSummary = styled.div`
+const CompletedMonthInfo = styled.div`
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
