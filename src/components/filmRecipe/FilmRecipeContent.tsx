@@ -25,16 +25,19 @@ const FilmRecipeContent = ({ recipes, refetch }: FilmRecipeContentProps) => {
 
 	return (
 		<Container>
-			{recipes.length === 0 && <EmptyMessage emoji={'📷'}>{'Add Recipe Please'}</EmptyMessage>}
-			{recipes.map(({ title, film_simulation, primary }, idx) => (
-				<Recipe key={idx} primary={primary} onClick={() => handleIndividualFilmRecipeModal(title)}>
-					<Title>
-						<NumberCount primary={primary}>{idx + 1}</NumberCount>
-						<span>{title}</span>
-					</Title>
-					<FilmSimulation>{film_simulation}</FilmSimulation>
-				</Recipe>
-			))}
+			{recipes.length === 0 ? (
+				<EmptyMessage emoji={'📷'}>{'Add Recipe Please'}</EmptyMessage>
+			) : (
+				recipes.map(({ title, film_simulation, primary }, idx) => (
+					<Recipe key={idx} primary={primary} onClick={() => handleIndividualFilmRecipeModal(title)}>
+						<Title>
+							<NumberCount primary={primary}>{idx + 1}</NumberCount>
+							<span>{title}</span>
+						</Title>
+						<FilmSimulation>{film_simulation}</FilmSimulation>
+					</Recipe>
+				))
+			)}
 		</Container>
 	);
 };
