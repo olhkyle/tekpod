@@ -8,7 +8,7 @@ import { AddPaymentFormSchema, addPaymentFormSchema } from '.';
 import { Button, CustomSelect, DatePicker, TextInput } from '../..';
 import { addPayment } from '../../../supabase';
 import { useLoading } from '../../../hooks';
-import { paymentData, toastData, queryKey, installmentPlanMonths, cardType } from '../../../constants';
+import { paymentData, toastData, installmentPlanMonths, cardType } from '../../../constants';
 import { useToastStore } from '../../../store';
 import { monetizeWithSeparator, today } from '../../../utils';
 
@@ -31,11 +31,22 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 		formState: { errors, touchedFields },
 	} = useForm<AddPaymentFormSchema>({
 		resolver: zodResolver(addPaymentFormSchema),
-		defaultValues: { usage_date: today, priceIntegerPart: '', priceDecimalPart: '', installment_plan_months: null },
+		defaultValues: { usage_date: today, installment_plan_months: null },
 	});
 
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
+
+	// const formattedPrice = (price: number) => {
+	// 	if (watch('price_unit') === 'WON' || watch('price_unit') === 'JPY') {
+	// 		return price;
+	// 	} else {
+	// 		return new Intl.NumberFormat('en-US', {
+	// 			minimumFractionDigits: 2,
+	// 			maximumFractionDigits: 2,
+	// 		}).format(price);
+	// 	}
+	// };
 
 	const onSubmit = async (data: AddPaymentFormSchema) => {
 		const currentTime = new Date().toISOString();
@@ -56,7 +67,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 			console.error(e);
 			addToast(toastData.EXPENSE_TRACKER.CREATE.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.EXPENSE_TRACKER });
+			// queryClient.invalidateQueries({ queryKey: queryKey.EXPENSE_TRACKER });
 		}
 	};
 
@@ -85,7 +96,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 
 					<CustomSelect
 						data={paymentData.paymentMethod}
-						target_id={'payment_method'}
+						label={'payment_method'}
 						placeholder={'Card / Cash'}
 						currentValue={watch('payment_method')}
 						isTriggered={!!touchedFields['payment_method']}
@@ -99,7 +110,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 						<>
 							<CustomSelect
 								data={Object.values(cardType)}
-								target_id={'card_type'}
+								label={'card_type'}
 								placeholder={'Select Card Type'}
 								currentValue={watch('card_type')}
 								isTriggered={!!touchedFields['card_type']}
@@ -107,12 +118,13 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 								error={errors['card_type']}
 								onSelect={data => {
 									setValue('card_type', data, { shouldValidate: true, shouldTouch: true });
+									setValue('installment_plan_months', null);
 								}}
 							/>
 							{watch('card_type') === cardType['신용'] && (
 								<CustomSelect
 									data={installmentPlanMonths}
-									target_id={'installment_plan_months'}
+									label={'installment_plan_months'}
 									placeholder={'Select Installment Month'}
 									currentValue={watch('installment_plan_months')}
 									isTriggered={!!touchedFields['installment_plan_months']}
@@ -126,7 +138,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 
 					<CustomSelect
 						data={paymentData.banks}
-						target_id={'bank'}
+						label={'bank'}
 						placeholder={'Select Bank'}
 						currentValue={watch('bank')}
 						isTriggered={!!touchedFields['bank']!}
@@ -141,7 +153,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 
 					<CustomSelect
 						data={paymentData.priceUnits}
-						target_id={'price_unit'}
+						label={'price_unit'}
 						placeholder={'Unit'}
 						currentValue={watch('price_unit')}
 						isTriggered={touchedFields['price_unit']!}
@@ -149,56 +161,26 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 						onSelect={data => setValue('price_unit', data, { shouldValidate: true, shouldTouch: true })}
 					/>
 
-					<BottomFixedFlex direction="row">
-						<Controller
-							name="priceIntegerPart"
-							control={control}
-							render={({ field: { name, value, onChange, onBlur } }) => (
-								<TextInput errorMessage={errors['priceIntegerPart']?.message}>
-									<TextInput.ControlledTextField
-										type="text"
-										inputMode="numeric" // 모바일에서 숫자 키패드 표시
-										id="priceIntegerPart"
-										name={name}
-										value={value ? monetizeWithSeparator(value) : ''}
-										onChange={e => {
-											const numericValue = e.target.value.replace(/[^0-9]/g, '');
-											onChange(numericValue);
-										}}
-										onBlur={onBlur}
-										placeholder="000"
-									/>
-								</TextInput>
-							)}
-						/>
-						{watch('price_unit') !== 'WON' && watch('price_unit') !== 'JPY' && (
-							<>
-								<Point>.</Point>
-								<Controller
-									name="priceDecimalPart"
-									control={control}
-									render={({ field: { name, value, onChange, onBlur } }) => (
-										<TextInput errorMessage={errors['priceDecimalPart']?.message}>
-											<TextInput.ControlledTextField
-												type="text"
-												inputMode="numeric" // 모바일에서 숫자 키패드 표시
-												id="priceDecimalPart"
-												name={name}
-												value={value ? value.toString() : ''}
-												onChange={e => {
-													const numericValue = e.target.value.replace(/[^0-9]/g, '');
-													onChange(numericValue);
-												}}
-												onBlur={onBlur}
-												maxLength={2}
-												placeholder="00"
-											/>
-										</TextInput>
-									)}
+					<Controller
+						name="price"
+						control={control}
+						render={({ field: { name, value, onChange, onBlur } }) => (
+							<TextInput errorMessage={errors['price']?.message}>
+								<TextInput.ControlledTextField
+									type="text"
+									id="price"
+									name={name}
+									value={value ? monetizeWithSeparator(value) : ''}
+									onChange={e => {
+										onChange(e.target.value.replace(/[^\d.]/g, ''));
+									}}
+									onBlur={onBlur}
+									placeholder={watch('price_unit') === 'WON' || watch('price_unit') === 'JPY' ? '1,000' : '100.00'}
+									inputMode="numeric"
 								/>
-							</>
+							</TextInput>
 						)}
-					</BottomFixedFlex>
+					/>
 				</Flex>
 
 				<SubmitButton type="submit">{isLoading ? Loading : 'Add'}</SubmitButton>
@@ -220,16 +202,6 @@ const Flex = styled.div<{ direction: 'row' | 'column' }>`
 	flex-direction: ${({ direction }) => direction};
 	gap: 8px;
 	margin-top: 8px;
-`;
-
-const BottomFixedFlex = styled(Flex)`
-	justify-content: space-between;
-`;
-
-const Point = styled.div`
-	padding-top: 32px;
-	font-size: 16px;
-	font-weight: var(--fw-black);
 `;
 
 const SubmitButton = styled(Button)`

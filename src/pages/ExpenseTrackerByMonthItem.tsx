@@ -5,7 +5,7 @@ import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
 import { Button, Switch } from '../components';
 import { useLoading, useTogglePaymentIsFixedMutation } from '../hooks';
-import { removePayment } from '../supabase';
+import { ExpenseTracker, removePayment } from '../supabase';
 import { monetizeWithSeparator, formatByKoreanTime } from '../utils';
 import { useToastStore } from '../store';
 import { routes, queryKey, toastData } from '../constants';
@@ -14,7 +14,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 	const queryClient = useQueryClient();
 	const {
 		state: { payment, currentDate },
-	} = useLocation();
+	} = useLocation() as { state: { payment: ExpenseTracker; currentDate: Date } };
 
 	const navigate = useNavigate();
 	const { startTransition, Loading, isLoading } = useLoading();
@@ -49,10 +49,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 					<span>{payment.payment_method}</span>
 				</PaymentMethod>
 				<Price>
-					<span>
-						{monetizeWithSeparator(payment.priceIntegerPart)}
-						{payment.priceDecimalPart.length ? `.${payment.priceDecimalPart}` : ''}
-					</span>
+					<span>{monetizeWithSeparator(payment.price)}</span>
 					<span>{payment.price_unit}</span>
 				</Price>
 			</div>
@@ -66,10 +63,12 @@ const ExpenseTrackerByMonthItemPage = () => {
 					<dt>Bank</dt>
 					<dd>{payment.bank} bank</dd>
 				</DetailGroup>
-				<DetailGroup>
-					<dt>Card Type</dt>
-					<dd>{payment.card_type}</dd>
-				</DetailGroup>
+				{payment.payment_method === 'Card' && (
+					<DetailGroup>
+						<dt>Card Type</dt>
+						<dd>{payment.card_type}</dd>
+					</DetailGroup>
+				)}
 				{payment.installment_plan_months && (
 					<DetailGroup>
 						<dt>Installment</dt>

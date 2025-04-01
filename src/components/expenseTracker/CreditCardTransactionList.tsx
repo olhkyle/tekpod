@@ -26,9 +26,7 @@ const CreditCardTransactionList = () => {
 						<PlaceAndPrice>
 							<div aria-label="place">{payment.place}</div>
 							<div aria-label="price">
-								{monetizeWithSeparator(payment.priceIntegerPart)}
-								{payment.priceDecimalPart && '.'}
-								{payment.priceDecimalPart} {payment.price_unit}
+								{monetizeWithSeparator(payment.price)} {payment.price_unit}
 							</div>
 						</PlaceAndPrice>
 

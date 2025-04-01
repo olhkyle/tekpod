@@ -99,6 +99,7 @@ const SelectContent = styled.div<{ isOpen: boolean }>`
 	border: 1px solid var(--grey100);
 	border-radius: var(--radius-s);
 	transition: height 0.3s ease-in-out display 0.5s ease-in-out;
+	z-index: 1;
 `;
 
 const SelectDescriptionLabel = styled.span`

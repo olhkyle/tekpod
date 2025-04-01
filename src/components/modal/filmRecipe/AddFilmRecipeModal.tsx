@@ -105,17 +105,17 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 					onImageRemove={handleImageRemove}
 				/>
 
-				{FILM_RECIPE_FORM.FIELDS.map(({ type, data, target_id, placeholder }, idx) => {
+				{FILM_RECIPE_FORM.FIELDS.map(({ type, data, label, placeholder }, idx) => {
 					return type === 'input' ? (
-						<TextInput key={`${type}_${idx}`} aria-label={target_id}>
+						<TextInput key={`${type}_${idx}`} aria-label={label}>
 							<TextInput.ControlledTextField
-								id={target_id}
-								name={target_id}
+								id={label}
+								name={label}
 								placeholder={placeholder}
-								value={currentFilmFeature[target_id].toString()}
+								value={currentFilmFeature[label].toString()}
 								onChange={e => {
-									setCurrentFilmFeature({ ...currentFilmFeature, [target_id]: e.target.value });
-									setTriggered({ ...isTriggered, [target_id]: e.target.value.length > 1 });
+									setCurrentFilmFeature({ ...currentFilmFeature, [label]: e.target.value });
+									setTriggered({ ...isTriggered, [label]: e.target.value.length > 1 });
 								}}
 							/>
 						</TextInput>
@@ -123,13 +123,13 @@ const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 						<CustomSelect
 							key={`${type}_${idx}`}
 							data={data}
-							target_id={target_id}
+							label={label}
 							placeholder={placeholder}
-							currentValue={currentFilmFeature[target_id]}
-							isTriggered={isTriggered[target_id]}
+							currentValue={currentFilmFeature[label]}
+							isTriggered={isTriggered[label]}
 							onSelect={(option: string | number) => {
-								setCurrentFilmFeature({ ...currentFilmFeature, [target_id]: option });
-								setTriggered({ ...isTriggered, [target_id]: true });
+								setCurrentFilmFeature({ ...currentFilmFeature, [label]: option });
+								setTriggered({ ...isTriggered, [label]: true });
 							}}
 						/>
 					) : null;

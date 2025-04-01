@@ -180,8 +180,7 @@ export interface Database {
 					id: string;
 					user_id: string;
 					place: string;
-					priceIntegerPart: string;
-					priceDecimalPart: string;
+					price: number;
 					price_unit: string;
 					payment_method: string;
 					bank: string;
@@ -197,8 +196,7 @@ export interface Database {
 					id?: never; // generated columns must not be supplied
 					user_id: string;
 					place: string;
-					priceIntegerPart: string;
-					priceDecimalPart: string;
+					price: number;
 					price_unit: string;
 					payment_method: string;
 					bank?: string;
@@ -214,8 +212,7 @@ export interface Database {
 					id: never;
 					user_id: string;
 					place?: string;
-					priceIntegerPart?: string;
-					priceDecimalPart?: string;
+					price?: number;
 					price_unit?: string;
 					payment_method?: string;
 					bank?: string;

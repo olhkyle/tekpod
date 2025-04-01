@@ -57,11 +57,11 @@ const Container = styled.div<{ isVisible: boolean; order: number }>`
 	z-index: var(--modal-index);
 	animation: ${({ isVisible }) => (isVisible ? 'slideModalUp 0.3s ease forwards' : 'slideModalDown 0.2s ease forwards')};
 	-webkit-animation: ${({ isVisible }) => (isVisible ? 'slideModalUp 0.3s ease forwards' : 'slideModalDown 0.2s ease forwards')};
-	-webkit-overflow-scrolling: touch; // iOS 스크롤 지원
+	-webkit-overflow-scrolling: touch; // iOS scroll support
 	-ms-overflow-style: none; // IE and Edge
 	scrollbar-width: none; // Firefox
 	&::-webkit-scrollbar {
-		display: none; // 스크롤바 숨기기 (선택사항)
+		display: none; // hide scrollbar (optional)
 	}
 
 	@keyframes slideModalUp {

@@ -8,7 +8,7 @@ interface PaymentItemProps {
 	data: ExpenseTracker;
 }
 
-const PaymentItem = ({ data: { place, priceIntegerPart, priceDecimalPart, payment_method, bank } }: PaymentItemProps) => {
+const PaymentItem = ({ data: { place, price, payment_method, bank } }: PaymentItemProps) => {
 	return (
 		<Container
 			onBlur={e => {
@@ -19,10 +19,7 @@ const PaymentItem = ({ data: { place, priceIntegerPart, priceDecimalPart, paymen
 				<Main>
 					<div>
 						<dt>Price</dt>
-						<dd>
-							{monetizeWithSeparator(priceIntegerPart)}
-							{priceDecimalPart.length ? `.${priceDecimalPart}` : ''}
-						</dd>
+						<dd>{monetizeWithSeparator(price)}</dd>
 					</div>
 					{payment_method === 'Cash' ? (
 						<div>

@@ -49,9 +49,12 @@ const addPaymentFormSchema = z.object({
 	card_type: cardTypeSchema,
 	installment_plan_months: installment,
 	bank: bankSchema,
-	priceIntegerPart: z.string().min(1, 'Please write the Price'),
-	priceDecimalPart: z.string().max(2, 'Please write up to 2 decimal points').default(''),
 	price_unit: priceUnitSchema,
+	price: z
+		.string({ required_error: 'Please write the price' })
+		.regex(/^\d+(\.\d{0,2})?$/, 'Write correct price(max 2 decimal points)')
+		.transform(val => parseFloat(val))
+		.refine(val => !isNaN(val) && val >= 0, 'Price should be over 0'),
 });
 
 export type { AddPaymentFormSchema };

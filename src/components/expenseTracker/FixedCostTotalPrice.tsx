@@ -9,7 +9,7 @@ const FixedCostTotalPrice = () => {
 		queryFn: () => getFixedCostPaymentsByMonth(currentMonth - 1),
 	});
 
-	return <p aria-label="total price">{monetizeWithSeparator(data.reduce((acc, curr) => acc + +curr.priceIntegerPart, 0))}</p>;
+	return <p aria-label="total price">{monetizeWithSeparator(data.reduce((acc, curr) => acc + curr.price, 0))}</p>;
 };
 
 export default FixedCostTotalPrice;
