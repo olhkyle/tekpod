@@ -56,7 +56,7 @@ const WritePage = () => {
 			<Header>
 				<Title>✍🏻</Title>
 			</Header>
-			<Group onSubmit={handleSubmit(onSubmit)}>
+			<Form onSubmit={handleSubmit(onSubmit)}>
 				<Wrapper>
 					<TextInput errorMessage={errors?.title?.message}>
 						<TextInput.TextField id="title" {...register('title')} placeholder="✨ Title" />
@@ -80,7 +80,7 @@ const WritePage = () => {
 					/>
 				</Wrapper>
 				<UploadButton type="submit">{isLoading ? Loading : 'Upload'}</UploadButton>
-			</Group>
+			</Form>
 		</Container>
 	);
 };
@@ -102,12 +102,11 @@ const Title = styled.h2`
 	font-weight: var(--fw-black);
 `;
 
-const Group = styled.form`
+const Form = styled.form`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	gap: 16px;
-	min-height: calc(100dvh - 4 * var(--nav-height));
 `;
 
 const Wrapper = styled.div`
@@ -117,6 +116,9 @@ const Wrapper = styled.div`
 `;
 
 const UploadButton = styled(Button)`
+	position: fixed;
+	bottom: calc(var(--nav-height) + 32px);
+	width: calc(100dvw - 32px);
 	padding: var(--padding-container-mobile);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
@@ -126,6 +128,11 @@ const UploadButton = styled(Button)`
 	&:hover,
 	&:focus {
 		background-color: var(--blue400);
+	}
+
+	@media screen and (min-width: 640px) {
+		bottom: calc(var(--nav-height) + 16px);
+		width: calc(var(--max-app-width) - 32px);
 	}
 `;
 
