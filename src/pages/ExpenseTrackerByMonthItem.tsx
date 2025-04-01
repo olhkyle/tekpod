@@ -49,10 +49,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 					<span>{payment.payment_method}</span>
 				</PaymentMethod>
 				<Price>
-					<span>
-						{monetizeWithSeparator(payment.priceIntegerPart)}
-						{payment.priceDecimalPart.length ? `.${payment.priceDecimalPart}` : ''}
-					</span>
+					<span>{monetizeWithSeparator(payment.price)}</span>
 					<span>{payment.price_unit}</span>
 				</Price>
 			</div>

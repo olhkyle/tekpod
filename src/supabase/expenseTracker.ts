@@ -15,13 +15,13 @@ const getEndDayOfMonth = (month: number) => new Date(currentYear, month + 1, 0).
 
 const calculatePriceUnits = (data: ExpenseTracker[]) => {
 	const groupByUnit = data.reduce<Record<string, number[]>>((acc, item) => {
-		const { price_unit, priceIntegerPart, priceDecimalPart } = item;
+		const { price_unit, price } = item;
 
 		if (!acc[price_unit]) {
 			acc[price_unit] = [];
 		}
 
-		acc[price_unit].push(Number(`${priceIntegerPart}.${priceDecimalPart}`));
+		acc[price_unit].push(price);
 		return acc;
 	}, {});
 
@@ -133,7 +133,8 @@ const getAllPaymentsByMonth = async (month: number) => {
 		.from(TABLE)
 		.select('*')
 		.gte('usage_date', getStartDayOfMonth(month))
-		.lte('usage_date', getEndDayOfMonth(month));
+		.lte('usage_date', getEndDayOfMonth(month))
+		.order('usage_date', { ascending: false });
 
 	if (error) {
 		throw new Error(error.message);
@@ -146,6 +147,21 @@ const getAllPaymentsPriceByMonth = async (month: number) => {
 	const data = await getAllPaymentsByMonth(month);
 
 	return Object.values(calculatePriceUnits(data)).length === 0 ? { price: 0 } : calculatePriceUnits(data);
+};
+
+const getMaxAndMinPaymentsByMonth = async (month: number) => {
+	const { data, error } = await supabase
+		.from(TABLE)
+		.select('*')
+		.gte('usage_date', getStartDayOfMonth(month))
+		.lte('usage_date', getEndDayOfMonth(month));
+
+	if (error) {
+		throw new Error(error.message);
+	}
+
+	console.log(data);
+	return data;
 };
 
 const getFixedCostPaymentsByMonth = async (month: number) => {
@@ -204,6 +220,7 @@ export {
 	getPaymentsByDate,
 	getAllPaymentsByMonth,
 	getAllPaymentsPriceByMonth,
+	getMaxAndMinPaymentsByMonth,
 	getFixedCostPaymentsByMonth,
 	getCreditCardPaymentsByMonth,
 	addPayment,

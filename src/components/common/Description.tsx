@@ -8,6 +8,7 @@ const Description = ({ children }: DescriptionProps) => {
 	return (
 		<p
 			css={{
+				marginBottom: '8px',
 				padding: 'calc(var(--padding-container-mobile) * 0.5) calc(var(--padding-container-mobile) * 0.75)',
 				fontWeight: 'var(--fw-medium)',
 				color: 'var(--blue200)',
