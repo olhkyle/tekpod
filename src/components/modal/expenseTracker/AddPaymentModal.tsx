@@ -85,7 +85,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 
 					<CustomSelect
 						data={paymentData.paymentMethod}
-						target_id={'payment_method'}
+						label={'payment_method'}
 						placeholder={'Card / Cash'}
 						currentValue={watch('payment_method')}
 						isTriggered={!!touchedFields['payment_method']}
@@ -99,7 +99,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 						<>
 							<CustomSelect
 								data={Object.values(cardType)}
-								target_id={'card_type'}
+								label={'card_type'}
 								placeholder={'Select Card Type'}
 								currentValue={watch('card_type')}
 								isTriggered={!!touchedFields['card_type']}
@@ -112,7 +112,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 							{watch('card_type') === cardType['신용'] && (
 								<CustomSelect
 									data={installmentPlanMonths}
-									target_id={'installment_plan_months'}
+									label={'installment_plan_months'}
 									placeholder={'Select Installment Month'}
 									currentValue={watch('installment_plan_months')}
 									isTriggered={!!touchedFields['installment_plan_months']}
@@ -126,7 +126,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 
 					<CustomSelect
 						data={paymentData.banks}
-						target_id={'bank'}
+						label={'bank'}
 						placeholder={'Select Bank'}
 						currentValue={watch('bank')}
 						isTriggered={!!touchedFields['bank']!}
@@ -141,7 +141,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 
 					<CustomSelect
 						data={paymentData.priceUnits}
-						target_id={'price_unit'}
+						label={'price_unit'}
 						placeholder={'Unit'}
 						currentValue={watch('price_unit')}
 						isTriggered={touchedFields['price_unit']!}

@@ -10,7 +10,7 @@ export type CustomSelectDataType = PaymentDataType | FilmRecipeFieldDataType[num
 
 interface CustomSelectProps<T extends CustomSelectDataType> {
 	data: readonly T[];
-	target_id: keyof RestrictedRecipeForValidation | keyof ExpenseTracker;
+	label: keyof RestrictedRecipeForValidation | keyof ExpenseTracker;
 	placeholder: string;
 	currentValue: T;
 	isTriggered: boolean;
@@ -21,7 +21,7 @@ interface CustomSelectProps<T extends CustomSelectDataType> {
 
 const CustomSelect = <T extends CustomSelectDataType>({
 	data: options,
-	target_id,
+	label,
 	placeholder,
 	currentValue,
 	isTriggered,
@@ -49,7 +49,7 @@ const CustomSelect = <T extends CustomSelectDataType>({
 			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
 
 			<SelectContent isOpen={isOpen} aria-labelledby={`custom-select-${generatedId}-content`}>
-				<Label>{target_id.toUpperCase()}</Label>
+				<Label>{label.toUpperCase()}</Label>
 				<SelectItemGrid column={options.length > 10 ? 2 : 1}>
 					{options.map((option, idx) => (
 						<SelectItem
