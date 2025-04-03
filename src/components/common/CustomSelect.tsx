@@ -4,9 +4,10 @@ import { FieldError } from 'react-hook-form';
 import { BiSolidChevronRight } from 'react-icons/bi';
 import { Button } from '.';
 import type { ExpenseTracker, RestrictedRecipeForValidation } from '../../supabase';
-import { customPropReceiver, PaymentDataType, FilmRecipeFieldDataType } from '../../constants';
+import { useClickOutside } from '../../hooks';
+import { customPropReceiver, PaymentDataValueType, FilmRecipeFieldDataType } from '../../constants';
 
-export type CustomSelectDataType = PaymentDataType | FilmRecipeFieldDataType[number] | string | number | null;
+export type CustomSelectDataType = PaymentDataValueType | FilmRecipeFieldDataType[number] | string | number | null;
 
 interface CustomSelectProps<T extends CustomSelectDataType> {
 	data: readonly T[];
@@ -32,8 +33,10 @@ const CustomSelect = <T extends CustomSelectDataType>({
 	const generatedId = useId();
 	const [isOpen, setOpen] = useState(false);
 
+	const targetRef = useClickOutside<HTMLDivElement>({ eventHandler: () => setOpen(false) });
+
 	return (
-		<SelectRoot>
+		<SelectRoot ref={targetRef}>
 			<SelectTrigger
 				type="button"
 				role="combobox"
@@ -145,6 +148,10 @@ const SelectItem = styled.div<{ isCurrent: boolean }>`
 
 	&:hover {
 		background-color: var(--greyOpacity100);
+	}
+
+	&:focus {
+		outline: 2px solid var(--grey500);
 	}
 `;
 
