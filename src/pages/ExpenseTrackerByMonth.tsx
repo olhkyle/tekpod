@@ -10,10 +10,8 @@ export type ExtendedPaymentMethodType = (typeof segmentedControlOptions)[number]
 const segmentedControlOptions = ['All', 'Card', 'Cash'] as const;
 
 const ExpenseTrackerByMonthPage = () => {
-	const {
-		state: { currentDate },
-	} = useLocation() as { state: { currentDate: Date } };
-	const [selected, setSelected] = useState<Date>(currentDate ?? today);
+	const { state } = useLocation() as { state: { currentDate: Date } };
+	const [selected, setSelected] = useState<Date>(state?.currentDate ?? today);
 	const { setModal } = useModalStore();
 
 	const [currentPaymentMethod, setCurrentPaymentMethod] = useState<ExtendedPaymentMethodType>(segmentedControlOptions[0]);
