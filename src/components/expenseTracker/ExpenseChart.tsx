@@ -17,7 +17,7 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 
 	const [isSmallMobile, isMediumMobile] = [useMediaQuery('(max-width: 320px)'), useMediaQuery('(max-width: 430px)')];
 
-	const lineChartWidth = isSmallMobile ? 280 : isMediumMobile ? 380 : 440;
+	const lineChartWidth = isSmallMobile ? 280 : isMediumMobile ? 340 : 440;
 
 	const getTotalPricePerMonth = expenses.reduce<{ [date: string]: number }>((acc, curr) => {
 		const formatDate = new Date(formatByKoreanTime(curr.usage_date)).getDate();
