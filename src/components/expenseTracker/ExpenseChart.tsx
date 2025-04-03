@@ -5,6 +5,7 @@ import { ExpenseTracker, getAllPaymentsByMonth } from '../../supabase';
 import { queryKey } from '../../constants';
 import { formatByKoreanTime, monetizeWithSeparator, months } from '../../utils';
 import { useMediaQuery } from '../../hooks';
+import { EmptyMessage } from '../common';
 
 interface ExpenseChartProps {
 	selectMonth: (typeof months)[number];
@@ -36,43 +37,53 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 
 	return (
 		<Container>
-			<LineChart width={lineChartWidth} height={400} data={filteredData} margin={{ top: 10, right: 10, left: -25, bottom: 5 }}>
-				<Line name="price" type="monotone" dataKey={'price'} stroke={'var(--black)'} />
-				<CartesianGrid stroke="var(--grey200)" strokeDasharray="3 3" />
-				<Tooltip
-					labelFormatter={label => `${label}일`}
-					wrapperStyle={{
-						border: 'none',
-						backgroundColor: 'var(--background)',
-					}}
-					labelStyle={{
-						fontWeight: 'var(--fw-semibold)',
-						color: 'var(--black)',
-					}}
-					contentStyle={{
-						border: '1px solid var(--grey200)',
-						borderRadius: '14px',
-					}}
-					itemStyle={{
-						color: 'var(--grey900)',
-						fontSize: 'var(--fz-sm)',
-					}}
-				/>
-				<Legend align="right" verticalAlign="bottom" height={36} />
-				<XAxis dataKey="date" />
-				<YAxis dataKey="price" tickFormatter={value => `${Math.floor(value / 1000)}`} />
-			</LineChart>
-			<MaxAndMinPriceList>
-				{[sortedData.at(-1), sortedData[0]].map((payment, idx) => (
-					<MaxAndMinPrice key={`${idx}_${payment?.date}_${payment?.price}`}>
-						<Label>{idx === 0 ? 'The day I spent the most' : 'The day I spent the least'}</Label>
-						<DateAndPrice>
-							<span aria-label="date">{`${months.findIndex(month => month === selectMonth) + 1}/${payment?.date}`}</span>
-							<span aria-label="price">{monetizeWithSeparator(`${payment?.price}`)}</span>
-						</DateAndPrice>
-					</MaxAndMinPrice>
-				))}
-			</MaxAndMinPriceList>
+			{expenses.length === 0 ? (
+				<EmptyMessage emoji="📈">None of Expenses</EmptyMessage>
+			) : (
+				<>
+					<LineChart width={lineChartWidth} height={400} data={filteredData} margin={{ top: 10, right: 10, left: -25, bottom: 5 }}>
+						<Line name="price" type="monotone" dataKey={'price'} stroke={'var(--black)'} />
+						<CartesianGrid stroke="var(--grey200)" strokeDasharray="3 3" />
+						<Tooltip
+							labelFormatter={label => `${label}일`}
+							wrapperStyle={{
+								border: 'none',
+								backgroundColor: 'var(--background)',
+							}}
+							labelStyle={{
+								fontWeight: 'var(--fw-semibold)',
+								color: 'var(--black)',
+							}}
+							contentStyle={{
+								border: '1px solid var(--grey200)',
+								borderRadius: '14px',
+							}}
+							itemStyle={{
+								color: 'var(--grey900)',
+								fontSize: 'var(--fz-sm)',
+							}}
+						/>
+						<Legend align="right" verticalAlign="bottom" height={36} />
+						<XAxis dataKey="date" />
+						<YAxis dataKey="price" tickFormatter={value => `${Math.floor(value / 1000)}`} />
+					</LineChart>
+					<TotalPrice>
+						<span>Total Price</span>
+						<div>{monetizeWithSeparator(filteredData.reduce((acc, curr) => (acc += curr.price), 0))}</div>
+					</TotalPrice>
+					<MaxAndMinPriceList>
+						{[sortedData.at(-1), sortedData[0]].map((payment, idx) => (
+							<MaxAndMinPrice key={`${idx}_${payment?.date}_${payment?.price}`}>
+								<Label>{idx === 0 ? 'The day I spent the most' : 'The day I spent the least'}</Label>
+								<DateAndPrice>
+									<span aria-label="date">{`${months.findIndex(month => month === selectMonth) + 1}/${payment?.date}`}</span>
+									<span aria-label="price">{monetizeWithSeparator(`${payment?.price}`)}</span>
+								</DateAndPrice>
+							</MaxAndMinPrice>
+						))}
+					</MaxAndMinPriceList>
+				</>
+			)}
 		</Container>
 	);
 };
@@ -81,21 +92,42 @@ const Container = styled.div`
 	margin-top: 32px;
 `;
 
+const TotalPrice = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 16px;
+
+	span {
+		font-weight: var(--fw-semibold);
+		color: var(--grey800);
+	}
+
+	div {
+		padding: var(--padding-container-mobile);
+		background-color: var(--blue100);
+		font-weight: var(--fw-bold);
+		color: var(--blue200);
+		border-radius: var(--radius-s);
+		text-align: right;
+	}
+`;
+
 const MaxAndMinPriceList = styled.div`
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 16px;
+	padding: var(--padding-container-mobile) 0;
 `;
 
 const MaxAndMinPrice = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
-	padding: var(--padding-container-mobile);
 `;
 
 const Label = styled.span`
-	font-weight: var(--fw-medium);
+	font-weight: var(--fw-semibold);
 	color: var(--grey800);
 `;
 
