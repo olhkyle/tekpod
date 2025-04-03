@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { EmptyMessage } from '../common';
 import { ExpenseTracker, FIXED_PAYMENT_DATE, getCreditCardPaymentsByMonth } from '../../supabase';
 import { bankSvgs, queryKey } from '../../constants';
 import { formatByKoreanTime, getCompletedMonth, monetizeWithSeparator } from '../../utils';
@@ -18,38 +19,44 @@ const CreditCardTransactionList = () => {
 	});
 
 	return (
-		<TransactionList>
-			{dataWithCompletedMonth.map(payment => (
-				<Transaction key={payment.id}>
-					<Info>
-						<UsageDate>{formatByKoreanTime(payment.usage_date)}</UsageDate>
-						<PlaceAndPrice>
-							<div aria-label="place">{payment.place}</div>
-							<div aria-label="price">
-								{monetizeWithSeparator(payment.price)} {payment.price_unit}
-							</div>
-						</PlaceAndPrice>
+		<>
+			{dataWithCompletedMonth.length === 0 ? (
+				<EmptyMessage emoji="💵">No Scheduled Costs</EmptyMessage>
+			) : (
+				<TransactionList>
+					{dataWithCompletedMonth.map(payment => (
+						<Transaction key={payment.id}>
+							<Info>
+								<UsageDate>{formatByKoreanTime(payment.usage_date)}</UsageDate>
+								<PlaceAndPrice>
+									<div aria-label="place">{payment.place}</div>
+									<div aria-label="price">
+										{monetizeWithSeparator(payment.price)} {payment.price_unit}
+									</div>
+								</PlaceAndPrice>
 
-						<CompletedMonthInfo>
-							<span>complete payment on </span>
-							<CompletedMonth>{payment.completedMonth}</CompletedMonth>
-						</CompletedMonthInfo>
-					</Info>
-					<Content>
-						<InstallmentPlan>
-							{payment.installment_plan_months === 0 ? 'One-time payment' : `${payment.installment_plan_months} month`}
-						</InstallmentPlan>
-						{bankSvgs[payment.bank] ? (
-							<BankImage>
-								<img src={bankSvgs[payment.bank]} alt={payment.bank} />
-							</BankImage>
-						) : (
-							<BankText>{payment.bank}</BankText>
-						)}
-					</Content>
-				</Transaction>
-			))}
-		</TransactionList>
+								<CompletedMonthInfo>
+									<span>complete payment on </span>
+									<CompletedMonth>{payment.completedMonth}</CompletedMonth>
+								</CompletedMonthInfo>
+							</Info>
+							<Content>
+								<InstallmentPlan>
+									{payment.installment_plan_months === 0 ? 'One-time payment' : `${payment.installment_plan_months} month`}
+								</InstallmentPlan>
+								{bankSvgs[payment.bank] ? (
+									<BankImage>
+										<img src={bankSvgs[payment.bank]} alt={payment.bank} />
+									</BankImage>
+								) : (
+									<BankText>{payment.bank}</BankText>
+								)}
+							</Content>
+						</Transaction>
+					))}
+				</TransactionList>
+			)}
+		</>
 	);
 };
 

@@ -4,9 +4,10 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { bankSvgs, queryKey, routes } from '../../constants';
 import { ExpenseTracker, getFixedCostPaymentsByMonth } from '../../supabase';
 import { currentDate, currentMonth, getDateFromString, getNextMonthFormatDate, monetizeWithSeparator } from '../../utils';
+import { EmptyMessage } from '../common';
 
 const FixedCostList = () => {
-	const { data } = useSuspenseQuery<ExpenseTracker[]>({
+	const { data: payments } = useSuspenseQuery<ExpenseTracker[]>({
 		queryKey: [...queryKey.EXPENSE_TRACKER, 'fixedCost'],
 		queryFn: () => getFixedCostPaymentsByMonth(currentMonth - 1),
 	});
@@ -14,35 +15,41 @@ const FixedCostList = () => {
 	const navigate = useNavigate();
 
 	return (
-		<PaymentList>
-			{data.map(payment => (
-				<Payment
-					key={payment.id}
-					onClick={() =>
-						navigate(`${routes.EXPENSE_TRACKER_BY_MONTH}/${payment.id}`, { state: { payment, currentDate: payment.usage_date } })
-					}>
-					<Date>
-						<Passed isPassed={getDateFromString(payment.usage_date).getDate() < currentDate} />
-						<div aria-label="usage_date">{getNextMonthFormatDate(payment.usage_date)}</div>
-					</Date>
-					<Detail>
-						<PlaceAndPrice>
-							<div aria-label="place">{payment.place}</div>
-							<div aria-label="price">
-								{monetizeWithSeparator(payment.price)} {payment.price_unit}
-							</div>
-						</PlaceAndPrice>
-						{bankSvgs[payment.bank] ? (
-							<BankImage>
-								<img src={bankSvgs[payment.bank]} alt={payment.bank} />
-							</BankImage>
-						) : (
-							<BankText>{payment.bank}</BankText>
-						)}
-					</Detail>
-				</Payment>
-			))}
-		</PaymentList>
+		<>
+			{payments.length === 0 ? (
+				<EmptyMessage emoji="💰">No Expenses</EmptyMessage>
+			) : (
+				<PaymentList>
+					{payments.map(payment => (
+						<Payment
+							key={payment.id}
+							onClick={() =>
+								navigate(`${routes.EXPENSE_TRACKER_BY_MONTH}/${payment.id}`, { state: { payment, currentDate: payment.usage_date } })
+							}>
+							<Date>
+								<Passed isPassed={getDateFromString(payment.usage_date).getDate() < currentDate} />
+								<div aria-label="usage_date">{getNextMonthFormatDate(payment.usage_date)}</div>
+							</Date>
+							<Detail>
+								<PlaceAndPrice>
+									<div aria-label="place">{payment.place}</div>
+									<div aria-label="price">
+										{monetizeWithSeparator(payment.price)} {payment.price_unit}
+									</div>
+								</PlaceAndPrice>
+								{bankSvgs[payment.bank] ? (
+									<BankImage>
+										<img src={bankSvgs[payment.bank]} alt={payment.bank} />
+									</BankImage>
+								) : (
+									<BankText>{payment.bank}</BankText>
+								)}
+							</Detail>
+						</Payment>
+					))}
+				</PaymentList>
+			)}
+		</>
 	);
 };
 
