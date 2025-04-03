@@ -8,7 +8,7 @@ import { AddPaymentFormSchema, addPaymentFormSchema } from '.';
 import { Button, CustomSelect, DatePicker, TextInput } from '../..';
 import { addPayment } from '../../../supabase';
 import { useLoading } from '../../../hooks';
-import { paymentData, toastData, installmentPlanMonths, cardType } from '../../../constants';
+import { paymentData, toastData, installmentPlanMonths, cardType, queryKey } from '../../../constants';
 import { useToastStore } from '../../../store';
 import { monetizeWithSeparator, today } from '../../../utils';
 
@@ -37,17 +37,6 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 
-	// const formattedPrice = (price: number) => {
-	// 	if (watch('price_unit') === 'WON' || watch('price_unit') === 'JPY') {
-	// 		return price;
-	// 	} else {
-	// 		return new Intl.NumberFormat('en-US', {
-	// 			minimumFractionDigits: 2,
-	// 			maximumFractionDigits: 2,
-	// 		}).format(price);
-	// 	}
-	// };
-
 	const onSubmit = async (data: AddPaymentFormSchema) => {
 		const currentTime = new Date().toISOString();
 
@@ -67,7 +56,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 			console.error(e);
 			addToast(toastData.EXPENSE_TRACKER.CREATE.ERROR);
 		} finally {
-			// queryClient.invalidateQueries({ queryKey: queryKey.EXPENSE_TRACKER });
+			queryClient.invalidateQueries({ queryKey: queryKey.EXPENSE_TRACKER });
 		}
 	};
 
@@ -141,7 +130,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 						label={'bank'}
 						placeholder={'Select Bank'}
 						currentValue={watch('bank')}
-						isTriggered={!!touchedFields['bank']!}
+						isTriggered={!!touchedFields['bank']}
 						error={errors['bank']}
 						onSelect={data =>
 							setValue('bank', data, {
@@ -164,7 +153,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 					<Controller
 						name="price"
 						control={control}
-						render={({ field: { name, value, onChange, onBlur } }) => (
+						render={({ field: { name, value, onChange, onBlur, disabled } }) => (
 							<TextInput errorMessage={errors['price']?.message}>
 								<TextInput.ControlledTextField
 									type="text"
@@ -177,6 +166,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 									onBlur={onBlur}
 									placeholder={watch('price_unit') === 'WON' || watch('price_unit') === 'JPY' ? '1,000' : '100.00'}
 									inputMode="numeric"
+									disabled={disabled}
 								/>
 							</TextInput>
 						)}
