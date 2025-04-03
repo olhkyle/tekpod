@@ -1,8 +1,9 @@
+import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { ExpenseTracker, getAllPaymentsByMonth } from '../../supabase';
 import { queryKey } from '../../constants';
-import { formatByKoreanTime, months } from '../../utils';
+import { formatByKoreanTime, monetizeWithSeparator, months } from '../../utils';
 import { useMediaQuery } from '../../hooks';
 
 interface ExpenseChartProps {
@@ -17,7 +18,7 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 
 	const [isSmallMobile, isMediumMobile] = [useMediaQuery('(max-width: 320px)'), useMediaQuery('(max-width: 430px)')];
 
-	const lineChartWidth = isSmallMobile ? 280 : isMediumMobile ? 380 : 440;
+	const lineChartWidth = isSmallMobile ? 280 : isMediumMobile ? 340 : 440;
 
 	const getTotalPricePerMonth = expenses.reduce<{ [date: string]: number }>((acc, curr) => {
 		const formatDate = new Date(formatByKoreanTime(curr.usage_date)).getDate();
@@ -31,9 +32,10 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 	}, {});
 
 	const filteredData = Object.entries(getTotalPricePerMonth).map(([key, value]) => ({ date: +key, price: value }));
+	const sortedData = [...filteredData].sort((prev, curr) => prev.price - curr.price);
 
 	return (
-		<>
+		<Container>
 			<LineChart width={lineChartWidth} height={400} data={filteredData} margin={{ top: 10, right: 10, left: -25, bottom: 5 }}>
 				<Line name="price" type="monotone" dataKey={'price'} stroke={'var(--black)'} />
 				<CartesianGrid stroke="var(--grey200)" strokeDasharray="3 3" />
@@ -60,9 +62,61 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 				<XAxis dataKey="date" />
 				<YAxis dataKey="price" tickFormatter={value => `${Math.floor(value / 1000)}`} />
 			</LineChart>
-			<ul></ul>
-		</>
+			<MaxAndMinPriceList>
+				{[sortedData.at(-1), sortedData[0]].map((payment, idx) => (
+					<MaxAndMinPrice key={`${idx}_${payment?.date}_${payment?.price}`}>
+						<Label>{idx === 0 ? 'The day I spent the most' : 'The day I spent the least'}</Label>
+						<DateAndPrice>
+							<span aria-label="date">{`${months.findIndex(month => month === selectMonth) + 1}/${payment?.date}`}</span>
+							<span aria-label="price">{monetizeWithSeparator(`${payment?.price}`)}</span>
+						</DateAndPrice>
+					</MaxAndMinPrice>
+				))}
+			</MaxAndMinPriceList>
+		</Container>
 	);
 };
+
+const Container = styled.div`
+	margin-top: 32px;
+`;
+
+const MaxAndMinPriceList = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+`;
+
+const MaxAndMinPrice = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: var(--padding-container-mobile);
+`;
+
+const Label = styled.span`
+	font-weight: var(--fw-medium);
+	color: var(--grey800);
+`;
+
+const DateAndPrice = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--padding-container-mobile);
+	background-color: var(--grey50);
+	border: 1px solid var(--grey100);
+	border-radius: var(--radius-s);
+
+	span[aria-label='date'] {
+		font-weight: var(--fw-medium);
+		color: var(--grey600);
+	}
+
+	span[aria-label='price'] {
+		font-weight: var(--fw-bold);
+		color: var(--grey800);
+	}
+`;
 
 export default ExpenseChart;
