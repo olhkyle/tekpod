@@ -10,13 +10,15 @@ import saemaeulSvg from '../assets/bank/saemaeul.svg';
 import scSvg from '../assets/bank/sc.svg';
 import citiSvg from '../assets/bank/citi.svg';
 
-type PaymentDataType = (typeof paymentData)[keyof typeof paymentData][number];
-type PaymentMethodType = (typeof paymentData)['paymentMethod'][number];
+type PaymentDataType = typeof paymentData;
+type PaymentDataValueType = PaymentDataType[keyof PaymentDataType][number];
+type PaymentMethodType = PaymentDataType['paymentMethod'][number];
 
 type InstallmentType = (typeof installmentPlanMonths)[number];
 
-type PriceUnitType = (typeof priceUnit)['unitType'][number];
-type PriceUnitSymbolType = (typeof priceUnit)['unitSymbol'][number];
+type PriceUnitGroup = typeof priceUnit;
+type PriceUnitType = PriceUnitGroup['unitType'][number];
+type PriceUnitSymbolType = PriceUnitGroup['unitSymbol'][number];
 
 type MatchedPriceUnitWithSymbol = Record<(typeof priceUnit.unitType)[number], (typeof priceUnit.unitSymbol)[number]>;
 
@@ -59,5 +61,14 @@ const matchedPriceUnitWithSymbol = priceUnit.unitType.reduce((acc, curr, idx) =>
 	return acc;
 }, {} as MatchedPriceUnitWithSymbol);
 
-export type { PaymentDataType, PaymentMethodType, InstallmentType, PriceUnitType, PriceUnitSymbolType, MatchedPriceUnitWithSymbol };
+export type {
+	PaymentDataType,
+	PaymentDataValueType,
+	PaymentMethodType,
+	InstallmentType,
+	PriceUnitGroup,
+	PriceUnitType,
+	PriceUnitSymbolType,
+	MatchedPriceUnitWithSymbol,
+};
 export { paymentData, installmentPlanMonths, cardType, priceUnit, bankSvgs, matchedPriceUnitWithSymbol };
