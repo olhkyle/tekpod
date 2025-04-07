@@ -31,9 +31,8 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 		formState: { errors, touchedFields },
 	} = useForm<AddPaymentFormSchema>({
 		resolver: zodResolver(addPaymentFormSchema),
-		defaultValues: { usage_date: today, installment_plan_months: null },
+		defaultValues: { usage_date: today, card_type: cardType['미확인'], installment_plan_months: null },
 	});
-
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 
