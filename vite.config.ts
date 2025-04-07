@@ -1,7 +1,32 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+	plugins: [react()],
+	build: {
+		rollupOptions: {
+			output: {
+				manualChunks(id: string) {
+					// Reducing the vendor chunk size
+					// creating a chunk to react routes deps. Reducing the vendor chunk size
+					if (id.includes('react-router-dom') || id.includes('@remix-run') || id.includes('react-router')) {
+						return '@react-router';
+					}
+
+					if (id.includes('supabase/supabase-js')) {
+						return '@supabase';
+					}
+
+					if (id.includes('framer-motion')) {
+						return '@motion';
+					}
+
+					if (id.includes('zod')) {
+						return '@zod';
+					}
+				},
+			},
+		},
+	},
+});
