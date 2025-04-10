@@ -117,8 +117,12 @@ const Wrapper = styled.div`
 
 const UploadButton = styled(Button)`
 	position: fixed;
+	left: 0;
+	right: 0;
 	bottom: calc(var(--nav-height) + 32px);
-	width: calc(100dvw - 32px);
+	max-width: calc(var(--max-app-width) - 32px);
+	width: calc(100% - 32px);
+	margin: 0 auto;
 	padding: var(--padding-container-mobile);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
