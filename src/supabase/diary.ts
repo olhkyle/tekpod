@@ -28,12 +28,8 @@ const getDiariesByPage = async (pageParam: number, pageSize: number): Promise<Di
 	const { data, error } = await supabase
 		.from(TABLE)
 		.select('*')
-		.order('updated_at', { ascending: false })
+		.order('created_at', { ascending: false })
 		.range((pageParam - 1) * pageSize, pageParam * pageSize - 1);
-	/**
-	 * select('*').range((page - 1) * 10, page * 9)
-		.order('created_at', { ascending: false });
-	 */
 
 	if (error) {
 		throw new Error(error.message);
