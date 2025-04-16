@@ -7,7 +7,16 @@ const todayLocaleString = today.toLocaleString('en-US', { timeZone: koreaTimeZon
 
 const [currentYear, currentMonth, currentDate] = [today.getFullYear(), today.getMonth(), today.getDate()];
 
+const years = [...Array.from({ length: 3 }, (_, idx) => `${currentYear - idx}`)] as const;
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
+
+const calendar = months.reduce<Record<string, number[]>>((acc, _, idx) => {
+	if (!acc[`${idx + 1}`]) {
+		acc[`${idx + 1}`] = [...Array.from({ length: new Date(currentYear, idx + 1, 0).getDate() }, (_, index) => index + 1)];
+	}
+
+	return acc;
+}, {});
 
 const formatByKoreanTime = (targetDate: Date | string): string => {
 	const _date = typeof targetDate === 'string' ? new Date(targetDate) : targetDate;
@@ -37,7 +46,9 @@ export {
 	currentYear,
 	currentMonth,
 	currentDate,
+	years,
 	months,
+	calendar,
 	formatByKoreanTime,
 	translateNumberIntoMonth,
 	getDateFromString,

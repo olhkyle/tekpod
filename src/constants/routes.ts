@@ -12,6 +12,7 @@ const routes = {
 	EXPENSE_TRACKER: '/expense',
 	EXPENSE_TRACKER_BY_MONTH: '/expense/daily',
 	EXPENSE_TRACKER_REPORT: '/expense/report',
+	COMMUTE_TRACKER: '/commute',
 } as const;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
