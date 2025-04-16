@@ -1,21 +1,21 @@
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { navigationLinks } from '../constants';
 import { ShrinkMotionBlock } from '../components';
+import { navigationLinks } from '../constants';
 
 const HomePage = () => {
 	return (
 		<Container>
-			<Flex>
+			<NavigationGrid>
 				{navigationLinks.map(({ to, icon, title }) => (
-					<Link to={to} key={to}>
-						<StyledShrinkMotionBlock>
+					<Navigation to={to} key={to}>
+						<ShrinkMotionBlock>
 							<IconBackground>{icon}</IconBackground>
-							<span>{title}</span>
-						</StyledShrinkMotionBlock>
-					</Link>
+						</ShrinkMotionBlock>
+						<span>{title}</span>
+					</Navigation>
 				))}
-			</Flex>
+			</NavigationGrid>
 		</Container>
 	);
 };
@@ -24,30 +24,31 @@ const Container = styled.section`
 	width: 100%;
 `;
 
-const Flex = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
+const NavigationGrid = styled.div`
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 24px;
 `;
 
-const StyledShrinkMotionBlock = styled(ShrinkMotionBlock)`
+const Navigation = styled(Link)`
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	gap: 16px;
-	padding: var(--padding-container-mobile);
-	background-color: var(--greyOpacity50);
-	border-radius: var(--radius-m);
-	font-weight: var(--fw-semibold);
+	gap: 6px;
+	font-size: var(--fz-sm);
+	font-weight: var(--fw-medium);
+	color: var(--grey800);
+	text-align: center;
 `;
 
 const IconBackground = styled.div`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	width: 32px;
-	height: 32px;
-	background-color: var(--blue400);
-	border-radius: var(--radius-s);
+	min-width: 60px;
+	min-height: 60px;
+	background: linear-gradient(135deg, var(--grey200) 0%, var(--blue300) 50%, var(--blue200) 100%);
+	border-radius: var(--radius-m);
 `;
 
 export default HomePage;
