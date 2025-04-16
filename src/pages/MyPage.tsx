@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
+import { IoMdArrowRoundForward } from 'react-icons/io';
 import { Button, ShrinkMotionBlock } from '../components';
 import { useUserStore } from '../store';
 import { navigationLinks, routes } from '../constants';
@@ -17,10 +18,10 @@ const MyPage = () => {
 				</EditButton>
 			</UserInfo>
 			<Navigations>
-				{navigationLinks.map(({ to, icon, title }) => (
+				{navigationLinks.map(({ to, title }) => (
 					<Link to={to} key={to}>
 						<StyledShrinkMotionBlock>
-							<IconBackground>{icon}</IconBackground>
+							<IoMdArrowRoundForward size="24" color="var(--grey300)" />
 							<span>{title}</span>
 						</StyledShrinkMotionBlock>
 					</Link>
@@ -80,17 +81,13 @@ const StyledShrinkMotionBlock = styled(ShrinkMotionBlock)`
 	padding: var(--padding-container-mobile);
 	background-color: var(--greyOpacity50);
 	border-radius: var(--radius-m);
+	font-size: var(--fz-h7);
 	font-weight: var(--fw-semibold);
-`;
+	transition: background-color 0.15s ease-in-out;
 
-const IconBackground = styled.div`
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	width: 32px;
-	height: 32px;
-	background-color: var(--blue400);
-	border-radius: var(--radius-s);
+	&:focus {
+		background-color: var(--greyOpacity100);
+	}
 `;
 
 export default MyPage;
