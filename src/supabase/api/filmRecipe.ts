@@ -23,8 +23,8 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { RestrictedRecipe } from './schema';
-import supabase from './service';
+import { RestrictedRecipe } from '../schema';
+import supabase from '../service';
 
 const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_FILM_RECIPE;
 const STORAGE_BUCKET = import.meta.env.VITE_SUPABASE_STORAGE_BUCKET_FILM_RECIPE;

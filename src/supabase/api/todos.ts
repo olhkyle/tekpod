@@ -1,5 +1,5 @@
-import supabase from './service';
-import { Todo } from './schema';
+import supabase from '../service';
+import { Todo } from '../schema';
 
 const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_TODOS;
 

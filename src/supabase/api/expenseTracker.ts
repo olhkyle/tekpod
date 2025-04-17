@@ -1,7 +1,7 @@
-import supabase from './service';
-import { ExpenseTracker } from './schema';
-import { currentMonth, currentYear, formatByKoreanTime } from '../utils';
-import { cardType } from '../constants';
+import supabase from '../service';
+import { ExpenseTracker } from '../schema';
+import { currentMonth, currentYear, formatByKoreanTime } from '../../utils';
+import { cardType } from '../../constants';
 
 const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_EXPENSE_TRACKER;
 

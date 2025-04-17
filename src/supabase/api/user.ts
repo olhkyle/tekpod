@@ -1,5 +1,5 @@
-import supabase from './service';
-import { RegisterSchema, UpdateProfileSchema } from '../components';
+import supabase from '../service';
+import { RegisterSchema, UpdateProfileSchema } from '../../components';
 
 const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_USERS;
 

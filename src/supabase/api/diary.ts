@@ -1,5 +1,5 @@
-import supabase from './service';
-import { Diary } from './schema';
+import supabase from '../service';
+import { Diary } from '../schema';
 
 const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_DIARY;
 const PAGE_SIZE = 10;
