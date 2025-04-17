@@ -101,7 +101,7 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 					/>
 					<ContentBoundary>
 						{isEditContentPending ? (
-							<SkeletonLoader theme="light" width={'100%'} height={'50px'} />
+							<SkeletonLoader width={'100%'} height={'50px'} />
 						) : (
 							<>
 								{isContentEditing ? (

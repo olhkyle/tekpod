@@ -9,11 +9,11 @@ const FixedCostListLoader = () => {
 				gap: '16px',
 				margin: '16px 0',
 			}}>
-			<SkeletonLoader theme={'light'} width={'100%'} height={'100px'} />
-			<SkeletonLoader theme={'light'} width={'100%'} height={'100px'} />
-			<SkeletonLoader theme={'light'} width={'100%'} height={'100px'} />
-			<SkeletonLoader theme={'light'} width={'100%'} height={'100px'} />
-			<SkeletonLoader theme={'light'} width={'100%'} height={'100px'} />
+			<SkeletonLoader width={'100%'} height={'100px'} />
+			<SkeletonLoader width={'100%'} height={'100px'} />
+			<SkeletonLoader width={'100%'} height={'100px'} />
+			<SkeletonLoader width={'100%'} height={'100px'} />
+			<SkeletonLoader width={'100%'} height={'100px'} />
 		</div>
 	);
 };
