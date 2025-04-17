@@ -31,7 +31,7 @@ const Checkbox = ({ id, checked, onCheckedChange: onClientCheckedChange, onServe
 				role="checkbox"
 				onClick={() => handleCheckedChange(!checked)}
 				aria-checked={checked}
-				aria-labelledby={`checkbox-${id + 1}`}
+				aria-labelledby={`todo checkbox-${id}`}
 				data-state={checked ? 'checked' : 'unchecked'}>
 				{checked ? (
 					<span data-state={checked ? 'checked' : 'unchecked'}>

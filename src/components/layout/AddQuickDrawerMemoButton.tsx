@@ -8,7 +8,7 @@ const AddQuickDrawerMemoButton = () => {
 	const { isOpen, toggle } = useDrawerStore();
 
 	return (
-		<Container type="button" onClick={toggle}>
+		<Container type="button" onClick={toggle} aria-label="Add quick memo">
 			<RotatableSvg size={24} color="var(--black)" $isActive={isOpen} />
 		</Container>
 	);

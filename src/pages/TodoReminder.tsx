@@ -61,7 +61,9 @@ const TodoReminderPage = () => {
 					/>
 				</TextInput>
 				<ShrinkMotionBlock>
-					<AddTodoButton type="submit">{isLoading ? Loading : <BsPlus size="24" color="var(--white)" />}</AddTodoButton>
+					<AddTodoButton type="submit" aria-label="Add todo">
+						{isLoading ? Loading : <BsPlus size="24" color="var(--white)" />}
+					</AddTodoButton>
 				</ShrinkMotionBlock>
 			</Form>
 

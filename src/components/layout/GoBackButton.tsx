@@ -13,7 +13,7 @@ const GoBackButton = ({ children = <RiArrowLeftLine size="24" color="var(--grey5
 
 	return (
 		<StyledShrinkMotionBlock>
-			<StyledButton type="button" onClick={() => navigate(-1)}>
+			<StyledButton type="button" onClick={() => navigate(-1)} aria-label="Go back to previous Route">
 				{children}
 			</StyledButton>
 		</StyledShrinkMotionBlock>

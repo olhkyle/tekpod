@@ -29,6 +29,7 @@ const Select = <T extends string>({ data: options, placeholder, descriptionLabel
 				onClick={() => setOpen(!isOpen)}
 				tabIndex={0}
 				aria-controls={`select-${generatedId}`}
+				aria-label={`${placeholder}`}
 				aria-expanded={isOpen}>
 				<span>{currentValue ?? placeholder}</span>
 				<Chevron size="19" color="var(--black)" $isOpen={isOpen} />

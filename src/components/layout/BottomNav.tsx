@@ -14,16 +14,18 @@ const BottomNav = () => {
 			{!pathname.includes(routes.UPDATE_PASSWORD) && (
 				<Container id="layout-gnb">
 					<Links>
-						<NavLink href={routes.HOME}>
+						<NavLink href={routes.HOME} aria-label="Link to Home Route">
 							<RiHome6Line size={24} />
 						</NavLink>
-						<NavLink href={routes.FILM_RECIPE}>
+						<NavLink href={routes.FILM_RECIPE} aria-label="Link to Film Recipe Route">
 							<RiCamera3Line size={26} />
 						</NavLink>
-						<NavLink href={routes.DIARY}>
+						<NavLink href={routes.DIARY} aria-label="Link to Diary Route">
 							<RiBook3Line size={24} />
 						</NavLink>
-						<NavLink href={data?.user ? `${routes.USER}` : routes.LOGIN}>
+						<NavLink
+							href={data?.user ? `${routes.USER}` : routes.LOGIN}
+							aria-label={`Link to ${data?.user ? routes.USER.slice(1) : routes.LOGIN.slice(1)} Route`}>
 							<RiUser3Line size={24} />
 						</NavLink>
 					</Links>
