@@ -1,50 +1,30 @@
-import styled from '@emotion/styled';
+import { SkeletonLoader } from '../common';
 
 const ContentBodyLoader = () => {
 	return (
-		<Container>
-			<Loader />
-		</Container>
+		<div css={{ display: 'flex', flexDirection: 'column' }}>
+			<div css={{ display: 'flex', justifyContent: 'flex-end' }}>
+				<SkeletonLoader width={'60px'} height={'40px'} />
+			</div>
+			<div
+				css={{
+					display: 'flex',
+					flexDirection: 'column',
+					marginTop: 'calc(100dvh / 25)',
+					padding: 'calc(var(--padding-container-mobile) * 2) var(--padding-container-mobile)',
+					backgroundColor: 'var(--greyOpacity50)',
+					borderRadius: 'var(--radius-s)',
+				}}>
+				<SkeletonLoader width={'100%'} height={'48px'} />
+				<div css={{ display: 'flex', flexDirection: 'column', gap: '8px', margin: '16px 0' }}>
+					<SkeletonLoader width={'100%'} height={'25px'} />
+					<SkeletonLoader width={'100%'} height={'25px'} />
+					<SkeletonLoader width={'100%'} height={'25px'} />
+				</div>
+				<SkeletonLoader width={'100%'} height={'56px'} />
+			</div>
+		</div>
 	);
 };
-
-const Container = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	height: 100dvh;
-`;
-
-const Loader = styled.div`
-	--linear-gradient: linear-gradient(to right, var(--blue100), var(--grey100), var(--blue100));
-	position: relative;
-	width: 100%;
-	height: calc(100dvh / 5);
-	background-color: var(--greyOpacity50);
-	border-radius: var(--radius-m);
-	overflow: hidden;
-
-	@keyframes loading {
-		0% {
-			transform: translateX(0);
-		}
-		50%,
-		100% {
-			transform: translateX(460px);
-		}
-	}
-
-	&::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 32px;
-		height: 100%;
-		background: var(--linear-gradient);
-		animation: loading 3s infinite linear;
-	}
-`;
 
 export default ContentBodyLoader;
