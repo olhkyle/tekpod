@@ -71,7 +71,7 @@ const Description = styled.div`
 	margin-top: calc(100dvh / 25);
 	padding: calc(var(--padding-container-mobile) * 2) var(--padding-container-mobile);
 	width: 100%;
-	border: 1px solid var(--greyOpacity200);
+	border: 1px solid var(--greyOpacity100);
 	border-radius: var(--radius-s);
 `;
 
@@ -107,6 +107,7 @@ const DeleteButton = styled(Button)`
 	color: var(--white);
 	background-color: var(--black);
 
+	&:hover,
 	&:focus {
 		background-color: var(--grey900);
 	}
