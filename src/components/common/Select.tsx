@@ -36,27 +36,31 @@ const Select = <T extends string>({ data: options, placeholder, descriptionLabel
 			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
 			<SelectContent isOpen={isOpen} aria-labelledby={`select-${generatedId}-content`}>
 				{descriptionLabel && <SelectDescriptionLabel>{descriptionLabel}</SelectDescriptionLabel>}
-				{options.map((option, idx) => (
-					<SelectItem
-						key={`${option}_${idx}`}
-						isCurrent={option === currentValue}
-						tabIndex={0}
-						onClick={() => {
-							onSelect(option);
-							setOpen(false);
-						}}
-						data-selected={option === currentValue}>
-						<SelectItemCheckIndicator isCurrent={option === currentValue} />
-						<span>{option}</span>
-					</SelectItem>
-				))}
+				<SelectItemList>
+					{options.map((option, idx) => (
+						<SelectItem
+							key={`${option}_${idx}`}
+							isCurrent={option === currentValue}
+							tabIndex={0}
+							onClick={() => {
+								onSelect(option);
+								setOpen(false);
+							}}
+							data-selected={option === currentValue}>
+							<SelectItemCheckIndicator isCurrent={option === currentValue} />
+							<span>{option}</span>
+						</SelectItem>
+					))}
+				</SelectItemList>
 			</SelectContent>
 		</SelectRoot>
 	);
 };
 
 const SelectRoot = styled.div`
-	position: relative;
+	@media screen and (min-width: 480px) {
+		position: relative;
+	}
 `;
 
 const SelectTrigger = styled(Button)`
@@ -88,39 +92,67 @@ const ErrorMessage = styled.p`
 `;
 
 const SelectContent = styled.div<{ isOpen: boolean }>`
-	position: absolute;
-	top: 40px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
 	right: 0;
 	display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
 	flex-direction: column;
-	padding: calc(var(--padding-container-mobile) * 0.5);
+	gap: 8px;
+	padding: calc(var(--padding-container-mobile));
+	width: 100%;
 	height: ${({ isOpen }) => (isOpen ? 'auto' : '0')};
 	background-color: var(--white);
 	border: 1px solid var(--grey100);
-	border-radius: var(--radius-s);
+	border-radius: var(--radius-m) var(--radius-m) 0 0;
 	transition: height 0.3s ease-in-out display 0.5s ease-in-out;
-	z-index: 1;
+	z-index: var(--modal-index);
+
+	@media screen and (min-width: 480px) {
+		position: absolute;
+		top: 40px;
+		right: 0;
+		bottom: auto;
+		left: auto;
+		padding: calc(var(--padding-container-mobile) * 0.5);
+		width: auto;
+		border-radius: var(--radius-s);
+		z-index: 10;
+	}
 `;
 
 const SelectDescriptionLabel = styled.span`
+	display: inline-block;
 	color: var(--black);
 	font-weight: var(--fw-medium);
+`;
+
+const SelectItemList = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	width: 100%;
 `;
 
 const SelectItem = styled.div<{ isCurrent: boolean }>`
 	display: flex;
 	align-items: center;
 	gap: 12px;
-	padding: calc(var(--padding-container-mobile) * 0.25) calc(var(--padding-container-mobile) * 0.5);
+	padding: calc(var(--padding-container-mobile) * 0.5) calc(var(--padding-container-mobile) * 0.75);
+	width: 100%;
 	font-size: var(--fz-p);
 	font-weight: ${({ isCurrent }) => (isCurrent ? 'var(--fw-semibold)' : 'var(--fw-regular)')};
 	color: ${({ isCurrent }) => (isCurrent ? 'var(--grey900)' : 'var(--grey700)')};
-	background-color: ${({ isCurrent }) => (isCurrent ? 'var(--greyOpacity50)' : 'var(--white)')};
+	background-color: ${({ isCurrent }) => (isCurrent ? 'var(--greyOpacity100)' : 'var(--white)')};
 	border-radius: var(--radius-s);
 	cursor: pointer;
 
 	&:hover {
-		background-color: var(--greyOpacity100);
+		background-color: var(--grey100);
+	}
+
+	@media screen and (min-width: 480px) {
+		padding: calc(var(--padding-container-mobile) * 0.25) calc(var(--padding-container-mobile) * 0.5);
 	}
 `;
 
