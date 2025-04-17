@@ -6,6 +6,7 @@ const queryKey = {
 	FILM_RECIPE: ['film_recipes'],
 	TODOS: ['todos'],
 	EXPENSE_TRACKER: ['expense_tracker'],
+	COMMUTE_RECORDS: ['commute_records'],
 } as const;
 
 export default queryKey;

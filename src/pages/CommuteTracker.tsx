@@ -1,12 +1,49 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
-import { calendar, currentMonth, currentYear, months, years } from '../utils';
+import { Session } from '@supabase/supabase-js';
 import { Select, WorkInProgress } from '../components';
+import { calendar, currentMonth, currentYear, months, years } from '../utils';
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { queryKey } from '../constants';
+import { getMonthlyRecords } from '../supabase';
+
+/**
+ *
+ * commute_records
+ * {
+ * 	id : uuid
+ * user_id: string;
+ * date: string;
+ * status: 'present' | 'absent' | 'remote' | 'half_day';
+ * check_in: string;
+ * check_out: string;
+ * workplace: string;
+ * notes: boolean;
+ * created_at: string;
+ * updated_at: string;
+ * }
+ */
+
+// TODO:
+// 1 - change Emoji with SVG
+// 2 - add trigger with mutation
 
 const CommuteTrackerPage = () => {
+	const queryClient = useQueryClient();
+	const session = queryClient.getQueryData(['auth']) as Session;
 	const [yearAndMonth, setYearAndMonth] = useState({
 		year: `${currentYear}`,
 		month: months[currentMonth],
+	});
+
+	const { data } = useSuspenseQuery({
+		queryKey: [...queryKey.COMMUTE_RECORDS, yearAndMonth],
+		queryFn: () =>
+			getMonthlyRecords({
+				year: +yearAndMonth.year,
+				month: months.findIndex(month => month === yearAndMonth.month) + 1,
+				user_id: session.user.id,
+			}),
 	});
 
 	return (
@@ -21,19 +58,24 @@ const CommuteTrackerPage = () => {
 					onSelect={option => setYearAndMonth({ ...yearAndMonth, year: option })}
 				/>
 				<Select
-					data={months.filter((_, idx) => idx <= currentMonth)}
+					data={months.filter((_, idx) => idx <= currentMonth).reverse()}
 					placeholder={'Select Month'}
 					descriptionLabel={'Month'}
 					currentValue={yearAndMonth.month}
 					onSelect={option => setYearAndMonth({ ...yearAndMonth, month: months[months.findIndex(month => month === option)] })}
 				/>
 			</Controller>
+
 			<Checker>
-				{calendar[months.findIndex(month => month === yearAndMonth.month) + 1].map(day => (
-					<li key={day}>
-						<div>{day}</div>
-					</li>
-				))}
+				{calendar[months.findIndex(month => month === yearAndMonth.month) + 1].map(day => {
+					const worked = data.find(item => new Date(item.date).getDate() === day);
+					return (
+						<Day key={day} worked={!!worked}>
+							<Label>{day}</Label>
+							<Emoji>{worked ? '✅' : '🫥'}</Emoji>
+						</Day>
+					);
+				})}
 			</Checker>
 			<WorkInProgress />
 		</Container>
@@ -59,25 +101,37 @@ const Controller = styled.div`
 
 const Checker = styled.ul`
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
+	grid-template-columns: repeat(5, 1fr);
 	gap: 8px;
 	margin: 32px auto;
+`;
 
-	li {
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		min-width: 48px;
-		min-height: 48px;
-		color: var(--grey600);
-		background-color: var(--grey100);
-		border-radius: var(--radius-s);
-		cursor: pointer;
+const Day = styled.li<{ worked: boolean }>`
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	padding: calc(var(--padding-container-mobile) * 0.25);
+	min-width: 48px;
+	min-height: 48px;
+	color: ${({ worked }) => (worked ? 'var(--blue200)' : 'var(--grey600)')};
+	background-color: ${({ worked }) => (worked ? 'var(--blue100)' : 'var(--grey50)')};
+	border: 1px solid ${({ worked }) => (worked ? 'var(--blue300)' : 'var(--grey100)')};
+	border-radius: var(--radius-s);
+	cursor: pointer;
 
-		@media screen and (min-width: 640px) {
-			min-height: 60px;
-		}
+	@media screen and (min-width: 640px) {
+		min-height: 60px;
 	}
+`;
+
+const Label = styled.span`
+	display: inline-block;
+	width: 100%;
+	text-align: start;
+`;
+
+const Emoji = styled.span`
+	font-size: var(--fz-h4);
 `;
 
 export default CommuteTrackerPage;
