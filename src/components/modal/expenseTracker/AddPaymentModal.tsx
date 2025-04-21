@@ -6,7 +6,7 @@ import { Session } from '@supabase/supabase-js';
 import { ModalLayout, ModalDataType } from '..';
 import { AddPaymentFormSchema, addPaymentFormSchema } from '.';
 import { Button, CustomSelect, DatePicker, TextInput } from '../..';
-import { addPayment } from '../../../supabase';
+import { addPayment, ExpenseTracker } from '../../../supabase';
 import { useLoading } from '../../../hooks';
 import { paymentData, toastData, installmentPlanMonths, cardType, queryKey } from '../../../constants';
 import { useToastStore } from '../../../store';
@@ -15,10 +15,11 @@ import { monetizeWithSeparator, today } from '../../../utils';
 interface AddPaymentModalProps {
 	id: string;
 	type: ModalDataType;
+	data: ExpenseTracker;
 	onClose: () => void;
 }
 
-const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
+const AddPaymentModal = ({ id, type, data, onClose }: AddPaymentModalProps) => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
 
@@ -31,7 +32,7 @@ const AddPaymentModal = ({ id, type, onClose }: AddPaymentModalProps) => {
 		formState: { errors, touchedFields },
 	} = useForm<AddPaymentFormSchema>({
 		resolver: zodResolver(addPaymentFormSchema),
-		defaultValues: { usage_date: today, card_type: cardType['미확인'], installment_plan_months: null },
+		defaultValues: { usage_date: new Date(data?.usage_date ?? today), card_type: cardType['미확인'], installment_plan_months: null },
 	});
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();

@@ -22,7 +22,7 @@ const ExpenseTrackerByMonthPage = () => {
 			Component: MODAL_CONFIG.EXPENSE_TRACKER.ADD.Component,
 			props: {
 				type: MODAL_CONFIG.EXPENSE_TRACKER.ADD.type,
-				data: null,
+				data: { usage_date: selected.toISOString() },
 			},
 		});
 	};
