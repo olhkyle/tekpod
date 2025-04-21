@@ -38,9 +38,6 @@ const useUpdateTodoItemCompletedMutation = () => {
 				queryClient.setQueryData(QUERY_KEY, context?.previousData);
 			}
 		},
-		onSuccess() {
-			addToast(toastData.TODO_REMINDER.EDIT.SUCCESS);
-		},
 		onSettled() {
 			return queryClient.invalidateQueries({ queryKey: QUERY_KEY });
 		},
