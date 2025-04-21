@@ -7,6 +7,7 @@ type Recipe = Database['public']['Tables']['recipes']['Row'];
 type Todo = Database['public']['Tables']['todos']['Row'];
 type ExpenseTracker = Database['public']['Tables']['expense_tracker']['Row'];
 type User = Database['public']['Tables']['users']['Row'];
+type CommuteRecords = Database['public']['Tables']['commute_records']['Row'];
 
 interface RestrictedRecipe extends Recipe {
 	dynamic_range: 'DR-Auto' | `DR-${'number'}`;
@@ -31,4 +32,5 @@ export type {
 	Todo,
 	ExpenseTracker,
 	User,
+	CommuteRecords,
 };

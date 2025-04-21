@@ -46,6 +46,7 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 						<CartesianGrid stroke="var(--grey200)" strokeDasharray="3 3" />
 						<Tooltip
 							labelFormatter={label => `${label}일`}
+							formatter={(value: number) => [monetizeWithSeparator(value), 'price']}
 							wrapperStyle={{
 								border: 'none',
 								backgroundColor: 'var(--background)',
