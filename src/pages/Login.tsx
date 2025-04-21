@@ -79,12 +79,14 @@ const LoginPage = () => {
 		<AuthLayout>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<AuthLogo />
-				<LabelInput label={'email'} errorMessage={errors?.email?.message}>
-					<LabelInput.TextField type={'email'} id={'email'} {...register('email')} placeholder={'Email'} />
-				</LabelInput>
-				<LabelInput label={'password'} errorMessage={errors?.password?.message}>
-					<LabelInput.TextField type={'password'} id={'password'} {...register('password')} placeholder={'Password'} />
-				</LabelInput>
+				<LabelInputGroup>
+					<LabelInput label={'email'} errorMessage={errors?.email?.message}>
+						<LabelInput.TextField type={'email'} id={'email'} {...register('email')} placeholder={'Email'} />
+					</LabelInput>
+					<LabelInput label={'password'} errorMessage={errors?.password?.message}>
+						<LabelInput.TextField type={'password'} id={'password'} {...register('password')} placeholder={'Password'} />
+					</LabelInput>
+				</LabelInputGroup>
 
 				<SubmitButton type="submit" aria-label="Login Button">
 					{isLoading ? Loading : 'Login'}
@@ -106,9 +108,18 @@ const Form = styled.form`
 	justify-content: center;
 	align-items: center;
 	gap: 16px;
+	margin: 0 auto;
 	padding: var(--padding-container-mobile);
 	height: 100dvh;
 	background-color: var(--white);
+`;
+
+const LabelInputGroup = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+	max-width: 270px;
 `;
 
 const SubmitButton = styled(Button)`
