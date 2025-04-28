@@ -6,7 +6,7 @@ const ExpenseTrackerCreditCardTransaction = () => {
 	return (
 		<section>
 			<Title>Scheduled Charge</Title>
-			<Description>This page will show all scheduled credit card transaction based on Current Month</Description>
+			<Description>This page will show all scheduled credit card transaction based on current month</Description>
 			<Suspense fallback={<CreditCardTransactionListLoader />}>
 				<CreditCardTransactionList />
 			</Suspense>
