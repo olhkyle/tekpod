@@ -14,3 +14,4 @@ export { default as useLoading } from './useLoading';
 export { default as useMediaQuery } from './useMediaQuery';
 export { default as useOverlayFixed } from './useOverlayFixed';
 export { default as useToastUnsubscribe } from './useToastUnsubscribe';
+export { default as useTriggerEscape } from './useTriggerEscape';
