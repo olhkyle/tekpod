@@ -25,12 +25,14 @@ import { getMonthlyRecords } from '../supabase';
  */
 
 // TODO:
+// 0 - update UI design for Calendar
 // 1 - change Emoji with SVG
 // 2 - add trigger with mutation
 
 const CommuteTrackerPage = () => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(['auth']) as Session;
+
 	const [yearAndMonth, setYearAndMonth] = useState({
 		year: `${currentYear}`,
 		month: months[currentMonth],
