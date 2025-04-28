@@ -2,6 +2,7 @@ import { AnimationEvent, ReactNode, useState } from 'react';
 import styled from '@emotion/styled';
 import { MdOutlineAdd } from 'react-icons/md';
 import { Button, Portal } from '..';
+import { useTriggerEscape } from '../../hooks';
 import { customPropReceiver } from '../../constants';
 
 /**
@@ -22,7 +23,10 @@ interface DrawerProps {
 
 const Drawer = ({ position, title, isOpen, close, children }: DrawerProps) => {
 	const [isClosing, setIsClosing] = useState(false);
+
 	const handleModalClose = () => setIsClosing(true);
+
+	useTriggerEscape({ condition: !isClosing, trigger: handleModalClose });
 
 	const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
 		if (isClosing && e.target === e.currentTarget) {

@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
 import { Button } from '..';
 import { type ModalDataType } from '.';
-import { useOverlayFixed } from '../../hooks';
+import { useOverlayFixed, useTriggerEscape } from '../../hooks';
 
 interface ModalLayoutProps {
 	id: string;
@@ -18,6 +18,8 @@ const ModalLayout = ({ id, type, title, onClose, children }: ModalLayoutProps) =
 	useOverlayFixed(!isClosing);
 
 	const handleModalClose = () => setIsClosing(true);
+
+	useTriggerEscape({ condition: !isClosing, trigger: handleModalClose });
 
 	const handleAnimationEnd = (e: AnimationEvent<HTMLDivElement>) => {
 		if (isClosing && e.target === e.currentTarget) {
