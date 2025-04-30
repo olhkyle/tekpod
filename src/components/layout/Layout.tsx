@@ -1,8 +1,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { css } from '@emotion/react';
 import { Outlet } from 'react-router-dom';
-import { ErrorBoundary } from 'react-error-boundary';
-import { Header, BottomNav, LayoutLoadingSpinner, ErrorFallback, ModalContainer, QuickMemoDrawer, Toast } from '..';
+import { Header, BottomNav, LayoutLoadingSpinner, QuickMemoDrawer, ModalContainer } from '..';
 import { useInitialScrollToTop } from '../../hooks';
 
 const layoutCss = {
@@ -40,20 +39,17 @@ const Layout = () => {
 	}, [setGlobalWidth]);
 
 	return (
-		<ErrorBoundary FallbackComponent={ErrorFallback}>
-			<Suspense fallback={<LayoutLoadingSpinner />}>
-				<div id="layout-container" ref={layoutRef} css={layoutCss.wrapper}>
-					<Header />
-					<main id="layout-contents" css={layoutCss.main}>
-						<Outlet />
-					</main>
-					<BottomNav />
-					<QuickMemoDrawer />
-				</div>
-			</Suspense>
+		<Suspense fallback={<LayoutLoadingSpinner />}>
+			<div id="layout-container" ref={layoutRef} css={layoutCss.wrapper}>
+				<Header />
+				<main id="layout-contents" css={layoutCss.main}>
+					<Outlet />
+				</main>
+				<BottomNav />
+				<QuickMemoDrawer />
+			</div>
 			<ModalContainer />
-			<Toast />
-		</ErrorBoundary>
+		</Suspense>
 	);
 };
 

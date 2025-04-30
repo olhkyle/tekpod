@@ -1,7 +1,6 @@
 import { ReactNode, Suspense } from 'react';
 import { css } from '@emotion/react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { ModalContainer, Toast, ErrorFallback, LayoutLoadingSpinner } from '..';
+import { LayoutLoadingSpinner, ModalContainer } from '..';
 
 interface AuthLayoutProps {
 	children: ReactNode;
@@ -18,15 +17,12 @@ const layoutCss = {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
 	return (
-		<ErrorBoundary FallbackComponent={ErrorFallback}>
-			<Suspense fallback={<LayoutLoadingSpinner />}>
-				<div id="authLayout-container" css={layoutCss.container}>
-					{children}
-				</div>
-				<Toast />
-				<ModalContainer />
-			</Suspense>
-		</ErrorBoundary>
+		<Suspense fallback={<LayoutLoadingSpinner />}>
+			<div id="authLayout-container" css={layoutCss.container}>
+				{children}
+			</div>
+			<ModalContainer />
+		</Suspense>
 	);
 };
 
