@@ -1,9 +1,10 @@
+import { Suspense } from 'react';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import { Session } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, ShrinkMotionBlock, MODAL_CONFIG } from '../components';
+import { Button, ShrinkMotionBlock, MODAL_CONFIG, FavoriteDevice, SkeletonLoader, Group } from '../components';
 import { supabase } from '../supabase';
 import { useLoading } from '../hooks';
 import { useToastStore, useModalStore, useUserStore } from '../store';
@@ -66,16 +67,18 @@ const UpdateProfile = () => {
 						<RiArrowRightSLine size="21" />
 					</dd>
 				</Nickname>
-				<Email>
+				<Group>
 					<Label>Email</Label>
 					<dd>{user?.email}</dd>
-				</Email>
-				<JoinedDate>
+				</Group>
+				<Suspense fallback={<SkeletonLoader width={'100%'} height={'54px'} />}>
+					<FavoriteDevice userId={user.id} />
+				</Suspense>
+				<Group>
 					<Label>Join in</Label>
 					<dd>{formatByKoreanTime(user?.created_at)}</dd>
-				</JoinedDate>
+				</Group>
 			</UserInfo>
-
 			<Bottom>
 				<ResetPasswordButton type="button" onClick={() => navigate(routes.UPDATE_PASSWORD, { state: { email: user?.email } })}>
 					Update Password
@@ -120,26 +123,6 @@ const Nickname = styled(ShrinkMotionBlock)`
 		align-items: center;
 		gap: 4px;
 	}
-`;
-
-const Email = styled.div`
-	display: flex;
-	justify-content: space-between;
-	padding: var(--padding-container-mobile);
-	font-weight: var(--fw-medium);
-	color: var(--grey800);
-	background-color: var(--grey50);
-	border-radius: var(--radius-s);
-`;
-
-const JoinedDate = styled.div`
-	display: flex;
-	justify-content: space-between;
-	padding: var(--padding-container-mobile);
-	font-weight: var(--fw-medium);
-	color: var(--grey800);
-	background-color: var(--grey50);
-	border-radius: var(--radius-s);
 `;
 
 const Label = styled.dt`

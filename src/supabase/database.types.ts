@@ -9,16 +9,19 @@ export interface Database {
 					user_id: string;
 					email: string;
 					nickname: string;
+					favorite_device: string;
 				};
 				Insert: {
 					user_id: string;
 					email: string;
 					nickname: string;
+					favorite_device: string;
 				};
 				Update: {
 					user_id: string;
 					email: string;
 					nickname: string;
+					favorite_device?: string;
 				};
 				Delete: {
 					user_id: string;

@@ -1,5 +1,6 @@
 const queryKey = {
 	AUTH: ['auth'],
+	USER: ['userInfo'],
 	PAGE_INFO: ['pageInfo'],
 	DIARY: ['diary'],
 	DIARY_BY_PAGE: ['diaryByPage'],

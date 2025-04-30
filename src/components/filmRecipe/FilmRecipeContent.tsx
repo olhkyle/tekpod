@@ -1,15 +1,13 @@
 import styled from '@emotion/styled';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { MODAL_CONFIG, EmptyMessage } from '..';
-import { RestrictedRecipe } from '../../supabase';
+import { getRecipes } from '../../supabase';
 import { useModalStore } from '../../store';
-import { QueryRefetch } from '../../store/useModalStore';
+import { queryKey } from '../../constants';
 
-interface FilmRecipeContentProps {
-	recipes: RestrictedRecipe[];
-	refetch: QueryRefetch;
-}
+const FilmRecipeContent = () => {
+	const { data: recipes } = useSuspenseQuery({ queryKey: queryKey.FILM_RECIPE, queryFn: getRecipes });
 
-const FilmRecipeContent = ({ recipes, refetch }: FilmRecipeContentProps) => {
 	const { setModal } = useModalStore();
 
 	const handleIndividualFilmRecipeModal = (targetTitle: string) => {
@@ -18,7 +16,6 @@ const FilmRecipeContent = ({ recipes, refetch }: FilmRecipeContentProps) => {
 			props: {
 				type: MODAL_CONFIG.FILM_RECIPE.READ.type,
 				data: recipes.find(({ title }) => title === targetTitle)!,
-				refetch,
 			},
 		});
 	};
