@@ -15,7 +15,7 @@ const FavoriteDevice = ({ userId }: FavoriteDeviceProps) => {
 
 	return (
 		<Container>
-			<dt>Email</dt>
+			<dt>Favorite Fuji Device</dt>
 			<dd>{data?.favorite_device}</dd>
 		</Container>
 	);
