@@ -6,8 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import GlobalStyle from './styles/GlobalStyle';
 import AuthenticationGuard from './guard/AuthenticationGuard';
-import MyPageLayout from './components/layout/MyPageLayout';
-import { Layout, DiaryLayout, LoadLazy, RouteError, ExpenseTrackerLayout } from './components';
+import { Layout, DiaryLayout, MyPageLayout, LoadLazy, RouteError, ExpenseTrackerLayout } from './components';
 import { routes } from './constants';
 
 const queryClient = new QueryClient({

@@ -7,12 +7,12 @@ const ModalContainer = () => {
 
 	return (
 		<Portal>
-			<Container id="modal-container" isVisible={modals.length > 0}>
+			<Container id="modal-container">
 				{modals.map(({ Component, props }, index) => {
 					const closeModal = () => removeModal(Component);
 
 					if (props) {
-						return <Component key={index} id={`modal-${index}`} onClose={closeModal} {...props} />;
+						return <Component key={index} id={index} onClose={closeModal} {...props} />;
 					}
 				})}
 			</Container>
@@ -20,16 +20,13 @@ const ModalContainer = () => {
 	);
 };
 
-const Container = styled.div<{ isVisible: boolean }>`
-	position: fixed;
+const Container = styled.div`
+	position: relative;
 	max-width: var(--max-app-width);
 	min-width: var(--min-app-width);
 	margin: 0 auto;
 	height: 100dvh;
-	background-color: rgba(0, 0, 0, 30%);
-	visibility: ${({ isVisible }) => (isVisible ? 'visible' : 'hidden')};
-	inset: 0px;
-	z-index: var(--overlay-index);
+	z-index: calc(var(--modal-index) - 1);
 `;
 
 export default ModalContainer;

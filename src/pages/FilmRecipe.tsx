@@ -1,12 +1,10 @@
+import { Suspense } from 'react';
 import styled from '@emotion/styled';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { Button, FilmRecipeContent, MODAL_CONFIG } from '../components';
-import { getRecipes } from '../supabase';
+import { BsPlus } from 'react-icons/bs';
+import { Button, FilmRecipeContent, FilmRecipeContentLoader, MODAL_CONFIG, MyDevice, SkeletonLoader } from '../components';
 import { useModalStore } from '../store';
-import { queryKey } from '../constants';
 
 const FilmRecipePage = () => {
-	const { data: recipes, refetch } = useSuspenseQuery({ queryKey: queryKey.FILM_RECIPE, queryFn: getRecipes });
 	const { setModal } = useModalStore();
 
 	const handleAddFilmRecipeModal = () => {
@@ -18,55 +16,53 @@ const FilmRecipePage = () => {
 
 	return (
 		<section>
-			<Header>
-				<Title>📷 FujiX Recipe</Title>
-				<AddButton type="button" onClick={handleAddFilmRecipeModal}>
-					ADD
-				</AddButton>
-			</Header>
-			<Description>
-				with <span>Fuji x100f</span>
-			</Description>
-			<FilmRecipeContent recipes={recipes} refetch={refetch} />
+			<Title>
+				📷 My{' '}
+				<Suspense fallback={<SkeletonLoader width={'80px'} height={'46px'} />}>
+					<MyDevice />
+				</Suspense>{' '}
+				Recipes
+			</Title>
+			<AddButton type="button" onClick={handleAddFilmRecipeModal}>
+				<BsPlus size="24" color="var(--white)" />
+			</AddButton>
+			<Suspense fallback={<FilmRecipeContentLoader />}>
+				<FilmRecipeContent />
+			</Suspense>
 		</section>
 	);
 };
 
-const Header = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-`;
-
 const Title = styled.h2`
+	display: flex;
+	align-items: center;
+	gap: 6px;
 	font-size: var(--fz-h5);
 	font-weight: var(--fw-black);
 	color: var(--grey900);
 `;
 
 const AddButton = styled(Button)`
-	padding: calc(var(--padding-container-mobile) * 0.5) var(--padding-container-mobile);
-	min-height: 40px;
+	position: fixed;
+	bottom: calc(var(--nav-height) * 2);
+	right: 16px;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: var(--padding-container-mobile) var(--padding-container-mobile);
 	background-color: var(--black);
 	color: var(--white);
-	font-size: var(--fz-p);
+	font-size: var(--fz-h7);
 	font-weight: var(--fw-bold);
-	border-radius: var(--radius-s);
+	border-radius: var(--radius-m);
 
 	&:hover,
 	&:active {
 		background-color: var(--grey900);
 	}
-`;
 
-const Description = styled.p`
-	span {
-		display: inline-block;
-		padding: calc(var(--padding-container-mobile) * 0.3);
-		font-weight: var(--fw-semibold);
-		color: var(--grey700);
-		background-color: var(--greyOpacity100);
-		border-radius: var(--radius-s);
+	@media screen and (min-width: 480px) {
+		right: calc((100dvw - var(--max-app-width)) / 2 + 16px);
 	}
 `;
 

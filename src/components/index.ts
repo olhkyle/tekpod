@@ -6,5 +6,7 @@ export * from './expenseTracker';
 export * from './filmRecipe';
 export * from './layout';
 export * from './modal';
+export * from './provider';
 export * from './todoReminder';
+export * from './updateProfile';
 export * from './write';

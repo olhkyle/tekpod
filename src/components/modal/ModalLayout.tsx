@@ -1,4 +1,4 @@
-import { AnimationEvent, ReactNode, useState } from 'react';
+import { AnimationEvent, Fragment, ReactNode, useState } from 'react';
 import styled from '@emotion/styled';
 import { CgClose } from 'react-icons/cg';
 import { Button } from '..';
@@ -28,29 +28,35 @@ const ModalLayout = ({ id, type, title, onClose, children }: ModalLayoutProps) =
 	};
 
 	return (
-		<Container
-			isVisible={!isClosing}
-			order={+id.split('-')[1]}
-			data-modal-type={type}
-			data-modal-id={id}
-			onAnimationEnd={handleAnimationEnd}>
-			<Header id={`${id}-header`}>
-				<Title>{title}</Title>
-				<CloseButton type="button" onClick={handleModalClose}>
-					<CgClose size="24" color="var(--black)" />
-				</CloseButton>
-			</Header>
-			<Body id={`${id}-body`}>{children}</Body>
-		</Container>
+		<Fragment>
+			<Container
+				isVisible={!isClosing}
+				order={+id}
+				data-modal-type={type}
+				data-modal-id={`modal-${id}`}
+				onAnimationEnd={handleAnimationEnd}>
+				<GrabArea />
+				<Header id={`modal-${id}-header`}>
+					<Title>{title}</Title>
+					<CloseButton type="button" onClick={handleModalClose}>
+						<CgClose size="24" color="var(--black)" />
+					</CloseButton>
+				</Header>
+				<Body id={`modal-${id}-body`}>{children}</Body>
+			</Container>
+			<Overlay id={`overlay-${id}`} onAnimationEnd={handleAnimationEnd} onClick={handleModalClose} aria-hidden={isClosing} />
+		</Fragment>
 	);
 };
 
 const Container = styled.div<{ isVisible: boolean; order: number }>`
-	position: absolute;
+	position: fixed;
 	bottom: 0;
-	left: 0;
-	right: 0;
+	margin: 0 auto;
 	padding: var(--padding-container-mobile);
+	max-width: var(--max-app-width);
+	min-width: var(--min-app-width);
+	width: 100%;
 	background-color: ${({ order }) => (order === 0 ? 'var(--white)' : `var(--grey50)`)};
 	border-top-left-radius: var(--radius-l);
 	border-top-right-radius: var(--radius-l);
@@ -85,6 +91,15 @@ const Container = styled.div<{ isVisible: boolean; order: number }>`
 	}
 `;
 
+const GrabArea = styled.div`
+	margin: 4px auto;
+	width: 100px;
+	height: 8px;
+	background-color: var(--grey100);
+	border-radius: var(--radius-extra);
+	cursor: pointer;
+`;
+
 const Header = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -110,6 +125,18 @@ const Body = styled.div`
 	&::-webkit-scrollbar {
 		display: none; // hide scrollbar
 	}
+`;
+
+const Overlay = styled.div`
+	position: fixed;
+	max-width: var(--max-app-width);
+	min-width: var(--min-app-width);
+	margin: 0 auto;
+	height: 100dvh;
+	background-color: rgba(0, 0, 0, 35%);
+	inset: 0px;
+	z-index: var(--overlay-index);
+	cursor: pointer;
 `;
 
 export default ModalLayout;

@@ -41,7 +41,7 @@ const Container = styled.div`
 	max-width: calc(100dvw - 2 * var(--padding-container-mobile));
 	min-width: calc(100dvw - 2 * var(--padding-container-mobile));
 	background-color: var(--grey100);
-	border: 1px solid var(--greyOpacity200);
+	border: 1px solid var(--greyOpacity100);
 	border-radius: var(--radius-s);
 
 	@media screen and (min-width: 640px) {

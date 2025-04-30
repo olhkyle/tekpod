@@ -9,6 +9,16 @@ const isUserExist = async (email: string) => {
 	return { data: data?.length !== 0, error };
 };
 
+const getUser = async (userId: string) => {
+	const { data, error } = await supabase.from(TABLE).select('*').eq('user_id', userId).single();
+
+	if (error) {
+		throw new Error(error.message);
+	}
+
+	return data;
+};
+
 const addNewUser = async ({ userId, userData }: { userId?: string; userData: RegisterSchema }) => {
 	return await supabase.from(TABLE).insert({ user_id: userId, email: userData.email, nickname: userData.nickname });
 };
@@ -17,4 +27,4 @@ const updateUser = async ({ userId, userData }: { userId: string; userData: Upda
 	return await supabase.from(TABLE).update(userData).eq('user_id', userId);
 };
 
-export { isUserExist, addNewUser, updateUser };
+export { isUserExist, getUser, addNewUser, updateUser };
