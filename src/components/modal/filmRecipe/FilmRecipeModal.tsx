@@ -8,7 +8,6 @@ import { MODAL_CONFIG, type ModalDataType } from '..';
 import { ModalLayout, LazyImage, FilmRecipeImageUpload, TextInput, CustomSelect, Button, FilmRecipeStaticFields } from '../..';
 import { editRecipe, type RestricedRecipeWithImage } from '../../../supabase';
 import { useModalStore, useToastStore } from '../../../store';
-import { QueryRefetch } from '../../../store/useModalStore';
 import { useFilmRecipeImage, useLoading } from '../../../hooks';
 import { filmRecipeFieldData, FILM_RECIPE_FORM, toastData, queryKey } from '../../../constants';
 import { validateTitle } from '../../../utils';
@@ -17,7 +16,6 @@ interface FilmRecipeModalProps {
 	id: string;
 	type: ModalDataType;
 	data: RestricedRecipeWithImage;
-	refetch: QueryRefetch;
 	onClose: () => void;
 }
 
