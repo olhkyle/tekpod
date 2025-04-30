@@ -25,7 +25,6 @@ const Container = styled.div`
 	max-width: var(--max-app-width);
 	min-width: var(--min-app-width);
 	margin: 0 auto;
-	height: 100dvh;
 	z-index: calc(var(--modal-index) - 1);
 `;
 
