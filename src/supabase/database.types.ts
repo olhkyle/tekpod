@@ -238,8 +238,6 @@ export interface Database {
 					user_id: string;
 					date: string;
 					status: 'present' | 'absent' | 'remote' | 'half_day';
-					check_in: string;
-					check_out: string;
 					workplace: string;
 					notes: boolean;
 					created_at: string;
@@ -251,9 +249,7 @@ export interface Database {
 					user_id: string;
 					date: string;
 					status: 'present' | 'absent' | 'remote' | 'half_day';
-					check_in: string;
-					check_out: string;
-					workplace: string;
+					workplace?: string;
 					notes?: boolean;
 					created_at: string;
 					updated_at: string;
@@ -264,8 +260,6 @@ export interface Database {
 					user_id: string;
 					date?: string;
 					status?: 'present' | 'absent' | 'remote' | 'half_day';
-					check_in?: string;
-					check_out?: string;
 					workplace?: string;
 					notes?: boolean;
 					created_at?: string;
