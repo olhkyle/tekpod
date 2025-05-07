@@ -8,11 +8,11 @@ import { Button, TagsInput, TextArea, TextInput, WriteSchema, writeSchema } from
 import { addDiary } from '../supabase';
 import { useLoading } from '../hooks';
 import { useToastStore } from '../store';
-import { routes, toastData } from '../constants';
+import { queryKey, routes, toastData } from '../constants';
 
 const WritePage = () => {
 	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(['auth']) as Session;
+	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
 	const navigate = useNavigate();
 
 	const {

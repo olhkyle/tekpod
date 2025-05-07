@@ -13,7 +13,7 @@ import { toastData, routes, queryKey } from '../../constants';
 
 const QuickMemoDrawer = () => {
 	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(['auth']) as Session;
+	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
 
 	const { register, setValue, handleSubmit } = useForm<QuickMemoDrawerSchema>({
 		resolver: zodResolver(quickMemoDrawerSchema),

@@ -7,7 +7,7 @@ import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLa
 import { type RestrictedRecipeForValidation } from '../../../supabase/schema';
 import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../../hooks';
 import { useToastStore } from '../../../store';
-import { FILM_RECIPE_FORM, toastData } from '../../../constants';
+import { FILM_RECIPE_FORM, queryKey, toastData } from '../../../constants';
 
 interface AddFilmRecipeModalProps {
 	id: string;
@@ -50,7 +50,7 @@ const initialValidationState: { [key: string]: boolean } = {
 
 const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
 	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(['auth']) as Session;
+	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
 
 	const [currentFilmFeature, setCurrentFilmFeature] = useState<Omit<RestrictedRecipeForValidation, 'imgSrc'>>(initialFilmFieldValue);
 	const [isTriggered, setTriggered] = useState(initialValidationState);

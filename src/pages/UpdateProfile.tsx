@@ -9,11 +9,11 @@ import { supabase } from '../supabase';
 import { useLoading } from '../hooks';
 import { useToastStore, useModalStore, useUserStore } from '../store';
 import { formatByKoreanTime } from '../utils';
-import { toastData, routes } from '../constants';
+import { toastData, routes, queryKey } from '../constants';
 
 const UpdateProfile = () => {
 	const queryClient = useQueryClient();
-	const { user } = queryClient.getQueryData(['auth']) as Session;
+	const { user } = queryClient.getQueryData(queryKey.AUTH) as Session;
 	const navigate = useNavigate();
 
 	const { resetUser } = useUserStore();
