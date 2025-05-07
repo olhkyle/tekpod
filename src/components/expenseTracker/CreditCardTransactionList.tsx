@@ -3,7 +3,11 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { EmptyMessage } from '../common';
 import { ExpenseTracker, FIXED_PAYMENT_DATE, getCreditCardPaymentsByMonth } from '../../supabase';
 import { bankSvgs, queryKey } from '../../constants';
-import { formatByKoreanTime, getCompletedMonth, monetizeWithSeparator } from '../../utils';
+import { currentMonth, formatByKoreanTime, getCompletedMonth, monetizeWithSeparator, months } from '../../utils';
+
+type WithCompletedMonth<T> = T & {
+	completedMonth: (typeof months)[number] | null;
+};
 
 const CreditCardTransactionList = () => {
 	const { data } = useSuspenseQuery<ExpenseTracker[]>({
@@ -11,12 +15,18 @@ const CreditCardTransactionList = () => {
 		queryFn: getCreditCardPaymentsByMonth,
 	});
 
-	const dataWithCompletedMonth = data.map(payment => {
+	const dataWithCompletedMonth = data.reduce<WithCompletedMonth<ExpenseTracker>[]>((acc, payment) => {
 		const _date = new Date(formatByKoreanTime(payment.usage_date));
 		const [usage_month, usage_date] = [_date.getMonth(), _date.getDate()];
 
-		return { ...payment, completedMonth: getCompletedMonth({ payment, usage_month, usage_date, FIXED_PAYMENT_DATE }) };
-	});
+		const completedMonth = getCompletedMonth({ payment, usage_month, usage_date, FIXED_PAYMENT_DATE });
+
+		if (months.findIndex(month => month === completedMonth) >= currentMonth) {
+			acc.push({ ...payment, completedMonth });
+		}
+
+		return acc;
+	}, []);
 
 	return (
 		<>
