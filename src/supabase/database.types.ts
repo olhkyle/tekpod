@@ -239,7 +239,7 @@ export interface Database {
 					date: string;
 					status: 'present' | 'absent' | 'remote' | 'half_day';
 					workplace: string;
-					notes: boolean;
+					notes: string;
 					created_at: string;
 					updated_at: string;
 				};
@@ -250,7 +250,7 @@ export interface Database {
 					date: string;
 					status: 'present' | 'absent' | 'remote' | 'half_day';
 					workplace?: string;
-					notes?: boolean;
+					notes?: string;
 					created_at: string;
 					updated_at: string;
 				};
@@ -261,7 +261,7 @@ export interface Database {
 					date?: string;
 					status?: 'present' | 'absent' | 'remote' | 'half_day';
 					workplace?: string;
-					notes?: boolean;
+					notes?: string;
 					created_at?: string;
 					updated_at?: string;
 				};

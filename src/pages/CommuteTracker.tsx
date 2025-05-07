@@ -1,11 +1,7 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { Session } from '@supabase/supabase-js';
-import { Select, WorkInProgress } from '../components';
-import { calendar, currentMonth, currentYear, months, years } from '../utils';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { queryKey } from '../constants';
-import { getMonthlyRecords } from '../supabase';
+import { LoadingSpinner, Records, Select, WorkInProgress } from '../components';
+import { currentMonth, currentYear, months, years } from '../utils';
 
 /**
  *
@@ -15,8 +11,6 @@ import { getMonthlyRecords } from '../supabase';
  * user_id: string;
  * date: string;
  * status: 'present' | 'absent' | 'remote' | 'half_day';
- * check_in: string;
- * check_out: string;
  * workplace: string;
  * notes: boolean;
  * created_at: string;
@@ -30,22 +24,9 @@ import { getMonthlyRecords } from '../supabase';
 // 2 - add trigger with mutation
 
 const CommuteTrackerPage = () => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(['auth']) as Session;
-
 	const [yearAndMonth, setYearAndMonth] = useState({
 		year: `${currentYear}`,
 		month: months[currentMonth],
-	});
-
-	const { data } = useSuspenseQuery({
-		queryKey: [...queryKey.COMMUTE_RECORDS, yearAndMonth],
-		queryFn: () =>
-			getMonthlyRecords({
-				year: +yearAndMonth.year,
-				month: months.findIndex(month => month === yearAndMonth.month) + 1,
-				user_id: session.user.id,
-			}),
 	});
 
 	return (
@@ -68,17 +49,9 @@ const CommuteTrackerPage = () => {
 				/>
 			</Controller>
 
-			<Checker>
-				{calendar[months.findIndex(month => month === yearAndMonth.month) + 1].map(day => {
-					const worked = data.find(item => new Date(item.date).getDate() === day);
-					return (
-						<Day key={day} worked={!!worked}>
-							<Label>{day}</Label>
-							<Emoji>{worked ? '✅' : '🫥'}</Emoji>
-						</Day>
-					);
-				})}
-			</Checker>
+			<Suspense fallback={<LoadingSpinner />}>
+				<Records yearAndMonth={yearAndMonth} />
+			</Suspense>
 			<WorkInProgress />
 		</Container>
 	);
@@ -99,41 +72,6 @@ const Controller = styled.div`
 	padding: calc(var(--padding-container-mobile) * 0.5);
 	background-color: var(--black);
 	border-radius: var(--radius-s);
-`;
-
-const Checker = styled.ul`
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	gap: 8px;
-	margin: 32px auto;
-`;
-
-const Day = styled.li<{ worked: boolean }>`
-	display: inline-flex;
-	flex-direction: column;
-	align-items: center;
-	padding: calc(var(--padding-container-mobile) * 0.25);
-	min-width: 48px;
-	min-height: 48px;
-	color: ${({ worked }) => (worked ? 'var(--blue200)' : 'var(--grey600)')};
-	background-color: ${({ worked }) => (worked ? 'var(--blue100)' : 'var(--grey50)')};
-	border: 1px solid ${({ worked }) => (worked ? 'var(--blue300)' : 'var(--grey100)')};
-	border-radius: var(--radius-s);
-	cursor: pointer;
-
-	@media screen and (min-width: 640px) {
-		min-height: 60px;
-	}
-`;
-
-const Label = styled.span`
-	display: inline-block;
-	width: 100%;
-	text-align: start;
-`;
-
-const Emoji = styled.span`
-	font-size: var(--fz-h4);
 `;
 
 export default CommuteTrackerPage;

@@ -166,6 +166,12 @@ const toastData = {
 			},
 		},
 	},
+	COMMUTE_RECORDS: {
+		CREATE: {
+			SUCCESS: { status: 'success', message: `Check commute ${FIXED_SUCCESS_PHRASE}` },
+			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} checking ` },
+		},
+	},
 } as const;
 
 export default toastData;

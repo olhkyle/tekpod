@@ -1,6 +1,8 @@
 import { Database } from './database.types';
 
-type ServiceDataType = Diary | Recipe | Todo | Partial<User> | ExpenseTracker | Pick<ExpenseTracker, 'usage_date'> | null;
+type TableRowData = Diary | Recipe | Todo | ExpenseTracker | User | CommuteRecords;
+
+type ServiceDataType<T = TableRowData> = T | Partial<T> | null;
 
 type Diary = Database['public']['Tables']['diary']['Row'];
 type Recipe = Database['public']['Tables']['recipes']['Row'];

@@ -8,9 +8,10 @@ import {
 	ResetPasswordForEmailModal,
 	UpdateProfileModal,
 	TodoItemEditModal,
+	RecordModal,
 } from '.';
 
-type ModalDataType = 'diary' | 'film_recipe' | 'expense_tracker' | 'user' | 'todo_reminder';
+type ModalDataType = (typeof modalType)[keyof typeof modalType];
 type ModalAction = 'ADD' | 'READ' | 'EDIT' | 'REMOVE' | 'RESET_PASSWORD' | 'PROFILE' | string; // TODO: string & NonNullable<unknown>
 
 type ModalConfigItem = {
@@ -30,6 +31,7 @@ const modalType = {
 	DIARY: 'diary',
 	USER: 'user',
 	TODO_REMINDER: 'todo_reminder',
+	COMMUTE_RECORDS: 'commute_records',
 } as const;
 
 const MODAL_CONFIG: ModalConfig = {
@@ -73,6 +75,16 @@ const MODAL_CONFIG: ModalConfig = {
 		EDIT: {
 			type: modalType.TODO_REMINDER,
 			Component: TodoItemEditModal,
+		},
+	},
+	COMMUTE_RECORDS: {
+		ADD: {
+			type: modalType.COMMUTE_RECORDS,
+			Component: RecordModal,
+		},
+		EDIT: {
+			type: modalType.COMMUTE_RECORDS,
+			Component: RecordModal,
 		},
 	},
 };

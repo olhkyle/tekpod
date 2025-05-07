@@ -1,5 +1,6 @@
 export * from './auth';
 export * from './common';
+export * from './commuteRecords';
 export * from './content';
 export * from './diary';
 export * from './expenseTracker';
