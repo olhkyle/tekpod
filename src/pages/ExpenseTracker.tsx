@@ -50,7 +50,7 @@ const ExpenseTrackerPage = () => {
 					<Flex direction={'row'} alignItems={'center'} gap={8}>
 						<h2>💳 Total Expenses</h2>
 						<Select
-							data={months.filter((_, idx) => idx <= currentMonth)}
+							data={months.filter((_, idx) => idx <= currentMonth).reverse()}
 							placeholder="Select Month"
 							descriptionLabel="Month"
 							currentValue={targetMonth}

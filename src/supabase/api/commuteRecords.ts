@@ -14,7 +14,7 @@ const getMonthlyRecords = async ({ year, month, user_id }: { year: number; month
 	return data;
 };
 
-const checkCommute = async (data: CommuteRecords) => {
+const addCommute = async (data: Omit<CommuteRecords, 'id'>) => {
 	const { error } = await supabase.from(TABLE).insert(data).select();
 
 	if (error) {
@@ -33,4 +33,4 @@ const updateCommute = async (data: Partial<CommuteRecords>) => {
 	}
 };
 
-export { getMonthlyRecords, checkCommute, updateCommute };
+export { getMonthlyRecords, addCommute, updateCommute };

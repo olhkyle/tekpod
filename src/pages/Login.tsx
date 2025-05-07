@@ -8,7 +8,7 @@ import { Button, LabelInput, AuthLogo, loginSchema, type LoginSchema, MODAL_CONF
 import { supabase } from '../supabase';
 import { useLoading } from '../hooks';
 import { useUserStore, useToastStore, useModalStore } from '../store';
-import { routes, toastData } from '../constants';
+import { queryKey, routes, toastData } from '../constants';
 
 const LoginPage = () => {
 	const queryClient = useQueryClient();
@@ -63,7 +63,7 @@ const LoginPage = () => {
 
 			if (data) {
 				setUserData(data.session);
-				queryClient.setQueryData(['auth'], data.session);
+				queryClient.setQueryData(queryKey.AUTH, data.session);
 				addToast(toastData.PROFILE.LOGIN.SUCCESS);
 				navigate(routes.HOME, { replace: true });
 			}

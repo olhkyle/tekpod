@@ -11,7 +11,7 @@ const ExpenseTrackerReportPage = () => {
 			<Title>
 				<span>Report of</span>
 				<Select
-					data={months.filter((_, idx) => idx <= currentMonth)}
+					data={months.filter((_, idx) => idx <= currentMonth).reverse()}
 					placeholder={'month'}
 					currentValue={selectMonth}
 					onSelect={option => setSelectMonth(months[months.findIndex(month => month === option)])}

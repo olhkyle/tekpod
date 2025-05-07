@@ -210,6 +210,16 @@ const Global = css`
 		-webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* 탭 시 하이라이트 효과 제거 */
 	}
 
+	div:focus-visible,
+	li:focus-visible,
+	span:focus-visible,
+	button:focus-visible,
+	a:focus-visible {
+		outline: 2px solid var(--blue200);
+		outline-offset: 1px;
+		border-radius: var(--radius-s);
+	}
+
 	::-moz-selection {
 		background: var(--blue100);
 	}

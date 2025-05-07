@@ -5,7 +5,7 @@ import { queryKey } from '../../constants';
 import { getUser } from '../../supabase';
 
 const MyDevice = () => {
-	const { user } = useQueryClient().getQueryData(['auth']) as Session;
+	const { user } = useQueryClient().getQueryData(queryKey.AUTH) as Session;
 	const { data } = useSuspenseQuery({
 		queryKey: queryKey.USER,
 		queryFn: () => getUser(user?.id),

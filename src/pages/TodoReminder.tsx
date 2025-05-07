@@ -11,7 +11,7 @@ import { queryKey, toastData } from '../constants';
 
 const TodoReminderPage = () => {
 	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(['auth']) as Session;
+	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
 
 	const [value, setValue] = useState('');
 	const { addToast } = useToastStore();

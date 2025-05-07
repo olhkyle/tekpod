@@ -21,7 +21,7 @@ interface AddPaymentModalProps {
 
 const AddPaymentModal = ({ id, type, data, onClose }: AddPaymentModalProps) => {
 	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(['auth']) as Session;
+	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
 
 	const {
 		register,
