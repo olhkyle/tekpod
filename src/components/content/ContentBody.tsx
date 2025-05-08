@@ -21,7 +21,11 @@ const ContentBody = () => {
 			props: { type: MODAL_CONFIG.DIARY.EDIT.type, data },
 		});
 
-	const handleDeleteDiaryClick = () => remove({ id: diaryId! });
+	const handleDeleteDiaryClick = () => {
+		if (diaryId) {
+			remove({ id: diaryId });
+		}
+	};
 
 	return (
 		<>

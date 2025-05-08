@@ -2,4 +2,6 @@ type Handlers = {
 	[handler: string]: () => void;
 };
 
-export type { Handlers };
+type OldData<T> = { pageParams: number[]; pages: T[][] };
+
+export type { Handlers, OldData };

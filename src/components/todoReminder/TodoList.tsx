@@ -1,14 +1,39 @@
-import styled from '@emotion/styled';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { EmptyMessage, TodoItem } from '..';
-import { getTodos } from '../../supabase';
-import { queryKey } from '../../constants';
 import { useState } from 'react';
+import styled from '@emotion/styled';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { EmptyMessage, LoadingSpinner, TodoItem } from '..';
+import { getTodosByPage, getTodosPageInfo, TODOS_PAGE_SIZE } from '../../supabase';
+import { useGetPaginationInfo, useInfinityScroll } from '../../hooks';
+import { queryKey, staleTime } from '../../constants';
 
 const TodoList = () => {
-	const { data: todoList } = useSuspenseQuery({ queryKey: queryKey.TODOS, queryFn: getTodos });
+	const { calculatedTotalPage } = useGetPaginationInfo({
+		queryKey: queryKey.TODOS_PAGE_INFO,
+		queryFn: getTodosPageInfo,
+		staleTime: staleTime.TODOS.PAGE_INFO,
+		pageSize: TODOS_PAGE_SIZE,
+	});
+
+	const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery({
+		queryKey: queryKey.TODOS_BY_PAGE,
+		queryFn: ({ pageParam }) => getTodosByPage(pageParam, TODOS_PAGE_SIZE),
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, __, lastPageParam) => {
+			const currentPageSize = lastPage.length ?? 0;
+
+			if (currentPageSize && lastPageParam < calculatedTotalPage) {
+				return lastPageParam + 1;
+			}
+
+			return undefined;
+		},
+		staleTime: staleTime.TODOS.ALL_WITH_PAGINATION,
+	});
+
 	const [activeEditingTodoItemId, setActiveEditingTodoItemId] = useState<string | null>(null);
 	const [activeDraggingTodoItemId, setActiveDraggingTodoItemId] = useState<string | null>(null);
+
+	const targetRef = useInfinityScroll(fetchNextPage);
 
 	const handleEditingIdChange = (id: string | null) => {
 		// do not make an effect on dragging
@@ -30,11 +55,11 @@ const TodoList = () => {
 
 	return (
 		<>
-			{todoList.length === 0 ? (
+			{data.pages.flat().length === 0 ? (
 				<EmptyMessage emoji={'🔄'}>Add New Reminder</EmptyMessage>
 			) : (
 				<Container>
-					{todoList.map(todo => (
+					{data.pages.flat().map(todo => (
 						<TodoItem
 							key={todo.id}
 							id={todo.id}
@@ -47,6 +72,11 @@ const TodoList = () => {
 					))}
 				</Container>
 			)}
+			{hasNextPage && (
+				<LoadingArea ref={targetRef}>
+					<LoadingSpinner />
+				</LoadingArea>
+			)}
 		</>
 	);
 };
@@ -57,6 +87,13 @@ const Container = styled.ul`
 	gap: 16px;
 	margin-top: 8px;
 	padding: calc(var(--padding-container-mobile) * 1) 0 calc(var(--padding-container-mobile) * 3);
+`;
+
+const LoadingArea = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: calc(var(--padding-container-mobile) * 2);
 `;
 
 export default TodoList;

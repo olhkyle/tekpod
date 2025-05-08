@@ -44,7 +44,7 @@ const TodoReminderPage = () => {
 			console.error(e);
 			addToast(toastData.TODO_REMINDER.CREATE.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
+			queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE });
 		}
 	};
 
