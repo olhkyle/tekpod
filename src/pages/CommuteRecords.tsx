@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { LoadingSpinner, Records, Select, WorkInProgress } from '../components';
+import { Records, RecordsLoader, Select, WorkInProgress } from '../components';
 import { currentMonth, currentYear, getMonthIndexFromMonths, months, years } from '../utils';
 
 /**
@@ -41,7 +41,7 @@ const CommuteRecordsPage = () => {
 					onSelect={option => setYearAndMonth({ ...yearAndMonth, year: option })}
 				/>
 				<Select
-					data={months.filter((_, idx) => idx <= currentMonth).reverse()}
+					data={+yearAndMonth.year === currentYear ? months.filter((_, idx) => idx <= currentMonth) : [...months].reverse()}
 					placeholder={'Select Month'}
 					descriptionLabel={'Month'}
 					currentValue={yearAndMonth.month}
@@ -49,7 +49,7 @@ const CommuteRecordsPage = () => {
 				/>
 			</Controller>
 
-			<Suspense fallback={<LoadingSpinner />}>
+			<Suspense fallback={<RecordsLoader />}>
 				<Records yearAndMonth={yearAndMonth} />
 			</Suspense>
 			<WorkInProgress />
