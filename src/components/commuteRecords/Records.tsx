@@ -93,9 +93,9 @@ const Day = styled.li<{ status: StatusOption }>`
 	border: 1px solid
 		${({ status }) =>
 			status === 'absent'
-				? 'var(--blue400)'
-				: status === 'present' || status === 'remote' || status === 'half_day'
 				? 'var(--blue300)'
+				: status === 'present' || status === 'remote' || status === 'half_day'
+				? 'var(--blue400)'
 				: 'var(--grey100)'};
 	border-radius: var(--radius-s);
 	cursor: pointer;
