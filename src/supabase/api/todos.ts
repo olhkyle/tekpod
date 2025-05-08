@@ -2,20 +2,30 @@ import supabase from '../service';
 import { Todo } from '../schema';
 
 const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_TODOS;
+const TODOS_PAGE_SIZE = 10;
 
-const getTodos = async (): Promise<Todo[]> => {
-	const { data, error } = await supabase.from(TABLE).select('*').order('created_at', { ascending: false });
+const getTodosPageInfo = async () => {
+	const { data, error } = await supabase.from(TABLE).select('*').explain({ format: 'json', analyze: true });
 
 	if (error) {
 		throw new Error(error.message);
 	}
 
-	return data.map(item => ({
-		...item,
-		created_at: new Date(item.created_at),
-		updated_at: new Date(item.updated_at),
-		reminder_time: item.reminder_time ? new Date(item.reminder_time) : null,
-	}));
+	return data;
+};
+
+const getTodosByPage = async (pageParam: number, pageSize: number): Promise<Todo[]> => {
+	const { data, error } = await supabase
+		.from(TABLE)
+		.select('*')
+		.order('created_at', { ascending: false })
+		.range((pageParam - 1) * pageSize, pageParam * pageSize - 1);
+
+	if (error) {
+		throw new Error(error.message);
+	}
+
+	return data;
 };
 
 const addTodo = async (data: Omit<Todo, 'id' | 'reminder_time' | 'notified'>) => {
@@ -70,4 +80,4 @@ const removeTodo = async ({ id }: { id: string }) => {
 	}
 };
 
-export { getTodos, addTodo, editTodoContent, editTodoDetail, updatedTodoCompleted, removeTodo };
+export { TODOS_PAGE_SIZE, getTodosPageInfo, getTodosByPage, addTodo, editTodoContent, editTodoDetail, updatedTodoCompleted, removeTodo };

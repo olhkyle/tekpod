@@ -48,6 +48,8 @@ const WritePage = () => {
 		} catch (e) {
 			console.error(e);
 			addToast(toastData.DIARY.CREATE.ERROR);
+		} finally {
+			queryClient.invalidateQueries({ queryKey: queryKey.DIARY_BY_PAGE });
 		}
 	};
 

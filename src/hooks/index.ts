@@ -5,6 +5,7 @@ export { default as useClickOutside } from './useClickOutside';
 export { default as useDrag } from './useDrag';
 export { default as useFilmRecipeImage } from './useFilmRecipeImage';
 export { default as useFunnel } from './useFunnel';
+export { default as useGetPaginationInfo } from './useGetPaginationInfo';
 export { default as useInfinityScroll } from './useInfinityScroll';
 export { default as useInitialScrollToTop } from './useInitialScrollToTop';
 export { default as useIsElementInViewport } from './useIsElementInViewport';

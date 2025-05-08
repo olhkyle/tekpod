@@ -1,10 +1,10 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
 import { Description, ExpenseChart, ExpenseChartLoader, Select } from '../components';
-import { currentMonth, months } from '../utils';
+import { type Month, currentMonth, getMonthIndexFromMonths, months } from '../utils';
 
 const ExpenseTrackerReportPage = () => {
-	const [selectMonth, setSelectMonth] = useState(months[currentMonth]);
+	const [selectMonth, setSelectMonth] = useState<Month>(months[currentMonth]);
 
 	return (
 		<section>
@@ -14,7 +14,7 @@ const ExpenseTrackerReportPage = () => {
 					data={months.filter((_, idx) => idx <= currentMonth).reverse()}
 					placeholder={'month'}
 					currentValue={selectMonth}
-					onSelect={option => setSelectMonth(months[months.findIndex(month => month === option)])}
+					onSelect={option => setSelectMonth(months[getMonthIndexFromMonths(option)])}
 				/>
 			</Title>
 			<Description>This chart will show price based on Korean WON(₩)</Description>

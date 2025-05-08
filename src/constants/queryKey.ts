@@ -1,11 +1,13 @@
 const queryKey = {
 	AUTH: ['auth'],
 	USER: ['userInfo'],
-	PAGE_INFO: ['pageInfo'],
+	DIARY_PAGE_INFO: ['diary_pagination', 'pageInfo'],
 	DIARY: ['diary'],
 	DIARY_BY_PAGE: ['diaryByPage'],
 	FILM_RECIPE: ['film_recipes'],
+	TODOS_PAGE_INFO: ['todos_pagination', 'todosInfo'],
 	TODOS: ['todos'],
+	TODOS_BY_PAGE: ['todosByPage'],
 	EXPENSE_TRACKER: ['expense_tracker'],
 	COMMUTE_RECORDS: ['commute_records'],
 } as const;

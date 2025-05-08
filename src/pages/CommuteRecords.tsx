@@ -1,7 +1,7 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { LoadingSpinner, Records, Select, WorkInProgress } from '../components';
-import { currentMonth, currentYear, months, years } from '../utils';
+import { Records, RecordsLoader, Select, WorkInProgress } from '../components';
+import { currentMonth, currentYear, getMonthIndexFromMonths, months, years } from '../utils';
 
 /**
  *
@@ -23,7 +23,7 @@ import { currentMonth, currentYear, months, years } from '../utils';
 // 1 - change Emoji with SVG
 // 2 - add trigger with mutation
 
-const CommuteTrackerPage = () => {
+const CommuteRecordsPage = () => {
 	const [yearAndMonth, setYearAndMonth] = useState({
 		year: `${currentYear}`,
 		month: months[currentMonth],
@@ -41,15 +41,15 @@ const CommuteTrackerPage = () => {
 					onSelect={option => setYearAndMonth({ ...yearAndMonth, year: option })}
 				/>
 				<Select
-					data={months.filter((_, idx) => idx <= currentMonth).reverse()}
+					data={+yearAndMonth.year === currentYear ? months.filter((_, idx) => idx <= currentMonth) : [...months].reverse()}
 					placeholder={'Select Month'}
 					descriptionLabel={'Month'}
 					currentValue={yearAndMonth.month}
-					onSelect={option => setYearAndMonth({ ...yearAndMonth, month: months[months.findIndex(month => month === option)] })}
+					onSelect={option => setYearAndMonth({ ...yearAndMonth, month: months[getMonthIndexFromMonths(option)] })}
 				/>
 			</Controller>
 
-			<Suspense fallback={<LoadingSpinner />}>
+			<Suspense fallback={<RecordsLoader />}>
 				<Records yearAndMonth={yearAndMonth} />
 			</Suspense>
 			<WorkInProgress />
@@ -74,4 +74,4 @@ const Controller = styled.div`
 	border-radius: var(--radius-s);
 `;
 
-export default CommuteTrackerPage;
+export default CommuteRecordsPage;

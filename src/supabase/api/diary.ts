@@ -2,17 +2,7 @@ import supabase from '../service';
 import { Diary } from '../schema';
 
 const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_DIARY;
-const PAGE_SIZE = 10;
-
-const getCommitStatus = async () => {
-	const { data, error } = await supabase.from(TABLE).select('*');
-
-	if (error) {
-		throw new Error(error.message);
-	}
-
-	return data;
-};
+const DIARY_PAGE_SIZE = 10;
 
 const getDiariesPageInfo = async () => {
 	const { data, error } = await supabase.from(TABLE).select('*').explain({ format: 'json', analyze: true });
@@ -60,4 +50,4 @@ const removeDiary = async ({ id }: { id: string }) => {
 	return await supabase.from(TABLE).delete().eq('id', id);
 };
 
-export { PAGE_SIZE, getCommitStatus, getDiariesPageInfo, getDiariesByPage, getSingleDiary, addDiary, updateDiary, removeDiary };
+export { DIARY_PAGE_SIZE, getDiariesPageInfo, getDiariesByPage, getSingleDiary, addDiary, updateDiary, removeDiary };

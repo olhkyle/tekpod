@@ -15,8 +15,8 @@ import { queryKey, toastData } from '../../../constants';
 interface TodoItemEditModal {
 	id: string;
 	type: ModalDataType;
-	onClose: () => void;
 	data: Todo;
+	onClose: () => void;
 }
 
 const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, tags, reminder_time } }: TodoItemEditModal) => {
@@ -82,7 +82,7 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 			console.error(e);
 			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS });
+			queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE });
 		}
 	};
 

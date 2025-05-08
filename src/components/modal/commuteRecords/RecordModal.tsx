@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ModalDataType, ModalLayout } from '..';
 import { StatusSelect, Button, TextInput } from '../..';
 import { recordSchema, RecordSchema } from './schema';
-import { addCommute, CommuteRecords, ServiceDataType } from '../../../supabase';
+import { addCommute, CommuteRecord, ServiceDataType } from '../../../supabase';
 import { useLoading } from '../../../hooks';
 import { useToastStore } from '../../../store';
 import { queryKey, status, toastData } from '../../../constants';
@@ -14,7 +14,7 @@ import { queryKey, status, toastData } from '../../../constants';
 interface RecordModalProps {
 	id: string;
 	type: ModalDataType;
-	data: ServiceDataType<CommuteRecords>;
+	data: ServiceDataType<CommuteRecord>;
 	onClose: () => void;
 }
 

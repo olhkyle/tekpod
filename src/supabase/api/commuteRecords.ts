@@ -1,4 +1,4 @@
-import { CommuteRecords } from '../schema';
+import { CommuteRecord } from '../schema';
 import supabase from '../service';
 
 const TABLE = 'commute_records';
@@ -14,7 +14,7 @@ const getMonthlyRecords = async ({ year, month, user_id }: { year: number; month
 	return data;
 };
 
-const addCommute = async (data: Omit<CommuteRecords, 'id'>) => {
+const addCommute = async (data: Omit<CommuteRecord, 'id'>) => {
 	const { error } = await supabase.from(TABLE).insert(data).select();
 
 	if (error) {
@@ -22,7 +22,7 @@ const addCommute = async (data: Omit<CommuteRecords, 'id'>) => {
 	}
 };
 
-const updateCommute = async (data: Partial<CommuteRecords>) => {
+const updateCommute = async (data: Partial<CommuteRecord>) => {
 	const { error } = await supabase
 		.from(TABLE)
 		.update({ ...data })

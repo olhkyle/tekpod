@@ -3,20 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { removeDiary, Diary } from '../../../supabase';
 import { useToastStore } from '../../../store';
 import { toastData, routes, queryKey } from '../../../constants';
+import { OldData } from '../../../types';
 
 type Variables = Pick<Diary, 'id'>;
 
 const remove =
 	({ id }: Variables) =>
-	(oldData: Diary[]) => {
-		return oldData.filter(item => item.id !== id);
+	(oldData: OldData<Diary>) => {
+		return { ...oldData, pages: oldData.pages.map(page => page.filter(diary => diary.id !== id)) };
 	};
 
 const useRemoveDiaryMutation = () => {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { addToast } = useToastStore();
-	const DIARY_QUERY_KEY = queryKey.DIARY;
+	const DIARY_QUERY_KEY = queryKey.DIARY_BY_PAGE;
 
 	return useMutation({
 		async mutationFn(variables: Variables) {

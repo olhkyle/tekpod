@@ -3,28 +3,28 @@ import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
 import { queryKey, StatusOption } from '../../constants';
 import { getMonthlyRecords } from '../../supabase';
-import { calendar, formatByKoreanTime, months } from '../../utils';
+import { calendar, formatByKoreanTime, getMonthIndexFromMonths, Month } from '../../utils';
 import { useModalStore } from '../../store';
 import { MODAL_CONFIG } from '../modal';
 
 interface RecordsProps {
 	yearAndMonth: {
 		year: string;
-		month: (typeof months)[number];
+		month: Month;
 	};
 }
 
-const Records = ({ yearAndMonth }: RecordsProps) => {
+const Records = ({ yearAndMonth: { year, month } }: RecordsProps) => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
 
-	const monthIndex = months.findIndex(month => month === yearAndMonth.month) + 1;
+	const monthIndex = getMonthIndexFromMonths(month) + 1;
 
 	const { data } = useSuspenseQuery({
-		queryKey: [...queryKey.COMMUTE_RECORDS, `${yearAndMonth.year}-${(monthIndex + '').padStart(2, '0')}`],
+		queryKey: [...queryKey.COMMUTE_RECORDS, `${year}-${(monthIndex + '').padStart(2, '0')}`],
 		queryFn: () =>
 			getMonthlyRecords({
-				year: +yearAndMonth.year,
+				year: +year,
 				month: monthIndex,
 				user_id: session.user.id,
 			}),
@@ -33,7 +33,7 @@ const Records = ({ yearAndMonth }: RecordsProps) => {
 	const { setModal } = useModalStore();
 
 	const handleRecordModal = (day: number) => {
-		const date = new Date(`${yearAndMonth.year}-${(monthIndex + '').padStart(2, '0')}-${(day + '').padStart(2, '0')}`).toISOString();
+		const date = new Date(`${year}-${`${monthIndex}`.padStart(2, '0')}-${`${day}`.padStart(2, '0')}`).toISOString();
 
 		setModal({
 			Component: MODAL_CONFIG.COMMUTE_RECORDS.ADD.Component,
@@ -46,7 +46,7 @@ const Records = ({ yearAndMonth }: RecordsProps) => {
 
 	return (
 		<Container>
-			{calendar[months.findIndex(month => month === yearAndMonth.month) + 1].map(day => {
+			{calendar[monthIndex].map(day => {
 				const workedDate = data.find(item => new Date(item.date).getDate() === day);
 
 				return (
@@ -93,9 +93,9 @@ const Day = styled.li<{ status: StatusOption }>`
 	border: 1px solid
 		${({ status }) =>
 			status === 'absent'
-				? 'var(--blue400)'
-				: status === 'present' || status === 'remote' || status === 'half_day'
 				? 'var(--blue300)'
+				: status === 'present' || status === 'remote' || status === 'half_day'
+				? 'var(--blue400)'
 				: 'var(--grey100)'};
 	border-radius: var(--radius-s);
 	cursor: pointer;

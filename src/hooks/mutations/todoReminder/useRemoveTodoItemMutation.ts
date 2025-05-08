@@ -2,19 +2,20 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToastStore } from '../../../store';
 import { removeTodo, Todo } from '../../../supabase';
 import { queryKey, toastData } from '../../../constants';
+import { OldData } from '../../../types';
 
 type Variables = Pick<Todo, 'id'>;
 
 const remove =
 	({ id }: Variables) =>
-	(oldData: Todo[]) => {
-		return oldData.filter(item => item.id !== id);
+	(oldData: OldData<Todo>) => {
+		return { ...oldData, pages: oldData.pages.map(page => page.filter(todo => todo.id !== id)) };
 	};
 
 const useRemoveTodoItemMutation = (handler?: () => void) => {
 	const queryClient = useQueryClient();
 	const { addToast } = useToastStore();
-	const QUERY_KEY = queryKey.TODOS;
+	const QUERY_KEY = queryKey.TODOS_BY_PAGE;
 
 	return useMutation({
 		async mutationFn(variables: Variables) {

@@ -7,7 +7,7 @@ import { BsCalendar2MonthFill } from 'react-icons/bs';
 import { Button, Select, ShrinkMotionBlock, TotalExpensePrice, TotalExpensePriceLoader, MODAL_CONFIG } from '../components';
 import { useModalStore } from '../store';
 import { routes } from '../constants';
-import { months, currentMonth, currentYear } from '../utils';
+import { type Month, months, currentMonth, currentYear, getMonthIndexFromMonths } from '../utils';
 
 const linkGroup = [
 	{
@@ -28,8 +28,8 @@ const linkGroup = [
 ];
 
 const ExpenseTrackerPage = () => {
-	const [targetMonth, setTargetMonth] = useState<string>(months[currentMonth]); // Jan ~ Dec
-	const currentMonthIndex = months.findIndex(month => month === targetMonth);
+	const [targetMonth, setTargetMonth] = useState<Month>(months[currentMonth]); // Jan ~ Dec
+	const currentMonthIndex = getMonthIndexFromMonths(targetMonth);
 
 	const navigate = useNavigate();
 	const { setModal } = useModalStore();
@@ -54,7 +54,7 @@ const ExpenseTrackerPage = () => {
 							placeholder="Select Month"
 							descriptionLabel="Month"
 							currentValue={targetMonth}
-							onSelect={option => setTargetMonth(months[months.findIndex(month => month === option)])}
+							onSelect={option => setTargetMonth(months[getMonthIndexFromMonths(option)])}
 						/>
 						<span>in {currentYear}</span>
 					</Flex>

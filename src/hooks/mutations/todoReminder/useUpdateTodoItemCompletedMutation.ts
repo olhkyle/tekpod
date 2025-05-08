@@ -2,19 +2,20 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Todo, updatedTodoCompleted } from '../../../supabase';
 import { queryKey, toastData } from '../../../constants';
 import { useToastStore } from '../../../store';
+import { OldData } from '../../../types';
 
 type Variables = Pick<Todo, 'id' | 'completed' | 'updated_at'>;
 
 const update =
 	({ id, completed, updated_at }: Variables) =>
-	(oldData: Todo[]) => {
-		return oldData.map(item => (item.id === id ? { ...item, completed, updated_at } : item));
+	(oldData: OldData<Todo>) => {
+		return { ...oldData, pages: oldData.pages.map(page => page.map(todo => (todo.id === id ? { ...todo, completed, updated_at } : todo))) };
 	};
 
 const useUpdateTodoItemCompletedMutation = () => {
 	const queryClient = useQueryClient();
 	const { addToast } = useToastStore();
-	const QUERY_KEY = queryKey.TODOS;
+	const QUERY_KEY = queryKey.TODOS_BY_PAGE;
 
 	return useMutation({
 		async mutationFn(variables: Variables) {
