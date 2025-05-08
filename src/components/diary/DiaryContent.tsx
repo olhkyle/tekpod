@@ -1,24 +1,22 @@
-import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { getDiariesByPage, getDiariesPageInfo, PAGE_SIZE, type Diary } from '../../supabase';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+import { getDiariesByPage, getDiariesPageInfo, DIARY_PAGE_SIZE, type Diary } from '../../supabase';
 import { EmptyMessage, LoadingSpinner } from '..';
-import { useInfinityScroll } from '../../hooks';
+import { useGetPaginationInfo, useInfinityScroll } from '../../hooks';
 import { routes, staleTime, queryKey } from '../../constants';
-import { getCalculatedTotalPage } from '../../utils';
 
 const DiaryContent = () => {
-	const { data: pageInfo } = useSuspenseQuery({
-		queryKey: queryKey.PAGE_INFO,
+	const { calculatedTotalPage } = useGetPaginationInfo({
+		queryKey: queryKey.DIARY_PAGE_INFO,
 		queryFn: getDiariesPageInfo,
 		staleTime: staleTime.DIARY.PAGE_INFO,
+		pageSize: DIARY_PAGE_SIZE,
 	});
-
-	const calculatedTotalPage = getCalculatedTotalPage(pageInfo, PAGE_SIZE);
 
 	const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery({
 		queryKey: queryKey.DIARY_BY_PAGE,
-		queryFn: ({ pageParam }) => getDiariesByPage(pageParam, PAGE_SIZE),
+		queryFn: ({ pageParam }) => getDiariesByPage(pageParam, DIARY_PAGE_SIZE),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage, __, lastPageParam) => {
 			const currentPageSize = lastPage?.length ?? 0;
@@ -140,7 +138,7 @@ const LoadingArea = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: var(--padding-container-mobile);
+	padding: calc(var(--padding-container-mobile) * 2);
 `;
 
 export default DiaryContent;
