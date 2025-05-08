@@ -1,7 +1,7 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
 import { LoadingSpinner, Records, Select, WorkInProgress } from '../components';
-import { currentMonth, currentYear, months, years } from '../utils';
+import { currentMonth, currentYear, getMonthIndexFromMonths, months, years } from '../utils';
 
 /**
  *
@@ -45,7 +45,7 @@ const CommuteRecordsPage = () => {
 					placeholder={'Select Month'}
 					descriptionLabel={'Month'}
 					currentValue={yearAndMonth.month}
-					onSelect={option => setYearAndMonth({ ...yearAndMonth, month: months[months.findIndex(month => month === option)] })}
+					onSelect={option => setYearAndMonth({ ...yearAndMonth, month: months[getMonthIndexFromMonths(option)] })}
 				/>
 			</Controller>
 

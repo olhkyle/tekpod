@@ -1,5 +1,7 @@
 import { format, toZonedTime } from 'date-fns-tz';
 
+type Month = (typeof months)[number];
+
 const koreaTimeZone = 'Asia/Seoul';
 
 const today = new Date();
@@ -27,6 +29,7 @@ const formatByKoreanTime = (targetDate: Date | string): string => {
 };
 
 const translateNumberIntoMonth = (month: number) => months[month]; // ['Jan', 'Feb', 'Mar'][number]
+const getMonthIndexFromMonths = (option: Month | null) => months.findIndex(month => month === option);
 
 const getDateFromString = (dateString: string): Date => {
 	return new Date(dateString);
@@ -40,6 +43,7 @@ const getNextMonthFormatDate = (usageDate: Date | string) => {
 	return `${((month + 2 > 12 ? month + 2 - 12 : month + 2) + '').padStart(2, '0')}/${(date + '').padStart(2, '0')}`;
 };
 
+export type { Month };
 export {
 	today,
 	todayLocaleString,
@@ -51,6 +55,7 @@ export {
 	calendar,
 	formatByKoreanTime,
 	translateNumberIntoMonth,
+	getMonthIndexFromMonths,
 	getDateFromString,
 	getNextMonthFormatDate,
 };

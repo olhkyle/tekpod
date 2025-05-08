@@ -3,18 +3,20 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { ExpenseTracker, getAllPaymentsByMonth } from '../../supabase';
 import { queryKey } from '../../constants';
-import { formatByKoreanTime, monetizeWithSeparator, months } from '../../utils';
+import { type Month, formatByKoreanTime, getMonthIndexFromMonths, monetizeWithSeparator } from '../../utils';
 import { useMediaQuery } from '../../hooks';
 import { EmptyMessage } from '../common';
 
 interface ExpenseChartProps {
-	selectMonth: (typeof months)[number];
+	selectMonth: Month;
 }
 
 const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
+	const monthIndex = getMonthIndexFromMonths(selectMonth);
+
 	const { data: expenses } = useSuspenseQuery<ExpenseTracker[]>({
 		queryKey: [...queryKey.EXPENSE_TRACKER, 'report', selectMonth],
-		queryFn: () => getAllPaymentsByMonth(months.findIndex(month => month === selectMonth)),
+		queryFn: () => getAllPaymentsByMonth(monthIndex),
 	});
 
 	const [isSmallMobile, isMediumMobile] = [useMediaQuery('(max-width: 320px)'), useMediaQuery('(max-width: 430px)')];
@@ -77,7 +79,7 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 							<MaxAndMinPrice key={`${idx}_${payment?.date}_${payment?.price}`}>
 								<Label>{idx === 0 ? 'The day I spent the most' : 'The day I spent the least'}</Label>
 								<DateAndPrice>
-									<span aria-label="date">{`${months.findIndex(month => month === selectMonth) + 1}/${payment?.date}`}</span>
+									<span aria-label="date">{`${monthIndex + 1}/${payment?.date}`}</span>
 									<span aria-label="price">{monetizeWithSeparator(`${payment?.price}`)}</span>
 								</DateAndPrice>
 							</MaxAndMinPrice>

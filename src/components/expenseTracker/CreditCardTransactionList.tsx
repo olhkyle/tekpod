@@ -3,10 +3,17 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { EmptyMessage } from '../common';
 import { ExpenseTracker, FIXED_PAYMENT_DATE, getCreditCardPaymentsByMonth } from '../../supabase';
 import { bankSvgs, queryKey } from '../../constants';
-import { currentMonth, formatByKoreanTime, getCompletedMonth, monetizeWithSeparator, months } from '../../utils';
+import {
+	type Month,
+	currentMonth,
+	formatByKoreanTime,
+	getCompletedMonth,
+	getMonthIndexFromMonths,
+	monetizeWithSeparator,
+} from '../../utils';
 
 type WithCompletedMonth<T> = T & {
-	completedMonth: (typeof months)[number] | null;
+	completedMonth: Month | null;
 };
 
 const CreditCardTransactionList = () => {
@@ -21,7 +28,7 @@ const CreditCardTransactionList = () => {
 
 		const completedMonth = getCompletedMonth({ payment, usage_month, usage_date, FIXED_PAYMENT_DATE });
 
-		if (months.findIndex(month => month === completedMonth) >= currentMonth) {
+		if (getMonthIndexFromMonths(completedMonth) >= currentMonth) {
 			acc.push({ ...payment, completedMonth });
 		}
 
