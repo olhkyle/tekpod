@@ -23,7 +23,7 @@ import { currentMonth, currentYear, months, years } from '../utils';
 // 1 - change Emoji with SVG
 // 2 - add trigger with mutation
 
-const CommuteTrackerPage = () => {
+const CommuteRecordsPage = () => {
 	const [yearAndMonth, setYearAndMonth] = useState({
 		year: `${currentYear}`,
 		month: months[currentMonth],
@@ -74,4 +74,4 @@ const Controller = styled.div`
 	border-radius: var(--radius-s);
 `;
 
-export default CommuteTrackerPage;
+export default CommuteRecordsPage;

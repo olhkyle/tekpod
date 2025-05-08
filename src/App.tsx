@@ -68,7 +68,7 @@ const router = createBrowserRouter(
 				},
 				{
 					path: routes.COMMUTE_TRACKER,
-					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('CommuteTracker')} />,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('CommuteRecords')} />,
 				},
 				{
 					path: `${routes.USER}`,
