@@ -3,17 +3,21 @@ import styled from '@emotion/styled';
 import { useQueryClient } from '@tanstack/react-query';
 import { Session } from '@supabase/supabase-js';
 import { BsPlus } from 'react-icons/bs';
-import { Button, ShrinkMotionBlock, TextInput, TodoList, TodoListLoader } from '../components';
+import { Button, SegmentedControl, ShrinkMotionBlock, TextInput, TodoList, TodoListLoader } from '../components';
 import { addTodo } from '../supabase';
 import { useLoading } from '../hooks';
 import { useToastStore } from '../store';
 import { queryKey, toastData } from '../constants';
+
+export type ControlOption = (typeof segmentedControlOptions)[number];
+const segmentedControlOptions = ['All', 'Checked', 'Unchecked'] as const;
 
 const TodoReminderPage = () => {
 	const queryClient = useQueryClient();
 	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
 
 	const [value, setValue] = useState('');
+	const [controlOption, setControlOption] = useState<ControlOption>(segmentedControlOptions[0]);
 	const { addToast } = useToastStore();
 	const { startTransition, Loading, isLoading } = useLoading();
 
@@ -67,8 +71,10 @@ const TodoReminderPage = () => {
 				</ShrinkMotionBlock>
 			</Form>
 
+			<SegmentedControl options={segmentedControlOptions} current={controlOption} setCurrent={setControlOption} />
+
 			<Suspense fallback={<TodoListLoader />}>
-				<TodoList />
+				<TodoList controlOption={controlOption} />
 			</Suspense>
 		</Container>
 	);
@@ -82,6 +88,7 @@ const Form = styled.form`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	margin-bottom: 16px;
 
 	& > div:first-of-type {
 		flex: 1; // make remained space for TextInput

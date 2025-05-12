@@ -12,9 +12,9 @@ interface UseTogglePaymentIsFixedMutation {
 type Variables = Pick<ExpenseTracker, 'id' | 'isFixed' | 'updated_at'>;
 
 const toggle =
-	({ id, isFixed }: Variables) =>
+	({ id, isFixed, updated_at }: Variables) =>
 	(oldData: PaymentsByDate) => {
-		return { ...oldData, expense: oldData.expense.map(item => (item.id === id ? { ...item, isFixed } : item)) };
+		return { ...oldData, expense: oldData.expense.map(item => (item.id === id ? { ...item, isFixed, updated_at } : item)) };
 	};
 
 const useTogglePaymentIsFixedMutation = ({ currentDate, handlers: { goBack } }: UseTogglePaymentIsFixedMutation) => {

@@ -119,7 +119,8 @@ const getPaymentsByDate = async (date: Date): Promise<PaymentsByDate> => {
 		.from(TABLE)
 		.select('*')
 		.gte('usage_date', startOfDay.toISOString())
-		.lte('usage_date', endOfDay.toISOString());
+		.lte('usage_date', endOfDay.toISOString())
+		.order('updated_at', { ascending: false });
 
 	if (error) {
 		throw new Error(error.message);
@@ -201,8 +202,8 @@ const addPayment = async (data: Omit<ExpenseTracker, 'id' | 'isFixed'>) => {
 	}
 };
 
-const togglePaymentIsFixed = async ({ id, isFixed }: { id: string; isFixed: boolean }) => {
-	const { error } = await supabase.from(TABLE).update({ isFixed }).eq('id', id);
+const togglePaymentIsFixed = async ({ id, isFixed, updated_at }: { id: string; isFixed: boolean; updated_at: string }) => {
+	const { error } = await supabase.from(TABLE).update({ isFixed, updated_at }).eq('id', id);
 
 	if (error) {
 		throw new Error(error.message);

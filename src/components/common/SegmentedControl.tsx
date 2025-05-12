@@ -20,9 +20,8 @@ const SegmentedControl = <T extends string>({ options, current, setCurrent }: Se
 };
 
 const Container = styled.ul`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
 	gap: 6px;
 	padding: calc(var(--padding-container-mobile) * 0.35);
 	background-color: var(--grey50);

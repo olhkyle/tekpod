@@ -5,8 +5,13 @@ import { EmptyMessage, LoadingSpinner, TodoItem } from '..';
 import { getTodosByPage, getTodosPageInfo, TODOS_PAGE_SIZE } from '../../supabase';
 import { useGetPaginationInfo, useInfinityScroll } from '../../hooks';
 import { queryKey, staleTime } from '../../constants';
+import { ControlOption } from '../../pages/TodoReminder';
 
-const TodoList = () => {
+interface TodoListProps {
+	controlOption: ControlOption;
+}
+
+const TodoList = ({ controlOption }: TodoListProps) => {
 	const { calculatedTotalPage } = useGetPaginationInfo({
 		queryKey: queryKey.TODOS_PAGE_INFO,
 		queryFn: getTodosPageInfo,
@@ -35,6 +40,12 @@ const TodoList = () => {
 
 	const targetRef = useInfinityScroll(fetchNextPage);
 
+	const filteredData = data.pages
+		.flat()
+		?.filter(todo =>
+			controlOption === 'Checked' ? todo.completed === true : controlOption === 'Unchecked' ? todo.completed === false : true,
+		);
+
 	const handleEditingIdChange = (id: string | null) => {
 		// do not make an effect on dragging
 		if (id !== null) {
@@ -59,7 +70,7 @@ const TodoList = () => {
 				<EmptyMessage emoji={'🔄'}>Add New Reminder</EmptyMessage>
 			) : (
 				<Container>
-					{data.pages.flat().map(todo => (
+					{filteredData.map(todo => (
 						<TodoItem
 							key={todo.id}
 							id={todo.id}
