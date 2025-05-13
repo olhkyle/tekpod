@@ -2,6 +2,7 @@ export * from './mutations';
 
 export { default as useAuthQuery } from './useAuthQuery';
 export { default as useClickOutside } from './useClickOutside';
+export { default as useClientSession } from './useClientSession';
 export { default as useDrag } from './useDrag';
 export { default as useFilmRecipeImage } from './useFilmRecipeImage';
 export { default as useFunnel } from './useFunnel';

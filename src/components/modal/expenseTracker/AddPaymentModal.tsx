@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
-import { Session } from '@supabase/supabase-js';
 import { ModalLayout, ModalDataType } from '..';
 import { AddPaymentFormSchema, addPaymentFormSchema } from '.';
 import { Button, CustomSelect, DatePicker, TextInput } from '../..';
 import { addPayment, ExpenseTracker } from '../../../supabase';
-import { useLoading } from '../../../hooks';
+import { useClientSession, useLoading } from '../../../hooks';
 import { paymentData, toastData, installmentPlanMonths, cardType, queryKey } from '../../../constants';
 import { useToastStore } from '../../../store';
 import { monetizeWithSeparator, today } from '../../../utils';
@@ -20,8 +18,7 @@ interface AddPaymentModalProps {
 }
 
 const AddPaymentModal = ({ id, type, data, onClose }: AddPaymentModalProps) => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
+	const { queryClient, session } = useClientSession();
 
 	const {
 		register,

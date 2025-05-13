@@ -1,18 +1,15 @@
 import styled from '@emotion/styled';
-import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
-import { Session } from '@supabase/supabase-js';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, TagsInput, TextArea, TextInput, WriteSchema, writeSchema } from '../components';
 import { addDiary } from '../supabase';
-import { useLoading } from '../hooks';
+import { useClientSession, useLoading } from '../hooks';
 import { useToastStore } from '../store';
 import { queryKey, routes, toastData } from '../constants';
 
 const WritePage = () => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
+	const { queryClient, session } = useClientSession();
 	const navigate = useNavigate();
 
 	const {

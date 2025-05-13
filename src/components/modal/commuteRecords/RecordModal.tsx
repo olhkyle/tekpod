@@ -1,13 +1,11 @@
 import styled from '@emotion/styled';
-import { Session } from '@supabase/supabase-js';
-import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ModalDataType, ModalLayout } from '..';
 import { StatusSelect, Button, TextInput } from '../..';
 import { recordSchema, RecordSchema } from './schema';
 import { addCommute, CommuteRecord, ServiceDataType } from '../../../supabase';
-import { useLoading } from '../../../hooks';
+import { useClientSession, useLoading } from '../../../hooks';
 import { useToastStore } from '../../../store';
 import { queryKey, status, toastData } from '../../../constants';
 
@@ -30,9 +28,18 @@ interface RecordModalProps {
 
 // TODO: add & Edit 을 조건부로 같은 RecordModal 활용?
 
+/**
+ *
+ * 조건부 렌더링 시 차이
+ * - 'add' | 'edit'
+ * - id type data
+ * - defaultValues
+ * - handleSubmit
+ * - form 하위 elements
+ */
+
 const RecordModal = ({ id, type, data: serviceData, onClose }: RecordModalProps) => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
+	const { queryClient, session } = useClientSession();
 
 	const {
 		register,

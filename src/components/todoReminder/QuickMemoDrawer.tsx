@@ -2,18 +2,15 @@ import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
-import { Session } from '@supabase/supabase-js';
 import { quickMemoDrawerSchema, QuickMemoDrawerSchema } from '.';
 import { Button, Drawer, TextInput } from '..';
 import { useDrawerStore, useToastStore } from '../../store';
-import { useLoading } from '../../hooks';
+import { useClientSession, useLoading } from '../../hooks';
 import { addTodo } from '../../supabase';
 import { toastData, routes, queryKey } from '../../constants';
 
 const QuickMemoDrawer = () => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
+	const { queryClient, session } = useClientSession();
 
 	const { register, setValue, handleSubmit } = useForm<QuickMemoDrawerSchema>({
 		resolver: zodResolver(quickMemoDrawerSchema),

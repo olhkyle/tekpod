@@ -1,13 +1,11 @@
 import { FormEventHandler, useState } from 'react';
 import styled from '@emotion/styled';
-import { Session } from '@supabase/supabase-js';
-import { useQueryClient } from '@tanstack/react-query';
 import { type ModalDataType } from '..';
 import { FilmRecipeImageUpload, LoadingSpinner, CustomSelect, TextInput, ModalLayout, Button } from '../..';
 import { type RestrictedRecipeForValidation } from '../../../supabase/schema';
-import { useFilmRecipeImage, useAddFilmRecipeMutation } from '../../../hooks';
+import { useFilmRecipeImage, useAddFilmRecipeMutation, useClientSession } from '../../../hooks';
 import { useToastStore } from '../../../store';
-import { FILM_RECIPE_FORM, queryKey, toastData } from '../../../constants';
+import { FILM_RECIPE_FORM, toastData } from '../../../constants';
 
 interface AddFilmRecipeModalProps {
 	id: string;
@@ -49,8 +47,7 @@ const initialValidationState: { [key: string]: boolean } = {
 };
 
 const AddFilmRecipeModal = ({ id, type, onClose }: AddFilmRecipeModalProps) => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
+	const { session } = useClientSession();
 
 	const [currentFilmFeature, setCurrentFilmFeature] = useState<Omit<RestrictedRecipeForValidation, 'imgSrc'>>(initialFilmFieldValue);
 	const [isTriggered, setTriggered] = useState(initialValidationState);
