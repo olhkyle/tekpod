@@ -9,13 +9,14 @@ import {
 	UpdateProfileModal,
 	TodoItemEditModal,
 	RecordModal,
+	EditPaymentModal,
 } from '.';
 
 type ModalDataType = (typeof modalType)[keyof typeof modalType];
 type BaseModalAction = 'GENERAL' | 'ADD' | 'READ' | 'EDIT' | 'REMOVE' | 'RESET_PASSWORD' | 'PROFILE'; // TODO: string & NonNullable<unknown>
 
 type ModalActionMap = {
-	[modalType.EXPENSE_TRACKER]: 'ADD';
+	[modalType.EXPENSE_TRACKER]: 'ADD' | 'EDIT';
 	[modalType.FILM_RECIPE]: 'READ' | 'ADD' | 'REMOVE';
 	[modalType.DIARY]: 'EDIT';
 	[modalType.USER]: 'RESET_PASSWORD' | 'PROFILE';
@@ -49,6 +50,10 @@ const MODAL_CONFIG: ModalConfig = {
 		ADD: {
 			type: modalType.EXPENSE_TRACKER,
 			Component: AddPaymentModal,
+		},
+		EDIT: {
+			type: modalType.EXPENSE_TRACKER,
+			Component: EditPaymentModal,
 		},
 	},
 	FILM_RECIPE: {

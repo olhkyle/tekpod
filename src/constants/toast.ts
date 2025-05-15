@@ -88,6 +88,10 @@ const toastData = {
 			SUCCESS: { status: 'success', message: `Add payment ${FIXED_SUCCESS_PHRASE}` },
 			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} adding` },
 		},
+		EDIT: {
+			SUCCESS: { status: 'success', message: `Edit payment ${FIXED_SUCCESS_PHRASE}` },
+			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} editing` },
+		},
 		TOGGLE: {
 			SUCCESS: { status: 'success', message: `Set next month upcoming cost ${FIXED_SUCCESS_PHRASE}` },
 			ERROR: {

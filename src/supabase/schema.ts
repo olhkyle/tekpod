@@ -2,7 +2,8 @@ import { Database } from './database.types';
 
 type TableRowData = Diary | Recipe | Todo | ExpenseTracker | User | CommuteRecord;
 
-type ServiceDataType<T = TableRowData> = T | Partial<T> | null;
+// {} => Record<string, never>, based on eslint ban-types
+type ServiceDataType<T = TableRowData, D = Record<string, never>> = (T & D) | Partial<T & D> | null;
 
 type Diary = Database['public']['Tables']['diary']['Row'];
 type Recipe = Database['public']['Tables']['recipes']['Row'];
@@ -25,6 +26,7 @@ interface RestricedRecipeWithImage extends RestrictedRecipe {
 type RestrictedRecipeForValidation = Omit<RestrictedRecipe, 'id' | 'user_id' | 'created_at' | 'updated_at'>;
 
 export type {
+	TableRowData,
 	ServiceDataType,
 	Diary,
 	Recipe,

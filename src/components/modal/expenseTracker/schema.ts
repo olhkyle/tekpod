@@ -3,6 +3,7 @@ import { cardType, installmentPlanMonths, InstallmentType, paymentData } from '.
 import { today } from '../../../utils';
 
 type AddPaymentFormSchema = z.infer<typeof addPaymentFormSchema>;
+type EditPaymentFormSchema = z.infer<typeof editPaymentFormSchema>;
 
 const paymentMethodSchema = z.enum(paymentData.paymentMethod, {
 	errorMap: () => {
@@ -38,7 +39,7 @@ const priceUnitSchema = z.enum(paymentData.priceUnits, {
 const addPaymentFormSchema = z.object({
 	place: z
 		.string({ required_error: 'The Place where you spend money is in need' })
-		.min(1, { message: 'Write the place where you spend money ' }),
+		.min(1, { message: 'Write the place where you spend money' }),
 	usage_date: z
 		.date({
 			required_error: 'Select Date in essential',
@@ -57,5 +58,11 @@ const addPaymentFormSchema = z.object({
 		.refine(val => !isNaN(val) && val >= 0, 'Price should be over 0'),
 });
 
-export type { AddPaymentFormSchema };
-export { addPaymentFormSchema };
+const editPaymentFormSchema = z.object({
+	place: z
+		.string({ required_error: 'The Place where you spend money is in need' })
+		.min(1, { message: 'Write the place where you spend money' }),
+});
+
+export type { AddPaymentFormSchema, EditPaymentFormSchema };
+export { addPaymentFormSchema, editPaymentFormSchema };

@@ -210,6 +210,14 @@ const togglePaymentIsFixed = async ({ id, isFixed, updated_at }: { id: string; i
 	}
 };
 
+const editPaymentPlace = async ({ id, place }: { id: string; place: string }) => {
+	const { error } = await supabase.from(TABLE).update({ place }).eq('id', id);
+
+	if (error) {
+		throw new Error(error.message);
+	}
+};
+
 const removePayment = async ({ id }: { id: string }) => {
 	await supabase.from(TABLE).delete().eq('id', id);
 };
@@ -224,6 +232,7 @@ export {
 	getFixedCostPaymentsByMonth,
 	getCreditCardPaymentsByMonth,
 	addPayment,
+	editPaymentPlace,
 	togglePaymentIsFixed,
 	removePayment,
 };
