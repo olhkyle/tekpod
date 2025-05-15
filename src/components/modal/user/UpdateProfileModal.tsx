@@ -74,7 +74,7 @@ const UpdateProfileModal = ({ id, type, onClose, data }: UpdateProfileModalProps
 	};
 
 	return (
-		<ModalLayout id={id} type={type} title="Update Profile" onClose={onClose}>
+		<ModalLayout id={id} type={type} title={'Update Profile'} onClose={onClose}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<LabelInput label="nickname" errorMessage={errors['nickname']?.message}>
 					<LabelInput.TextField type="text" id="nickname" {...register('nickname')} placeholder="Nickname" />
