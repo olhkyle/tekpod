@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { status } from '../../../constants';
+import { commuteStatusList } from '../../../constants';
 
 type RecordSchema = z.infer<typeof recordSchema>;
 
-const statusSchema = z.enum(status, {
+const statusSchema = z.enum(commuteStatusList, {
 	errorMap: () => {
-		return { message: 'Please select work status ' };
+		return { message: 'Please select work status' };
 	},
 });
 

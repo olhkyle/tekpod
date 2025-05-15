@@ -171,6 +171,10 @@ const toastData = {
 			SUCCESS: { status: 'success', message: `Check commute ${FIXED_SUCCESS_PHRASE}` },
 			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} checking ` },
 		},
+		EDIT: {
+			SUCCESS: { status: 'success', message: `Update commute ${FIXED_SUCCESS_PHRASE}` },
+			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} updating ` },
+		},
 	},
 } as const;
 

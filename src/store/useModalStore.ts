@@ -2,7 +2,7 @@ import { ElementType } from 'react';
 import { UseQueryResult } from '@tanstack/react-query';
 import { create } from 'zustand';
 import { ServiceDataType } from '../supabase';
-import { ModalDataType } from '../components';
+import { BaseModalAction, ModalDataType } from '../components';
 
 export type QueryRefetch = (options?: { throwOnError: boolean; cancelRefetch: boolean }) => Promise<UseQueryResult>;
 
@@ -10,6 +10,7 @@ interface Modal {
 	Component: ElementType;
 	props?: {
 		type: ModalDataType;
+		action?: BaseModalAction;
 		data: ServiceDataType;
 		refetch?: QueryRefetch;
 		onTopLevelModalClose?: () => void;

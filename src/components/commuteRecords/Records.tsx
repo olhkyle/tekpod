@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { Session } from '@supabase/supabase-js';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { MODAL_CONFIG, ModalActionMap, modalType } from '../modal';
 import { queryKey, StatusOption } from '../../constants';
-import { getMonthlyRecords } from '../../supabase';
+import { CommuteRecord, getMonthlyRecords } from '../../supabase';
 import { calendar, formatByKoreanTime, getMonthIndexFromMonths, Month } from '../../utils';
 import { useModalStore } from '../../store';
-import { MODAL_CONFIG } from '../modal';
+import { useClientSession } from '../../hooks';
 
 interface RecordsProps {
 	yearAndMonth: {
@@ -14,10 +14,10 @@ interface RecordsProps {
 	};
 }
 
-const Records = ({ yearAndMonth: { year, month } }: RecordsProps) => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
+type CommuteRecordModalType = ModalActionMap[typeof modalType.COMMUTE_RECORDS];
 
+const Records = ({ yearAndMonth: { year, month } }: RecordsProps) => {
+	const { session } = useClientSession();
 	const monthIndex = getMonthIndexFromMonths(month) + 1;
 
 	const { data } = useSuspenseQuery({
@@ -32,14 +32,23 @@ const Records = ({ yearAndMonth: { year, month } }: RecordsProps) => {
 
 	const { setModal } = useModalStore();
 
-	const handleRecordModal = (day: number) => {
+	const handleRecordModal = ({
+		type,
+		day,
+		commuteData,
+	}: {
+		type: CommuteRecordModalType;
+		day: number;
+		commuteData: CommuteRecord | undefined;
+	}) => {
 		const date = new Date(`${year}-${`${monthIndex}`.padStart(2, '0')}-${`${day}`.padStart(2, '0')}`).toISOString();
 
 		setModal({
-			Component: MODAL_CONFIG.COMMUTE_RECORDS.ADD.Component,
+			Component: MODAL_CONFIG.COMMUTE_RECORDS[type.toUpperCase() as CommuteRecordModalType].Component,
 			props: {
-				type: MODAL_CONFIG.COMMUTE_RECORDS.ADD.type,
-				data: { date: formatByKoreanTime(date) },
+				type: MODAL_CONFIG.COMMUTE_RECORDS[type.toUpperCase() as CommuteRecordModalType].type,
+				action: type,
+				data: { ...commuteData, date: formatByKoreanTime(date) },
 			},
 		});
 	};
@@ -47,17 +56,21 @@ const Records = ({ yearAndMonth: { year, month } }: RecordsProps) => {
 	return (
 		<Container>
 			{calendar[monthIndex].map(day => {
-				const workedDate = data.find(item => new Date(item.date).getDate() === day);
+				const workedDay = data.find(item => new Date(item.date).getDate() === day);
 
 				return (
-					<Day key={day} status={workedDate?.status} tabIndex={0} onClick={() => handleRecordModal(day)}>
+					<Day
+						key={day}
+						status={workedDay?.status}
+						tabIndex={0}
+						onClick={() => handleRecordModal({ type: !workedDay ? 'ADD' : 'EDIT', day, commuteData: workedDay })}>
 						<Label>{day}</Label>
 						<Emoji>
-							{workedDate?.status === 'present' || workedDate?.status === 'remote'
+							{workedDay?.status === 'present' || workedDay?.status === 'remote'
 								? '✅'
-								: workedDate?.status === 'half_day'
+								: workedDay?.status === 'half_day'
 								? '🥝'
-								: workedDate?.status === 'absent'
+								: workedDay?.status === 'absent'
 								? '💤'
 								: '🫥'}
 						</Emoji>

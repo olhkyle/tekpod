@@ -12,16 +12,26 @@ import {
 } from '.';
 
 type ModalDataType = (typeof modalType)[keyof typeof modalType];
-type ModalAction = 'ADD' | 'READ' | 'EDIT' | 'REMOVE' | 'RESET_PASSWORD' | 'PROFILE' | string; // TODO: string & NonNullable<unknown>
+type BaseModalAction = 'GENERAL' | 'ADD' | 'READ' | 'EDIT' | 'REMOVE' | 'RESET_PASSWORD' | 'PROFILE'; // TODO: string & NonNullable<unknown>
+
+type ModalActionMap = {
+	[modalType.EXPENSE_TRACKER]: 'ADD';
+	[modalType.FILM_RECIPE]: 'READ' | 'ADD' | 'REMOVE';
+	[modalType.DIARY]: 'EDIT';
+	[modalType.USER]: 'RESET_PASSWORD' | 'PROFILE';
+	[modalType.TODO_REMINDER]: 'EDIT';
+	[modalType.COMMUTE_RECORDS]: 'ADD' | 'EDIT';
+};
 
 type ModalConfigItem = {
 	type: ModalDataType;
 	Component: ElementType;
+	action?: Lowercase<BaseModalAction>;
 };
 
 type ModalConfig = {
-	[DATA_TYPE in Uppercase<ModalDataType>]: {
-		[ACTION in ModalAction]: ModalConfigItem;
+	[DATA_TYPE in keyof typeof modalType]: {
+		[ACTION in ModalActionMap[(typeof modalType)[DATA_TYPE]]]: ModalConfigItem;
 	};
 };
 
@@ -81,13 +91,15 @@ const MODAL_CONFIG: ModalConfig = {
 		ADD: {
 			type: modalType.COMMUTE_RECORDS,
 			Component: RecordModal,
+			action: 'add',
 		},
 		EDIT: {
 			type: modalType.COMMUTE_RECORDS,
 			Component: RecordModal,
+			action: 'edit',
 		},
 	},
 };
 
-export type { ModalDataType };
-export { MODAL_CONFIG };
+export type { ModalDataType, BaseModalAction, ModalActionMap };
+export { MODAL_CONFIG, modalType };
