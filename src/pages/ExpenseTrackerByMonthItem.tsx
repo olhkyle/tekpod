@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
-import { Button, Switch } from '../components';
+import { Button, PaymentItemDetail, Switch } from '../components';
 import { useLoading, useTogglePaymentIsFixedMutation } from '../hooks';
 import { ExpenseTracker, removePayment } from '../supabase';
 import { monetizeWithSeparator, formatByKoreanTime } from '../utils';
@@ -55,10 +55,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 			</div>
 
 			<Detail>
-				<DetailGroup>
-					<dt>Place</dt>
-					<dd>{payment.place}</dd>
-				</DetailGroup>
+				<PaymentItemDetail title={'Place'} description={payment.place} data={{ ...payment, transaction_date: currentDate }} />
 				<DetailGroup>
 					<dt>Bank</dt>
 					<dd>{payment.bank} bank</dd>
@@ -142,7 +139,7 @@ const DetailGroup = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 8px 0;
+	padding: 16px;
 
 	dt {
 		font-weight: var(--fw-medium);

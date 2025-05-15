@@ -1,11 +1,9 @@
 import { FormEvent, Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { useQueryClient } from '@tanstack/react-query';
-import { Session } from '@supabase/supabase-js';
 import { BsPlus } from 'react-icons/bs';
 import { Button, SegmentedControl, ShrinkMotionBlock, TextInput, TodoList, TodoListLoader } from '../components';
 import { addTodo } from '../supabase';
-import { useLoading } from '../hooks';
+import { useClientSession, useLoading } from '../hooks';
 import { useToastStore } from '../store';
 import { queryKey, toastData } from '../constants';
 
@@ -13,8 +11,7 @@ export type ControlOption = (typeof segmentedControlOptions)[number];
 const segmentedControlOptions = ['All', 'Checked', 'Unchecked'] as const;
 
 const TodoReminderPage = () => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
+	const { queryClient, session } = useClientSession();
 
 	const [value, setValue] = useState('');
 	const [controlOption, setControlOption] = useState<ControlOption>(segmentedControlOptions[0]);

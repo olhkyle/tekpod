@@ -4,6 +4,7 @@ export { default as CreditCardTransactionList } from './CreditCardTransactionLis
 export { default as ExpenseChart } from './ExpenseChart';
 export { default as FixedCostList } from './FixedCostList';
 export { default as FixedCostTotalPrice } from './FixedCostTotalPrice';
-export { default as PaymentList } from './PaymentList';
 export { default as PaymentItem } from './PaymentItem';
+export { default as PaymentItemDetail } from './PaymentItemDetail';
+export { default as PaymentList } from './PaymentList';
 export { default as TotalExpensePrice } from './TotalExpensePrice';

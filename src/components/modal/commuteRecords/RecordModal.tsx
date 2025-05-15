@@ -1,19 +1,21 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import styled from '@emotion/styled';
-import { Session } from '@supabase/supabase-js';
-import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ModalDataType, ModalLayout } from '..';
 import { StatusSelect, Button, TextInput } from '../..';
 import { recordSchema, RecordSchema } from './schema';
-import { addCommute, CommuteRecord, ServiceDataType } from '../../../supabase';
-import { useLoading } from '../../../hooks';
+import { addCommute, CommuteRecord, ServiceDataType, updateCommute } from '../../../supabase';
+import { useClientSession, useLoading } from '../../../hooks';
 import { useToastStore } from '../../../store';
-import { queryKey, status, toastData } from '../../../constants';
+import { queryKey, commuteStatusList, toastData, COMMUTE_STATUS } from '../../../constants';
+
+type CommuteRecordAction = 'ADD' | 'EDIT';
 
 interface RecordModalProps {
 	id: string;
 	type: ModalDataType;
+	action: CommuteRecordAction;
 	data: ServiceDataType<CommuteRecord>;
 	onClose: () => void;
 }
@@ -30,9 +32,36 @@ interface RecordModalProps {
 
 // TODO: add & Edit 을 조건부로 같은 RecordModal 활용?
 
-const RecordModal = ({ id, type, data: serviceData, onClose }: RecordModalProps) => {
-	const queryClient = useQueryClient();
-	const session = queryClient.getQueryData(queryKey.AUTH) as Session;
+/**
+ *
+ * 조건부 렌더링 시 차이
+ * - 'add' | 'edit'
+ * - id type data
+ * - defaultValues
+ * - handleSubmit
+ * - form 하위 elements
+ */
+
+const getDefaultValues = (action: CommuteRecordAction, data: ServiceDataType<CommuteRecord>) => {
+	if (action === 'ADD') {
+		return {
+			status: COMMUTE_STATUS.PRESENT,
+			workplace: '',
+			notes: '',
+		};
+	}
+
+	if (action === 'EDIT') {
+		return {
+			status: data?.status,
+			workplace: data?.workplace,
+			notes: data?.notes,
+		};
+	}
+};
+
+const RecordModal = ({ id, type, action, data: serviceData, onClose }: RecordModalProps) => {
+	const { queryClient, session } = useClientSession();
 
 	const {
 		register,
@@ -42,11 +71,7 @@ const RecordModal = ({ id, type, data: serviceData, onClose }: RecordModalProps)
 		handleSubmit,
 	} = useForm<RecordSchema>({
 		resolver: zodResolver(recordSchema),
-		defaultValues: {
-			status: 'present',
-			workplace: '',
-			notes: '',
-		},
+		defaultValues: getDefaultValues(action, serviceData),
 	});
 
 	const { startTransition, Loading, isLoading } = useLoading();
@@ -56,21 +81,33 @@ const RecordModal = ({ id, type, data: serviceData, onClose }: RecordModalProps)
 		if (!serviceData?.date) return;
 
 		const { date } = serviceData;
+
+		const actionProperty = action === 'ADD' ? 'CREATE' : 'EDIT';
+
 		try {
-			await startTransition(
-				addCommute({
-					...data,
-					user_id: session?.user?.id,
-					date,
-					created_at: date,
-					updated_at: date,
-				}),
-			);
+			const callback =
+				action === 'ADD'
+					? addCommute({
+							...data,
+							user_id: session?.user?.id,
+							date,
+							created_at: date,
+							updated_at: date,
+					  })
+					: updateCommute({
+							...data,
+							id: serviceData?.id,
+							user_id: session?.user?.id,
+							updated_at: date,
+					  });
+
+			await startTransition(callback);
+
 			onClose();
-			addToast(toastData.COMMUTE_RECORDS.CREATE.SUCCESS);
+			addToast(toastData.COMMUTE_RECORDS[actionProperty].SUCCESS);
 		} catch (e) {
 			console.error(e);
-			addToast(toastData.COMMUTE_RECORDS.CREATE.ERROR);
+			addToast(toastData.COMMUTE_RECORDS[actionProperty].ERROR);
 		} finally {
 			const _date = new Date(date);
 
@@ -84,7 +121,7 @@ const RecordModal = ({ id, type, data: serviceData, onClose }: RecordModalProps)
 		<ModalLayout id={id} type={type} title={'Add Record'} onClose={onClose}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<StatusSelect
-					data={status}
+					data={commuteStatusList}
 					currentValue={watch('status')}
 					error={errors['status']}
 					onSelect={data => {
