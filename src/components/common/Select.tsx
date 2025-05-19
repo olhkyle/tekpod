@@ -2,7 +2,7 @@ import { useId, useState } from 'react';
 import styled from '@emotion/styled';
 import { BiSolidChevronRight } from 'react-icons/bi';
 import { FieldError } from 'react-hook-form';
-import { Button } from '..';
+import { Button, Symbol } from '..';
 import { customPropReceiver } from '../../constants';
 import { useClickOutside } from '../../hooks';
 
@@ -34,7 +34,11 @@ const Select = <T extends string>({ data: options, placeholder, descriptionLabel
 				<span>{currentValue ?? placeholder}</span>
 				<Chevron size="19" color="var(--black)" $isOpen={isOpen} />
 			</SelectTrigger>
-			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
+			{error && (
+				<ErrorMessage>
+					<Symbol>﹡</Symbol> {error?.message}
+				</ErrorMessage>
+			)}
 			<SelectContent isOpen={isOpen} aria-labelledby={`select-${generatedId}-content`}>
 				{descriptionLabel && <SelectDescriptionLabel>{descriptionLabel}</SelectDescriptionLabel>}
 				<SelectItemList>

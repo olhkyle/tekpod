@@ -2,7 +2,7 @@ import { useId, useState } from 'react';
 import styled from '@emotion/styled';
 import { FieldError } from 'react-hook-form';
 import { BiSolidChevronRight } from 'react-icons/bi';
-import { Button } from '.';
+import { Button, Symbol } from '.';
 import type { ExpenseTracker, RestrictedRecipeForValidation } from '../../supabase';
 import { useClickOutside } from '../../hooks';
 import { customPropReceiver, PaymentDataValueType, FilmRecipeFieldDataType } from '../../constants';
@@ -49,7 +49,11 @@ const CustomSelect = <T extends CustomSelectDataType>({
 				</SelectValue>
 				<Chevron size="21" color="var(--black)" $isOpen={isOpen} />
 			</SelectTrigger>
-			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
+			{error && (
+				<ErrorMessage>
+					<Symbol>﹡</Symbol> {error?.message}
+				</ErrorMessage>
+			)}
 
 			<SelectContent isOpen={isOpen} aria-labelledby={`custom-select-${generatedId}-content`}>
 				<Label>{label.toUpperCase()}</Label>

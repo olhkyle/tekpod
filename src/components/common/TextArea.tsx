@@ -1,5 +1,6 @@
 import { ChangeEvent, Children, cloneElement, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId, useRef } from 'react';
 import styled from '@emotion/styled';
+import { Symbol } from '.';
 
 interface TextAreaProps {
 	children: ReactElement;
@@ -16,7 +17,11 @@ const TextArea = ({ children, errorMessage, ...props }: TextAreaProps) => {
 	return (
 		<Container {...props}>
 			{cloneElement(child, { id, ref, ...child.props })}
-			{errorMessage && <Message>﹡ {errorMessage}</Message>}
+			{errorMessage && (
+				<Message>
+					<Symbol>﹡</Symbol> {errorMessage}
+				</Message>
+			)}
 		</Container>
 	);
 };

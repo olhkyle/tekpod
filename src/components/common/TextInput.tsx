@@ -1,5 +1,6 @@
 import { ChangeEvent, Children, cloneElement, FocusEvent, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId } from 'react';
 import styled from '@emotion/styled';
+import { Symbol } from '.';
 
 interface TextInputProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> {
 	children: ReactElement;
@@ -19,7 +20,11 @@ const TextInput = ({ children, label, errorMessage, ...props }: TextInputProps) 
 				id,
 				...child.props,
 			})}
-			{errorMessage && <Message>﹡ {errorMessage}</Message>}
+			{errorMessage && (
+				<Message>
+					<Symbol>﹡</Symbol> {errorMessage}
+				</Message>
+			)}
 		</Container>
 	);
 };

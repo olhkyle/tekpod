@@ -99,7 +99,9 @@ const UpdatePassword = () => {
 		<div css={pageCss.container}>
 			<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
 				<AuthLogo />
-				<Title>﹡ Update Password ﹡</Title>
+				<Title>
+					<Symbol>﹡</Symbol> Update Password <Symbol>﹡</Symbol>
+				</Title>
 
 				<EmailInfo>{searchParams.get('email') || state?.email}</EmailInfo>
 				<LabelInput label="Password" errorMessage={errors['password']?.message}>
@@ -125,6 +127,10 @@ const Title = styled.h4`
 	font-weight: var(--fw-semibold);
 	border-radius: var(--radius-s);
 	text-align: center;
+`;
+
+const Symbol = styled.span`
+	font-size: 1.2em;
 `;
 
 const EmailInfo = styled.div`

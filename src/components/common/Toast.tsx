@@ -1,15 +1,17 @@
 import styled from '@emotion/styled';
+import { RiCloseFill } from 'react-icons/ri';
 import { motion } from 'framer-motion';
-import { useToastStore } from '../../store';
+import { Flex, Button } from '.';
+import { status, useToastStore } from '../../store';
 import { useToastUnsubscribe } from '../../hooks';
 
 const Toast = () => {
-	const { toast } = useToastStore();
+	const { toast, removeToast } = useToastStore();
 
 	useToastUnsubscribe();
 
 	return (
-		<MotionWrapper
+		<MotionBlock
 			isToastNull={toast === null}
 			initial={{ y: '100%', opacity: 0 }}
 			animate={{ y: 0, opacity: 1 }}
@@ -17,24 +19,33 @@ const Toast = () => {
 			exit={{ y: '100%', opacity: 0 }}
 			transition={{ duration: 0.4, delay: 0.2, ease: 'easeOut' }}>
 			<Container>
-				<Status status={toast?.status ?? 'info'} />
-				<Message>{toast?.message}</Message>
+				<Flex gap={'16px'}>
+					<Status status={toast?.status ?? status['INFO']} />
+					<Message>{toast?.message}</Message>
+				</Flex>
+				<RemoveToastButton type="button" onClick={removeToast}>
+					<RiCloseFill size="21" color="var(--white)" />
+				</RemoveToastButton>
 			</Container>
-		</MotionWrapper>
+		</MotionBlock>
 	);
 };
 
-const MotionWrapper = styled(motion.div)<{ isToastNull: boolean }>`
+const MotionBlock = styled(motion.div)<{ isToastNull: boolean }>`
 	position: fixed;
 	display: ${({ isToastNull }) => (isToastNull ? 'none' : 'block')};
 	right: var(--padding-container-mobile);
 	bottom: calc(var(--nav-height) + 3 * var(--padding-container-mobile));
 	z-index: var(--toast-index);
+
+	@media screen and (min-width: 480px) {
+		right: calc(100dvw / 2 - (var(--max-app-width) / 2) + 16px);
+	}
 `;
 
 const Container = styled.div`
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
 	gap: 8px;
 	padding: calc(var(--padding-container-mobile) * 0.6) var(--padding-container-mobile);
@@ -46,7 +57,7 @@ const Container = styled.div`
 
 	@media screen and (min-width: 640px) {
 		max-width: var(--max-app-width);
-		min-width: calc(var(--min-app-width) - 2 * var(--padding-container-mobile));
+		min-width: calc(var(--max-app-width) - 2 * var(--padding-container-mobile));
 	}
 `;
 
@@ -71,6 +82,14 @@ const Message = styled.p`
 	font-size: var(--fz-sm);
 	font-weight: var(--fw-semibold);
 	color: var(--grey800);
+`;
+
+const RemoveToastButton = styled(Button)`
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: calc(var(--padding-container-mobile) * 0.15);
+	background-color: var(--black);
 `;
 
 export default Toast;
