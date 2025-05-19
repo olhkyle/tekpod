@@ -20,7 +20,11 @@ const StatusSelect = <T extends string>({ data, currentValue, error, onSelect }:
 					</Option>
 				))}
 			</Options>
-			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
+			{error && (
+				<ErrorMessage>
+					<Symbol>﹡</Symbol> {error?.message}
+				</ErrorMessage>
+			)}
 		</Container>
 	);
 };
@@ -71,6 +75,10 @@ const ErrorMessage = styled.p`
 	padding-left: 4px;
 	font-size: var(--fz-sm);
 	color: var(--red200);
+`;
+
+const Symbol = styled.span`
+	font-size: 1.2em;
 `;
 
 export default StatusSelect;

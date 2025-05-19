@@ -4,7 +4,7 @@ import { FieldError } from 'react-hook-form';
 import { DayPicker } from 'react-day-picker';
 import { IoMdCalendar } from 'react-icons/io';
 import { ko } from 'date-fns/locale';
-import { Button } from '..';
+import { Button, Symbol } from '..';
 import { useClickOutside } from '../../hooks';
 import { customPropReceiver } from '../../constants';
 import { formatByKoreanTime } from '../../utils';
@@ -30,7 +30,11 @@ const DatePicker = ({ selected, setSelected, error, disabled, isFloated = false,
 				</IconBackground>
 				<span>{selected ? formatByKoreanTime(selected) : 'Select Date'}</span>
 			</TriggerButton>
-			{error && <ErrorMessage>﹡ {error?.message}</ErrorMessage>}
+			{error && (
+				<ErrorMessage>
+					<Symbol>﹡</Symbol> {error?.message}
+				</ErrorMessage>
+			)}
 			<DayPickerWrapper isFloated={isFloated}>
 				{isOpen && (
 					<DayPicker
