@@ -5,6 +5,7 @@ const COMMUTE_STATUS = {
 	ABSENT: 'absent',
 	REMOTE: 'remote',
 	HALF_DAY: 'half_day',
+	HOLIDAY: 'holiday',
 } as const;
 
 // because of schema, z.enum can't refer the type of arr (e.g. Object.values(COMMUTE_STATUS))

@@ -3,26 +3,6 @@ import styled from '@emotion/styled';
 import { Records, RecordsLoader, Select, WorkInProgress } from '../components';
 import { currentMonth, currentYear, getMonthIndexFromMonths, months, years } from '../utils';
 
-/**
- *
- * commute_records
- * {
- * 	id : uuid
- * user_id: string;
- * date: string;
- * status: 'present' | 'absent' | 'remote' | 'half_day';
- * workplace: string;
- * notes: boolean;
- * created_at: string;
- * updated_at: string;
- * }
- */
-
-// TODO:
-// 0 - update UI design for Calendar
-// 1 - change Emoji with SVG
-// 2 - add trigger with mutation
-
 const CommuteRecordsPage = () => {
 	const [yearAndMonth, setYearAndMonth] = useState({
 		year: `${currentYear}`,
@@ -30,7 +10,7 @@ const CommuteRecordsPage = () => {
 	});
 
 	return (
-		<Container>
+		<section>
 			<Title id="commute-tracker-page-title">Commute Tracker</Title>
 			<Controller>
 				<Select
@@ -38,7 +18,13 @@ const CommuteRecordsPage = () => {
 					placeholder={'Select Year'}
 					descriptionLabel={'Year'}
 					currentValue={yearAndMonth.year}
-					onSelect={option => setYearAndMonth({ ...yearAndMonth, year: option })}
+					onSelect={option =>
+						setYearAndMonth({
+							...yearAndMonth,
+							year: option,
+							month: getMonthIndexFromMonths(yearAndMonth.month) >= currentMonth ? months[currentMonth] : yearAndMonth.month,
+						})
+					}
 				/>
 				<Select
 					data={+yearAndMonth.year === currentYear ? months.filter((_, idx) => idx <= currentMonth) : [...months].reverse()}
@@ -53,11 +39,9 @@ const CommuteRecordsPage = () => {
 				<Records yearAndMonth={yearAndMonth} />
 			</Suspense>
 			<WorkInProgress />
-		</Container>
+		</section>
 	);
 };
-
-const Container = styled.section``;
 
 const Title = styled.h2`
 	font-size: var(--fz-h5);

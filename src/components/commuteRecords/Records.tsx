@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { MODAL_CONFIG, ModalActionMap, modalType } from '../modal';
-import { queryKey, StatusOption } from '../../constants';
+import { COMMUTE_STATUS, queryKey, StatusOption } from '../../constants';
 import { CommuteRecord, getMonthlyRecords } from '../../supabase';
 import { calendar, formatByKoreanTime, getMonthIndexFromMonths, Month } from '../../utils';
 import { useModalStore } from '../../store';
 import { useClientSession } from '../../hooks';
+import { Fragment } from 'react';
 
 interface RecordsProps {
 	yearAndMonth: {
@@ -54,38 +55,52 @@ const Records = ({ yearAndMonth: { year, month } }: RecordsProps) => {
 	};
 
 	return (
-		<Container>
-			{calendar[monthIndex].map(day => {
-				const workedDay = data.find(item => new Date(item.date).getDate() === day);
+		<Fragment>
+			<Calendar>
+				{calendar[monthIndex].map(day => {
+					const workedDay = data.find(item => new Date(item.date).getDate() === day);
 
-				return (
-					<Day
-						key={day}
-						status={workedDay?.status}
-						tabIndex={0}
-						onClick={() => handleRecordModal({ type: !workedDay ? 'ADD' : 'EDIT', day, commuteData: workedDay })}>
-						<Label>{day}</Label>
-						<Emoji>
-							{workedDay?.status === 'present' || workedDay?.status === 'remote'
-								? '✅'
-								: workedDay?.status === 'half_day'
-								? '🥝'
-								: workedDay?.status === 'absent'
-								? '💤'
-								: '🫥'}
-						</Emoji>
-					</Day>
-				);
-			})}
-		</Container>
+					return (
+						<Day
+							key={day}
+							status={workedDay?.status ?? COMMUTE_STATUS.HOLIDAY}
+							tabIndex={0}
+							onClick={() => handleRecordModal({ type: !workedDay ? 'ADD' : 'EDIT', day, commuteData: workedDay })}>
+							<Label>{day}</Label>
+							<Emoji>
+								{workedDay?.status === 'present'
+									? '🏢'
+									: workedDay?.status === 'remote'
+									? '💼'
+									: workedDay?.status === 'half_day'
+									? '🥝'
+									: workedDay?.status === 'absent'
+									? '💤'
+									: '🏝️'}
+							</Emoji>
+						</Day>
+					);
+				})}
+			</Calendar>
+			<Overview>
+				<li>
+					<span>Full-Time</span>
+					<p>{data.filter(day => day.status === 'present').length}</p>
+				</li>
+				<li>
+					<span>Remote</span>
+					<p>{data.filter(day => day.status === 'remote').length}</p>
+				</li>
+			</Overview>
+		</Fragment>
 	);
 };
 
-const Container = styled.ul`
+const Calendar = styled.ul`
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	gap: 8px;
-	margin: 32px auto;
+	margin: 32px auto 16px;
 `;
 
 const Day = styled.li<{ status: StatusOption }>`
@@ -126,6 +141,33 @@ const Label = styled.span`
 
 const Emoji = styled.span`
 	font-size: var(--fz-h4);
+`;
+
+const Overview = styled.ul`
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 16px;
+
+	li {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: var(--padding-container-mobile);
+		background-color: var(--grey50);
+		border-radius: var(--radius-s);
+
+		span {
+			color: var(--grey800);
+			font-weight: var(--fw-semibold);
+		}
+
+		p {
+			color: var(--blue200);
+			font-size: var(--fz-h7);
+			font-weight: var(--fw-semibold);
+		}
+	}
 `;
 
 export default Records;

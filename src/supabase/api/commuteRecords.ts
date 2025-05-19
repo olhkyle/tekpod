@@ -3,7 +3,7 @@ import supabase from '../service';
 
 const TABLE = 'commute_records';
 
-const getMonthlyRecords = async ({ year, month, user_id }: { year: number; month: number; user_id: string }) => {
+const getMonthlyRecords = async ({ year, month, user_id }: { year: number; month: number; user_id: string }): Promise<CommuteRecord[]> => {
 	const startDate = `${year}-${`${month}`.padStart(2, '0')}-01`;
 	const endDate = `${year}-${`${month}`.padStart(2, '0')}-${new Date(year, month, 0).getDate()}`;
 
