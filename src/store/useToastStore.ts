@@ -11,6 +11,13 @@ interface ToastState {
 	removeToast: () => void;
 }
 
+const status = {
+	SUCCESS: 'success',
+	WARN: 'warn',
+	INFO: 'info',
+	ERROR: 'error',
+} as const;
+
 const useToastStore = create<ToastState>(set => ({
 	toast: null,
 	addToast(newToast) {
@@ -22,4 +29,4 @@ const useToastStore = create<ToastState>(set => ({
 }));
 
 export type { Toast };
-export default useToastStore;
+export { status, useToastStore };
