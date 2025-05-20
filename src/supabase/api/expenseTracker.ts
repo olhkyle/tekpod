@@ -181,11 +181,7 @@ const getFixedCostPaymentsByMonth = async (month: number) => {
 };
 
 const getCreditCardPaymentsByMonth = async () => {
-	const { data, error } = await supabase
-		.from(TABLE)
-		.select('*')
-		.eq('card_type', cardType['신용'])
-		.order('usage_date', { ascending: false });
+	const { data, error } = await supabase.from(TABLE).select('*').eq('card_type', cardType.CREDIT).order('usage_date', { ascending: false });
 
 	if (error) {
 		throw new Error(error.message);
