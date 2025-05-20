@@ -21,7 +21,7 @@ const calendar = months.reduce<Record<string, number[]>>((acc, _, idx) => {
 }, {});
 
 const formatByKoreanTime = (targetDate: Date | string): string => {
-	const _date = typeof targetDate === 'string' ? new Date(targetDate) : targetDate;
+	const _date = typeof targetDate === 'string' || typeof targetDate === 'object' ? new Date(targetDate) : targetDate;
 
 	const formattedDate = format(toZonedTime(_date, koreaTimeZone), 'yyyy/MM/dd', { timeZone: koreaTimeZone });
 
