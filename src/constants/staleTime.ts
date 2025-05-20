@@ -10,7 +10,7 @@ const staleTime = {
 		BY_MONTH: ONE_SECOND * 5,
 	},
 	TODOS: {
-		PAGE_INFO: ONE_SECOND * 5,
+		PAGE_INFO: ONE_SECOND * 15,
 		ALL_WITH_PAGINATION: ONE_SECOND * 10,
 	},
 };
