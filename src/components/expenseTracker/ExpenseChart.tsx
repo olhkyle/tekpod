@@ -1,17 +1,18 @@
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
+import { EmptyMessage } from '..';
 import { ExpenseTracker, getAllPaymentsByMonth } from '../../supabase';
-import { queryKey } from '../../constants';
-import { type Month, formatByKoreanTime, getMonthIndexFromMonths, monetizeWithSeparator } from '../../utils';
 import { useMediaQuery } from '../../hooks';
-import { EmptyMessage } from '../common';
+import { priceUnit, PriceUnitType, queryKey, USD_GBP_EUR_SEPARATOR, WON_AND_JPY_SEPARATOR, ZERO_PRICE } from '../../constants';
+import { type Month, formatByKoreanTime, getMonthIndexFromMonths, monetizeWithSeparator } from '../../utils';
 
 interface ExpenseChartProps {
 	selectMonth: Month;
+	priceUnitType: PriceUnitType;
 }
 
-const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
+const ExpenseChart = ({ selectMonth, priceUnitType }: ExpenseChartProps) => {
 	const monthIndex = getMonthIndexFromMonths(selectMonth);
 
 	const { data: expenses } = useSuspenseQuery<ExpenseTracker[]>({
@@ -23,19 +24,28 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 
 	const lineChartWidth = isSmallMobile ? 280 : isMediumMobile ? 340 : 440;
 
-	const getTotalPricePerMonth = expenses.reduce<{ [date: string]: number }>((acc, curr) => {
+	const getTotalPricePerMonth = expenses.reduce<{ [date: string]: { [key in PriceUnitType]: number } }>((acc, curr) => {
 		const formatDate = new Date(formatByKoreanTime(curr.usage_date)).getDate();
 
 		if (!acc[formatDate]) {
-			acc[formatDate] = 0;
+			acc[formatDate] = {
+				WON: ZERO_PRICE,
+				USD: ZERO_PRICE,
+				GBP: ZERO_PRICE,
+				EUR: ZERO_PRICE,
+				JPY: ZERO_PRICE,
+			};
 		}
 
-		acc[formatDate] += curr.price;
+		acc[formatDate][curr.price_unit as PriceUnitType] += curr.price ?? ZERO_PRICE;
 		return acc;
 	}, {});
 
-	const filteredData = Object.entries(getTotalPricePerMonth).map(([key, value]) => ({ date: +key, price: value }));
+	const filteredData = Object.entries(getTotalPricePerMonth).map(([date, prices]) => ({ date, price: prices[priceUnitType] }));
 	const sortedData = [...filteredData].sort((prev, curr) => prev.price - curr.price);
+	const isAllZeroPrice = filteredData.reduce((acc, curr) => (acc += curr.price), ZERO_PRICE) === ZERO_PRICE;
+
+	const currentPriceUnitSymbol = priceUnit.unitSymbol[priceUnit.unitType.findIndex(type => type === priceUnitType)];
 
 	return (
 		<Container>
@@ -48,7 +58,7 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 						<CartesianGrid stroke="var(--grey200)" strokeDasharray="3 3" />
 						<Tooltip
 							labelFormatter={label => `${label}일`}
-							formatter={(value: number) => [monetizeWithSeparator(value), 'price']}
+							formatter={(value: number) => [`${monetizeWithSeparator(value)} ${currentPriceUnitSymbol}`, 'price']}
 							wrapperStyle={{
 								border: 'none',
 								backgroundColor: 'var(--background)',
@@ -68,23 +78,40 @@ const ExpenseChart = ({ selectMonth }: ExpenseChartProps) => {
 						/>
 						<Legend align="right" verticalAlign="bottom" height={36} />
 						<XAxis dataKey="date" />
-						<YAxis dataKey="price" tickFormatter={value => `${Math.floor(value / 1000)}`} />
+						<YAxis
+							dataKey="price"
+							tickFormatter={value =>
+								`${Math.floor(
+									value / (priceUnitType === 'WON' || priceUnitType === 'JPY' ? WON_AND_JPY_SEPARATOR : USD_GBP_EUR_SEPARATOR),
+								)}`
+							}
+						/>
 					</LineChart>
+
 					<TotalPrice>
 						<span>Total Price</span>
-						<div>{monetizeWithSeparator(filteredData.reduce((acc, curr) => (acc += curr.price), 0))}</div>
+						<div>{`${currentPriceUnitSymbol}${monetizeWithSeparator(
+							filteredData.reduce((acc, curr) => (acc += curr.price), ZERO_PRICE),
+						)}`}</div>
 					</TotalPrice>
-					<MaxAndMinPriceList>
-						{[sortedData.at(-1), sortedData[0]].map((payment, idx) => (
-							<MaxAndMinPrice key={`${idx}_${payment?.date}_${payment?.price}`}>
-								<Label>{idx === 0 ? 'The day I spent the most' : 'The day I spent the least'}</Label>
-								<DateAndPrice>
-									<span aria-label="date">{`${monthIndex + 1}/${payment?.date}`}</span>
-									<span aria-label="price">{monetizeWithSeparator(`${payment?.price}`)}</span>
-								</DateAndPrice>
-							</MaxAndMinPrice>
-						))}
-					</MaxAndMinPriceList>
+
+					{isAllZeroPrice ? (
+						<NonePriceMessage>
+							Didn't use <UnitType>{priceUnitType}</UnitType> money, yet
+						</NonePriceMessage>
+					) : (
+						<MaxAndMinPriceList>
+							{[sortedData.at(-1), sortedData[0]].map((payment, idx) => (
+								<MaxAndMinPrice key={`${idx}_${payment?.date}_${payment?.price}`}>
+									<Label>{idx === 0 ? 'The day I spent the most' : 'The day I spent the least'}</Label>
+									<DateAndPrice>
+										<span aria-label="date">{`${monthIndex + 1}/${payment?.date}`}</span>
+										<span aria-label="price">{`${currentPriceUnitSymbol}${monetizeWithSeparator(`${payment?.price}`)}`}</span>
+									</DateAndPrice>
+								</MaxAndMinPrice>
+							))}
+						</MaxAndMinPriceList>
+					)}
 				</>
 			)}
 		</Container>
@@ -121,6 +148,24 @@ const MaxAndMinPriceList = styled.div`
 	flex-direction: column;
 	gap: 16px;
 	padding: var(--padding-container-mobile) 0;
+`;
+
+const NonePriceMessage = styled.div`
+	margin-top: 16px;
+	padding: var(--padding-container-mobile);
+	font-weight: var(--fw-bold);
+	color: var(--white);
+	background-color: var(--black);
+	border-radius: var(--radius-s);
+`;
+
+const UnitType = styled.span`
+	display: inline-block;
+	padding: calc(var(--padding-container-mobile) * 0.25);
+	border-radius: var(--radius-s);
+	font-weight: var(--fw-semibold);
+	color: var(--black);
+	background-color: var(--white);
 `;
 
 const MaxAndMinPrice = styled.div`
