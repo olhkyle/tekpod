@@ -53,13 +53,12 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 
 	const onSubmit = async (formData: EditTodoItemFormSchema) => {
 		if (
-			reminder_time
-				? isEqual(
-						{ content: formData.content, reminder_time: formatByKoreanTime(formData.reminder_time) },
-						{ content, reminder_time: formatByKoreanTime(reminder_time) },
-						// eslint-disable-next-line no-mixed-spaces-and-tabs
-				  )
-				: false
+			reminder_time &&
+			isEqual(
+				{ content: formData.content, reminder_time: formatByKoreanTime(formData.reminder_time) },
+				{ content, reminder_time: formatByKoreanTime(reminder_time) },
+				// eslint-disable-next-line no-mixed-spaces-and-tabs
+			)
 		) {
 			addToast(toastData.TODO_REMINDER.EDIT.WARN);
 			return;

@@ -74,6 +74,11 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 	};
 
 	const onSubmit = ({ content }: TodoItemSchema) => {
+		if (content === todo?.content) {
+			onEditingIdChange(false);
+			return;
+		}
+
 		editContent({ id: todo?.id, content, updated_at: new Date().toISOString() });
 	};
 
@@ -106,7 +111,7 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 							<>
 								{isContentEditing ? (
 									<ContentEditingForm onSubmit={handleSubmit(onSubmit)}>
-										<TextInput errorMessage={errors?.content?.message}>
+										<TextInput errorMessage={errors?.['content']?.message}>
 											<TextInput.TextField
 												id="todoItem_content"
 												{...register('content')}
