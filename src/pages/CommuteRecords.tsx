@@ -27,7 +27,7 @@ const CommuteRecordsPage = () => {
 					}
 				/>
 				<Select
-					data={+yearAndMonth.year === currentYear ? months.filter((_, idx) => idx <= currentMonth) : [...months].reverse()}
+					data={+yearAndMonth.year === currentYear ? months.filter((_, idx) => idx <= currentMonth).reverse() : [...months].reverse()}
 					placeholder={'Select Month'}
 					descriptionLabel={'Month'}
 					currentValue={yearAndMonth.month}
