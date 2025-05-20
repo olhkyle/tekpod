@@ -6,7 +6,7 @@ import { AddPaymentFormSchema, addPaymentFormSchema } from '.';
 import { Button, CustomSelect, DatePicker, TextInput } from '../..';
 import { addPayment, ExpenseTracker } from '../../../supabase';
 import { useClientSession, useLoading } from '../../../hooks';
-import { paymentData, toastData, installmentPlanMonths, cardType, queryKey } from '../../../constants';
+import { paymentData, toastData, installmentPlanMonths, cardType, queryKey, paymentMethod } from '../../../constants';
 import { useToastStore } from '../../../store';
 import { monetizeWithSeparator, today } from '../../../utils';
 
@@ -29,7 +29,7 @@ const AddPaymentModal = ({ id, type, data, onClose }: AddPaymentModalProps) => {
 		formState: { errors, touchedFields },
 	} = useForm<AddPaymentFormSchema>({
 		resolver: zodResolver(addPaymentFormSchema),
-		defaultValues: { usage_date: new Date(data?.usage_date ?? today), card_type: cardType['미확인'], installment_plan_months: null },
+		defaultValues: { usage_date: new Date(data?.usage_date ?? today), card_type: cardType.UNCONFIRMED, installment_plan_months: null },
 	});
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
@@ -89,10 +89,15 @@ const AddPaymentModal = ({ id, type, data, onClose }: AddPaymentModalProps) => {
 						error={errors['payment_method']}
 						onSelect={data => {
 							setValue('payment_method', data, { shouldValidate: true, shouldTouch: true });
+
+							if (data === paymentMethod.CASH) {
+								setValue('card_type', cardType.UNCONFIRMED);
+								setValue('installment_plan_months', null);
+							}
 						}}
 					/>
 
-					{watch('payment_method') === 'Card' && (
+					{watch('payment_method') === paymentMethod.CARD && (
 						<>
 							<CustomSelect
 								data={Object.values(cardType)}
@@ -107,7 +112,7 @@ const AddPaymentModal = ({ id, type, data, onClose }: AddPaymentModalProps) => {
 									setValue('installment_plan_months', null);
 								}}
 							/>
-							{watch('card_type') === cardType['신용'] && (
+							{watch('card_type') === cardType.CREDIT && (
 								<CustomSelect
 									data={installmentPlanMonths}
 									label={'installment_plan_months'}
