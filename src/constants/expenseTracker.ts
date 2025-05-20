@@ -22,6 +22,11 @@ type PriceUnitSymbolType = PriceUnitGroup['unitSymbol'][number];
 
 type MatchedPriceUnitWithSymbol = Record<(typeof priceUnit.unitType)[number], (typeof priceUnit.unitSymbol)[number]>;
 
+const ZERO_PRICE = 0;
+
+const WON_AND_JPY_SEPARATOR = 1000;
+const USD_GBP_EUR_SEPARATOR = 1;
+
 const paymentMethod = {
 	CARD: 'Card',
 	CASH: 'Cash',
@@ -76,4 +81,15 @@ export type {
 	PriceUnitSymbolType,
 	MatchedPriceUnitWithSymbol,
 };
-export { paymentMethod, paymentData, installmentPlanMonths, cardType, priceUnit, bankSvgs, matchedPriceUnitWithSymbol };
+export {
+	ZERO_PRICE,
+	WON_AND_JPY_SEPARATOR,
+	USD_GBP_EUR_SEPARATOR,
+	paymentMethod,
+	paymentData,
+	installmentPlanMonths,
+	cardType,
+	priceUnit,
+	bankSvgs,
+	matchedPriceUnitWithSymbol,
+};
