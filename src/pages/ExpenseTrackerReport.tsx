@@ -2,9 +2,11 @@ import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
 import { Description, ExpenseChart, ExpenseChartLoader, Select } from '../components';
 import { type Month, currentMonth, getMonthIndexFromMonths, months } from '../utils';
+import { priceUnit, PriceUnitType } from '../constants';
 
 const ExpenseTrackerReportPage = () => {
 	const [selectMonth, setSelectMonth] = useState<Month>(months[currentMonth]);
+	const [priceUnitType, setPriceUnitType] = useState<PriceUnitType>(priceUnit.unitType[0]); // WON
 
 	return (
 		<section>
@@ -12,14 +14,22 @@ const ExpenseTrackerReportPage = () => {
 				<span>Report of</span>
 				<Select
 					data={months.filter((_, idx) => idx <= currentMonth).reverse()}
-					placeholder={'month'}
+					placeholder={'Month'}
 					currentValue={selectMonth}
 					onSelect={option => setSelectMonth(months[getMonthIndexFromMonths(option)])}
 				/>
+				<Select
+					data={priceUnit.unitType}
+					placeholder={'Price Unit'}
+					currentValue={priceUnitType}
+					onSelect={option => setPriceUnitType(option)}
+				/>
 			</Title>
-			<Description>This chart will show price based on Korean WON(₩)</Description>
+			<Description>
+				This chart will show price based on <UnitType>{priceUnitType}</UnitType>
+			</Description>
 			<Suspense fallback={<ExpenseChartLoader />}>
-				<ExpenseChart selectMonth={selectMonth} />
+				<ExpenseChart selectMonth={selectMonth} priceUnitType={priceUnitType} />
 			</Suspense>
 		</section>
 	);
@@ -37,6 +47,15 @@ const Title = styled.h2`
 	span[aria-label='month'] {
 		color: var(--blue200);
 	}
+`;
+
+const UnitType = styled.span`
+	display: inline-block;
+	padding: calc(var(--padding-container-mobile) * 0.25);
+	border-radius: var(--radius-s);
+	font-weight: var(--fw-semibold);
+	color: var(--blue100);
+	background-color: var(--blue200);
 `;
 
 export default ExpenseTrackerReportPage;

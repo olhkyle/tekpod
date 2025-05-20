@@ -47,8 +47,8 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 				</TotalPriceHover>
 			)}
 
-			{totalPrice === 0 ? (
-				<EmptyMessage emoji={'💳'}>{`No ${currentPaymentMethod === 'All' ? '' : currentPaymentMethod} expenses recorded`}</EmptyMessage>
+			{totalPrice === 0 || filteredData.length === 0 ? (
+				<EmptyMessage emoji={'💳'}>{`No ${currentPaymentMethod === 'All' ? '' : currentPaymentMethod} Expenses Recorded`}</EmptyMessage>
 			) : (
 				<PaymentListContent>
 					{filteredData.map((payment, idx) => (

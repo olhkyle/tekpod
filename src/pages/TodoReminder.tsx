@@ -15,6 +15,7 @@ const TodoReminderPage = () => {
 
 	const [value, setValue] = useState('');
 	const [controlOption, setControlOption] = useState<ControlOption>(segmentedControlOptions[0]);
+
 	const { addToast } = useToastStore();
 	const { startTransition, Loading, isLoading } = useLoading();
 

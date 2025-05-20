@@ -22,8 +22,18 @@ type PriceUnitSymbolType = PriceUnitGroup['unitSymbol'][number];
 
 type MatchedPriceUnitWithSymbol = Record<(typeof priceUnit.unitType)[number], (typeof priceUnit.unitSymbol)[number]>;
 
+const ZERO_PRICE = 0;
+
+const WON_AND_JPY_SEPARATOR = 1000;
+const USD_GBP_EUR_SEPARATOR = 1;
+
+const paymentMethod = {
+	CARD: 'Card',
+	CASH: 'Cash',
+} as const;
+
 const paymentData = {
-	paymentMethod: ['Card', 'Cash'] as const,
+	paymentMethod: [paymentMethod.CARD, paymentMethod.CASH],
 	banks: ['신한', '하나', '국민', '우리', 'IBK기업', '농협', '카카오뱅크', '토스뱅크', '새마을', 'SC제일', '씨티', '해당없음'] as const,
 	priceUnits: ['WON', 'USD', 'GBP', 'EUR', 'JPY'],
 } as const;
@@ -31,9 +41,9 @@ const paymentData = {
 const installmentPlanMonths = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 24, 36] as const;
 
 const cardType = {
-	신용: 'Credit',
-	체크: 'Debit',
-	미확인: 'Unconfirmed',
+	CREDIT: 'Credit',
+	DEBIT: 'Debit',
+	UNCONFIRMED: 'Unconfirmed',
 } as const;
 
 const priceUnit = {
@@ -71,4 +81,15 @@ export type {
 	PriceUnitSymbolType,
 	MatchedPriceUnitWithSymbol,
 };
-export { paymentData, installmentPlanMonths, cardType, priceUnit, bankSvgs, matchedPriceUnitWithSymbol };
+export {
+	ZERO_PRICE,
+	WON_AND_JPY_SEPARATOR,
+	USD_GBP_EUR_SEPARATOR,
+	paymentMethod,
+	paymentData,
+	installmentPlanMonths,
+	cardType,
+	priceUnit,
+	bankSvgs,
+	matchedPriceUnitWithSymbol,
+};
