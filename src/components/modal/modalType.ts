@@ -12,6 +12,15 @@ import {
 	EditPaymentModal,
 } from '.';
 
+const modalType = {
+	EXPENSE_TRACKER: 'expense_tracker',
+	FILM_RECIPE: 'film_recipe',
+	DIARY: 'diary',
+	USER: 'user',
+	TODO_REMINDER: 'todo_reminder',
+	COMMUTE_RECORDS: 'commute_records',
+} as const;
+
 type ModalDataType = (typeof modalType)[keyof typeof modalType];
 type BaseModalAction = 'GENERAL' | 'ADD' | 'READ' | 'EDIT' | 'REMOVE' | 'RESET_PASSWORD' | 'PROFILE'; // TODO: string & NonNullable<unknown>
 
@@ -35,15 +44,6 @@ type ModalConfig = {
 		[ACTION in ModalActionMap[(typeof modalType)[DATA_TYPE]]]: ModalConfigItem;
 	};
 };
-
-const modalType = {
-	EXPENSE_TRACKER: 'expense_tracker',
-	FILM_RECIPE: 'film_recipe',
-	DIARY: 'diary',
-	USER: 'user',
-	TODO_REMINDER: 'todo_reminder',
-	COMMUTE_RECORDS: 'commute_records',
-} as const;
 
 const MODAL_CONFIG: ModalConfig = {
 	EXPENSE_TRACKER: {
