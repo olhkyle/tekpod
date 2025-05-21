@@ -48,7 +48,7 @@ const ExpenseTrackerPage = () => {
 			<TotalExpense>
 				<TotalExpenseContent>
 					<Flex direction={'row'} alignItems={'center'} gap={8}>
-						<h2>💳 Total Expenses</h2>
+						<h2>Total Expenses</h2>
 						<Select
 							data={months.filter((_, idx) => idx <= currentMonth).reverse()}
 							placeholder="Select Month"
@@ -109,6 +109,10 @@ const Flex = styled.div<{
 
 	a {
 		width: 100%;
+	}
+
+	span {
+		font-weight: var(--fw-semibold);
 	}
 `;
 
