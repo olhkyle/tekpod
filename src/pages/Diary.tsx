@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
-import { DiaryContent, DiaryContentLoader } from '../components';
+import { DiaryContent, DiaryContentLoader, FloatingActionButton } from '../components';
 import { routes } from '../constants';
 
 const DiaryPage = () => {
@@ -9,11 +9,13 @@ const DiaryPage = () => {
 		<section>
 			<Header>
 				<Title>💿 Records</Title>
-				<WriteLink to={routes.WRITE}>WRITE</WriteLink>
 			</Header>
 			<Suspense fallback={<DiaryContentLoader />}>
 				<DiaryContent />
 			</Suspense>
+			<FloatingActionButton variant={'link'}>
+				<WriteLink to={routes.WRITE}>Write</WriteLink>
+			</FloatingActionButton>
 		</section>
 	);
 };
@@ -34,15 +36,11 @@ const WriteLink = styled(Link)`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	padding: calc(var(--padding-container-mobile) * 0.5) var(--padding-container-mobile);
-	min-width: 80px;
-	min-height: 40px;
+	max-height: 50.5px;
 	color: var(--white);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-bold);
 	background-color: var(--black);
-	border-radius: var(--radius-s);
-	transition: background 0.3s ease-in-out outline 0.15s ease-in-out;
 
 	&:hover,
 	&:active {

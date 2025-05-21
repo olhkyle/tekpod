@@ -161,7 +161,7 @@ const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
 					<>
 						<Left>
 							<RankActivateButton type="button" onClick={() => setIsPrimary(!isPrimary)}>
-								{isPrimary ? <FaStar size="27" color="var(--blue200)" /> : <FaRegStar size="27" color="var(--blue200)" />}
+								{isPrimary ? <FaStar size="24" color="var(--blue200)" /> : <FaRegStar size="24" color="var(--blue200)" />}
 							</RankActivateButton>
 							<CancelButton type="button" onClick={() => setEditing(false)}>
 								Cancel
@@ -209,14 +209,18 @@ const Left = styled.div`
 `;
 
 const RankActivateButton = styled(Button)`
-	padding: calc(var(--padding-container-mobile) * 0.5) var(--padding-container-mobile);
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: var(--padding-container-mobile);
+	max-height: 50.5px;
 	background-color: var(--blue100);
 `;
 
 const StyledButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
-
+	max-height: 50.5px;
 	color: var(--white);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);

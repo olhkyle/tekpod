@@ -37,14 +37,14 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 	return (
 		<Container>
 			{totalPrice !== 0 && (
-				<TotalPriceHover>
+				<TotalPriceSummary>
 					{Object.entries(totalPrice).map(([priceUnit, price], idx) => (
 						<TotalPriceContent key={`payment_${idx}`}>
 							<dt>{priceUnit}</dt>
 							<dd>{monetizeWithSeparator(price)}</dd>
 						</TotalPriceContent>
 					))}
-				</TotalPriceHover>
+				</TotalPriceSummary>
 			)}
 
 			{totalPrice === 0 || filteredData.length === 0 ? (
@@ -69,35 +69,32 @@ const Container = styled.div`
 	flex-direction: column;
 `;
 
-const TotalPriceHover = styled.dl`
-	position: fixed;
-	bottom: calc(var(--nav-height) + 32px);
-	right: 16px;
+const TotalPriceSummary = styled.dl`
 	display: inline-flex;
 	flex-direction: column;
 	gap: 8px;
+	margin: 16px calc(var(--padding-container-mobile) * 0.35) 0;
 	padding: calc(var(--padding-container-mobile) * 0.5);
 	min-width: 90px;
-	background-color: var(--black);
-	border: 1px solid var(--grey300);
+	color: var(--blue200);
+	background-color: var(--blue100);
 	border-radius: var(--radius-s);
+	z-index: var(--hovered-info-index);
 `;
 
 const TotalPriceContent = styled.div`
-	display: flex;
+	display: inline-flex;
 	justify-content: space-between;
 	align-items: center;
 	gap: 8px;
 
 	dt {
 		font-weight: var(--fw-medium);
-		color: var(--white);
 	}
 
 	dd {
 		font-size: var(--fz-h7);
 		font-weight: var(--fw-bold);
-		color: var(--white);
 	}
 `;
 
