@@ -7,6 +7,7 @@ export { default as Description } from './Description';
 export { default as Drawer } from './Drawer';
 export { default as EmptyMessage } from './EmptyMessage';
 export { default as Flex } from './Flex';
+export { default as FloatingActionButton } from './FloatingActionButton';
 export { default as LazyImage } from './LazyImage';
 export { default as Logo } from './Logo';
 export { default as SegmentedControl } from './SegmentedControl';

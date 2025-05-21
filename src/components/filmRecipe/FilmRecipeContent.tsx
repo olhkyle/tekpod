@@ -50,6 +50,7 @@ const Recipe = styled.div<{ primary: boolean }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 4px;
 	padding: calc(var(--padding-container-mobile) * 1.2) calc(var(--padding-container-mobile) * 0.75);
 	border-radius: var(--radius-m);
 	transition: background 0.15s ease-in-out;
@@ -65,7 +66,7 @@ const Title = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	gap: 8px;
+	gap: 12px;
 	font-size: var(--fz-h7);
 	font-weight: var(--fw-bold);
 `;

@@ -1,7 +1,7 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
 import { useLocation } from 'react-router-dom';
-import { DatePicker, PaymentItemLoader, PaymentList, SegmentedControl, Select, MODAL_CONFIG } from '../components';
+import { DatePicker, PaymentItemLoader, PaymentList, SegmentedControl, Select, MODAL_CONFIG, FloatingActionButton } from '../components';
 import { useModalStore } from '../store';
 import { priceUnit, PriceUnitType } from '../constants';
 import { today } from '../utils';
@@ -31,9 +31,6 @@ const ExpenseTrackerByMonthPage = () => {
 		<section>
 			<Header>
 				<Title>Expense Tracker</Title>
-				<AddPaymentButton type="button" onClick={handleAddPaymentModal}>
-					NEW
-				</AddPaymentButton>
 			</Header>
 			<DatePicker selected={selected} setSelected={setSelected} disabled={{ after: today }} isFloated={true} />
 			<PaymentListLayout>
@@ -52,6 +49,9 @@ const ExpenseTrackerByMonthPage = () => {
 					<PaymentList selectedDate={selected} currentPaymentMethod={currentPaymentMethod} currentPriceUnit={currentPriceUnit} />
 				</Suspense>
 			</PaymentListLayout>
+			<AddPaymentButton type={'button'} variant={'button'} onClick={handleAddPaymentModal}>
+				Add New Expense
+			</AddPaymentButton>
 		</section>
 	);
 };
@@ -68,29 +68,25 @@ const Title = styled.h2`
 	font-weight: var(--fw-bold);
 `;
 
-const AddPaymentButton = styled.button`
-	padding: calc(var(--padding-container-mobile) * 0.5) var(--padding-container-mobile);
-	min-height: 40px;
+const AddPaymentButton = styled(FloatingActionButton)`
 	color: var(--white);
-	background-color: var(--blue200);
+	background-color: var(--black);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-bold);
-	border-radius: var(--radius-s);
-	transition: opacity 0.15 ease-in-out;
 
 	&:hover,
 	&:focus {
-		opacity: 0.95;
+		background-color: var(--grey900);
 	}
 `;
 
 const PaymentListLayout = styled.div`
-	margin: 32px 0 48px;
+	margin: 32px 0 64px;
 `;
 
 const PaymentListTitle = styled.div`
 	margin-bottom: 8px;
-	font-size: var(--fz-h7);
+	font-size: var(--fz-h6);
 	font-weight: var(--fw-semibold);
 `;
 

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
-import { Button, PaymentItemDetail, Switch } from '../components';
+import { PaymentItemDetail, Switch, FloatingActionButton } from '../components';
 import { useLoading, useTogglePaymentIsFixedMutation } from '../hooks';
 import { ExpenseTracker, removePayment } from '../supabase';
 import { monetizeWithSeparator, formatByKoreanTime } from '../utils';
@@ -66,7 +66,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 						<dd>{payment.card_type}</dd>
 					</DetailGroup>
 				)}
-				{payment.installment_plan_months && (
+				{payment.installment_plan_months !== null && payment.installment_plan_months > 0 && (
 					<DetailGroup>
 						<dt>Installment</dt>
 						<dd>{payment.installment_plan_months} month</dd>
@@ -87,7 +87,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 				</DetailGroup>
 			</Detail>
 
-			<DeleteButton type="button" onClick={handlePaymentDelete}>
+			<DeleteButton type={'button'} variant={'button'} onClick={handlePaymentDelete}>
 				{isLoading ? Loading : 'Delete'}
 			</DeleteButton>
 		</Container>
@@ -153,10 +153,15 @@ const DetailGroup = styled.div`
 	}
 `;
 
-const DeleteButton = styled(Button)`
-	margin-top: auto;
+const DeleteButton = styled(FloatingActionButton)`
+	position: fixed;
+	bottom: calc(var(--nav-height) + 2 * var(--padding-container-mobile));
+	left: 0;
+	right: 0;
+	margin: 0 auto;
 	padding: var(--padding-container-mobile);
-
+	max-width: calc(var(--max-app-width) - 32px);
+	width: calc(100% - var(--padding-container-mobile) * 2);
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);
@@ -166,6 +171,11 @@ const DeleteButton = styled(Button)`
 	&:active,
 	&:hover {
 		background-color: var(--grey900);
+	}
+
+	@media screen and (min-width: 640px) {
+		bottom: calc(var(--nav-height) + var(--padding-container-mobile));
+		width: calc(var(--max-app-width) - 2 * var(--padding-container-mobile));
 	}
 `;
 

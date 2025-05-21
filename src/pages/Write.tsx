@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, TagsInput, TextArea, TextInput, WriteSchema, writeSchema } from '../components';
+import { FloatingActionButton, TagsInput, TextArea, TextInput, WriteSchema, writeSchema } from '../components';
 import { addDiary } from '../supabase';
 import { useClientSession, useLoading } from '../hooks';
 import { useToastStore } from '../store';
@@ -78,7 +78,9 @@ const WritePage = () => {
 						render={({ field: { name, value, onChange } }) => <TagsInput inputId={name} tags={value} onChange={onChange} />}
 					/>
 				</Wrapper>
-				<UploadButton type="submit">{isLoading ? Loading : 'Upload'}</UploadButton>
+				<UploadButton type={'submit'} variant={'button'}>
+					{isLoading ? Loading : 'Upload'}
+				</UploadButton>
 			</Form>
 		</Container>
 	);
@@ -114,15 +116,7 @@ const Wrapper = styled.div`
 	gap: 16px;
 `;
 
-const UploadButton = styled(Button)`
-	position: fixed;
-	left: 0;
-	right: 0;
-	bottom: calc(var(--nav-height) + 32px);
-	max-width: calc(var(--max-app-width) - 32px);
-	width: calc(100% - 32px);
-	margin: 0 auto;
-	padding: var(--padding-container-mobile);
+const UploadButton = styled(FloatingActionButton)`
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);
@@ -131,11 +125,6 @@ const UploadButton = styled(Button)`
 	&:hover,
 	&:focus {
 		background-color: var(--blue400);
-	}
-
-	@media screen and (min-width: 640px) {
-		bottom: calc(var(--nav-height) + 16px);
-		width: calc(var(--max-app-width) - 32px);
 	}
 `;
 
