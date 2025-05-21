@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { bankSvgs, queryKey, routes } from '../../constants';
+import { bankSvgs, queryKey, routes, staleTime } from '../../constants';
 import { ExpenseTracker, getFixedCostPaymentsByMonth } from '../../supabase';
 import { currentDate, currentMonth, getDateFromString, getNextMonthFormatDate, monetizeWithSeparator } from '../../utils';
 import { EmptyMessage } from '../common';
@@ -10,6 +10,7 @@ const FixedCostList = () => {
 	const { data: payments } = useSuspenseQuery<ExpenseTracker[]>({
 		queryKey: [...queryKey.EXPENSE_TRACKER, 'fixedCost'],
 		queryFn: () => getFixedCostPaymentsByMonth(currentMonth - 1),
+		staleTime: staleTime.EXPENSE_TRACKER.FIXED_COST,
 	});
 
 	const navigate = useNavigate();
