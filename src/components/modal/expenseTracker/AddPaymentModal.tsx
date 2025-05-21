@@ -58,7 +58,7 @@ const AddPaymentModal = ({ id, type, data, onClose }: AddPaymentModalProps) => {
 	};
 
 	return (
-		<ModalLayout id={id} type={type} title={'Add Payment'} onClose={onClose}>
+		<ModalLayout id={id} type={type} title={'Add Expense'} onClose={onClose}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<Flex direction="column">
 					<Controller
