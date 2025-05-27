@@ -18,7 +18,6 @@ const DiaryContentLoader = () => {
 					<SkeletonLoader width={'100%'} height={'22px'} />
 					<SkeletonLoader width={'100%'} height={'22px'} />
 					<SkeletonLoader width={'100%'} height={'22px'} />
-					<SkeletonLoader width={'100%'} height={'30px'} />
 					<div css={{ display: 'flex', gap: '8px' }}>
 						<SkeletonLoader width={'30%'} height={'28px'} />
 						<SkeletonLoader width={'30%'} height={'28px'} />

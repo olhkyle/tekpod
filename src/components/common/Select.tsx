@@ -122,7 +122,6 @@ const SelectContent = styled.div<{ isOpen: boolean }>`
 		padding: calc(var(--padding-container-mobile) * 0.5);
 		width: auto;
 		border-radius: var(--radius-s);
-		z-index: 10;
 	}
 `;
 
