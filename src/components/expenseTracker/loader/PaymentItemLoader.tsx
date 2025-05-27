@@ -9,9 +9,9 @@ const PaymentItemLoader = () => {
 				gap: '16px',
 				margin: '16px 0',
 			}}>
-			<SkeletonLoader width={'100%'} height={'72px'} />
-			<SkeletonLoader width={'100%'} height={'72px'} />
-			<SkeletonLoader width={'100%'} height={'72px'} />
+			{Array.from({ length: 8 }, (_, idx) => (
+				<SkeletonLoader key={idx} width={'100%'} height={'72px'} />
+			))}
 		</div>
 	);
 };
