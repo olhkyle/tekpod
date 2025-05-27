@@ -167,7 +167,6 @@ const AddPaymentModal = ({ id, type, data, onClose }: AddPaymentModalProps) => {
 									}}
 									onBlur={onBlur}
 									placeholder={watch('price_unit') === 'WON' || watch('price_unit') === 'JPY' ? '1,000' : '100.00'}
-									inputMode="numeric"
 									disabled={disabled}
 								/>
 							</TextInput>
