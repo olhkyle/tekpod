@@ -81,7 +81,7 @@ const AddPaymentButton = styled(FloatingActionButton)`
 `;
 
 const PaymentListLayout = styled.div`
-	margin: 32px 0 64px;
+	margin: 32px 0 80px;
 `;
 
 const PaymentListTitle = styled.div`

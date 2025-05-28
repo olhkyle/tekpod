@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { getSingleDiary } from '../../supabase';
-import { LoadingSpinner, Button, MODAL_CONFIG } from '..';
+import { LoadingSpinner, Button, MODAL_CONFIG, FloatingActionButton } from '..';
 import { useRemoveDiaryMutation } from '../../hooks';
 import { useModalStore } from '../../store';
 import { queryKey } from '../../constants';
@@ -45,7 +45,7 @@ const ContentBody = () => {
 				<Feeling>⚡️ {data?.feeling}</Feeling>
 			</Description>
 
-			<DeleteButton type="button" onClick={handleDeleteDiaryClick}>
+			<DeleteButton variant={'button'} onClick={handleDeleteDiaryClick}>
 				{isPending ? <LoadingSpinner /> : 'Delete'}
 			</DeleteButton>
 		</>
@@ -101,11 +101,7 @@ const Feeling = styled.p`
 	border-radius: var(--radius-s);
 `;
 
-const DeleteButton = styled(Button)`
-	position: absolute;
-	bottom: 0;
-	padding: var(--padding-container-mobile);
-	width: 100%;
+const DeleteButton = styled(FloatingActionButton)`
 	font-size: var(--fz-p);
 	font-weight: var(--fw-semibold);
 	color: var(--white);

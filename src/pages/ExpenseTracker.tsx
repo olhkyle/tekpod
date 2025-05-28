@@ -106,6 +106,7 @@ const Flex = styled.div<{
 	flex-direction: ${({ direction }) => direction};
 	align-items: ${({ alignItems }) => alignItems};
 	gap: ${({ gap }) => `${gap}px`};
+	margin-bottom: 6px;
 
 	a {
 		width: 100%;
