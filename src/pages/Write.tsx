@@ -90,6 +90,7 @@ const Container = styled.section`
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
+	margin-bottom: 80px;
 `;
 
 const Header = styled.div`
