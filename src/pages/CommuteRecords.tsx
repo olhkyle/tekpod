@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react';
 import styled from '@emotion/styled';
-import { Records, RecordsLoader, Select, WorkInProgress } from '../components';
+import { Records, RecordsLoader, Select } from '../components';
 import { currentMonth, currentYear, getMonthIndexFromMonths, months, years } from '../utils';
 
 const CommuteRecordsPage = () => {
@@ -11,7 +11,7 @@ const CommuteRecordsPage = () => {
 
 	return (
 		<section>
-			<Title id="commute-tracker-page-title">Commute Tracker</Title>
+			<Title>Commute Tracker</Title>
 			<Controller>
 				<Select
 					data={years}
@@ -38,7 +38,6 @@ const CommuteRecordsPage = () => {
 			<Suspense fallback={<RecordsLoader />}>
 				<Records yearAndMonth={yearAndMonth} />
 			</Suspense>
-			<WorkInProgress />
 		</section>
 	);
 };
