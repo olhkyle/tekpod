@@ -185,6 +185,11 @@ const toastData = {
 			return { status, message };
 		},
 	},
+	POMODORO_TIMER: {
+		CUSTOM(status: Toast['status'], message: string) {
+			return { status, message };
+		},
+	},
 } as const;
 
 export default toastData;
