@@ -180,6 +180,11 @@ const toastData = {
 			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} updating ` },
 		},
 	},
+	FAVORITE_PLACE: {
+		CUSTOM(status: Toast['status'], message: string) {
+			return { status, message };
+		},
+	},
 } as const;
 
 export default toastData;

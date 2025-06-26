@@ -71,8 +71,12 @@ const router = createBrowserRouter(
 					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('CommuteRecords')} />,
 				},
 				{
-					path: routes.FAVORITE_CAFE,
-					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('FavoriteCafes')} />,
+					path: routes.FAVORITE_PLACE,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('FavoritePlace')} />,
+				},
+				{
+					path: routes.POMODORO_TIMER,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('PomodoroTimer')} />,
 				},
 				{
 					path: `${routes.USER}`,

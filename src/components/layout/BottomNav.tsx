@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useLocation } from 'react-router-dom';
-import { RiBook3Line, RiHome6Line, RiCamera3Line, RiUser3Line } from 'react-icons/ri';
+import { RiBook3Line, RiCalculatorLine, RiHome6Line, RiUser3Line } from 'react-icons/ri';
 import { NavLink } from '.';
 import { useAuthQuery } from '../../hooks';
 import { routes } from '../../constants';
@@ -17,8 +17,8 @@ const BottomNav = () => {
 						<NavLink href={routes.HOME} aria-label="Link to Home Route">
 							<RiHome6Line size={24} />
 						</NavLink>
-						<NavLink href={routes.FILM_RECIPE} aria-label="Link to Film Recipe Route">
-							<RiCamera3Line size={26} />
+						<NavLink href={routes.EXPENSE_TRACKER} aria-label="Link to Film Recipe Route">
+							<RiCalculatorLine size={27} />
 						</NavLink>
 						<NavLink href={routes.DIARY} aria-label="Link to Diary Route">
 							<RiBook3Line size={24} />
