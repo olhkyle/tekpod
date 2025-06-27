@@ -38,6 +38,7 @@ const Container = styled(ShrinkMotionBlock)`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 16px;
 	padding: var(--padding-container-mobile);
 	background-color: var(--greyOpacity50);
 	border: 1px solid var(--grey100);
@@ -55,6 +56,10 @@ const Container = styled(ShrinkMotionBlock)`
 		gap: 6px;
 		font-size: var(--fz-h7);
 		font-weight: var(--fw-semibold);
+
+		span {
+			text-align: right;
+		}
 	}
 `;
 
