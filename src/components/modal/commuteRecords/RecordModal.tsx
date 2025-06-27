@@ -62,6 +62,7 @@ const getDefaultValues = (action: CommuteRecordAction, data: ServiceDataType<Com
 
 const RecordModal = ({ id, type, action, data: serviceData, onClose }: RecordModalProps) => {
 	const { queryClient, session } = useClientSession();
+	const defaultValues = getDefaultValues(action, serviceData);
 
 	const {
 		register,
@@ -71,7 +72,7 @@ const RecordModal = ({ id, type, action, data: serviceData, onClose }: RecordMod
 		handleSubmit,
 	} = useForm<RecordSchema>({
 		resolver: zodResolver(recordSchema),
-		defaultValues: getDefaultValues(action, serviceData),
+		defaultValues,
 	});
 
 	const { startTransition, Loading, isLoading } = useLoading();
@@ -101,15 +102,22 @@ const RecordModal = ({ id, type, action, data: serviceData, onClose }: RecordMod
 							updated_at: date,
 					  });
 
+			if (action === 'EDIT') {
+				if (defaultValues?.notes === data.notes) {
+					addToast(toastData.COMMUTE_RECORDS.CUSTOM('warn', 'Notes are not changed'));
+					return;
+				}
+			}
+
 			await startTransition(callback);
 
-			onClose();
 			addToast(toastData.COMMUTE_RECORDS[actionProperty].SUCCESS);
 		} catch (e) {
 			console.error(e);
 			addToast(toastData.COMMUTE_RECORDS[actionProperty].ERROR);
 		} finally {
 			const _date = new Date(date);
+			onClose();
 
 			queryClient.invalidateQueries({
 				queryKey: [...queryKey.COMMUTE_RECORDS, `${_date.getFullYear()}-${(_date.getMonth() + 1 + '').padStart(2, '0')}`],

@@ -177,7 +177,11 @@ const toastData = {
 		},
 		EDIT: {
 			SUCCESS: { status: 'success', message: `Update commute ${FIXED_SUCCESS_PHRASE}` },
+
 			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} updating ` },
+		},
+		CUSTOM(status: Toast['status'], message: string) {
+			return { status, message };
 		},
 	},
 	FAVORITE_PLACE: {

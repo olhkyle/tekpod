@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { Button } from '../components';
+import { Button, Select } from '../components';
 import { useToastStore } from '../store';
 import { toastData } from '../constants';
 
@@ -14,17 +14,44 @@ const PomodoroTimer = () => {
 	const [inputMinutes, setInputMinutes] = useState(initialMinute);
 
 	const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
+	const wakeLockRef = useRef<WakeLockSentinel | null>(null);
 	const { addToast } = useToastStore();
+
+	// prevent auto-lock in IOS
+	useEffect(() => {
+		async function requestWakeLock() {
+			try {
+				if ('wakeLock' in navigator) {
+					wakeLockRef.current = await navigator.wakeLock.request('screen');
+				}
+			} catch (err) {
+				// Wake Lock 요청 실패 (권한 거부 등)
+			}
+		}
+		if (isCountdownRunning) {
+			requestWakeLock();
+		} else {
+			if (wakeLockRef.current) {
+				wakeLockRef.current.release();
+				wakeLockRef.current = null;
+			}
+		}
+		return () => {
+			if (wakeLockRef.current) {
+				wakeLockRef.current.release();
+				wakeLockRef.current = null;
+			}
+		};
+	}, [isCountdownRunning]);
 
 	useEffect(() => {
 		if (isCountdownRunning && countdownTime > 0) {
 			countdownIntervalRef.current = setInterval(() => {
 				setCountdownTime(prevTime => {
 					if (prevTime <= 1) {
-						setIsCountdownRunning(false);
-						addToast(toastData.POMODORO_TIMER.CUSTOM('info', `${formatCountdownTime(countdownTime)} 완료`));
 						return 0;
 					}
+
 					return prevTime - 1;
 				});
 			}, ONE_SECOND);
@@ -35,6 +62,14 @@ const PomodoroTimer = () => {
 		return () => clearInterval(countdownIntervalRef.current!);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isCountdownRunning, countdownTime]);
+
+	useEffect(() => {
+		if (countdownTime === 0 && isCountdownRunning) {
+			setIsCountdownRunning(false);
+			addToast(toastData.POMODORO_TIMER.CUSTOM('info', `It's ${formatCountdownTime(countdownTime)}. All Done.`));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [countdownTime, isCountdownRunning]);
 
 	const formatCountdownTime = (seconds: number) => {
 		const mins = Math.floor(seconds / SIXTY);
@@ -63,15 +98,19 @@ const PomodoroTimer = () => {
 
 	return (
 		<Container>
-			<MinuteAndSecondDisplay isAlmostDone={countdownTime <= 30}>{formatCountdownTime(countdownTime)}</MinuteAndSecondDisplay>
+			<MinuteAndSecondDisplay
+				isAllTasksDone={
+					countdownTime > 30 ? 'ongoing' : countdownTime <= 30 ? 'almost_done' : countdownTime <= 10 ? 'close_to_done' : 'done'
+				}>
+				{formatCountdownTime(countdownTime)}
+			</MinuteAndSecondDisplay>
 			<SetInputAndButton>
-				<input
-					type="text"
-					min="1"
-					max="60"
-					value={inputMinutes}
-					onChange={e => setInputMinutes(Number(e.target.value))}
-					disabled={isCountdownRunning}
+				<Select
+					data={Array.from({ length: 60 }, (_, idx) => `${idx + 1}`)}
+					placeholder={'Select Year'}
+					descriptionLabel={'Year'}
+					currentValue={`${inputMinutes}`}
+					onSelect={option => setInputMinutes(+option)}
 				/>
 				<SetButton type="button" onClick={setCountdownTimer} disabled={isCountdownRunning}>
 					Set
@@ -84,7 +123,7 @@ const PomodoroTimer = () => {
 				<PauseButton type="button" onClick={pauseCountdown} disabled={!isCountdownRunning}>
 					Pause
 				</PauseButton>
-				{!isCountdownRunning && (
+				{!isCountdownRunning && countdownIntervalRef.current && (
 					<ResetButton type="button" onClick={resetCountdown}>
 						Reset
 					</ResetButton>
@@ -103,11 +142,18 @@ const Container = styled.section`
 	height: calc(100dvh - 2 * var(--nav-height) - 2 * var(--padding-container-mobile));
 `;
 
-const MinuteAndSecondDisplay = styled.div<{ isAlmostDone: boolean }>`
+const MinuteAndSecondDisplay = styled.div<{ isAllTasksDone: 'ongoing' | 'almost_done' | 'close_to_done' | 'done' }>`
 	font-size: calc(var(--fz-h1) * 2);
 	font-weight: var(--fw-black);
 
-	color: ${({ isAlmostDone }) => (isAlmostDone ? 'var(--blue300)' : 'var(--black)')};
+	color: ${({ isAllTasksDone }) =>
+		isAllTasksDone === 'ongoing'
+			? 'var(--black)'
+			: isAllTasksDone === 'almost_done'
+			? 'var(--blue200)'
+			: isAllTasksDone === 'close_to_done'
+			? 'var(--blue400)'
+			: 'var(--blue300)'};
 `;
 
 const ButtonGroup = styled.div`
@@ -126,12 +172,12 @@ const SetInputAndButton = styled.div`
 	align-items: center;
 	gap: 16px;
 
-	input {
-		padding: var(--padding-container-mobile);
-		width: 60px;
-		border: 1px solid var(--grey100);
-		border-radius: var(--radius-s);
-		text-align: center;
+	#select-root {
+		height: 100%;
+
+		button[role='combobox'] {
+			height: 100%;
+		}
 	}
 `;
 
@@ -150,6 +196,11 @@ const SetButton = styled(StyledButton)`
 	&:active,
 	&:focus {
 		background-color: var(--grey800);
+	}
+
+	&:disabled {
+		color: var(--grey700);
+		background-color: var(--grey200);
 	}
 `;
 
@@ -170,13 +221,14 @@ const StartButton = styled(StyledButton)`
 `;
 
 const PauseButton = styled(StyledButton)`
-	color: var(--black);
-	border: 1px solid var(--grey200);
+	color: var(--white);
+	background-color: var(--black);
+	border: 1px solid var(--grey100);
 
 	&:hover,
 	&:active,
 	&:focus {
-		background-color: var(--grey100);
+		background-color: var(--grey900);
 	}
 
 	&:disabled {

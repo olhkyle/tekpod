@@ -22,7 +22,7 @@ const Select = <T extends string>({ data: options, placeholder, descriptionLabel
 	const targetRef = useClickOutside<HTMLDivElement>({ eventHandler: () => setOpen(false) });
 
 	return (
-		<SelectRoot ref={targetRef}>
+		<SelectRoot id="select-root" ref={targetRef}>
 			<SelectTrigger
 				type="button"
 				role="combobox"
@@ -41,7 +41,7 @@ const Select = <T extends string>({ data: options, placeholder, descriptionLabel
 			)}
 			<SelectContent isOpen={isOpen} aria-labelledby={`select-${generatedId}-content`}>
 				{descriptionLabel && <SelectDescriptionLabel>{descriptionLabel}</SelectDescriptionLabel>}
-				<SelectItemList>
+				<SelectItemList isLong={options.length > 6}>
 					{options.map((option, idx) => (
 						<SelectItem
 							key={`${option}_${idx}`}
@@ -131,11 +131,20 @@ const SelectDescriptionLabel = styled.span`
 	font-weight: var(--fw-medium);
 `;
 
-const SelectItemList = styled.div`
+const SelectItemList = styled.div<{ isLong: boolean }>`
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
 	width: 100%;
+	height: ${({ isLong }) => (isLong ? '300px' : 'auto')};
+	overflow-y: ${({ isLong }) => (isLong ? 'scroll' : 'auto')};
+
+	-webkit-overflow-scrolling: touch; // iOS scroll support
+	-ms-overflow-style: none; // IE and Edge
+	scrollbar-width: none; // Firefox
+	&::-webkit-scrollbar {
+		display: none; // hide scrollbar (optional)
+	}
 `;
 
 const SelectItem = styled.div<{ isCurrent: boolean }>`
