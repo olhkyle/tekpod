@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { useQueryClient } from '@tanstack/react-query';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthLogo, Button, LabelInput, updatePasswordSchema, UpdatePasswordSchema } from '../components';
 import { supabase } from '../supabase';
-import { useLoading } from '../hooks';
+import { useClientSession, useLoading } from '../hooks';
 import { useUserStore, useToastStore } from '../store';
 import { toastData, routes } from '../constants';
 
@@ -39,7 +38,7 @@ const pageCss = {
  */
 
 const UpdatePassword = () => {
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 
 	const [searchParams, setSearchParams] = useSearchParams();
 	const navigate = useNavigate();

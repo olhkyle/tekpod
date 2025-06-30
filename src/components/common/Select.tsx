@@ -45,6 +45,11 @@ const Select = <T extends string>({ data: options, placeholder, descriptionLabel
 					{options.map((option, idx) => (
 						<SelectItem
 							key={`${option}_${idx}`}
+							ref={ref => {
+								if (option === currentValue) {
+									ref?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+								}
+							}}
 							isCurrent={option === currentValue}
 							tabIndex={0}
 							onClick={() => {

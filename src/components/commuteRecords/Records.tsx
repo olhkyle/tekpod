@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { MODAL_CONFIG, ModalActionMap, modalType } from '../modal';
@@ -6,7 +7,6 @@ import { CommuteRecord, getMonthlyRecords } from '../../supabase';
 import { calendar, formatByKoreanTime, getMonthIndexFromMonths, Month } from '../../utils';
 import { useModalStore } from '../../store';
 import { useClientSession } from '../../hooks';
-import { Fragment } from 'react';
 
 interface RecordsProps {
 	yearAndMonth: {
@@ -56,6 +56,16 @@ const Records = ({ yearAndMonth: { year, month } }: RecordsProps) => {
 
 	return (
 		<Fragment>
+			<Overview>
+				<li>
+					<span>Full-Time</span>
+					<p>{data.filter(day => day.status === 'present').length}</p>
+				</li>
+				<li>
+					<span>Remote</span>
+					<p>{data.filter(day => day.status === 'remote').length}</p>
+				</li>
+			</Overview>
 			<Calendar>
 				{calendar[monthIndex].map(day => {
 					const workedDay = data.find(item => new Date(item.date).getDate() === day);
@@ -82,25 +92,44 @@ const Records = ({ yearAndMonth: { year, month } }: RecordsProps) => {
 					);
 				})}
 			</Calendar>
-			<Overview>
-				<li>
-					<span>Full-Time</span>
-					<p>{data.filter(day => day.status === 'present').length}</p>
-				</li>
-				<li>
-					<span>Remote</span>
-					<p>{data.filter(day => day.status === 'remote').length}</p>
-				</li>
-			</Overview>
 		</Fragment>
 	);
 };
+
+const Overview = styled.ul`
+	display: flex;
+	gap: 8px;
+	margin-top: 16px;
+	width: 100%;
+
+	li {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: var(--padding-container-mobile);
+		width: 100%;
+		background-color: var(--grey50);
+		border: 1px solid var(--grey100);
+		border-radius: var(--radius-s);
+
+		span {
+			color: var(--grey800);
+			font-weight: var(--fw-semibold);
+		}
+
+		p {
+			color: var(--blue200);
+			font-size: var(--fz-h7);
+			font-weight: var(--fw-semibold);
+		}
+	}
+`;
 
 const Calendar = styled.ul`
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	gap: 8px;
-	margin: 32px auto 16px;
+	margin: 16px auto;
 `;
 
 const Day = styled.li<{ status: StatusOption }>`
@@ -111,7 +140,7 @@ const Day = styled.li<{ status: StatusOption }>`
 	min-width: 48px;
 	min-height: 48px;
 	color: ${({ status }) =>
-		status === 'present' || status === 'remote' ? 'var(--blue200)' : status === 'half_day' ? 'var(--blue300)' : 'var(--grey600)'};
+		status === 'present' || status === 'remote' ? 'var(--blue200)' : status === 'half_day' ? 'var(--grey500)' : 'var(--grey600)'};
 	background-color: ${({ status }) =>
 		status === 'absent'
 			? 'var(--grey50)'
@@ -120,9 +149,9 @@ const Day = styled.li<{ status: StatusOption }>`
 			: 'var(--grey50)'};
 	border: 1px solid
 		${({ status }) =>
-			status === 'absent'
+			status === 'absent' || status === 'half_day'
 				? 'var(--blue300)'
-				: status === 'present' || status === 'remote' || status === 'half_day'
+				: status === 'present' || status === 'remote'
 				? 'var(--blue400)'
 				: 'var(--grey100)'};
 	border-radius: var(--radius-s);
@@ -141,33 +170,6 @@ const Label = styled.span`
 
 const Emoji = styled.span`
 	font-size: var(--fz-h4);
-`;
-
-const Overview = styled.ul`
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	margin-bottom: 16px;
-
-	li {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: var(--padding-container-mobile);
-		background-color: var(--grey50);
-		border-radius: var(--radius-s);
-
-		span {
-			color: var(--grey800);
-			font-weight: var(--fw-semibold);
-		}
-
-		p {
-			color: var(--blue200);
-			font-size: var(--fz-h7);
-			font-weight: var(--fw-semibold);
-		}
-	}
 `;
 
 export default Records;

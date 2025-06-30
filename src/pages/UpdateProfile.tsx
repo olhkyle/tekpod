@@ -2,18 +2,15 @@ import { Suspense } from 'react';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import { Session } from '@supabase/supabase-js';
-import { useQueryClient } from '@tanstack/react-query';
 import { Button, ShrinkMotionBlock, MODAL_CONFIG, FavoriteDevice, SkeletonLoader, Group } from '../components';
 import { supabase } from '../supabase';
-import { useLoading } from '../hooks';
+import { useClientSession, useLoading } from '../hooks';
 import { useToastStore, useModalStore, useUserStore } from '../store';
 import { formatByKoreanTime } from '../utils';
-import { toastData, routes, queryKey } from '../constants';
+import { toastData, routes } from '../constants';
 
 const UpdateProfile = () => {
-	const queryClient = useQueryClient();
-	const { user } = queryClient.getQueryData(queryKey.AUTH) as Session;
+	const { queryClient, session } = useClientSession();
 	const navigate = useNavigate();
 
 	const { resetUser } = useUserStore();
@@ -43,9 +40,9 @@ const UpdateProfile = () => {
 
 	const handleUpdateProfileModal = () => {
 		const userData = {
-			user_id: user.id,
-			email: user?.user_metadata.email,
-			nickname: user?.user_metadata?.nickname,
+			user_id: session.user.id,
+			email: session.user?.user_metadata.email,
+			nickname: session.user?.user_metadata?.nickname,
 		};
 
 		setModal({
@@ -63,24 +60,24 @@ const UpdateProfile = () => {
 				<Nickname onClick={handleUpdateProfileModal}>
 					<Label>Nickname</Label>
 					<dd>
-						<span>{user?.user_metadata?.nickname}</span>
+						<span>{session.user?.user_metadata?.nickname}</span>
 						<RiArrowRightSLine size="21" />
 					</dd>
 				</Nickname>
 				<Group>
 					<Label>Email</Label>
-					<dd>{user?.email}</dd>
+					<dd>{session.user?.email}</dd>
 				</Group>
 				<Suspense fallback={<SkeletonLoader width={'100%'} height={'54px'} />}>
-					<FavoriteDevice userId={user.id} />
+					<FavoriteDevice userId={session.user.id} />
 				</Suspense>
 				<Group>
 					<Label>Join in</Label>
-					<dd>{formatByKoreanTime(user?.created_at)}</dd>
+					<dd>{formatByKoreanTime(session.user?.created_at)}</dd>
 				</Group>
 			</UserInfo>
 			<Bottom>
-				<ResetPasswordButton type="button" onClick={() => navigate(routes.UPDATE_PASSWORD, { state: { email: user?.email } })}>
+				<ResetPasswordButton type="button" onClick={() => navigate(routes.UPDATE_PASSWORD, { state: { email: session.user?.email } })}>
 					Update Password
 				</ResetPasswordButton>
 				<LogoutButton type="button" onClick={handleLogout}>

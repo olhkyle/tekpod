@@ -1,17 +1,16 @@
 import styled from '@emotion/styled';
-import { useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthError } from '@supabase/supabase-js';
 import { Button, LabelInput, AuthLogo, loginSchema, type LoginSchema, MODAL_CONFIG, AuthLayout } from '../components';
 import { supabase } from '../supabase';
-import { useLoading } from '../hooks';
+import { useClientSession, useLoading } from '../hooks';
 import { useUserStore, useToastStore, useModalStore } from '../store';
 import { queryKey, routes, toastData } from '../constants';
 
 const LoginPage = () => {
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 	const navigate = useNavigate();
 
 	const {

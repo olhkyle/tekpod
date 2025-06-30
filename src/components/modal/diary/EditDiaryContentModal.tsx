@@ -6,9 +6,9 @@ import { BiMessageSquareEdit } from 'react-icons/bi';
 import { isEqual } from 'es-toolkit';
 import { ModalLayout, type ModalDataType, editContentFormSchema, EditContentFormSchema } from '..';
 import { Button, TagsInput, TextArea, TextInput } from '../..';
-import { useLoading } from '../../../hooks';
+import { useClientSession, useLoading } from '../../../hooks';
 import { Diary, updateDiary } from '../../../supabase';
-import { routes, toastData } from '../../../constants';
+import { queryKey, routes, toastData } from '../../../constants';
 import { useToastStore } from '../../../store';
 
 interface EditDiaryContentModalProps {
@@ -19,6 +19,7 @@ interface EditDiaryContentModalProps {
 }
 
 const EditDiaryContentModal = ({ id, type, data, onClose }: EditDiaryContentModalProps) => {
+	const { queryClient } = useClientSession();
 	const {
 		register,
 		control,
@@ -73,6 +74,11 @@ const EditDiaryContentModal = ({ id, type, data, onClose }: EditDiaryContentModa
 		} catch (e) {
 			console.error(e);
 			addToast(toastData.DIARY.EDIT.ERROR);
+		} finally {
+			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: queryKey.DIARY_BY_PAGE }),
+				queryClient.invalidateQueries({ queryKey: queryKey.DIARY_PAGE_INFO }),
+			]);
 		}
 	};
 

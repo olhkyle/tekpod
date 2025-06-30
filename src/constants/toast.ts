@@ -180,6 +180,11 @@ const toastData = {
 
 			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} updating ` },
 		},
+		REMOVE: {
+			SUCCESS: { status: 'success', message: `Remove commute ${FIXED_SUCCESS_PHRASE}` },
+
+			ERROR: { status: 'error', message: `${FIXED_ERROR_MESSAGE_PHRASE} removing ` },
+		},
 		CUSTOM(status: Toast['status'], message: string) {
 			return { status, message };
 		},

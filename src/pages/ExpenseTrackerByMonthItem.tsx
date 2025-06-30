@@ -1,17 +1,17 @@
 import styled from '@emotion/styled';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
+import { RiArrowRightSLine } from 'react-icons/ri';
 import { PaymentItemDetail, Switch, FloatingActionButton } from '../components';
-import { useLoading, useTogglePaymentIsFixedMutation } from '../hooks';
+import { useClientSession, useLoading, useTogglePaymentIsFixedMutation } from '../hooks';
 import { ExpenseTracker, removePayment } from '../supabase';
 import { monetizeWithSeparator, formatByKoreanTime } from '../utils';
 import { useToastStore } from '../store';
 import { routes, queryKey, toastData } from '../constants';
 
 const ExpenseTrackerByMonthItemPage = () => {
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 	const {
 		state: { payment, currentDate },
 	} = useLocation() as { state: { payment: ExpenseTracker; currentDate: Date } };
@@ -41,18 +41,14 @@ const ExpenseTrackerByMonthItemPage = () => {
 
 	return (
 		<Container>
-			<div>
-				<PaymentMethod>
-					<WonIconWrapper>
-						{payment.payment_method === 'Card' ? <BsFillCreditCardFill size="14" /> : <FaWonSign size="14" />}
-					</WonIconWrapper>
-					<span>{payment.payment_method}</span>
-				</PaymentMethod>
-				<Price>
-					<span>{monetizeWithSeparator(payment.price)}</span>
-					<span>{payment.price_unit}</span>
-				</Price>
-			</div>
+			<PaymentMethod>
+				<WonIconWrapper>{payment.payment_method === 'Card' ? <BsFillCreditCardFill size="14" /> : <FaWonSign size="14" />}</WonIconWrapper>
+				<span>{payment.payment_method}</span>
+			</PaymentMethod>
+			<Price>
+				<span>{monetizeWithSeparator(payment.price)}</span>
+				<span>{payment.price_unit}</span>
+			</Price>
 
 			<Detail>
 				<PaymentItemDetail title={'Place'} description={payment.place} data={{ ...payment, transaction_date: currentDate }} />
@@ -72,10 +68,13 @@ const ExpenseTrackerByMonthItemPage = () => {
 						<dd>{payment.installment_plan_months} month</dd>
 					</DetailGroup>
 				)}
-				<DetailGroup>
+				<TransactionDateGroup>
 					<dt>Transaction Date</dt>
-					<dd>{formatByKoreanTime(currentDate)}</dd>
-				</DetailGroup>
+					<dd onClick={() => navigate(routes.EXPENSE_TRACKER_BY_MONTH, { state: { currentDate } })}>
+						<span>{formatByKoreanTime(currentDate)}</span>
+						<RiArrowRightSLine size="21" color="var(--black)" />
+					</dd>
+				</TransactionDateGroup>
 				<DetailGroup>
 					<dt>Make Upcoming Next Month</dt>
 					<dd>
@@ -139,7 +138,7 @@ const DetailGroup = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 16px;
+	padding: var(--padding-container-mobile);
 
 	dt {
 		font-weight: var(--fw-medium);
@@ -150,6 +149,27 @@ const DetailGroup = styled.div`
 		font-size: var(--fz-h7);
 		font-weight: var(--fw-semibold);
 		text-align: right;
+	}
+`;
+
+const TransactionDateGroup = styled(DetailGroup)`
+	padding-right: 0;
+
+	dd {
+		display: inline-flex;
+		gap: 2px;
+		align-items: center;
+		padding: calc(var(--padding-container-mobile) * 0.35) calc(var(--padding-container-mobile) * 0.5)
+			calc(var(--padding-container-mobile) * 0.35);
+		background-color: var(--grey50);
+		border: 1px solid var(--grey100);
+		border-radius: var(--radius-m);
+		cursor: pointer;
+
+		&:active,
+		&:focus {
+			background-color: var(--grey100);
+		}
 	}
 `;
 
