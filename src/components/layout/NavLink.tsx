@@ -10,9 +10,10 @@ interface NavLinkProps {
 
 const NavLink = ({ href, children }: NavLinkProps) => {
 	const { pathname } = useLocation();
+	console.log(pathname, href);
 
 	return (
-		<StyledLink to={href} $isCurrentUrl={pathname === href}>
+		<StyledLink to={href} $isCurrentUrl={pathname === href || (href !== routes.HOME && pathname.includes(href))}>
 			{children}
 		</StyledLink>
 	);
