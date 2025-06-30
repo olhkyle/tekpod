@@ -73,7 +73,7 @@ const Description = styled.div`
 	display: flex;
 	flex-direction: column;
 	margin-top: calc(100dvh / 25);
-	padding: calc(var(--padding-container-mobile) * 2) var(--padding-container-mobile);
+	padding: var(--padding-container-mobile) var(--padding-container-mobile);
 	width: 100%;
 	border: 1px solid var(--greyOpacity100);
 	border-radius: var(--radius-s);
