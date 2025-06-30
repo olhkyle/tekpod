@@ -141,7 +141,8 @@ const SelectItemList = styled.div<{ isLong: boolean }>`
 	flex-direction: column;
 	gap: 4px;
 	width: 100%;
-	height: ${({ isLong }) => (isLong ? '300px' : 'auto')};
+	max-height: 300px;
+	height: auto;
 	overflow-y: ${({ isLong }) => (isLong ? 'scroll' : 'auto')};
 
 	-webkit-overflow-scrolling: touch; // iOS scroll support
