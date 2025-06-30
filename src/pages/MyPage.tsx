@@ -35,7 +35,7 @@ const Container = styled.section`
 	display: flex;
 	flex-direction: column;
 	gap: 32px;
-	height: calc(100dvh - 3 * var(--nav-height));
+	margin-bottom: 32px;
 `;
 
 const UserInfo = styled.div`
