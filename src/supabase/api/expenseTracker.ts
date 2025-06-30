@@ -9,9 +9,14 @@ const ZERO_PRICE = 0;
 
 const FIXED_PAYMENT_DATE = 8;
 
-const getStartDayOfMonth = (month: number) => new Date(currentYear, month, 1).toISOString();
+const getStartDayOfMonth = (month: number) => {
+	return new Date(currentYear, month, 1, 0, 0, 0, 0).toISOString();
+};
 
-const getEndDayOfMonth = (month: number) => new Date(currentYear, month + 1, 0).toISOString();
+// new Date(2025, 7, 0) -> 2025/06/30 00:00:00 KST -> 2025/06/29 15:00:00
+const getEndDayOfMonth = (month: number) => {
+	return new Date(currentYear, month + 1, 0, 23, 59, 59, 999).toISOString();
+};
 
 const calculatePriceUnits = (data: ExpenseTracker[]) => {
 	const groupByUnit = data.reduce<Record<string, number[]>>((acc, item) => {
