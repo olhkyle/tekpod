@@ -1,8 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { editTodoContent, type Todo } from '../../../supabase';
 import { queryKey, toastData } from '../../../constants';
 import { useToastStore } from '../../../store';
 import { OldData } from '../../../types';
+import { useClientSession } from '../../../hooks';
 
 type Variables = Pick<Todo, 'id' | 'content' | 'updated_at'>;
 
@@ -13,7 +14,7 @@ const edit =
 	};
 
 const useEditTodoItemContentMutation = (handler: () => void) => {
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 	const { addToast } = useToastStore();
 	const QUERY_KEY = queryKey.TODOS_BY_PAGE;
 

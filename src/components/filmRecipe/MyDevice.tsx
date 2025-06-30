@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
-import { Session } from '@supabase/supabase-js';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { queryKey } from '../../constants';
 import { getUser } from '../../supabase';
+import { useClientSession } from '../../hooks';
 
 const MyDevice = () => {
-	const { user } = useQueryClient().getQueryData(queryKey.AUTH) as Session;
+	const { session } = useClientSession();
 	const { data } = useSuspenseQuery({
 		queryKey: queryKey.USER,
-		queryFn: () => getUser(user?.id),
+		queryFn: () => getUser(session.user?.id),
 	});
 
 	return <Container>{data.favorite_device}</Container>;

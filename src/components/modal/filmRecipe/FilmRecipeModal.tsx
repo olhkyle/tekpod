@@ -3,12 +3,11 @@ import styled from '@emotion/styled';
 import placeholderImage from '../../../assets/placeholder-gray.webp';
 import { FaStar } from 'react-icons/fa';
 import { FaRegStar } from 'react-icons/fa6';
-import { useQueryClient } from '@tanstack/react-query';
 import { MODAL_CONFIG, type ModalDataType } from '..';
 import { ModalLayout, LazyImage, FilmRecipeImageUpload, TextInput, CustomSelect, Button, FilmRecipeStaticFields } from '../..';
 import { editRecipe, type RestricedRecipeWithImage } from '../../../supabase';
 import { useModalStore, useToastStore } from '../../../store';
-import { useFilmRecipeImage, useLoading } from '../../../hooks';
+import { useClientSession, useFilmRecipeImage, useLoading } from '../../../hooks';
 import { filmRecipeFieldData, FILM_RECIPE_FORM, toastData, queryKey } from '../../../constants';
 import { validateTitle } from '../../../utils';
 
@@ -20,7 +19,7 @@ interface FilmRecipeModalProps {
 }
 
 const FilmRecipeModal = ({ id, type, data, onClose }: FilmRecipeModalProps) => {
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 	const { setModal } = useModalStore();
 
 	const [isEditing, setEditing] = useState<boolean>(false);

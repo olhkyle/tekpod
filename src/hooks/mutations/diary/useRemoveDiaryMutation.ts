@@ -1,9 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { removeDiary, Diary } from '../../../supabase';
 import { useToastStore } from '../../../store';
 import { toastData, routes, queryKey } from '../../../constants';
 import { OldData } from '../../../types';
+import { useClientSession } from '../../../hooks';
 
 type Variables = Pick<Diary, 'id'>;
 
@@ -14,7 +15,7 @@ const remove =
 	};
 
 const useRemoveDiaryMutation = () => {
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 	const navigate = useNavigate();
 	const { addToast } = useToastStore();
 	const DIARY_QUERY_KEY = queryKey.DIARY_BY_PAGE;

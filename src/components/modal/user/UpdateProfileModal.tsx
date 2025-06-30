@@ -3,10 +3,9 @@ import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 import { Button, ModalLayout, LabelInput } from '../..';
 import { updateProfileSchema, UpdateProfileSchema, ModalDataType } from '..';
-import { useLoading } from '../../../hooks';
+import { useClientSession, useLoading } from '../../../hooks';
 import { supabase, User, updateUser } from '../../../supabase';
 import { useToastStore } from '../../../store';
 import { toastData, routes, queryKey } from '../../../constants';
@@ -29,7 +28,7 @@ const UpdateProfileModal = ({ id, type, onClose, data }: UpdateProfileModalProps
 		resolver: zodResolver(updateProfileSchema),
 	});
 
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 	const navigate = useNavigate();
 	const { isLoading, Loading, startTransition } = useLoading();
 	const { addToast } = useToastStore();

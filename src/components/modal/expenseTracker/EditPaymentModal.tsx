@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { editPaymentFormSchema, EditPaymentFormSchema, ModalDataType, ModalLayout } from '..';
 import { Button, LabelInput } from '../..';
 import { editPaymentPlace, ExpenseTracker, ServiceDataType } from '../../../supabase';
-import { useLoading } from '../../../hooks';
+import { useClientSession, useLoading } from '../../../hooks';
 import { useToastStore } from '../../../store';
 import { queryKey, routes, toastData } from '../../../constants';
 import { formatByKoreanTime } from '../../../utils';
@@ -20,7 +19,7 @@ interface EditPaymentModalProps {
 }
 
 const EditPaymentModal = ({ id, type, data, onClose }: EditPaymentModalProps) => {
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 	const {
 		register,
 		formState: { errors },

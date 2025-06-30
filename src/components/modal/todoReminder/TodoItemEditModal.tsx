@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Controller, useForm } from 'react-hook-form';
-import { useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isEqual } from 'es-toolkit';
 import { ModalLayout, ModalDataType } from '..';
@@ -9,7 +8,7 @@ import { Button, DatePicker, TagsInput, TextInput, editTodoItemFormSchema, EditT
 import { editTodoDetail, type Todo } from '../../../supabase';
 import { formatByKoreanTime, today } from '../../../utils';
 import { useToastStore } from '../../../store';
-import { useLoading, useRemoveTodoItemMutation } from '../../../hooks';
+import { useClientSession, useLoading, useRemoveTodoItemMutation } from '../../../hooks';
 import { queryKey, toastData } from '../../../constants';
 
 interface TodoItemEditModal {
@@ -20,7 +19,7 @@ interface TodoItemEditModal {
 }
 
 const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, tags, reminder_time } }: TodoItemEditModal) => {
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 	const {
 		register,
 		control,

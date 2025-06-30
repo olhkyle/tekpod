@@ -1,8 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { removeRecipe, RestrictedRecipe } from '../../../supabase';
 import { toastData, queryKey } from '../../../constants';
 import { useToastStore } from '../../../store';
 import { Handlers } from '../../../types';
+import { useClientSession } from '../../../hooks';
 
 interface UseRemoveFilmRecipeMutation {
 	id: string;
@@ -18,7 +19,7 @@ const remove =
 	};
 
 const useRemoveRecipeMutation = ({ id, handlers: { onClose, onTopLevelModalClose } }: UseRemoveFilmRecipeMutation) => {
-	const queryClient = useQueryClient();
+	const { queryClient } = useClientSession();
 	const { addToast } = useToastStore();
 	const QUERY_KEY = [...queryKey.FILM_RECIPE, id];
 
