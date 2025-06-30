@@ -44,6 +44,8 @@ const Container = styled.nav`
 	width: 100%;
 	background-color: var(--white);
 	border-top: 1px solid var(--grey200);
+	border-top-left-radius: var(--radius-s);
+	border-top-right-radius: var(--radius-s);
 	z-index: var(--nav-index);
 `;
 
