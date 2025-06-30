@@ -178,7 +178,7 @@ const SetInputAndButton = styled.div`
 		width: 100%;
 
 		button[role='combobox'] {
-			width: calc(100dvw - 6 * var(--padding-container-mobile));
+			min-width: 240px;
 			height: 64px;
 			font-size: var(--fz-h7);
 		}
