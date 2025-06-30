@@ -92,7 +92,7 @@ const PomodoroTimer = () => {
 		setCountdownTime(inputMinutes * SIXTY);
 	};
 
-	const setCountdownTimer = () => {
+	const setCountdownTimer = (inputMinutes: number) => {
 		setCountdownTime(inputMinutes * SIXTY);
 	};
 
@@ -106,15 +106,16 @@ const PomodoroTimer = () => {
 			</MinuteAndSecondDisplay>
 			<SetInputAndButton>
 				<Select
-					data={Array.from({ length: 60 }, (_, idx) => `${idx + 1}`)}
-					placeholder={'Select Year'}
-					descriptionLabel={'Year'}
-					currentValue={`${inputMinutes}`}
-					onSelect={option => setInputMinutes(+option)}
+					data={Array.from({ length: 60 }, (_, idx) => `${idx + 1} min`)}
+					placeholder={'Select Minute'}
+					descriptionLabel={'Minute'}
+					currentValue={`${inputMinutes} min`}
+					onSelect={option => {
+						const _option = option.split('min')[0];
+						setInputMinutes(+_option);
+						setCountdownTimer(+_option);
+					}}
 				/>
-				<SetButton type="button" onClick={setCountdownTimer} disabled={isCountdownRunning}>
-					Set
-				</SetButton>
 			</SetInputAndButton>
 			<ButtonGroup>
 				<StartButton type="button" onClick={startCountdown} disabled={isCountdownRunning || countdownTime === 0}>
@@ -139,6 +140,7 @@ const Container = styled.section`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	padding-bottom: calc(var(--padding-container-mobile) * 4);
 	height: calc(100dvh - 2 * var(--nav-height) - 2 * var(--padding-container-mobile));
 `;
 
@@ -173,10 +175,12 @@ const SetInputAndButton = styled.div`
 	gap: 16px;
 
 	#select-root {
-		height: 100%;
+		width: 100%;
 
 		button[role='combobox'] {
-			height: 100%;
+			width: calc(100dvw - 6 * var(--padding-container-mobile));
+			height: 64px;
+			font-size: var(--fz-h7);
 		}
 	}
 `;
@@ -187,24 +191,8 @@ const StyledButton = styled(Button)`
 	font-weight: var(--fw-semibold);
 `;
 
-const SetButton = styled(StyledButton)`
-	color: var(--white);
-	background-color: var(--grey900);
-	border-radius: var(--radius-xl);
-
-	&:hover,
-	&:active,
-	&:focus {
-		background-color: var(--grey800);
-	}
-
-	&:disabled {
-		color: var(--grey700);
-		background-color: var(--grey200);
-	}
-`;
-
 const StartButton = styled(StyledButton)`
+	width: 100%;
 	color: var(--white);
 	background-color: var(--black);
 
@@ -221,6 +209,7 @@ const StartButton = styled(StyledButton)`
 `;
 
 const PauseButton = styled(StyledButton)`
+	width: 100%;
 	color: var(--white);
 	background-color: var(--black);
 	border: 1px solid var(--grey100);
