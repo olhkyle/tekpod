@@ -3,12 +3,13 @@ import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ModalDataType, ModalLayout } from '..';
-import { StatusSelect, Button, TextInput } from '../..';
+import { StatusSelect, Button, TextInput, Flex } from '../..';
 import { recordSchema, RecordSchema } from './schema';
-import { addCommute, CommuteRecord, ServiceDataType, updateCommute } from '../../../supabase';
+import { addCommute, CommuteRecord, removeCommute, ServiceDataType, updateCommute } from '../../../supabase';
 import { useClientSession, useLoading } from '../../../hooks';
 import { useToastStore } from '../../../store';
 import { queryKey, commuteStatusList, toastData, COMMUTE_STATUS } from '../../../constants';
+import { isEqual } from 'es-toolkit';
 
 type CommuteRecordAction = 'ADD' | 'EDIT';
 
@@ -42,8 +43,14 @@ interface RecordModalProps {
  * - form 하위 elements
  */
 
+const userAction = {
+	ADD: 'ADD',
+	EDIT: 'EDIT',
+	REMOVE: 'REMOVE',
+} as const;
+
 const getDefaultValues = (action: CommuteRecordAction, data: ServiceDataType<CommuteRecord>) => {
-	if (action === 'ADD') {
+	if (action === userAction.ADD) {
 		return {
 			status: COMMUTE_STATUS.PRESENT,
 			workplace: '',
@@ -51,7 +58,7 @@ const getDefaultValues = (action: CommuteRecordAction, data: ServiceDataType<Com
 		};
 	}
 
-	if (action === 'EDIT') {
+	if (action === userAction.EDIT) {
 		return {
 			status: data?.status,
 			workplace: data?.workplace,
@@ -78,16 +85,38 @@ const RecordModal = ({ id, type, action, data: serviceData, onClose }: RecordMod
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
 
+	const handleEditCommute = async () => {
+		try {
+			if (serviceData?.id) {
+				await startTransition(removeCommute({ id: serviceData?.id }));
+
+				addToast(toastData.COMMUTE_RECORDS.REMOVE.SUCCESS);
+			}
+		} catch (e) {
+			console.error(e);
+			addToast(toastData.COMMUTE_RECORDS.REMOVE.ERROR);
+		} finally {
+			if (serviceData?.date) {
+				const _date = new Date(serviceData?.date);
+				onClose();
+
+				queryClient.invalidateQueries({
+					queryKey: [...queryKey.COMMUTE_RECORDS, `${_date.getFullYear()}-${(_date.getMonth() + 1 + '').padStart(2, '0')}`],
+				});
+			}
+		}
+	};
+
 	const onSubmit = async (data: RecordSchema) => {
 		if (!serviceData?.date) return;
 
 		const { date } = serviceData;
 
-		const actionProperty = action === 'ADD' ? 'CREATE' : 'EDIT';
+		const actionProperty = action === userAction.ADD ? 'CREATE' : userAction.EDIT;
 
 		try {
 			const callback =
-				action === 'ADD'
+				action === userAction.ADD
 					? addCommute({
 							...data,
 							user_id: session?.user?.id,
@@ -102,11 +131,9 @@ const RecordModal = ({ id, type, action, data: serviceData, onClose }: RecordMod
 							updated_at: date,
 					  });
 
-			if (action === 'EDIT') {
-				if (defaultValues?.notes === data.notes) {
-					addToast(toastData.COMMUTE_RECORDS.CUSTOM('warn', 'Notes are not changed'));
-					return;
-				}
+			if (action === 'EDIT' && isEqual(defaultValues, data)) {
+				addToast(toastData.COMMUTE_RECORDS.CUSTOM('warn', 'Notes are not changed'));
+				return;
 			}
 
 			await startTransition(callback);
@@ -146,7 +173,14 @@ const RecordModal = ({ id, type, action, data: serviceData, onClose }: RecordMod
 				<TextInput errorMessage={errors['notes']?.message}>
 					<TextInput.TextField id="notes" {...register('notes')} placeholder="Notes" variant="sm" />
 				</TextInput>
-				<SubmitButton type="submit">{isLoading ? Loading : 'Get to work'}</SubmitButton>
+				<ButtonGroup justifyContent={'space-between'} gap={'16px'} width={'100%'}>
+					{action === 'EDIT' && (
+						<DeleteButton type="button" onClick={handleEditCommute}>
+							Delete
+						</DeleteButton>
+					)}
+					<SubmitButton type="submit">{isLoading ? Loading : 'Get to work'}</SubmitButton>
+				</ButtonGroup>
 			</Form>
 		</ModalLayout>
 	);
@@ -164,8 +198,27 @@ const Form = styled.form`
 	cursor: pointer;
 `;
 
-const SubmitButton = styled(Button)`
+const ButtonGroup = styled(Flex)`
 	margin-top: 16px;
+`;
+
+const DeleteButton = styled(Button)`
+	padding: var(--padding-container-mobile);
+	width: 100%;
+	color: var(--black);
+	background-color: var(--white);
+	border: 1px solid var(--grey100);
+	border-radius: var(--radius-s);
+	font-size: var(--fz-p);
+	font-weight: var(--fw-semibold);
+
+	&:active,
+	&:focus {
+		background-color: var(--grey100);
+	}
+`;
+
+const SubmitButton = styled(Button)`
 	padding: var(--padding-container-mobile);
 	width: 100%;
 	color: var(--white);
