@@ -13,7 +13,9 @@
   - Credit Card Transaction List
   - Upcoming Credit Card Transaction
 - TodoReminder : Write todos which are to be checked in need
-- Commute Tracker (WIP)
+- Commute Tracker : Keep track of commuting records
+- PomodoroTimer : Helps us stand up consistently from our seat, supporting our back and neck health
+- Favorite Place(WIP) : Add personal favorite place on Map
 
 ## Tech Stacks
 
