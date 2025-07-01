@@ -5,3 +5,4 @@ export * from './validateField';
 export * from './expenseTracker';
 
 export { default as mergeRefs } from './mergeRefs';
+export { default as suspendImage } from './suspendImage';

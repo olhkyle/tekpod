@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import { useIsImageLoaded } from '../../hooks';
 import placeholderImage from '../../assets/placeholder-gray.webp';
+import { suspendImage } from '../../utils';
 
 interface LazyImageProps {
 	src: string;
@@ -11,13 +11,15 @@ interface LazyImageProps {
 }
 
 const LazyImage = ({ src, alt, width, height, lazy = true }: LazyImageProps) => {
-	const { elementRef, isLoaded } = useIsImageLoaded(lazy);
+	if (lazy && src) {
+		suspendImage(src);
+	}
 
 	return (
 		<Container>
 			<img
-				ref={elementRef}
-				src={isLoaded ? src : placeholderImage}
+				// ref={elementRef}
+				src={src || placeholderImage}
 				alt={alt}
 				style={{ display: 'block', width, height }}
 				sizes="(max-width: 640px) 300px, 380px"
