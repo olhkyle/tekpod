@@ -161,6 +161,7 @@ const AddPaymentModal = ({ id, type, data, onClose }: AddPaymentModalProps) => {
 									type="text"
 									id="price"
 									name={name}
+									inputMode={'decimal'}
 									value={value ? monetizeWithSeparator(value) : ''}
 									onChange={e => {
 										onChange(e.target.value.replace(/[^\d.]/g, ''));

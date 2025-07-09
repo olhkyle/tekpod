@@ -28,7 +28,7 @@ const PaymentItemDetail = ({ title, description, data }: PaymentItemDetailProps)
 			<dt>{title}</dt>
 			<dd>
 				<span>{description}</span>
-				<RiArrowRightSLine size="21" />
+				<RiArrowRightSLine size="21" color="var(--black)" />
 			</dd>
 		</Container>
 	);
