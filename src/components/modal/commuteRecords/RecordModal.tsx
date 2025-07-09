@@ -179,7 +179,7 @@ const RecordModal = ({ id, type, action, data: serviceData, onClose }: RecordMod
 							Delete
 						</DeleteButton>
 					)}
-					<SubmitButton type="submit">{isLoading ? Loading : 'Get to work'}</SubmitButton>
+					<SubmitButton type="submit">{isLoading ? Loading : action === 'EDIT' ? 'Edit my work' : 'Get to work'}</SubmitButton>
 				</ButtonGroup>
 			</Form>
 		</ModalLayout>
