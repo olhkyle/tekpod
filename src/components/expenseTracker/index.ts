@@ -1,5 +1,6 @@
 export * from './loader';
 
+export { default as AdditionalOptions } from './AdditionalOptions';
 export { default as CreditCardTransactionList } from './CreditCardTransactionList';
 export { default as ExpenseChart } from './ExpenseChart';
 export { default as FixedCostList } from './FixedCostList';

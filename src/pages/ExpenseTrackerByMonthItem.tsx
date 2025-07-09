@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { FaWonSign } from 'react-icons/fa6';
 import { BsFillCreditCardFill } from 'react-icons/bs';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import { PaymentItemDetail, Switch, FloatingActionButton } from '../components';
+import { PaymentItemDetail, Switch, FloatingActionButton, AdditionalOptions } from '../components';
 import { useClientSession, useLoading, useTogglePaymentIsFixedMutation } from '../hooks';
 import { ExpenseTracker, removePayment } from '../supabase';
 import { monetizeWithSeparator, formatByKoreanTime } from '../utils';
@@ -15,7 +15,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 	const {
 		state: { payment, currentDate },
 	} = useLocation() as { state: { payment: ExpenseTracker; currentDate: Date } };
-
+	console.log(payment);
 	const navigate = useNavigate();
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
@@ -84,6 +84,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 						/>
 					</dd>
 				</DetailGroup>
+				<AdditionalOptions payment={payment} />
 			</Detail>
 
 			<DeleteButton type={'button'} variant={'button'} onClick={handlePaymentDelete}>
