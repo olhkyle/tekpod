@@ -15,7 +15,7 @@ const ExpenseTrackerByMonthItemPage = () => {
 	const {
 		state: { payment, currentDate },
 	} = useLocation() as { state: { payment: ExpenseTracker; currentDate: Date } };
-	console.log(payment);
+
 	const navigate = useNavigate();
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
@@ -132,7 +132,7 @@ const Detail = styled.dl`
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	padding: calc(var(--padding-container-mobile) * 3) 0;
+	padding: calc(var(--padding-container-mobile) * 3) 0 calc(var(--padding-container-mobile) * 5);
 `;
 
 const DetailGroup = styled.div`

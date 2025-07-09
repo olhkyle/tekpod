@@ -63,7 +63,7 @@ const AdditionalOptions = ({
 			<OptionsList isOpen={isOpen}>
 				<li>
 					<Option onClick={handleAddSameExpense}>
-						<MdOutlineAdd size="18" color="var(--black)" />
+						<MdOutlineAdd size="18" color="var(--blue400)" />
 						<span>{isLoading ? Loading : `Add same expense info on ${formatByKoreanTime(today)}`} </span>
 					</Option>
 				</li>
@@ -112,13 +112,18 @@ const Option = styled(ShrinkMotionBlock)`
 	align-items: center;
 	gap: 8px;
 	padding: var(--padding-container-mobile);
-	border: 1px solid var(--grey200);
+	border: 1px solid var(--blue400);
 	border-radius: var(--radius-s);
 	color: var(--black);
-	background-color: var(--grey200);
+	background-color: var(--blue100);
 
 	span {
 		font-weight: var(--fw-medium);
+		color: var(--blue200);
+
+		@media screen and (max-width: 640px) {
+			font-size: var(--fz-sm);
+		}
 	}
 `;
 
