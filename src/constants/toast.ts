@@ -199,6 +199,11 @@ const toastData = {
 			return { status, message };
 		},
 	},
+	ALARM: {
+		CUSTOM(status: Toast['status'], message: string) {
+			return { status, message };
+		},
+	},
 } as const;
 
 export default toastData;
