@@ -32,14 +32,14 @@ const navigationLinks = [
 		title: 'Commute',
 	},
 	{
-		to: routes.FAVORITE_PLACE,
-		icon: <RiMap2Fill size="36" color="var(--blue100)" />,
-		title: 'Fav Map',
-	},
-	{
 		to: routes.POMODORO_TIMER,
 		icon: <LuTimer size="40" color="var(--blue100)" />,
 		title: 'Pomodoro',
+	},
+	{
+		to: routes.FAVORITE_PLACE,
+		icon: <RiMap2Fill size="36" color="var(--blue100)" />,
+		title: 'Fav Map',
 	},
 ] as const;
 
