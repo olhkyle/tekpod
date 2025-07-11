@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isEqual } from 'es-toolkit';
@@ -9,7 +10,7 @@ import { editTodoDetail, type Todo } from '../../../supabase';
 import { formatByKoreanTime, today } from '../../../utils';
 import { useToastStore } from '../../../store';
 import { useClientSession, useLoading, useRemoveTodoItemMutation } from '../../../hooks';
-import { queryKey, toastData } from '../../../constants';
+import { queryKey, routes, toastData } from '../../../constants';
 
 interface TodoItemEditModal {
 	id: string;
@@ -40,6 +41,7 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 	const { mutate: removeTodo, isPending } = useRemoveTodoItemMutation(onClose);
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		setFocus('content');
@@ -85,7 +87,14 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 	};
 
 	return (
-		<ModalLayout id={modalId} type={type} title={'Detail'} onClose={onClose}>
+		<ModalLayout
+			id={modalId}
+			type={type}
+			title={'Detail'}
+			onClose={() => {
+				onClose();
+				navigate(routes.HOME, { replace: true }); // state 초기화
+			}}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<TextInput errorMessage={errors?.content?.message}>
 					<TextInput.TextField id="todoItem_editModal_content" {...register('content')} placeholder="Change content" variant="lg" />

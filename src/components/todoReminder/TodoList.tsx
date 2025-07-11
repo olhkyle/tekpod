@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
+import { useLocation } from 'react-router-dom';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { EmptyMessage, LoadingSpinner, TodoItem } from '..';
+import { EmptyMessage, LoadingSpinner, MODAL_CONFIG, TodoItem } from '..';
 import { getTodosByPage, getTodosPageInfo, TODOS_PAGE_SIZE } from '../../supabase';
 import { useGetPaginationInfo, useInfinityScroll } from '../../hooks';
 import { queryKey, staleTime } from '../../constants';
 import { ControlOption } from '../../pages/TodoReminder';
+import { useModalStore } from '../../store';
 
 interface TodoListProps {
 	controlOption: ControlOption;
@@ -35,6 +37,9 @@ const TodoList = ({ controlOption }: TodoListProps) => {
 		staleTime: staleTime.TODOS.ALL_WITH_PAGINATION,
 	});
 
+	const { state } = useLocation() as { state: { todo_id: string; openModal: boolean } };
+	const { setModal } = useModalStore();
+
 	const [activeEditingTodoItemId, setActiveEditingTodoItemId] = useState<string | null>(null);
 	const [activeDraggingTodoItemId, setActiveDraggingTodoItemId] = useState<string | null>(null);
 
@@ -45,6 +50,20 @@ const TodoList = ({ controlOption }: TodoListProps) => {
 		?.filter(todo =>
 			controlOption === 'Checked' ? todo.completed === true : controlOption === 'Unchecked' ? todo.completed === false : true,
 		);
+
+	useEffect(() => {
+		if (state?.todo_id && state?.openModal) {
+			setModal({
+				Component: MODAL_CONFIG.TODO_REMINDER.EDIT.Component,
+				props: {
+					type: MODAL_CONFIG.TODO_REMINDER.EDIT.type,
+					data: filteredData.find(todo => todo.id === state?.todo_id)!,
+				},
+			});
+		}
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const handleEditingIdChange = (id: string | null) => {
 		// do not make an effect on dragging
