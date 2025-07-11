@@ -52,6 +52,10 @@ const router = createBrowserRouter(
 					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('TodoReminder')} />,
 				},
 				{
+					path: routes.NOTIFICATION,
+					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={LoadLazy('Notification')} />,
+				},
+				{
 					path: routes.EXPENSE_TRACKER,
 					element: <AuthenticationGuard redirectTo={routes.LOGIN} element={<ExpenseTrackerLayout />} />,
 					children: [
