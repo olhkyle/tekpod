@@ -17,7 +17,7 @@ const BottomNav = () => {
 						<NavLink href={routes.HOME} aria-label="Link to Home Route">
 							<RiHome6Line size={24} />
 						</NavLink>
-						<NavLink href={routes.EXPENSE_TRACKER} aria-label="Link to Film Recipe Route">
+						<NavLink href={routes.EXPENSE_TRACKER} aria-label="Link to Expense Tracker Route">
 							<RiCalculatorLine size={27} />
 						</NavLink>
 						<NavLink href={routes.DIARY} aria-label="Link to Diary Route">
