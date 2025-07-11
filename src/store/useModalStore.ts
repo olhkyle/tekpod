@@ -27,7 +27,14 @@ interface ModalState {
 const useModalStore = create<ModalState>(set => ({
 	modals: [],
 	setModal(data) {
-		set(state => ({ ...state, modals: [...state.modals, data] }));
+		set(state => {
+			const isDuplicate = state.modals.some(
+				({ Component, props }) => Component === data.Component && JSON.stringify(props?.data) === JSON.stringify(data.props?.data),
+			);
+
+			if (isDuplicate) return state;
+			return { ...state, modals: [...state.modals, data] };
+		});
 	},
 	removeModal(component) {
 		set(state => ({ ...state, modals: state.modals.filter(({ Component }) => Component !== component) }));
