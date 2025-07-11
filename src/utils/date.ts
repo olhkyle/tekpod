@@ -35,6 +35,14 @@ const getDateFromString = (dateString: string): Date => {
 	return new Date(dateString);
 };
 
+const getNextDay = (date: Date | string) => {
+	const _date = typeof date === 'string' || date instanceof Date ? new Date(date) : date;
+
+	_date.setDate(_date.getDate() + 1);
+
+	return _date.toISOString();
+};
+
 const getNextMonthFormatDate = (usageDate: Date | string) => {
 	const _date = typeof usageDate === 'string' ? new Date(usageDate) : usageDate;
 	const koreaDate = toZonedTime(_date, koreaTimeZone);
@@ -57,5 +65,6 @@ export {
 	translateNumberIntoMonth,
 	getMonthIndexFromMonths,
 	getDateFromString,
+	getNextDay,
 	getNextMonthFormatDate,
 };
