@@ -146,7 +146,6 @@ export interface Database {
 					content: string;
 					created_at: string;
 					updated_at: string;
-					notified: boolean;
 					reminder_time: string | null;
 					tags: string[] | null;
 				};
