@@ -28,7 +28,7 @@ const getTodosByPage = async (pageParam: number, pageSize: number): Promise<Todo
 	return data;
 };
 
-const addTodo = async (data: Omit<Todo, 'id' | 'notified'>) => {
+const addTodo = async (data: Omit<Todo, 'id'>) => {
 	const { data: todo, error: addTodoError } = await supabase.from(TABLE).insert(data).select();
 
 	if (addTodoError) {
