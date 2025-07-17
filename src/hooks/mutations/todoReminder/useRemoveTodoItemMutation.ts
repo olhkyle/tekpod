@@ -1,9 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToastStore } from '../../../store';
 import { removeTodo, Todo } from '../../../supabase';
-import { queryKey, toastData } from '../../../constants';
+import { queryKey, routes, toastData } from '../../../constants';
 import { OldData } from '../../../types';
 import { useClientSession } from '../../../hooks';
+import { useNavigate } from 'react-router-dom';
 
 type Variables = Pick<Todo, 'id'>;
 
@@ -16,6 +17,7 @@ const remove =
 const useRemoveTodoItemMutation = (handler?: () => void) => {
 	const { queryClient } = useClientSession();
 	const { addToast } = useToastStore();
+	const navigate = useNavigate();
 	const QUERY_KEY = queryKey.TODOS_BY_PAGE;
 
 	return useMutation({
@@ -42,10 +44,14 @@ const useRemoveTodoItemMutation = (handler?: () => void) => {
 		},
 		onSuccess() {
 			addToast(toastData.TODO_REMINDER.REMOVE.SUCCESS);
-			handler?.();
+			navigate(routes.TODO_REMINDER, { replace: true });
 		},
 		onSettled() {
-			return queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+			handler?.();
+			return Promise.all([
+				queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
+				queryClient.invalidateQueries({ queryKey: queryKey.ALARM }),
+			]);
 		},
 	});
 };

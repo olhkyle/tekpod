@@ -51,6 +51,7 @@ const TodoList = ({ controlOption }: TodoListProps) => {
 			controlOption === 'Checked' ? todo.completed === true : controlOption === 'Unchecked' ? todo.completed === false : true,
 		);
 
+	// todo -> 만들고 ,수정하고, 삭제하고, 뒤로가기, 뒤로가기 에러
 	useEffect(() => {
 		if (state?.todo_id && state?.openModal) {
 			setModal({

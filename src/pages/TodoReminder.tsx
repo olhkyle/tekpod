@@ -20,7 +20,7 @@ import { getNextDay } from '../utils';
  * user_id
  * id
  * content
- * isChecked -> notified와 연관 있음
+ * isChecked
  * todo_id
  *
  * 1. App Mounted
@@ -86,7 +86,10 @@ const TodoReminderPage = () => {
 			console.error(e);
 			addToast(toastData.TODO_REMINDER.CREATE.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE });
+			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE }),
+				queryClient.invalidateQueries({ queryKey: queryKey.ALARM_NOT_COMPLETED }),
+			]);
 		}
 	};
 

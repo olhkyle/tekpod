@@ -9,6 +9,7 @@ const queryKey = {
 	TODOS: ['todos'],
 	TODOS_BY_PAGE: ['todosByPage'],
 	ALARM: ['alarm'],
+	ALARM_NOT_COMPLETED: ['alarm', 'not_completed'],
 	EXPENSE_TRACKER: ['expense_tracker'],
 	COMMUTE_RECORDS: ['commute_records'],
 } as const;

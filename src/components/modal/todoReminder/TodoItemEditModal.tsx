@@ -1,16 +1,15 @@
 import { useEffect } from 'react';
 import styled from '@emotion/styled';
-import { useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isEqual } from 'es-toolkit';
 import { ModalLayout, ModalDataType } from '..';
 import { Button, DatePicker, TagsInput, TextInput, editTodoItemFormSchema, EditTodoItemFormSchema, LoadingSpinner } from '../..';
-import { editTodoDetail, type Todo } from '../../../supabase';
+import { editAlarm, editTodoDetail, type Todo } from '../../../supabase';
 import { formatByKoreanTime, today } from '../../../utils';
 import { useToastStore } from '../../../store';
 import { useClientSession, useLoading, useRemoveTodoItemMutation } from '../../../hooks';
-import { queryKey, routes, toastData } from '../../../constants';
+import { queryKey, toastData } from '../../../constants';
 
 interface TodoItemEditModal {
 	id: string;
@@ -41,7 +40,6 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 	const { mutate: removeTodo, isPending } = useRemoveTodoItemMutation(onClose);
 	const { startTransition, Loading, isLoading } = useLoading();
 	const { addToast } = useToastStore();
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		setFocus('content');
@@ -66,13 +64,26 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 		}
 
 		try {
+			const currentTime = new Date().toISOString();
+			const reminder_time = formData.reminder_time.toISOString();
+
 			await startTransition(
 				editTodoDetail({
 					...formData,
 					id,
 					tags: formData?.tags.length > 0 ? formData.tags.map(({ tag }) => tag) : [],
-					updated_at: new Date().toISOString(),
-					reminder_time: formData.reminder_time.toISOString(),
+					updated_at: currentTime,
+					reminder_time,
+				}),
+			);
+
+			await startTransition(
+				editAlarm({
+					todo_id: id,
+					content: formData.content,
+					isChecked: false,
+					reminder_time,
+					updated_at: currentTime,
 				}),
 			);
 
@@ -82,19 +93,16 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 			console.error(e);
 			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE });
+			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE }),
+				queryClient.invalidateQueries({ queryKey: queryKey.ALARM }),
+				queryClient.invalidateQueries({ queryKey: queryKey.ALARM_NOT_COMPLETED }),
+			]);
 		}
 	};
 
 	return (
-		<ModalLayout
-			id={modalId}
-			type={type}
-			title={'Detail'}
-			onClose={() => {
-				onClose();
-				navigate(routes.HOME, { replace: true }); // state 초기화
-			}}>
+		<ModalLayout id={modalId} type={type} title={'Detail'} onClose={onClose}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<TextInput errorMessage={errors?.content?.message}>
 					<TextInput.TextField id="todoItem_editModal_content" {...register('content')} placeholder="Change content" variant="lg" />

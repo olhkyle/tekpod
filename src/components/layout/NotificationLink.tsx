@@ -1,25 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { supabase } from '../../supabase';
 import { getSubscribed, getUncompletedAlarms } from '../../supabase/api/alarm';
-import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
-import { queryKey, routes } from '../../constants';
+import { queryKey, routes, staleTime } from '../../constants';
+// import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 // TODO: add count of reminder_time < currentTime or new Todo
 const NotificationLink = () => {
-	const { data } = useSuspenseQuery({ queryKey: [...queryKey.ALARM, 'not_completed'], queryFn: getUncompletedAlarms });
+	const { data } = useSuspenseQuery({
+		queryKey: queryKey.ALARM_NOT_COMPLETED,
+		queryFn: getUncompletedAlarms,
+		staleTime: staleTime.ALARM.NOT_COMPLETED,
+	});
 
-	const [reminder, setReminder] = useState<RealtimePostgresChangesPayload<{ [key: string]: unknown }>>(); // toast에 담을 메세지 저장
+	// const [_, setReminder] = useState<RealtimePostgresChangesPayload<{ [key: string]: unknown }>>(); // toast에 담을 메세지 저장
 	const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
-	// const { addToast } = useToastStore();
-	console.log(reminder);
 
 	// layout nav 단계에서 체킹 하고 있는 형태
 	useEffect(() => {
-		channelRef.current = getSubscribed(setReminder);
+		channelRef.current = getSubscribed();
 
 		return () => {
 			channelRef.current?.unsubscribe();

@@ -14,6 +14,10 @@ const staleTime = {
 		PAGE_INFO: ONE_SECOND * 120,
 		ALL_WITH_PAGINATION: ONE_SECOND * 60,
 	},
+	ALARM: {
+		LIST: ONE_SECOND * 10,
+		NOT_COMPLETED: ONE_SECOND * 5,
+	},
 };
 
 export default staleTime;
