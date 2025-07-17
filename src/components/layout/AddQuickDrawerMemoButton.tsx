@@ -18,8 +18,8 @@ const Container = styled(Button)`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	width: 27px;
-	height: 27px;
+	width: 30px;
+	height: 30px;
 	cursor: pointer;
 `;
 

@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { isEqual } from 'es-toolkit';
 import { ModalLayout, ModalDataType } from '..';
 import { Button, DatePicker, TagsInput, TextInput, editTodoItemFormSchema, EditTodoItemFormSchema, LoadingSpinner } from '../..';
-import { editTodoDetail, type Todo } from '../../../supabase';
+import { editAlarm, editTodoDetail, type Todo } from '../../../supabase';
 import { formatByKoreanTime, today } from '../../../utils';
 import { useToastStore } from '../../../store';
 import { useClientSession, useLoading, useRemoveTodoItemMutation } from '../../../hooks';
@@ -64,13 +64,26 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 		}
 
 		try {
+			const currentTime = new Date().toISOString();
+			const reminder_time = formData.reminder_time.toISOString();
+
 			await startTransition(
 				editTodoDetail({
 					...formData,
 					id,
 					tags: formData?.tags.length > 0 ? formData.tags.map(({ tag }) => tag) : [],
-					updated_at: new Date().toISOString(),
-					reminder_time: formData.reminder_time.toISOString(),
+					updated_at: currentTime,
+					reminder_time,
+				}),
+			);
+
+			await startTransition(
+				editAlarm({
+					todo_id: id,
+					content: formData.content,
+					isChecked: false,
+					reminder_time,
+					updated_at: currentTime,
 				}),
 			);
 
@@ -80,7 +93,11 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 			console.error(e);
 			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE });
+			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE }),
+				queryClient.invalidateQueries({ queryKey: queryKey.ALARM }),
+				queryClient.invalidateQueries({ queryKey: queryKey.ALARM_NOT_COMPLETED }),
+			]);
 		}
 	};
 

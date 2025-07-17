@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { IoIosArrowBack } from 'react-icons/io';
-import { GoBackButton, AddQuickDrawerMemoButton, Logo } from '..';
+import { GoBackButton, AddQuickDrawerMemoButton, Logo, NotificationLink } from '..';
 import { routes } from '../../constants';
 
 const Header = () => {
@@ -10,6 +10,7 @@ const Header = () => {
 	const isGoBackButtonActive =
 		pathname.includes(routes.EXPENSE_TRACKER) ||
 		pathname.includes(routes.TODO_REMINDER) ||
+		pathname.includes(routes.NOTIFICATION) ||
 		[...pathname].filter(item => item === '/').length >= 2;
 
 	return (
@@ -25,7 +26,10 @@ const Header = () => {
 							<Logo />
 						)}
 					</ReactiveLogo>
-					<AddQuickDrawerMemoButton />
+					<Actions>
+						<NotificationLink />
+						<AddQuickDrawerMemoButton />
+					</Actions>
 				</Container>
 			)}
 		</>
@@ -53,6 +57,13 @@ const ReactiveLogo = styled.h1`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+`;
+
+const Actions = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
 `;
 
 export default Header;

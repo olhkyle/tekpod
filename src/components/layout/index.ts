@@ -13,5 +13,6 @@ export { default as LoadLazy } from './LoadLazy';
 export { default as MyPageLayout } from './MyPageLayout';
 export { default as NavLink } from './NavLink';
 export { default as NotAuthenticated } from './NotAuthenticated';
+export { default as NotificationLink } from './NotificationLink';
 export { default as Portal } from './Portal';
 export { default as RouteError } from './RouteError';

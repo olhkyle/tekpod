@@ -28,12 +28,14 @@ const getTodosByPage = async (pageParam: number, pageSize: number): Promise<Todo
 	return data;
 };
 
-const addTodo = async (data: Omit<Todo, 'id' | 'reminder_time' | 'notified'>) => {
-	const { error: addTodoError } = await supabase.from(TABLE).insert(data).select();
+const addTodo = async (data: Omit<Todo, 'id'>) => {
+	const { data: todo, error: addTodoError } = await supabase.from(TABLE).insert(data).select();
 
 	if (addTodoError) {
 		throw new Error(addTodoError.message);
 	}
+
+	return todo;
 };
 
 const editTodoContent = async ({ id, content, updated_at }: { id: string; content: string; updated_at: string }) => {

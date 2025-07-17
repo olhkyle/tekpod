@@ -8,6 +8,7 @@ const routes = {
 	USER: '/mypage',
 	PROFILE: '/mypage/profile',
 	UPDATE_PASSWORD: '/mypage/update-password',
+	NOTIFICATION: '/notification',
 	TODO_REMINDER: '/todo_reminder',
 	EXPENSE_TRACKER: '/expense',
 	EXPENSE_TRACKER_BY_MONTH: '/expense/daily',

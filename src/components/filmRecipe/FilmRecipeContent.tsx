@@ -60,6 +60,10 @@ const Recipe = styled.div<{ primary: boolean }>`
 	&:focus {
 		background-color: ${({ primary }) => (primary ? 'var(--blue100)' : ' var(--greyOpacity50)')};
 	}
+
+	@media (hover: none) and (pointer: coarse) {
+		background-color: inherit;
+	}
 `;
 
 const Title = styled.div`

@@ -6,8 +6,9 @@ import { quickMemoDrawerSchema, QuickMemoDrawerSchema } from '.';
 import { Button, Drawer, TextInput } from '..';
 import { useDrawerStore, useToastStore } from '../../store';
 import { useClientSession, useLoading } from '../../hooks';
-import { addTodo } from '../../supabase';
+import { addAlarm, addTodo } from '../../supabase';
 import { toastData, routes, queryKey } from '../../constants';
+import { getNextDay } from '../../utils';
 
 const QuickMemoDrawer = () => {
 	const { queryClient, session } = useClientSession();
@@ -23,16 +24,30 @@ const QuickMemoDrawer = () => {
 
 	const onSubmit = async (data: QuickMemoDrawerSchema) => {
 		const currentTime = new Date().toISOString();
+		const nextDay = getNextDay(currentTime);
 
 		try {
-			await startTransition(
+			const todo = await startTransition(
 				addTodo({
 					user_id: session?.user?.id,
 					completed: false,
 					content: data.memo,
 					created_at: currentTime,
 					updated_at: currentTime,
+					reminder_time: nextDay,
 					tags: [],
+				}),
+			);
+
+			await startTransition(
+				addAlarm({
+					user_id: session?.user?.id,
+					todo_id: todo[0].id,
+					content: data.memo,
+					isChecked: false,
+					reminder_time: nextDay,
+					created_at: currentTime,
+					updated_at: currentTime,
 				}),
 			);
 
@@ -45,7 +60,10 @@ const QuickMemoDrawer = () => {
 			console.error(e);
 			addToast(toastData.TODO_REMINDER.CREATE.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE });
+			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE }),
+				queryClient.invalidateQueries({ queryKey: queryKey.ALARM_NOT_COMPLETED }),
+			]);
 		}
 	};
 
