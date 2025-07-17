@@ -94,7 +94,7 @@ const FavoritePlace = () => {
 		if (!query) return;
 
 		const res = await axios.get('/api/v1/search/local.json', {
-			params: { query, display: 10 },
+			params: { query, display: 5 },
 		});
 
 		const items: Place[] = res.data.items;
