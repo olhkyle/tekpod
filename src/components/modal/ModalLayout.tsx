@@ -53,7 +53,8 @@ const Container = styled.div<{ isVisible: boolean; order: number }>`
 	position: fixed;
 	bottom: 0;
 	margin: 0 auto;
-	padding: var(--padding-container-mobile);
+	padding: var(--padding-container-mobile) var(--padding-container-mobile) calc(var(--padding-container-mobile) * 2)
+		var(--padding-container-mobile);
 	max-width: var(--max-app-width);
 	min-width: var(--min-app-width);
 	width: 100%;
