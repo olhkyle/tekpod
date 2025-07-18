@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
-import { useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { Container as MapDiv, NaverMap, Marker, useNavermaps } from 'react-naver-maps';
+import { RiCloseFill } from 'react-icons/ri';
 
 const favPlaces: { id: number; label: string; coords: [number, number]; order: number }[] = [
 	{ id: 1, coords: [37.497175, 127.027926], label: '강남', order: 1 },
@@ -90,7 +91,8 @@ const FavoritePlace = () => {
 		}
 	}, [places, navermaps]);
 
-	const handleSearch = async () => {
+	const handleSearch = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 		if (!query) return;
 
 		const res = await axios.get('/api/v1/search/local.json', {
@@ -126,13 +128,7 @@ const FavoritePlace = () => {
 	};
 
 	return (
-		<section>
-			<div>
-				<input type="text" placeholder="장소 검색" value={query} onChange={e => setQuery(e.target.value)} />
-				<button type="button" onClick={handleSearch}>
-					검색
-				</button>
-			</div>
+		<Container>
 			<MapContainer>
 				<NaverMap
 					defaultCenter={currentPos}
@@ -152,71 +148,137 @@ const FavoritePlace = () => {
 						}}
 					/>
 
-					{places.map((place, idx) => (
-						<Marker
-							key={`${idx}_${place.x}_${place.y}`}
-							position={new navermaps.LatLng(+place.y, +place.x)}
-							title={place.roadAddress}
-							icon={{
-								content: `<button class="markerBox">
-                <div class="totalOrder">${idx + 1}</div>
-                ${place.roadAddress}</button>`,
-							}}
-							onClick={() => {
-								setSelectedId(idx);
-								// alert(place.roadAddress);
+					{places?.length !== 0 && (
+						<>
+							{places?.map((place, idx) => (
+								<Marker
+									key={`${idx}_${place.x}_${place.y}`}
+									position={new navermaps.LatLng(+place.y, +place.x)}
+									title={place.roadAddress}
+									icon={{
+										content: `<button class="markerBox" type="button">${idx + 1}</button>`,
+									}}
+									onClick={() => {
+										setSelectedId(idx);
 
-								if (mapRef.current) {
-									const map = mapRef.current;
-									const latlng = new naver.maps.LatLng(+place.y, +place.x);
+										if (mapRef.current) {
+											const map = mapRef.current;
+											const latlng = new naver.maps.LatLng(+place.y, +place.x);
 
-									// 위치 먼저 이동 후 줌
-									map.panTo(latlng);
+											// 위치 먼저 이동 후 줌
+											map.panTo(latlng);
 
-									// 약간의 지연을 두고 확대 (선택사항)
-									setTimeout(() => {
-										map.setZoom(17);
-									}, 300); // 300ms 정도가 자연스럽습니다.
-								}
-							}}
-						/>
-					))}
+											// 약간의 지연을 두고 확대 (선택사항)
+											setTimeout(() => {
+												map.setZoom(17);
+											}, 300); // 300ms 정도가 자연스럽습니다.
+										}
+									}}
+								/>
+							))}{' '}
+						</>
+					)}
 				</NaverMap>
 			</MapContainer>
-		</section>
+			<SearchInputForm onSubmit={handleSearch}>
+				<SearchInput>
+					<input type="text" placeholder="장소 검색" value={query} onChange={e => setQuery(e.target.value)} />
+					<ResetButton type="button" hasQuery={query.length !== 0} onClick={() => setQuery('')}>
+						<RiCloseFill size="24" color="var(--black)" />
+					</ResetButton>
+				</SearchInput>
+
+				<SearchButton type="submit">검색</SearchButton>
+			</SearchInputForm>
+		</Container>
 	);
 };
+
+const Container = styled.section`
+	position: relative;
+`;
 
 const MapContainer = styled(MapDiv)`
 	position: relative;
 	width: 100%;
 	height: calc(100dvh - 2 * var(--nav-height) - 3 * var(--padding-container-mobile));
 	border: 1px solid var(--grey100);
-	border-radius: var(--radius-s);
+	border-radius: var(--radius-m);
+
+	div {
+		border-radius: var(--radius-m);
+	}
 
 	.markerBox {
 		position: relative;
-		padding-right: calc(var(--padding-container-mobile) * 0.5);
-		padding-left: calc(var(--padding-container-mobile) * 2);
-		height: 30px;
-		font-size: 1em;
-		color: var(--white);
-		background-color: var(--black);
-		border-radius: var(--radius-m);
+		width: 36px;
+		height: 36px;
+		font-size: 0.85em;
+		font-weight: var(--fw-semibold);
+		color: var(--blue200);
+		background-color: var(--blue100);
+		border: 1px solid var(--blue300);
+		border-radius: var(--radius-xl);
 
-		.totalOrder {
+		/* .totalOrder {
 			position: absolute;
 			top: 0;
 			left: 0;
 			line-height: 30px;
 			width: 30px;
 			height: 30px;
-			color: var(--grey600);
-			background-color: var(--grey200);
-			border-radius: var(--radius-m);
+			color: var(--blue200);
+			background-color: var(--blue100);
+			border-radius: var(--radius-m) 0 0 var(--radius-m);
 			text-align: center;
-		}
+		} */
 	}
+`;
+
+const SearchInputForm = styled.form`
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+`;
+
+const SearchInput = styled.div`
+	position: relative;
+	width: 100%;
+
+	input {
+		padding: var(--padding-container-mobile);
+		width: 100%;
+		border: 1px solid var(--grey100);
+		border-radius: var(--radius-m) 0 0 var(--radius-m);
+		background-color: var(--white);
+		font-weight: var(--fw-semibold);
+	}
+`;
+
+const ResetButton = styled.button<{ hasQuery: boolean }>`
+	position: absolute;
+	top: 50%;
+	right: 16px;
+	display: ${({ hasQuery }) => (hasQuery ? 'inline-flex' : 'none')};
+	justify-content: center;
+	align-items: center;
+	padding: calc(var(--padding-container-mobile) * 0.25);
+	background-color: var(--grey50);
+	border: 1px solid var(--grey100);
+	border-radius: var(--radius-s);
+	transform: translate3d(0, -50%, 0);
+`;
+
+const SearchButton = styled.button`
+	padding: var(--padding-container-mobile);
+	border-radius: 0 var(--radius-m) var(--radius-m) 0;
+	color: var(--white);
+	background-color: var(--black);
+	font-weight: var(--fw-semibold);
 `;
 
 export default FavoritePlace;
