@@ -95,36 +95,38 @@ const FavoritePlace = () => {
 		e.preventDefault();
 		if (!query) return;
 
-		const res = await axios.get('/api/v1/search/local.json', {
-			params: { query, display: 5 },
-		});
+		try {
+			const res = await axios.get('/api/v1/search/local.json', {
+				params: { query, display: 5 },
+			});
 
-		const items: Place[] = res.data.items;
+			const getGeoCode = async (query: string) => {
+				try {
+					const res = await axios.get(`/ntruss/map-geocode/v2/geocode?query=${decodeURIComponent(query)}`);
 
-		const getGeoCode = async (query: string) => {
-			try {
-				const res = await axios.get(`/ntruss/map-geocode/v2/geocode?query=${decodeURIComponent(query)}`);
+					return res.data.addresses[0];
+				} catch (e) {
+					console.error(e);
+					return null;
+				}
+			};
 
-				return res.data.addresses[0];
-			} catch (e) {
-				console.error(e);
-				return null;
-			}
-		};
+			const convertedPlaces: Geocode[] = await Promise.all(
+				res?.data.items?.map(async (item: Place) => {
+					const data = await getGeoCode(item.address);
+					if (!data) return null;
 
-		const convertedPlaces = await Promise.all(
-			items.map(async item => {
-				const data = await getGeoCode(item.address);
-				if (!data) return null;
+					return data;
+				}),
+			);
 
-				return data;
-			}),
-		);
+			setPlaces(convertedPlaces);
 
-		setPlaces(convertedPlaces);
-
-		setSelectedId(null); // 선택 초기화
-		console.log(convertedPlaces);
+			setSelectedId(null); // 선택 초기화
+		} catch (e) {
+			console.error(e);
+			setSelectedId(null); // 선택 초기화
+		}
 	};
 
 	return (
