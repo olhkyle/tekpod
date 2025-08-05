@@ -48,8 +48,8 @@ const FavoritePlace = () => {
 			navigator.geolocation.getCurrentPosition(
 				position => {
 					setCurrentPos({
-						lat: position.coords.latitude,
-						lng: position.coords.longitude,
+						lat: position?.coords.latitude,
+						lng: position?.coords.longitude,
 					});
 				},
 				error => {
@@ -173,11 +173,11 @@ const FavoritePlace = () => {
 											// 약간의 지연을 두고 확대 (선택사항)
 											setTimeout(() => {
 												map.setZoom(17);
-											}, 300); // 300ms 정도가 자연스럽습니다.
+											}, 300);
 										}
 									}}
 								/>
-							))}{' '}
+							))}
 						</>
 					)}
 				</NaverMap>
