@@ -54,7 +54,7 @@ const getUncompletedAlarms = async () => {
 };
 
 const getAlarms = async () => {
-	const startDate = `${currentYear}-${`${currentMonth + 1}`.padStart(2, '0')}-01`;
+	const startDate = `${currentYear}-${`${currentMonth}`.padStart(2, '0')}-01`;
 	const endDate = `${currentYear}-${`${currentMonth + 1}`.padStart(2, '0')}-${new Date(
 		currentYear,
 		currentMonth + 1,
