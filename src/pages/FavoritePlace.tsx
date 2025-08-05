@@ -42,6 +42,11 @@ const FavoritePlace = () => {
 	const [places, setPlaces] = useState<Geocode[]>([]);
 	const [query, setQuery] = useState('');
 
+	const searchURL = `${import.meta.env.MODE === 'development' ? '/api' : 'https://openapi.naver.com'}/v1/search/local.json`;
+	const geoCodeURL = `${
+		import.meta.env.MODE === 'development' ? '/ntruss' : 'https://maps.apigw.ntruss.com'
+	}/map-geocode/v2/geocode?query=`;
+
 	useEffect(() => {
 		// 현재 위치 가져오기
 		if (navigator.geolocation) {
@@ -96,13 +101,13 @@ const FavoritePlace = () => {
 		if (!query) return;
 
 		try {
-			const res = await axios.get('/api/v1/search/local.json', {
+			const res = await axios.get(searchURL, {
 				params: { query, display: 5 },
 			});
 
 			const getGeoCode = async (query: string) => {
 				try {
-					const res = await axios.get(`/ntruss/map-geocode/v2/geocode?query=${decodeURIComponent(query)}`);
+					const res = await axios.get(`${geoCodeURL}${decodeURIComponent(query)}`);
 
 					return res.data.addresses[0];
 				} catch (e) {
