@@ -18,7 +18,7 @@ const getTodosByPage = async (pageParam: number, pageSize: number): Promise<Todo
 	const { data, error } = await supabase
 		.from(TABLE)
 		.select('*')
-		.order('created_at', { ascending: false })
+		.order('updated_at', { ascending: false })
 		.range((pageParam - 1) * pageSize, pageParam * pageSize - 1);
 
 	if (error) {
