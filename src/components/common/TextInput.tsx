@@ -1,6 +1,6 @@
 import { ChangeEvent, Children, cloneElement, FocusEvent, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId } from 'react';
 import styled from '@emotion/styled';
-import { Symbol } from '.';
+import { LuAsterisk } from 'react-icons/lu';
 
 interface TextInputProps extends Omit<HTMLAttributes<HTMLInputElement>, 'size'> {
 	children: ReactElement;
@@ -22,7 +22,7 @@ const TextInput = ({ children, label, errorMessage, ...props }: TextInputProps) 
 			})}
 			{errorMessage && (
 				<Message>
-					<Symbol>﹡</Symbol> {errorMessage}
+					<LuAsterisk size="16" /> {errorMessage}
 				</Message>
 			)}
 		</Container>
@@ -91,6 +91,8 @@ const Label = styled.label`
 `;
 
 const Message = styled.p`
+	display: flex;
+	align-items: center;
 	padding-left: 4px;
 	font-size: var(--fz-sm);
 	color: var(--red200);

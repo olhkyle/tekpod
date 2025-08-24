@@ -3,8 +3,9 @@ import styled from '@emotion/styled';
 import { FieldError } from 'react-hook-form';
 import { DayPicker } from 'react-day-picker';
 import { IoMdCalendar } from 'react-icons/io';
+import { LuAsterisk } from 'react-icons/lu';
 import { ko } from 'date-fns/locale';
-import { Button, Symbol } from '..';
+import { Button } from '..';
 import { useClickOutside } from '../../hooks';
 import { customPropReceiver } from '../../constants';
 import { formatByKoreanTime } from '../../utils';
@@ -32,7 +33,7 @@ const DatePicker = ({ selected, setSelected, error, disabled, isFloated = false,
 			</TriggerButton>
 			{error && (
 				<ErrorMessage>
-					<Symbol>﹡</Symbol> {error?.message}
+					<LuAsterisk size="16" /> {error?.message}
 				</ErrorMessage>
 			)}
 			<DayPickerWrapper isFloated={isFloated}>
@@ -90,6 +91,8 @@ const IconBackground = styled.div`
 `;
 
 const ErrorMessage = styled.p`
+	display: flex;
+	align-items: center;
 	padding-left: 4px;
 	font-size: var(--fz-sm);
 	color: var(--red200);

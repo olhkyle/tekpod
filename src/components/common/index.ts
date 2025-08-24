@@ -15,7 +15,6 @@ export { default as Select } from './Select';
 export { default as ShrinkMotionBlock } from './ShrinkMotionBlock';
 export { default as SkeletonLoader } from './SkeletonLoader';
 export { default as Switch } from './Switch';
-export { default as Symbol } from './Symbol';
 export { default as TagsInput } from './TagsInput';
 export { default as TextArea } from './TextArea';
 export { default as TextInput } from './TextInput';
