@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { EmptyMessage, PaymentItem } from '..';
 import { ExtendedPaymentMethodType } from '../../pages/ExpenseTrackerByMonth';
 import { getPaymentsByDate } from '../../supabase';
-import { formatByKoreanTime, monetizeWithSeparator } from '../../utils';
+import { formatByISOKoreanTime, monetizeWithSeparator } from '../../utils';
 import { PriceUnitType, staleTime, queryKey } from '../../constants';
 
 interface PaymentListProps {
@@ -22,7 +22,7 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 	const {
 		data: { expense, totalPrice },
 	} = useSuspenseQuery({
-		queryKey: [...queryKey.EXPENSE_TRACKER, formatByKoreanTime(selectedDate)],
+		queryKey: [...queryKey.EXPENSE_TRACKER, formatByISOKoreanTime(selectedDate)],
 		queryFn: () => getPaymentsByDate(selectedDate),
 		staleTime: staleTime.EXPENSE_TRACKER.BY_MONTH,
 	});
@@ -54,7 +54,9 @@ const PaymentList = ({ selectedDate, currentPaymentMethod, currentPriceUnit }: P
 					{filteredData.map((payment, idx) => (
 						<li
 							key={`${payment.place}_${payment.bank}_${idx}`}
-							onClick={() => navigate(`${payment.id}`, { state: { payment, currentDate: selectedDate } })}>
+							onClick={() =>
+								navigate(`${payment.id}?date=${formatByISOKoreanTime(selectedDate)}`, { state: { payment, currentDate: selectedDate } })
+							}>
 							<PaymentItem data={payment} />
 						</li>
 					))}

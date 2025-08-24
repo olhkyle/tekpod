@@ -6,7 +6,7 @@ import { RiArrowRightSLine } from 'react-icons/ri';
 import { PaymentItemDetail, Switch, FloatingActionButton, AdditionalOptions } from '../components';
 import { useClientSession, useLoading, useTogglePaymentIsFixedMutation } from '../hooks';
 import { ExpenseTracker, removePayment } from '../supabase';
-import { monetizeWithSeparator, formatByKoreanTime } from '../utils';
+import { monetizeWithSeparator, formatByKoreanTime, formatByISOKoreanTime } from '../utils';
 import { useToastStore } from '../store';
 import { routes, queryKey, toastData } from '../constants';
 
@@ -22,7 +22,13 @@ const ExpenseTrackerByMonthItemPage = () => {
 
 	const { mutate: toggleIsFixed } = useTogglePaymentIsFixedMutation({
 		currentDate,
-		handlers: { goBack: () => navigate(routes.EXPENSE_TRACKER_BY_MONTH, { replace: true, state: { currentDate } }) },
+		handlers: {
+			goBack: () =>
+				navigate(`${routes.EXPENSE_TRACKER_BY_MONTH}?date=${formatByISOKoreanTime(currentDate)}`, {
+					state: { currentDate },
+					replace: true,
+				}),
+		},
 	});
 
 	const handlePaymentDelete = async () => {
@@ -30,12 +36,12 @@ const ExpenseTrackerByMonthItemPage = () => {
 			await startTransition(removePayment({ id: payment.id }));
 
 			addToast(toastData.EXPENSE_TRACKER.REMOVE.SUCCESS);
-			navigate(routes.EXPENSE_TRACKER_BY_MONTH, { state: { currentDate }, replace: true });
+			navigate(`${routes.EXPENSE_TRACKER_BY_MONTH}?date=${formatByISOKoreanTime(currentDate)}`, { state: { currentDate }, replace: true });
 		} catch (e) {
 			console.error(e);
 			addToast(toastData.EXPENSE_TRACKER.REMOVE.ERROR);
 		} finally {
-			queryClient.invalidateQueries({ queryKey: [...queryKey.EXPENSE_TRACKER, formatByKoreanTime(currentDate)] });
+			queryClient.invalidateQueries({ queryKey: [...queryKey.EXPENSE_TRACKER, formatByISOKoreanTime(currentDate)] });
 		}
 	};
 
@@ -70,7 +76,10 @@ const ExpenseTrackerByMonthItemPage = () => {
 				)}
 				<TransactionDateGroup>
 					<dt>Transaction Date</dt>
-					<dd onClick={() => navigate(routes.EXPENSE_TRACKER_BY_MONTH, { state: { currentDate } })}>
+					<dd
+						onClick={() =>
+							navigate(`${routes.EXPENSE_TRACKER_BY_MONTH}?date=${formatByISOKoreanTime(currentDate)}`, { state: { currentDate } })
+						}>
 						<span>{formatByKoreanTime(currentDate)}</span>
 						<RiArrowRightSLine size="21" color="var(--black)" />
 					</dd>

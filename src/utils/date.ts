@@ -28,6 +28,14 @@ const formatByKoreanTime = (targetDate: Date | string): string => {
 	return formattedDate;
 };
 
+const formatByISOKoreanTime = (targetDate: Date | string): string => {
+	const _date = typeof targetDate === 'string' || targetDate instanceof Date ? new Date(targetDate) : targetDate;
+
+	const formattedDate = format(toZonedTime(_date, koreaTimeZone), 'yyyy-MM-dd', { timeZone: koreaTimeZone });
+
+	return formattedDate;
+};
+
 const translateNumberIntoMonth = (month: number) => months[month]; // ['Jan', 'Feb', 'Mar'][number]
 const getMonthIndexFromMonths = (option: Month | null) => months.findIndex(month => month === option);
 
@@ -62,6 +70,7 @@ export {
 	months,
 	calendar,
 	formatByKoreanTime,
+	formatByISOKoreanTime,
 	translateNumberIntoMonth,
 	getMonthIndexFromMonths,
 	getDateFromString,

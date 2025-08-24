@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { ExpenseTracker, PaymentsByDate, togglePaymentIsFixed } from '../../../supabase';
 import { useToastStore } from '../../../store';
 import { toastData, queryKey } from '../../../constants';
-import { formatByKoreanTime } from '../../../utils';
+import { formatByISOKoreanTime } from '../../../utils';
 import { useClientSession } from '../../../hooks';
 
 interface UseTogglePaymentIsFixedMutation {
@@ -21,7 +21,7 @@ const toggle =
 const useTogglePaymentIsFixedMutation = ({ currentDate, handlers: { goBack } }: UseTogglePaymentIsFixedMutation) => {
 	const { queryClient } = useClientSession();
 	const { addToast } = useToastStore();
-	const QUERY_KEY = [...queryKey.EXPENSE_TRACKER, formatByKoreanTime(currentDate)];
+	const QUERY_KEY = [...queryKey.EXPENSE_TRACKER, formatByISOKoreanTime(currentDate)];
 
 	return useMutation({
 		async mutationFn(variables: Variables) {
