@@ -1,8 +1,9 @@
 import { useId, useState } from 'react';
 import styled from '@emotion/styled';
 import { BiSolidChevronRight } from 'react-icons/bi';
+import { LuAsterisk } from 'react-icons/lu';
 import { FieldError } from 'react-hook-form';
-import { Button, Symbol } from '..';
+import { Button } from '..';
 import { customPropReceiver } from '../../constants';
 import { useClickOutside } from '../../hooks';
 
@@ -36,7 +37,7 @@ const Select = <T extends string>({ data: options, placeholder, descriptionLabel
 			</SelectTrigger>
 			{error && (
 				<ErrorMessage>
-					<Symbol>﹡</Symbol> {error?.message}
+					<LuAsterisk size="16" /> {error?.message}
 				</ErrorMessage>
 			)}
 			<SelectContent isOpen={isOpen} aria-labelledby={`select-${generatedId}-content`}>
@@ -96,6 +97,8 @@ const Chevron = styled(BiSolidChevronRight, customPropReceiver)<{ $isOpen: boole
 `;
 
 const ErrorMessage = styled.p`
+	display: flex;
+	align-items: center;
 	padding-left: 4px;
 	font-size: var(--fz-sm);
 	color: var(--red200);

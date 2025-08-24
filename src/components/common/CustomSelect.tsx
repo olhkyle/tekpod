@@ -1,8 +1,9 @@
 import { useId, useState } from 'react';
 import styled from '@emotion/styled';
 import { FieldError } from 'react-hook-form';
+import { LuAsterisk } from 'react-icons/lu';
 import { BiSolidChevronRight } from 'react-icons/bi';
-import { Button, Symbol } from '.';
+import { Button } from '.';
 import type { ExpenseTracker, RestrictedRecipeForValidation } from '../../supabase';
 import { useClickOutside } from '../../hooks';
 import { customPropReceiver, PaymentDataValueType, FilmRecipeFieldDataType } from '../../constants';
@@ -51,7 +52,7 @@ const CustomSelect = <T extends CustomSelectDataType>({
 			</SelectTrigger>
 			{error && (
 				<ErrorMessage>
-					<Symbol>﹡</Symbol> {error?.message}
+					<LuAsterisk size="16" /> {error?.message}
 				</ErrorMessage>
 			)}
 
@@ -111,6 +112,8 @@ const Chevron = styled(BiSolidChevronRight, customPropReceiver)<{ $isOpen: boole
 `;
 
 const ErrorMessage = styled.p`
+	display: flex;
+	align-items: center;
 	padding-left: 4px;
 	font-size: var(--fz-sm);
 	color: var(--red200);

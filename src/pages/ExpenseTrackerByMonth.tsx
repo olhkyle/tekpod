@@ -1,21 +1,49 @@
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { DatePicker, PaymentItemLoader, PaymentList, SegmentedControl, Select, MODAL_CONFIG, FloatingActionButton } from '../components';
 import { useModalStore } from '../store';
 import { priceUnit, PriceUnitType } from '../constants';
-import { today } from '../utils';
+import { formatByISOKoreanTime, today } from '../utils';
 
 export type ExtendedPaymentMethodType = (typeof segmentedControlOptions)[number];
 const segmentedControlOptions = ['All', 'Card', 'Cash'] as const;
 
 const ExpenseTrackerByMonthPage = () => {
 	const { state } = useLocation() as { state: { currentDate: Date } };
-	const [selected, setSelected] = useState<Date>(state?.currentDate ?? today);
+	const [searchParams, setSearchParams] = useSearchParams();
+
+	const getInitialDate = (): Date => {
+		const dateParam = searchParams.get('date');
+
+		if (dateParam) {
+			const parsedDate = new Date(dateParam);
+			if (!isNaN(parsedDate.getTime())) {
+				return parsedDate;
+			}
+		}
+		return state?.currentDate ?? today;
+	};
+
+	const [selected, setSelected] = useState<Date>(getInitialDate);
 	const { setModal } = useModalStore();
 
 	const [currentPaymentMethod, setCurrentPaymentMethod] = useState<ExtendedPaymentMethodType>(segmentedControlOptions[0]);
 	const [currentPriceUnit, setCurrentPriceUnit] = useState<PriceUnitType>('WON');
+
+	useEffect(() => {
+		if (state?.currentDate) {
+			const newDate = state.currentDate;
+
+			setSelected(newDate);
+			setSearchParams({ date: formatByISOKoreanTime(newDate) }, { replace: true });
+		}
+	}, [state?.currentDate, setSearchParams]);
+
+	const handleDateChange = (newDate: Date) => {
+		setSelected(newDate);
+		setSearchParams({ date: formatByISOKoreanTime(newDate) }, { replace: true });
+	};
 
 	const handleAddPaymentModal = () => {
 		setModal({
@@ -32,7 +60,7 @@ const ExpenseTrackerByMonthPage = () => {
 			<Header>
 				<Title>Expense Tracker</Title>
 			</Header>
-			<DatePicker selected={selected} setSelected={setSelected} disabled={{ after: today }} isFloated={true} />
+			<DatePicker selected={selected} setSelected={handleDateChange} disabled={{ after: today }} isFloated={true} />
 			<PaymentListLayout>
 				<PaymentListTitle>List</PaymentListTitle>
 				<Flex>

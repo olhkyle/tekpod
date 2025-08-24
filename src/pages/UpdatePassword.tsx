@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LuAsterisk } from 'react-icons/lu';
 import { AuthLogo, Button, LabelInput, updatePasswordSchema, UpdatePasswordSchema } from '../components';
 import { supabase } from '../supabase';
 import { useClientSession, useLoading } from '../hooks';
@@ -99,7 +100,7 @@ const UpdatePassword = () => {
 			<form css={pageCss.form} onSubmit={handleSubmit(onSubmit)}>
 				<AuthLogo />
 				<Title>
-					<Symbol>﹡</Symbol> Update Password <Symbol>﹡</Symbol>
+					<LuAsterisk size="16" /> Update Password <LuAsterisk size="16" />
 				</Title>
 
 				<EmailInfo>{searchParams.get('email') || state?.email}</EmailInfo>
@@ -118,6 +119,8 @@ const UpdatePassword = () => {
 };
 
 const Title = styled.h4`
+	display: flex;
+	align-items: center;
 	padding: calc(var(--padding-container-mobile) * 0.5);
 	min-width: 270px;
 	color: var(--blue200);
@@ -126,10 +129,6 @@ const Title = styled.h4`
 	font-weight: var(--fw-semibold);
 	border-radius: var(--radius-s);
 	text-align: center;
-`;
-
-const Symbol = styled.span`
-	font-size: 1.2em;
 `;
 
 const EmailInfo = styled.div`

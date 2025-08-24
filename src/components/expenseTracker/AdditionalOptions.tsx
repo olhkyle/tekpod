@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
 import { MdOutlineAdd } from 'react-icons/md';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import { formatByKoreanTime, today } from '../../utils';
+import { formatByKoreanTime, formatByISOKoreanTime, today } from '../../utils';
 import { ShrinkMotionBlock } from '../common';
 import { useState } from 'react';
 import { customPropReceiver, queryKey, routes, toastData } from '../../constants';
 import { addPayment, ExpenseTracker } from '../../supabase';
 import { useClientSession, useLoading } from '../../hooks';
 import { useToastStore } from '../../store';
-import { useNavigate } from 'react-router-dom';
 
 interface AdditionalOptionsProps {
 	payment: ExpenseTracker;
@@ -44,7 +44,10 @@ const AdditionalOptions = ({
 				}),
 			);
 
-			navigate(routes.EXPENSE_TRACKER_BY_MONTH, { state: { currentDate: currentTime }, replace: true });
+			navigate(`${routes.EXPENSE_TRACKER_BY_MONTH}?date=${formatByISOKoreanTime(currentTime)}`, {
+				state: { currentDate: currentTime },
+				replace: true,
+			});
 			addToast(toastData.EXPENSE_TRACKER.CREATE.SUCCESS);
 		} catch (e) {
 			console.error(e);

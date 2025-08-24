@@ -1,6 +1,6 @@
 import { ChangeEvent, Children, cloneElement, ForwardedRef, forwardRef, HTMLAttributes, ReactElement, useId, useRef } from 'react';
 import styled from '@emotion/styled';
-import { Symbol } from '.';
+import { LuAsterisk } from 'react-icons/lu';
 
 interface TextAreaProps {
 	children: ReactElement;
@@ -19,7 +19,7 @@ const TextArea = ({ children, errorMessage, ...props }: TextAreaProps) => {
 			{cloneElement(child, { id, ref, ...child.props })}
 			{errorMessage && (
 				<Message>
-					<Symbol>﹡</Symbol> {errorMessage}
+					<LuAsterisk size="16" /> {errorMessage}
 				</Message>
 			)}
 		</Container>
@@ -77,6 +77,8 @@ const Container = styled.div`
 `;
 
 const Message = styled.p`
+	display: flex;
+	align-items: center;
 	padding-left: 4px;
 	font-size: var(--fz-sm);
 	color: var(--red200);

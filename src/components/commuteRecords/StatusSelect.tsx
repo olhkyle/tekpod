@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { FieldError } from 'react-hook-form';
+import { LuAsterisk } from 'react-icons/lu';
 
 interface StatusSelectProps<T extends string> {
 	data: readonly T[];
@@ -22,7 +23,7 @@ const StatusSelect = <T extends string>({ data, currentValue, error, onSelect }:
 			</Options>
 			{error && (
 				<ErrorMessage>
-					<Symbol>﹡</Symbol> {error?.message}
+					<LuAsterisk size="16" /> {error?.message}
 				</ErrorMessage>
 			)}
 		</Container>
@@ -72,13 +73,11 @@ const CheckIndicator = styled.span<{ isChecked: boolean }>`
 `;
 
 const ErrorMessage = styled.p`
+	display: flex;
+	align-items: center;
 	padding-left: 4px;
 	font-size: var(--fz-sm);
 	color: var(--red200);
-`;
-
-const Symbol = styled.span`
-	font-size: 1.2em;
 `;
 
 export default StatusSelect;
