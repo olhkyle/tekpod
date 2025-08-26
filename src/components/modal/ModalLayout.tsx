@@ -44,7 +44,13 @@ const ModalLayout = ({ id, type, title, onClose, children }: ModalLayoutProps) =
 				</Header>
 				<Body id={`modal-${id}-body`}>{children}</Body>
 			</Container>
-			<Overlay id={`overlay-${id}`} onAnimationEnd={handleAnimationEnd} onClick={handleModalClose} aria-hidden={isClosing} />
+			<Overlay
+				id={`overlay-${id}`}
+				isVisible={!isClosing}
+				onAnimationEnd={handleAnimationEnd}
+				onClick={handleModalClose}
+				aria-hidden={isClosing}
+			/>
 		</Fragment>
 	);
 };
@@ -64,8 +70,10 @@ const Container = styled.div<{ isVisible: boolean; order: number }>`
 	border-top: ${({ order }) => (order === 0 ? 'none' : '1px solid var(--grey100)')};
 	transition: transform 0.3s ease;
 	z-index: var(--modal-index);
-	animation: ${({ isVisible }) => (isVisible ? 'slideModalUp 0.3s ease forwards' : 'slideModalDown 0.2s ease forwards')};
-	-webkit-animation: ${({ isVisible }) => (isVisible ? 'slideModalUp 0.3s ease forwards' : 'slideModalDown 0.2s ease forwards')};
+	animation: ${({ isVisible }) =>
+		isVisible ? 'slideModalUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards' : 'slideModalDown 0.2s ease forwards'};
+	-webkit-animation: ${({ isVisible }) =>
+		isVisible ? 'slideModalUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards' : 'slideModalDown 0.2s ease forwards'};
 	-webkit-overflow-scrolling: touch; // iOS scroll support
 	-ms-overflow-style: none; // IE and Edge
 	scrollbar-width: none; // Firefox
@@ -128,7 +136,7 @@ const Body = styled.div`
 	}
 `;
 
-const Overlay = styled.div`
+const Overlay = styled.div<{ isVisible: boolean }>`
 	position: fixed;
 	max-width: var(--max-app-width);
 	min-width: var(--min-app-width);
@@ -138,6 +146,25 @@ const Overlay = styled.div`
 	inset: 0px;
 	z-index: var(--overlay-index);
 	cursor: pointer;
+	animation: ${({ isVisible }) => (isVisible ? 'fadeIn 0.3s ease forwards' : 'fadeOut 0.2s ease forwards')};
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeOut {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 0;
+		}
+	}
 `;
 
 export default ModalLayout;

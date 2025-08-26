@@ -48,7 +48,7 @@ const Drawer = ({ position, title, isOpen, close, children }: DrawerProps) => {
 				<GrabArea isShown={position === 'bottom'} />
 				<Body>{children}</Body>
 			</Container>
-			<Overlay id="dialog-overlay" isOpen={isOpen} onClick={handleModalClose} aria-label="dialog-overlay" />
+			<Overlay id="dialog-overlay" isOpen={!isClosing} onClick={handleModalClose} aria-label="dialog-overlay" />
 		</Portal>
 	);
 };
@@ -66,8 +66,10 @@ const Container = styled.div<{ position: 'top' | 'bottom'; isOpen: boolean }>`
 	border-radius: ${({ position }) => (position === 'top' ? '0 0 var(--radius-l) var(--radius-l)' : 'var(--radius-l) var(--radius-l) 0 0')};
 	background-color: var(--white);
 	z-index: var(--drawer-index);
-	animation: ${({ isOpen }) => (isOpen ? 'slideDrawerDown 0.3s ease forwards' : 'slideDrawerUp 0.2s ease forwards')};
-	-webkit-animation: ${({ isOpen }) => (isOpen ? 'slideDrawerDown 0.3s ease forwards' : 'slideDrawerUp 0.2s ease forwards')};
+	animation: ${({ isOpen }) =>
+		isOpen ? 'slideDrawerDown 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards' : 'slideDrawerUp 0.2s ease forwards'};
+	-webkit-animation: ${({ isOpen }) =>
+		isOpen ? 'slideDrawerDown 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards' : 'slideDrawerUp 0.2s ease forwards'};
 
 	@keyframes slideDrawerUp {
 		from {
@@ -136,6 +138,25 @@ const Overlay = styled.div<{ isOpen: boolean }>`
 	z-index: calc(var(--drawer-index) - 1);
 	transition: visibility 0.3s ease-in-out, opacity 0.3s ease-in-out;
 	cursor: pointer;
+	animation: ${({ isOpen }) => (isOpen ? 'fadeIn 0.3s ease forwards' : 'fadeOut 0.2s ease forwards')};
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeOut {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 0;
+		}
+	}
 `;
 
 export default Drawer;
