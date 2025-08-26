@@ -49,6 +49,11 @@ const ImageUploadInput = styled('div', customPropReceiver)<{ $isAttached: boolea
 	background: ${({ $isAttached }) =>
 		$isAttached ? 'var(--white)' : 'linear-gradient(135deg, var(--greyOpacity50), var(--greyOpacity200))'};
 	border: 1px solid var(--greyOpacity200);
+	border-radius: var(--radius-s);
+
+	&:active {
+		background-color: var(--greyOpacity50);
+	}
 
 	input {
 		display: none;
