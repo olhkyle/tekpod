@@ -27,7 +27,7 @@ const Container = styled.section`
 const NavigationGrid = styled.div`
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
-	gap: 24px;
+	gap: 16px;
 `;
 
 const Navigation = styled(Link)`
@@ -45,10 +45,10 @@ const IconBackground = styled.div`
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	min-width: 60px;
-	min-height: 60px;
+	min-width: 72px;
+	min-height: 72px;
 	background: linear-gradient(135deg, var(--grey200) 0%, var(--blue300) 50%, var(--blue200) 100%);
-	border-radius: var(--radius-m);
+	border-radius: var(--radius-l);
 `;
 
 export default HomePage;
