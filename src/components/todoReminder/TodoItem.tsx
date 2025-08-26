@@ -6,9 +6,16 @@ import { RiCloseFill } from 'react-icons/ri';
 import { RiInformation2Line } from 'react-icons/ri';
 import { todoItemSchema, TodoItemSchema } from '.';
 import { MODAL_CONFIG, Button, Checkbox, TextInput, SkeletonLoader, LoadingSpinner } from '..';
-import { type Todo } from '../../supabase';
-import { useDrag, useEditTodoItemContentMutation, useRemoveTodoItemMutation, useUpdateTodoItemCompletedMutation } from '../../hooks';
-import { useModalStore } from '../../store';
+import { editAlarm, type Todo } from '../../supabase';
+import {
+	useClientSession,
+	useDrag,
+	useEditTodoItemContentMutation,
+	useRemoveTodoItemMutation,
+	useUpdateTodoItemCompletedMutation,
+} from '../../hooks';
+import { useModalStore, useToastStore } from '../../store';
+import { queryKey, toastData } from '../../constants';
 
 interface TodoProps {
 	id: string;
@@ -20,9 +27,9 @@ interface TodoProps {
 }
 
 // TODO: when individual TodoItem starts to drag, stop the other dragged TodoItem to drag
-// TODO: web-socket connection in need
 
 const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, onDraggingIdChange }: TodoProps) => {
+	const { queryClient } = useClientSession();
 	const {
 		register,
 		formState: { errors },
@@ -45,6 +52,7 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 		dragContainerRef,
 		handlers: { handleTouchStart, handleTouchMove, handleTouchEnd },
 	} = useDrag();
+	const { addToast } = useToastStore();
 
 	useEffect(() => {
 		if (!isDragging && isContentEditing) {
@@ -73,13 +81,33 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 		removeTodo({ id: todo.id });
 	};
 
-	const onSubmit = ({ content }: TodoItemSchema) => {
+	const onSubmit = async ({ content }: TodoItemSchema) => {
 		if (content === todo?.content) {
 			onEditingIdChange(false);
 			return;
 		}
 
-		editContent({ id: todo?.id, content, updated_at: new Date().toISOString() });
+		const currentTime = new Date().toISOString();
+
+		try {
+			editContent({ id: todo?.id, content, updated_at: new Date().toISOString() });
+
+			await editAlarm({
+				todo_id: todo?.id,
+				content,
+				isChecked: false,
+				reminder_time: todo?.reminder_time ?? currentTime,
+				updated_at: currentTime,
+			});
+		} catch (e) {
+			console.error(e);
+			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
+		} finally {
+			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: queryKey.ALARM }),
+				queryClient.invalidateQueries({ queryKey: queryKey.ALARM_NOT_COMPLETED }),
+			]);
+		}
 	};
 
 	return (
