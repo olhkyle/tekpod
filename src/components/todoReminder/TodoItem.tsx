@@ -104,6 +104,7 @@ const TodoItem = ({ id, todo, isContentEditing, isDragging, onEditingIdChange, o
 			addToast(toastData.TODO_REMINDER.EDIT.ERROR);
 		} finally {
 			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: queryKey.TODOS_BY_PAGE }),
 				queryClient.invalidateQueries({ queryKey: queryKey.ALARM }),
 				queryClient.invalidateQueries({ queryKey: queryKey.ALARM_NOT_COMPLETED }),
 			]);
