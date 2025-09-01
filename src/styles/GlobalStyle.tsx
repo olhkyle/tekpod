@@ -117,12 +117,12 @@ const Global = css`
 
 		/* z-index */
 		--nav-index: 50;
-		--overlay-index: 999;
-		--drawer-index: 9991;
-		--modal-index: 9990;
-		--toast-index: 9999;
-		--hovered-info-index: 9989;
-		--floating-action-button-index: 9988;
+		--overlay-index: 100;
+		--drawer-index: 999;
+		--modal-index: 1000;
+		--toast-index: 1010;
+		--hovered-info-index: 1009;
+		--floating-action-button-index: 1008;
 	}
 
 	* {
