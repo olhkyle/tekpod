@@ -121,8 +121,8 @@ const Global = css`
 		--drawer-index: 999;
 		--modal-index: 1000;
 		--toast-index: 1010;
-		--hovered-info-index: 1009;
-		--floating-action-button-index: 1008;
+		--hovered-info-index: 998;
+		--floating-action-button-index: 997;
 	}
 
 	* {
