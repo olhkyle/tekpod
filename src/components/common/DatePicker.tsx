@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { FieldError } from 'react-hook-form';
 import { DayPicker } from 'react-day-picker';
@@ -20,6 +20,13 @@ interface DatePickerProps {
 
 const DatePicker = ({ selected, setSelected, error, disabled, isFloated = false, ...props }: DatePickerProps) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [month, setMonth] = useState(selected);
+
+	useEffect(() => {
+		if (selected) {
+			setMonth(selected);
+		}
+	}, [selected]);
 
 	const targetRef = useClickOutside<HTMLDivElement>({ eventHandler: () => setIsOpen(false) });
 
@@ -48,6 +55,8 @@ const DatePicker = ({ selected, setSelected, error, disabled, isFloated = false,
 						captionLayout="dropdown"
 						timeZone="Asia/Seoul"
 						showOutsideDays
+						month={month}
+						onMonthChange={setMonth}
 						onDayClick={() => {
 							setIsOpen(false);
 						}}

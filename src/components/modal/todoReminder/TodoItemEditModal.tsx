@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isEqual } from 'es-toolkit';
 import { ModalLayout, ModalDataType } from '..';
-import { Button, DatePicker, TagsInput, TextInput, editTodoItemFormSchema, EditTodoItemFormSchema, LoadingSpinner } from '../..';
+import { Button, DatePicker, TagsInput, editTodoItemFormSchema, EditTodoItemFormSchema, LoadingSpinner, TextArea } from '../..';
 import { editAlarm, editTodoDetail, type Todo } from '../../../supabase';
 import { formatByKoreanTime, today } from '../../../utils';
 import { useToastStore } from '../../../store';
@@ -21,7 +21,6 @@ interface TodoItemEditModal {
 const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, tags, reminder_time } }: TodoItemEditModal) => {
 	const { queryClient } = useClientSession();
 	const {
-		register,
 		control,
 		watch,
 		setValue,
@@ -104,9 +103,23 @@ const TodoItemEditModal = ({ id: modalId, type, onClose, data: { id, content, ta
 	return (
 		<ModalLayout id={modalId} type={type} title={'Detail'} onClose={onClose}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
-				<TextInput errorMessage={errors?.content?.message}>
-					<TextInput.TextField id="todoItem_editModal_content" {...register('content')} placeholder="Change content" variant="lg" />
-				</TextInput>
+				<Controller
+					name="content"
+					control={control}
+					render={({ field: { name, value, onChange, onBlur }, fieldState: { error } }) => (
+						<TextArea errorMessage={error?.message}>
+							<TextArea.TextField
+								id="content"
+								name={name}
+								value={value}
+								onChange={onChange}
+								onBlur={onBlur}
+								placeholder="Change content"
+								modalType={'edit'}
+							/>
+						</TextArea>
+					)}
+				/>
 				<Controller
 					name="tags"
 					control={control}

@@ -120,12 +120,18 @@ const NotificationItem = styled(ShrinkMotionBlock)<{ isLoading: boolean; isCheck
 	display: flex;
 	justify-content: ${({ isLoading }) => (isLoading ? 'center' : 'space-between')};
 	align-items: center;
-	gap: 4px;
+	gap: 16px;
 	padding: calc(var(--padding-container-mobile) * 2) var(--padding-container-mobile);
 	background-color: ${({ isChecked }) => (isChecked ? 'var(--white)' : 'var(--blue100)')};
 	border: ${({ isChecked }) => (isChecked ? '1px solid var(--grey200)' : 'none')};
 	border-radius: var(--radius-xs);
 	cursor: pointer;
+
+	p {
+		flex: 1;
+		overflow-wrap: break-word;
+		word-break: break-word;
+	}
 
 	span {
 		font-size: var(--fz-sm);

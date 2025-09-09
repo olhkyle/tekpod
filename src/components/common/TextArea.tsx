@@ -86,6 +86,7 @@ const Message = styled.p`
 
 const TextField = styled.textarea`
 	padding: var(--padding-container-mobile);
+	height: calc(var(--padding-container-mobile) * 1.5 + var(--fz-h5) * 2);
 	font-size: var(--fz-h5);
 	font-weight: var(--fw-regular);
 	color: var(--black);
