@@ -3,7 +3,6 @@ import { Todo } from '../schema';
 
 const TABLE = import.meta.env.VITE_SUPABASE_DB_TABLE_TODOS;
 const TODOS_PAGE_SIZE = 10;
-
 const getTodosPageInfo = async () => {
 	const { data, error } = await supabase.from(TABLE).select('*').explain({ format: 'json', analyze: true });
 
